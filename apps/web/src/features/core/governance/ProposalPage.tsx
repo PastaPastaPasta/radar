@@ -27,6 +27,8 @@ import { ProposalLinks } from './ProposalLinks'
 import { governanceQueries, insightGovernanceQueries } from './queries'
 import { netVotes, proposalStatus, totalVotes } from './status'
 import { StatusBadge } from './StatusBadge'
+import { ThresholdNote } from './ThresholdNote'
+import { useFundingThreshold, withThreshold } from './threshold'
 
 export function ProposalPage({ hash }: { hash: string }) {
   const { t } = useLingui()
@@ -55,6 +57,7 @@ function ProposalContent({ hash }: { hash: string }) {
   const fromInsight = insight && !missing
   const query = !insight ? hy : missing ? older : ins
   const now = useNow(false)
+  const core = useFundingThreshold(net)
 
   return (
     <>
@@ -79,8 +82,10 @@ function ProposalContent({ hash }: { hash: string }) {
           />
         }
       >
-        {(p, stamp) =>
-          p === null ? null : (
+        {(raw, stamp) => {
+          if (raw === null) return null
+          const p = withThreshold(raw, core?.threshold)
+          return (
             <>
               <header className="grid gap-2">
                 <h2 className="text-2xl font-semibold" data-proposal-name>
@@ -88,7 +93,7 @@ function ProposalContent({ hash }: { hash: string }) {
                 </h2>
                 <Hash value={p.hash} display="wrap" />
               </header>
-              <Card title={t`Votes`} layer="network" source={stamp}>
+              <Card title={t`Votes`} layer="network" source={core ? [stamp, core.source] : stamp}>
                 {fromInsight ? (
                   <DerivedFundingNote proposals={[p]} className="rx-note mb-3" />
                 ) : null}
@@ -111,6 +116,9 @@ function ProposalContent({ hash }: { hash: string }) {
                     }
                   />
                 </div>
+                {core ? (
+                  <ThresholdNote threshold={core.threshold} className="rx-note mt-3" />
+                ) : null}
               </Card>
               <Card title={t`Details`} layer="network" source={stamp}>
                 <KeyValue
@@ -160,7 +168,7 @@ function ProposalContent({ hash }: { hash: string }) {
               <VoteHistory hash={hash} />
             </>
           )
-        }
+        }}
       </QueryView>
     </>
   )

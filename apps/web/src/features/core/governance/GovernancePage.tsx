@@ -29,6 +29,8 @@ import { governanceClaim } from '../claims'
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { governanceQueries, insightGovernanceQueries } from './queries'
 import { budgetSplit, netVotes, proposalStatus, type ProposalStatus } from './status'
+import { ThresholdNote } from './ThresholdNote'
+import { useFundingThreshold, withThreshold } from './threshold'
 import { ProposalLinks } from './ProposalLinks'
 import { DerivedFundingNote } from './DerivedFundingNote'
 import { StatusBadge } from './StatusBadge'
@@ -84,17 +86,30 @@ function GovernanceContent() {
     [now],
   )
   const data = index.pending ? undefined : query.data
-  const proposals = useMemo(() => rank(data?.data.items ?? []), [data, rank])
+  const core = useFundingThreshold(net)
+  const threshold = core?.threshold
+  const proposals = useMemo(
+    () => rank((data?.data.items ?? []).map((p) => withThreshold(p, threshold))),
+    [data, rank, threshold],
+  )
   const earlier = useMemo(() => {
     if (!insight || !hy.data) return []
     const current = new Set(proposals.map((p) => p.hash))
-    return rank(hy.data.data.items.filter((p) => !current.has(p.hash)))
-  }, [insight, hy.data, proposals, rank])
+    return rank(
+      hy.data.data.items
+        .filter((p) => !current.has(p.hash))
+        .map((p) => withThreshold(p, threshold)),
+    )
+  }, [insight, hy.data, proposals, rank, threshold])
   const split = useMemo(() => budgetSplit(proposals, now), [proposals, now])
   const { funded, passing, failing } = split.count
   usePageClaim(data ? governanceClaim(funded + passing + failing, funded + passing) : undefined)
   const stamp = data ? stampOf(data) : undefined
-  const stamps = hy.data && earlier.length > 0 && stamp ? [stamp, stampOf(hy.data)] : stamp
+  const listStamps = hy.data && earlier.length > 0 && stamp ? [stamp, stampOf(hy.data)] : stamp
+  const stamps =
+    core && listStamps
+      ? [...(Array.isArray(listStamps) ? listStamps : [listStamps]), core.source]
+      : listStamps
 
   const option: EChartsOption = {
     tooltip: {
@@ -199,6 +214,7 @@ function GovernanceContent() {
         source={stamps}
       >
         {insight && data ? <DerivedFundingNote proposals={proposals} /> : null}
+        {threshold && data ? <ThresholdNote threshold={threshold} /> : null}
         {waiting ? (
           <Skeleton shape="row" count={6} />
         ) : proposals.length === 0 && earlier.length === 0 ? (

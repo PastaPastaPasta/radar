@@ -265,6 +265,13 @@ msgstr "Dash アドレスは34文字で、メインネットでは X または 7
 msgid "A proof didn't verify"
 msgstr "証明を検証できませんでした"
 
+#. placeholder {0}: formatInt(votes)
+#. placeholder {1}: formatInt(weighted)
+#. placeholder {2}: formatInt(regular)
+#. placeholder {3}: formatInt(evonodes)
+msgid "A proposal passes when its yes votes less its no votes reach {0}: a tenth of the {1} votes of the valid masternodes on DAPI’s list, {2} masternodes and {3} evonodes that count four times each."
+msgstr "賛成票から反対票を引いた数が {0} に達すると提案は可決されます。これは DAPI の一覧にある有効なマスターノードの票 {1} の10分の1で、マスターノード {2} 件と、それぞれ4票として数える Evonode {3} 件の分です。"
+
 msgid "About sources"
 msgstr "ソースについて"
 

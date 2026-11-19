@@ -265,6 +265,13 @@ msgstr "Dash 地址为 34 个字符，主网以 X 或 7 开头，测试网以 y 
 msgid "A proof didn't verify"
 msgstr "有一项证明未通过验证"
 
+#. placeholder {0}: formatInt(votes)
+#. placeholder {1}: formatInt(weighted)
+#. placeholder {2}: formatInt(regular)
+#. placeholder {3}: formatInt(evonodes)
+msgid "A proposal passes when its yes votes less its no votes reach {0}: a tenth of the {1} votes of the valid masternodes on DAPI’s list, {2} masternodes and {3} evonodes that count four times each."
+msgstr "当赞成票减去反对票达到 {0} 时，提案即获通过：这是 DAPI 列表中有效主节点 {1} 票的十分之一，包括 {2} 个主节点和 {3} 个各计四票的 evonode。"
+
 msgid "About sources"
 msgstr "关于数据源"
 

@@ -709,6 +709,38 @@ test.describe('governance', () => {
     }
   })
 
+  test('measures proposals against Dash Core’s threshold: a tenth of the weighted masternode votes @HY-13', async ({
+    page,
+  }) => {
+    await page.goto('/governance')
+    const note = page.locator('#proposals [data-funding-threshold]')
+    await expect(note).toBeVisible()
+    const text = await note.innerText()
+    const [votes, weighted, regular, evonodes] = [...text.matchAll(/(\d[\d,]*)/g)].map((m) =>
+      Number(m[1]!.replace(/,/g, '')),
+    )
+    expect(weighted, 'an evonode counts four times').toBe(regular! + 4 * evonodes!)
+    expect(votes, 'a tenth of the weighted count, rounded down').toBe(Math.floor(weighted! / 10))
+    await expect(note).toHaveAttribute('data-funding-threshold', String(votes))
+    // Every proposal is measured against it, not Hyphen's unweighted figure.
+    const shown = await page.locator('tbody[data-proposal] td.rx-votes--last').allInnerTexts()
+    expect(shown.length).toBeGreaterThan(5)
+    for (const cell of shown) expect(cell).toContain(`/ ${votes!.toLocaleString('en-US')}`)
+    const passing = await page
+      .locator(
+        'tbody[data-proposal][data-status="passing"], tbody[data-proposal][data-status="funded"]',
+      )
+      .count()
+    const nets = await page
+      .locator(
+        'tbody[data-proposal]:not([data-status="ended"]):not([data-status="invalid"]) td.rx-votes--last',
+      )
+      .allInnerTexts()
+    expect(passing).toBe(
+      nets.filter((n) => Number(n.split('/')[0]!.replace(/[^\d-]/g, '')) >= votes!).length,
+    )
+  })
+
   test('the proposal page has the votes and the vote history @HY-13', async ({ page }) => {
     await page.goto(`/governance/${PROPOSAL}`)
     await expect(page.getByRole('heading', { level: 1, name: 'Proposal' })).toBeVisible()
