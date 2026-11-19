@@ -433,6 +433,15 @@ For a devnet, `endpoint(net, 'quorums', devnets?)` takes the `quorumUrl` of the 
 
 **Deploying.** `wrangler deploy` from `workers/edge` (after `pnpm build`) deploys `radar-web` to explorer.dashhq.org. `wrangler deploy --env preview` deploys `radar-web-preview` to explorer-next.dashhq.org, so a preview never touches production. Both custom domains are set in `wrangler.jsonc`, not as flags: wrangler replaces a Worker's whole custom-domain set on each deploy, and in a non-interactive shell it overwrites a conflicting DNS record without asking.
 
+**Rolling back.**
+- **To an earlier Radar build** (seconds; the domain stays): run `npx wrangler deployments list --name radar-web` to find the version, then `npx wrangler rollback <version-id> --name radar-web -y` from `workers/edge`.
+- **Back to the Native Platform Explorer** (about 2 minutes, only until explorer-classic is retired on 2026-12-18):
+  1. Detach `radar-web`'s custom domain explorer.dashhq.org in Cloudflare (Workers → radar-web → Domains). This removes its `AAAA 100::` record.
+  2. Create a **DNS-only** `CNAME explorer → pastapastapasta.github.io` record. A proxied record can block GitHub's certificate check.
+  3. Set the `PastaPastaPasta/native-platform-explorer` Pages custom domain back to `explorer.dashhq.org`. explorer-classic stops serving from this step, because a Pages site has only one custom domain.
+  4. Once GitHub has issued the certificate and HTTPS is enforced, switch the record to proxied.
+  5. Remove the `explorer.dashhq.org` route from `workers/edge/wrangler.jsonc` on main. Until it is gone, don't run `wrangler deploy` without `--env preview`: a production deploy would take the domain back and overwrite the CNAME.
+
 **Edge transforms.** HTML responses carry `cache-control: …, no-transform`. The dashhq.org zone has Cloudflare Web Analytics auto-install on, and without `no-transform` the edge injects its beacon script, which the CSP refuses. Backend reads (the pass-through and the link-preview reads) send `UPSTREAM_USER_AGENT`, because Hyphen answers 520 to a request with no User-Agent.
 ---
 
