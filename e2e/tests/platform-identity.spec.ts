@@ -464,6 +464,14 @@ test.describe('Fiat estimates', () => {
     await expect(fiat).toHaveText(/≈\s*\$4[67]\d\b/)
   })
 
+  test('shows the identity nonce, not the value Platform stores with its skipped-nonce bits @NX-10', async ({
+    page,
+  }) => {
+    // Platform stores 4,611,687,117,939,015,721 for this identity: 2^62 + 2^40 + 41. Platform Explorer's API says 41.
+    await openIdentity(page, T, {}, 'testnet')
+    await expect(page.locator('#identity-summary [data-field="nonce"]')).toHaveText('41')
+  })
+
   test('shows no USD estimate on testnet, where the DASH has no price @PE-37', async ({ page }) => {
     await openIdentity(page, T, {}, 'testnet')
     await expect(page.locator(`${FACTS} [data-field="balance"]`)).toContainText('tDASH')

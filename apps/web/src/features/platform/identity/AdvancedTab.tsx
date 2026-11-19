@@ -9,6 +9,7 @@ import { Card, DataTable, Empty, KeyValue } from '@/ui'
 import { loadState, type IdentityTabProps } from './common'
 import { ContractForm } from './IdForm'
 import { useKeyColumns } from './KeysTab'
+import { nonceValue } from './nonce'
 
 export function AdvancedTab({
   id,
@@ -65,7 +66,9 @@ export function AdvancedTab({
                 ) : nonce.isError ? (
                   t`Not available`
                 ) : (
-                  <span data-field="contract-nonce">{formatInt(nonce.data?.data ?? 0n)}</span>
+                  <span data-field="contract-nonce">
+                    {formatInt(nonceValue(nonce.data?.data ?? 0n))}
+                  </span>
                 ),
                 source: nonce.data ? stampOf(nonce.data) : undefined,
               },
