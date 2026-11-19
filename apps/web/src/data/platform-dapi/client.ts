@@ -40,8 +40,8 @@ export function createPlatformDapi(deps: PlatformDapiDeps) {
         avoidNodes,
       })
       try {
-        const data = decodeCurrentQuorums(reply.response)
         const fetchedAt = deps.now()
+        const data = decodeCurrentQuorums(reply.response, { net, now: fetchedAt })
         return {
           source: 'dapi',
           asOf: Math.min(data.meta.timeMs, fetchedAt),

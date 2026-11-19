@@ -3,7 +3,9 @@ import type { DapiTransport } from '@/data/dapi-core'
 import { proposerTurns } from '@/lib/proposer-order'
 import { loadDapiFixture } from '@/test/fixtures/dapi-load'
 import { requestKey } from '@/test/msw/dapi-transport'
+import { encodeCurrentQuorums } from '@/test/msw/platform-tip'
 import { createPlatformDapi } from '@/data/platform-dapi/client'
+import { platformDapiQueries } from '@/data/platform-dapi/queries'
 import {
   CURRENT_QUORUMS_REQUEST,
   decodeCurrentQuorums,
@@ -16,9 +18,12 @@ async function recorded(net: 'mainnet' | 'testnet'): Promise<Uint8Array> {
   return Uint8Array.from(atob(f.response), (c) => c.charCodeAt(0))
 }
 
+const decode = (bytes: Uint8Array, net: 'mainnet' | 'testnet' = 'mainnet', now = Date.now()) =>
+  decodeCurrentQuorums(bytes, { net, now })
+
 describe('decodeCurrentQuorums', () => {
   it('reads mainnet’s 24 sets of up to 100, the active one, the last proposer and the block it is at', async () => {
-    const q = decodeCurrentQuorums(await recorded('mainnet'))
+    const q = decode(await recorded('mainnet'))
     expect(q.sets).toHaveLength(24)
     expect(q.order).toHaveLength(24)
     expect(q.sets.every((s) => s.members.length > 90 && s.members.length <= 100)).toBe(true)
@@ -33,7 +38,7 @@ describe('decodeCurrentQuorums', () => {
   })
 
   it('reads testnet’s smaller sets', async () => {
-    const q = decodeCurrentQuorums(await recorded('testnet'))
+    const q = decode(await recorded('testnet'), 'testnet')
     expect(q.meta.chainId).toBe('dash-testnet-51')
     expect(q.sets.length).toBeGreaterThan(0)
     expect(proposerTurns(q).length).toBeGreaterThan(12)
@@ -41,12 +46,43 @@ describe('decodeCurrentQuorums', () => {
 
   it('refuses an answer that is cut short, empty, or names a hash of the wrong size', async () => {
     const bytes = await recorded('testnet')
-    expect(() => decodeCurrentQuorums(bytes.subarray(0, 1000))).toThrow(QuorumsDecodeError)
-    expect(() => decodeCurrentQuorums(new Uint8Array())).toThrow('No v0 answer')
+    expect(() => decode(bytes.subarray(0, 1000), 'testnet')).toThrow(QuorumsDecodeError)
+    expect(() => decode(new Uint8Array())).toThrow('No v0 answer')
     // v0 { last_block_proposer: 3 bytes }
-    expect(() => decodeCurrentQuorums(new Uint8Array([0x0a, 0x05, 0x22, 0x03, 1, 2, 3]))).toThrow(
-      /not 32/,
-    )
+    expect(() => decode(new Uint8Array([0x0a, 0x05, 0x22, 0x03, 1, 2, 3]))).toThrow(/not 32/)
+  })
+})
+
+describe('what the decoder refuses', () => {
+  const good = async () => decode(await recorded('mainnet'))
+
+  it('a block time no clock can show, which would throw when drawn', async () => {
+    const q = await good()
+    expect(() => decode(encodeCurrentQuorums(q, { timeMs: 2n ** 63n }))).toThrow(/block time/)
+  })
+
+  it('a block time more than a minute past the browser’s clock', async () => {
+    const q = await good()
+    const now = q.meta.timeMs
+    expect(() => decode(encodeCurrentQuorums(q), 'mainnet', now - 61_000)).toThrow(/future/)
+    expect(decode(encodeCurrentQuorums(q), 'mainnet', now - 59_000).meta.timeMs).toBe(now)
+  })
+
+  it('a height past what a number holds exactly', async () => {
+    const q = await good()
+    expect(() => decode(encodeCurrentQuorums(q, { height: 2n ** 60n }))).toThrow(/block height/)
+  })
+
+  it('an answer with no rotation: a broken read, not an order that ran out', async () => {
+    const q = await good()
+    expect(() => decode(encodeCurrentQuorums({ ...q, order: [] }))).toThrow(/rotation/)
+  })
+
+  it('an answer for another network', async () => {
+    const testnet = await recorded('testnet')
+    const mainnet = await recorded('mainnet')
+    expect(() => decode(testnet, 'mainnet')).toThrow(/dash-testnet-51, not mainnet/)
+    expect(() => decode(mainnet, 'testnet')).toThrow(/evo1, not testnet/)
   })
 })
 
@@ -106,5 +142,13 @@ describe('platformDapi.currentQuorums', () => {
       source: 'dapi',
       kind: 'invalid-response',
     })
+  })
+})
+
+describe('platformDapiQueries.currentQuorums', () => {
+  it('reads only when the schedule asks: never on focus, and never again by itself after a refusal', () => {
+    const options = platformDapiQueries.currentQuorums('mainnet')
+    expect(options.refetchOnWindowFocus).toBe(false)
+    expect(options.retry).toBe(false)
   })
 })

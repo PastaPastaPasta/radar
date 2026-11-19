@@ -1,6 +1,7 @@
 import { BinaryWriter } from '@bufbuild/protobuf/wire'
 import { decodeCurrentQuorums, type CurrentQuorums } from '@/data/platform-dapi/quorums'
 import { hexToBytes } from '@/lib/hex'
+import type { NetworkId } from '@/lib/network'
 import { proposerTurns } from '@/lib/proposer-order'
 
 /**
@@ -39,7 +40,14 @@ export function advancedEpochAnswer<R>(result: R): R {
   } as R
 }
 
-function encode(q: CurrentQuorums): Uint8Array {
+/**
+ * Encodes an answer as a node would send it. `raw` overrides the height and time with values no decoded answer could
+ * hold, for tests of what the decoder refuses.
+ */
+export function encodeCurrentQuorums(
+  q: CurrentQuorums,
+  raw: { height?: bigint; timeMs?: bigint } = {},
+): Uint8Array {
   const v0 = new BinaryWriter()
   for (const h of q.order) v0.tag(1, 2).bytes(hexToBytes(h))
   v0.tag(2, 2).bytes(hexToBytes(q.current))
@@ -55,13 +63,13 @@ function encode(q: CurrentQuorums): Uint8Array {
   v0.tag(4, 2).bytes(hexToBytes(q.lastProposer))
   const meta = new BinaryWriter()
     .tag(1, 0)
-    .uint64(q.meta.height)
+    .uint64(raw.height ?? q.meta.height)
     .tag(2, 0)
     .uint32(q.meta.coreChainLockedHeight)
     .tag(3, 0)
     .uint32(q.meta.epoch)
     .tag(4, 0)
-    .uint64(q.meta.timeMs)
+    .uint64(raw.timeMs ?? q.meta.timeMs)
     .tag(5, 0)
     .uint32(q.meta.protocolVersion)
     .tag(6, 2)
@@ -71,12 +79,12 @@ function encode(q: CurrentQuorums): Uint8Array {
 }
 
 /** A recorded validator-set answer as it reads `advance` blocks later: each turn taken, so the proposer is the one due. */
-export function advancedQuorumsAnswer(bytes: Uint8Array): Uint8Array {
+export function advancedQuorumsAnswer(bytes: Uint8Array, net: NetworkId): Uint8Array {
   if (tip.advance === 0) return bytes
-  const q = decodeCurrentQuorums(bytes)
+  const q = decodeCurrentQuorums(bytes, { net, now: Number.MAX_SAFE_INTEGER })
   const due = proposerTurns(q).find((t) => t.slot === tip.advance)
   if (!due) return bytes
-  return encode({
+  return encodeCurrentQuorums({
     ...q,
     lastProposer: due.proTxHash,
     meta: {

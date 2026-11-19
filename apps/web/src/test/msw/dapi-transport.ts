@@ -216,7 +216,8 @@ export class FixtureDapiTransport implements DapiTransport {
       })
     }
     const recorded = fromBase64(fixture.response)
-    const response = method === 'getCurrentQuorumsInfo' ? advancedQuorumsAnswer(recorded) : recorded
+    const response =
+      method === 'getCurrentQuorumsInfo' ? advancedQuorumsAnswer(recorded, net) : recorded
     return {
       response:
         method === 'getTransaction' && this.unmined.size > 0
