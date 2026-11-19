@@ -13,9 +13,6 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-msgid ": a missed turn, or a new set, shifts it."
-msgstr ": a missed turn, or a new set, shifts it."
-
 msgid "(estimated)"
 msgstr "(estimated)"
 
@@ -61,8 +58,17 @@ msgstr "{0} of {1} evonodes are needed"
 msgid "{0} quorums at Platform height {1}. Not proof-checked: the SDK has no proof for this list."
 msgstr "{0} quorums at Platform height {1}. Not proof-checked: the SDK has no proof for this list."
 
+msgid "{m} min {s} s"
+msgstr "{m} min {s} s"
+
+msgid "{moved, plural, one {Moved on # block since, assuming no missed turn.} other {Moved on # blocks since, assuming no missed turn.}}"
+msgstr "{moved, plural, one {Moved on # block since, assuming no missed turn.} other {Moved on # blocks since, assuming no missed turn.}}"
+
 msgid "{pages, plural, one {Combined from # proof-checked answer.} other {Combined from # proof-checked answers.}}"
 msgstr "{pages, plural, one {Combined from # proof-checked answer.} other {Combined from # proof-checked answers.}}"
+
+msgid "{s} s"
+msgstr "{s} s"
 
 msgid "1 m"
 msgstr "1 m"
@@ -145,6 +151,9 @@ msgstr "Chunks of notes"
 msgid "Commitment"
 msgstr "Commitment"
 
+msgid "Connecting to Platform…"
+msgstr "Connecting to Platform…"
+
 msgid "Copy encrypted note"
 msgstr "Copy encrypted note"
 
@@ -153,6 +162,10 @@ msgstr "Copy ID"
 
 msgid "Core block rewards"
 msgstr "Core block rewards"
+
+#. placeholder {0}: formatInt(pool.cl)
+msgid "Core block rewards to Core block {0}; fees not counted"
+msgstr "Core block rewards to Core block {0}; fees not counted"
 
 msgid "Credits"
 msgstr "Credits"
@@ -282,6 +295,15 @@ msgstr "First block"
 msgid "From epoch"
 msgstr "From epoch"
 
+msgid "From Radar’s crawl; fees not counted"
+msgstr "From Radar’s crawl; fees not counted"
+
+msgid "From Radar’s crawl: an estimate until the epoch ends"
+msgstr "From Radar’s crawl: an estimate until the epoch ends"
+
+msgid "From Radar’s last look at the validator sets, at block {at}, while DAPI doesn’t answer. A missed turn or a new set shifts it."
+msgstr "From Radar’s last look at the validator sets, at block {at}, while DAPI doesn’t answer. A missed turn or a new set shifts it."
+
 msgid "Hash prefix"
 msgstr "Hash prefix"
 
@@ -315,6 +337,15 @@ msgstr "Last pool"
 msgid "Latest {0}"
 msgstr "Latest {0}"
 
+msgid "Latest block"
+msgstr "Latest block"
+
+msgid "Latest Platform block"
+msgstr "Latest Platform block"
+
+msgid "Live"
+msgstr "Live"
+
 msgid "Look up"
 msgstr "Look up"
 
@@ -338,6 +369,13 @@ msgstr "Neighbouring epochs"
 
 msgid "Network"
 msgstr "Network"
+
+msgid "Next block due now (about every {pace})"
+msgstr "Next block due now (about every {pace})"
+
+#. placeholder {0}: countdown(next)
+msgid "Next block expected in about {0}"
+msgstr "Next block expected in about {0}"
 
 msgid "Next chunk"
 msgstr "Next chunk"
@@ -364,8 +402,17 @@ msgstr "No evonode has voted."
 msgid "No evonode proposed a block in this epoch."
 msgstr "No evonode proposed a block in this epoch."
 
+msgid "No new block for {ago}, where one usually comes about every {pace}"
+msgstr "No new block for {ago}, where one usually comes about every {pace}"
+
+msgid "No new Platform block for a while"
+msgstr "No new Platform block for a while"
+
 msgid "No prefunded balance"
 msgstr "No prefunded balance"
+
+msgid "No proposer order yet."
+msgstr "No proposer order yet."
 
 msgid "No quorum matches this filter."
 msgstr "No quorum matches this filter."
@@ -437,6 +484,12 @@ msgstr "Platform keeps totals only for epochs that have been finalized, and this
 msgid "Platform reports no credits."
 msgstr "Platform reports no credits."
 
+msgid "Platform updates paused"
+msgstr "Platform updates paused"
+
+msgid "Platform updates resumed"
+msgstr "Platform updates resumed"
+
 msgid "Platform’s flag"
 msgstr "Platform’s flag"
 
@@ -464,6 +517,9 @@ msgstr "Previous: epoch {0}"
 
 msgid "Processing fees"
 msgstr "Processing fees"
+
+msgid "proposed by"
+msgstr "proposed by"
 
 msgid "Proposers"
 msgstr "Proposers"
@@ -495,11 +551,11 @@ msgstr "Quorums"
 msgid "Radar doesn’t crawl devnets"
 msgstr "Radar doesn’t crawl devnets"
 
+msgid "Radar doesn’t crawl devnets: no last pool, earnings, yield or history"
+msgstr "Radar doesn’t crawl devnets: no last pool, earnings, yield or history"
+
 msgid "Radar has no epoch history yet."
 msgstr "Radar has no epoch history yet."
-
-msgid "Radar has no proposer schedule right now."
-msgstr "Radar has no proposer schedule right now."
 
 msgid "Radar’s exact threshold, phase and per-candidate counts need Radar’s crawl"
 msgstr "Radar’s exact threshold, phase and per-candidate counts need Radar’s crawl"
@@ -570,6 +626,9 @@ msgstr "Storage fees created"
 msgid "Storage fees distributed"
 msgstr "Storage fees distributed"
 
+msgid "Tenderdash’s turn order, from the validator sets an evonode reported at block {at}. Not proof-checked: a missed turn or a new set shifts it."
+msgstr "Tenderdash’s turn order, from the validator sets an evonode reported at block {at}. Not proof-checked: a missed turn or a new set shifts it."
+
 msgid "That is not a nullifier"
 msgstr "That is not a nullifier"
 
@@ -586,14 +645,17 @@ msgstr "The credits held in Platform, and a lookup of a prefunded specialised ba
 msgid "The current epoch is {0}."
 msgstr "The current epoch is {0}."
 
-msgid "The epoch’s pool, earnings, yield, proposer schedule and history need Radar’s crawl"
-msgstr "The epoch’s pool, earnings, yield, proposer schedule and history need Radar’s crawl"
-
 msgid "The evonodes that proposed the most blocks this epoch."
 msgstr "The evonodes that proposed the most blocks this epoch."
 
 msgid "The history of shielding and unshielding needs Platform Explorer’s index"
 msgstr "The history of shielding and unshielding needs Platform Explorer’s index"
+
+msgid "The last pool, earnings, yield and the epoch history need Radar’s crawl"
+msgstr "The last pool, earnings, yield and the epoch history need Radar’s crawl"
+
+msgid "The last proposer order has run out. A fresh one is on its way."
+msgstr "The last proposer order has run out. A fresh one is on its way."
 
 #. placeholder {0}: formatInt(DEFAULT_COUNT)
 msgid "The latest {0} epochs."
@@ -602,8 +664,8 @@ msgstr "The latest {0} epochs."
 msgid "The next proposers"
 msgstr "The next proposers"
 
-msgid "The next twelve proposers, each with the blocks until its turn. An estimate at about {pace} seconds a block, from the validator sets"
-msgstr "The next twelve proposers, each with the blocks until its turn. An estimate at about {pace} seconds a block, from the validator sets"
+msgid "The next twelve proposers, each with the blocks until its turn."
+msgstr "The next twelve proposers, each with the blocks until its turn."
 
 msgid "The node reported no quorums."
 msgstr "The node reported no quorums."
@@ -640,6 +702,10 @@ msgstr "The pool of shielded credits: its balance, the anchors it accepts, its e
 msgid "The pool serves its notes in chunks of {0}. The first {NOTES_SHOWN} of the chunk starting at note {1} are shown."
 msgstr "The pool serves its notes in chunks of {0}. The first {NOTES_SHOWN} of the chunk starting at note {1} are shown."
 
+#. placeholder {0}: formatInt(pool.blocks)
+msgid "The pool so far over {0} blocks: an estimate until the epoch ends"
+msgstr "The pool so far over {0} blocks: an estimate until the epoch ends"
+
 msgid "The protocol version each evonode votes for"
 msgstr "The protocol version each evonode votes for"
 
@@ -674,11 +740,20 @@ msgstr "Total credits"
 msgid "Totals"
 msgstr "Totals"
 
+msgid "Try again"
+msgstr "Try again"
+
 msgid "Type"
 msgstr "Type"
 
 msgid "Unshielded"
 msgstr "Unshielded"
+
+msgid "Updates paused, last block {ago} ago"
+msgstr "Updates paused, last block {ago} ago"
+
+msgid "Updates paused: Platform isn’t answering"
+msgstr "Updates paused: Platform isn’t answering"
 
 msgid "Upgrade vote"
 msgstr "Upgrade vote"

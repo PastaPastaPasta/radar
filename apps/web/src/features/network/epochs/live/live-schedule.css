@@ -1,0 +1,57 @@
+/* The latest Platform block and the countdown, above the next proposers: fixed heights, so nothing below moves. */
+.rx-livesched {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+  min-height: 72px;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--dh-line);
+  border-radius: 10px;
+  background: var(--dh-sunken);
+  font-size: var(--dh-fs-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--dh-ink-2);
+}
+.rx-livesched__state {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  min-height: 28px;
+  color: var(--dh-ink);
+  font-weight: var(--dh-w-ui);
+}
+.rx-livesched[data-live='paused'] .rx-livesched__state,
+.rx-livesched[data-live='quiet'] .rx-livesched__state {
+  color: var(--dh-warn);
+}
+.rx-livesched__tip {
+  overflow-wrap: anywhere;
+  line-height: 28px;
+}
+/* Links in the strip keep a 24 px touch target, on the phone too. */
+.rx-livesched__tip a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  vertical-align: middle;
+}
+.rx-livesched__next {
+  color: var(--dh-ink);
+}
+.rx-livesched .rx-time {
+  font-variant-numeric: tabular-nums;
+}
+.rx-livefig {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+}
+.rx-livefig.is-new {
+  animation: rx-roll var(--rx-dur-3) var(--rx-ease-out);
+}
+@media (max-width: 640px) {
+  .rx-livesched {
+    min-height: 96px;
+  }
+}

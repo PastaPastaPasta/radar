@@ -2,6 +2,13 @@ import { isSourceError, SourceError } from '../errors'
 import { GRPC_INVALID_ARGUMENT, GRPC_NOT_FOUND } from './transport'
 
 export const CORE_SERVICE = 'org.dash.platform.dapi.v0.Core'
+export const PLATFORM_SERVICE = 'org.dash.platform.dapi.v0.Platform'
+
+/** The Platform service's methods Radar calls over gRPC-web itself, outside the SDK: unproved reads only. */
+const PLATFORM_METHODS: ReadonlySet<string> = new Set(['getCurrentQuorumsInfo'])
+
+export const serviceOf = (method: string): string =>
+  PLATFORM_METHODS.has(method) ? PLATFORM_SERVICE : CORE_SERVICE
 
 const GRPC_DEADLINE_EXCEEDED = 4
 const GRPC_RESOURCE_EXHAUSTED = 8
@@ -61,6 +68,8 @@ export const MAX_FRAME_BYTES: Record<string, number> = {
   subscribeToBlockHeadersWithChainLocks: 512 * 1024,
   subscribeToTransactionsWithProofs: 4 * 1024 * 1024,
   subscribeToMasternodeList: 16 * 1024 * 1024,
+  // Every validator set with its members: about 126 KB on mainnet (24 sets of 100).
+  getCurrentQuorumsInfo: 1024 * 1024,
 }
 export const DEFAULT_MAX_FRAME_BYTES = 64 * 1024
 const MAX_TRAILER_BYTES = 16 * 1024
@@ -285,7 +294,7 @@ export async function openCall(init: CallInit): Promise<OpenCall> {
   }
   let res: Response
   try {
-    res = await doFetch(`${init.baseUrl}/${CORE_SERVICE}/${init.method}`, {
+    res = await doFetch(`${init.baseUrl}/${serviceOf(init.method)}/${init.method}`, {
       method: 'POST',
       headers: {
         'content-type': 'application/grpc-web+proto',

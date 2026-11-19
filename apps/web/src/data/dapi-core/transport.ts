@@ -7,6 +7,7 @@ export type DapiUnaryMethod =
   | 'getBlock'
   | 'getTransaction'
   | 'getMasternodeStatus'
+  | 'getCurrentQuorumsInfo'
 
 export type DapiStreamMethod =
   | 'subscribeToBlockHeadersWithChainLocks'

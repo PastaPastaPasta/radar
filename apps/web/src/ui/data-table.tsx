@@ -16,6 +16,7 @@ import {
   useId,
   useLayoutEffect,
   useRef,
+  type CSSProperties,
   type RefObject,
   useState,
   type ReactNode,
@@ -47,7 +48,11 @@ export interface DataTableProps<Row> {
   virtual?: boolean
   rowLink?: (r: Row) => LinkProps
   onCellFilter?: (columnId: string, value: string) => void
-  live?: { newRowIds: Set<string> }
+  /**
+   * Live rows: `newRowIds` slide in; `leavingRowIds` fade out before they are dropped; `rise` moves every other row up
+   * from that many rows below, after rows above them left.
+   */
+  live?: { newRowIds: Set<string>; leavingRowIds?: Set<string>; rise?: number }
   /** Placeholder rows after the real ones, for a page whose remaining rows are still on their way. */
   pendingRows?: number
   phone?: 'cards' | 'scroll'
@@ -481,6 +486,8 @@ export function DataTable<Row>({
           if (!row) return null
           const id = row.id
           const fresh = live?.newRowIds.has(id) === true
+          const leaving = live?.leavingRowIds?.has(id) === true
+          const rise = !fresh && !leaving && live?.rise ? live.rise : 0
           return (
             <tr
               key={id}
@@ -489,7 +496,14 @@ export function DataTable<Row>({
               data-row-id={id}
               data-index={index}
               aria-rowindex={virtual ? index + 2 : undefined}
-              className={cx(fresh && 'rx-enter', focusId === id && 'is-focus')}
+              className={cx(
+                fresh && 'rx-enter',
+                leaving && 'rx-leave',
+                rise > 0 && 'rx-rise',
+                focusId === id && 'is-focus',
+              )}
+              style={rise > 0 ? ({ '--rx-rise': rise } as CSSProperties) : undefined}
+              aria-hidden={leaving || undefined}
               onFocus={() => {
                 if (rowLink) setFocusId(id)
               }}
