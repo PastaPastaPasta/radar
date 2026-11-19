@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { delay, http, HttpResponse } from 'msw'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { core } from '@/data/core/client'
+import { SourceError } from '@/data/errors'
 import { resetHealthRegistry } from '@/data/health'
 import { fixtureBody } from '@/test/fixtures/load'
 import { server } from '@/test/server'
@@ -38,6 +39,41 @@ async function olderProposal(): Promise<HyProposalBody> {
 afterEach(() => vi.restoreAllMocks())
 
 describe('Governance page', () => {
+  it.each([
+    [
+      'dapi',
+      () =>
+        vi
+          .spyOn(core, 'masternodeList')
+          .mockRejectedValue(
+            new SourceError({ source: 'dapi', kind: 'network', message: 'No node answered' }),
+          ),
+    ],
+    [
+      'insight',
+      () =>
+        server.use(
+          http.get('*/insight-api/gobject/info', () => HttpResponse.json({}, { status: 503 })),
+        ),
+    ],
+  ])(
+    'says %s is not answering, and keeps the proposals, when the threshold or budget source is down @X-09',
+    async (source, down) => {
+      down()
+      renderAt('/governance')
+      const alert = await waitFor(
+        () => {
+          const el = document.querySelector(`#proposals [role="alert"][data-source="${source}"]`)
+          expect(el).not.toBeNull()
+          return el!
+        },
+        { timeout: 10_000 },
+      )
+      expect(alert).toBeInTheDocument()
+      expect(document.querySelectorAll('tbody[data-proposal]').length).toBeGreaterThan(0)
+    },
+  )
+
   it('says the exact threshold isn’t known, and takes Core’s own flag from Hyphen, until DAPI’s list answers @HY-13', async () => {
     vi.spyOn(core, 'masternodeList').mockReturnValue(new Promise(() => undefined))
     const page = await fixtureBody<{ value: HyProposalBody[] }>(
@@ -330,7 +366,7 @@ describe('Governance page while Hyphen’s index is stale @IN-16 @HY-19', () => 
     const line = document.querySelector('.rx-page__src')!
     await waitFor(() => expect(line.querySelector('[data-source="insight"]')).not.toBeNull())
     expect(line.querySelector('[data-source="hyphen"]')).not.toBeNull()
-    expect(document.querySelector('#proposals [data-source]')).toBeNull()
+    expect(document.querySelector('#proposals [data-source]:not([role="alert"])')).toBeNull()
     expect(document.querySelector('[data-stale-index]')).toHaveTextContent(
       'Earlier proposals below are from Hyphen’s index',
     )

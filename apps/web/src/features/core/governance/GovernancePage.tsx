@@ -38,6 +38,7 @@ import {
 } from './threshold'
 import { ProposalLinks } from './ProposalLinks'
 import { DerivedFundingNote } from './DerivedFundingNote'
+import { FundingSourcesDown } from './FundingSourcesDown'
 import { StatusBadge } from './StatusBadge'
 
 export function GovernancePage() {
@@ -228,6 +229,7 @@ function GovernanceContent() {
         id="proposals"
         source={stamps}
       >
+        {data ? <FundingSourcesDown net={net} /> : null}
         {data ? <DerivedFundingNote budget={budget} /> : null}
         {data ? <ThresholdNote threshold={threshold} index={from} /> : null}
         {waiting ? (

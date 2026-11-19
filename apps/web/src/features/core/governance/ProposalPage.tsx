@@ -23,6 +23,7 @@ import {
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { firstPageStamp, infiniteTableProps } from '../hy-shared/infinite-list'
 import { DerivedFundingNote } from './DerivedFundingNote'
+import { FundingSourcesDown } from './FundingSourcesDown'
 import { ProposalLinks } from './ProposalLinks'
 import { governanceQueries, insightGovernanceQueries } from './queries'
 import { netVotes, proposalStatus, totalVotes } from './status'
@@ -125,6 +126,7 @@ function ProposalContent({ hash }: { hash: string }) {
                   ...(sb && budget ? [sb.source] : []),
                 ]}
               >
+                {missing ? null : <FundingSourcesDown net={net} />}
                 {missing ? null : <DerivedFundingNote budget={budget} className="rx-note mb-3" />}
                 <div className="grid gap-4 sm:grid-cols-4" data-votes>
                   <Stat label={t`Yes`} value={formatInt(p.votes.yes)} tone="good" />
