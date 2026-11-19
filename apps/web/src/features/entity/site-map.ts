@@ -167,7 +167,7 @@ export const SITE_MAP: SitePage[] = [
     section: 'core',
     layer: 'core',
     summary: msg`Budget proposals with vote counts, status and the next superblock.`,
-    sources: ['hyphen', 'insight'],
+    sources: ['hyphen', 'insight', 'dapi'],
     nav: true,
     keywords: ['proposals', 'budget', 'superblock'],
   }),
@@ -178,7 +178,7 @@ export const SITE_MAP: SitePage[] = [
     section: 'core',
     layer: 'core',
     summary: msg`One governance proposal: payment, timeline, vote history and a link to vote.`,
-    sources: ['hyphen', 'insight'],
+    sources: ['hyphen', 'insight', 'dapi'],
     record: msg`proposal`,
   }),
   page({

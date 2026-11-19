@@ -4,6 +4,7 @@ import { mapSourced } from '../envelope'
 import type { HyPage, HyProposal } from '../hyphen/schemas'
 import { insKeys } from '../query/keys'
 import { dataClass } from '../query/stale'
+import type { SuperblockBudget } from '../governance-budget'
 import { adaptProposals } from './adapt'
 import { readInsightPage } from './blocks-page'
 import { insight } from './client'
@@ -87,6 +88,22 @@ export const insQueries = {
     queryOptions({
       queryKey: insKeys(net, 'tx', { txid: lower(txid) }),
       queryFn: ({ signal }) => insight.tx(net, txid, signal),
+      ...dataClass('index'),
+    }),
+  /**
+   * What the next superblock can pay and when, from Dash Core's `getgovernanceinfo` through Insight; `null` when its
+   * time can't be worked out. Hyphen has no budget, so its proposals are funded against this too.
+   */
+  superblockBudget: (net: NetworkId) =>
+    queryOptions({
+      queryKey: insKeys(net, 'superblock-budget'),
+      queryFn: async ({ signal }) => {
+        const info = await insight.governanceInfo(net, signal)
+        const at = await superblockTime(net, info.data, signal)
+        return mapSourced(info, (i): SuperblockBudget | null =>
+          at === undefined ? null : { budget: i.governancebudget, superblockAt: at },
+        )
+      },
       ...dataClass('index'),
     }),
   /** Every proposal in Hyphen's shape, with funding worked out from the vote counts and the budget (`adaptProposals`). */

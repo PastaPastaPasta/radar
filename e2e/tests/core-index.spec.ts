@@ -714,7 +714,8 @@ test.describe('governance', () => {
   }) => {
     await page.goto('/governance')
     const note = page.locator('#proposals [data-funding-threshold]')
-    await expect(note).toBeVisible()
+    // The note says the figure isn't known yet until DAPI's masternode list answers.
+    await expect(note).toHaveAttribute('data-funding-threshold', /^\d+$/)
     const text = await note.innerText()
     const [votes, weighted, regular, evonodes] = [...text.matchAll(/(\d[\d,]*)/g)].map((m) =>
       Number(m[1]!.replace(/,/g, '')),

@@ -2,7 +2,7 @@ import { useLingui } from '@lingui/react/macro'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
-import type { HyProposalVote } from '@/data/hyphen/schemas'
+import type { HyProposal, HyProposalVote } from '@/data/hyphen/schemas'
 import { useIndexHealth } from '@/data/index-health'
 import { Entity, PageFrame, PageLink, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
@@ -28,7 +28,12 @@ import { governanceQueries, insightGovernanceQueries } from './queries'
 import { netVotes, proposalStatus, totalVotes } from './status'
 import { StatusBadge } from './StatusBadge'
 import { ThresholdNote } from './ThresholdNote'
-import { useFundingThreshold, withThreshold } from './threshold'
+import {
+  fundingView,
+  useFundingThreshold,
+  useSuperblockBudget,
+  type ProposalIndex,
+} from './threshold'
 
 export function ProposalPage({ hash }: { hash: string }) {
   const { t } = useLingui()
@@ -58,6 +63,24 @@ function ProposalContent({ hash }: { hash: string }) {
   const query = !insight ? hy : missing ? older : ins
   const now = useNow(false)
   const core = useFundingThreshold(net)
+  const sb = useSuperblockBudget(net)
+  const from: ProposalIndex = fromInsight ? 'insight' : 'hyphen'
+  // Funded depends on every other proposal in the budget, so it is worked out over the whole list.
+  const hyList = useQuery({
+    ...governanceQueries.proposals(net),
+    enabled: !index.pending && !insight,
+  })
+  const insList = useQuery({ ...insightGovernanceQueries.proposals(net), enabled: fromInsight })
+  const list = fromInsight
+    ? insList.data?.data.items
+    : insight
+      ? undefined
+      : hyList.data?.data.items
+  const budget = missing ? undefined : sb?.budget
+  const view = (raw: HyProposal): HyProposal =>
+    (list?.some((x) => x.hash === raw.hash)
+      ? fundingView(list, core?.threshold, from, budget).find((x) => x.hash === raw.hash)
+      : undefined) ?? fundingView([raw], core?.threshold, from, undefined)[0]!
 
   return (
     <>
@@ -84,7 +107,7 @@ function ProposalContent({ hash }: { hash: string }) {
       >
         {(raw, stamp) => {
           if (raw === null) return null
-          const p = withThreshold(raw, core?.threshold)
+          const p = view(raw)
           return (
             <>
               <header className="grid gap-2">
@@ -93,10 +116,16 @@ function ProposalContent({ hash }: { hash: string }) {
                 </h2>
                 <Hash value={p.hash} display="wrap" />
               </header>
-              <Card title={t`Votes`} layer="network" source={core ? [stamp, core.source] : stamp}>
-                {fromInsight ? (
-                  <DerivedFundingNote proposals={[p]} className="rx-note mb-3" />
-                ) : null}
+              <Card
+                title={t`Votes`}
+                layer="network"
+                source={[
+                  stamp,
+                  ...(core ? [core.source] : []),
+                  ...(sb && budget ? [sb.source] : []),
+                ]}
+              >
+                {missing ? null : <DerivedFundingNote budget={budget} className="rx-note mb-3" />}
                 <div className="grid gap-4 sm:grid-cols-4" data-votes>
                   <Stat label={t`Yes`} value={formatInt(p.votes.yes)} tone="good" />
                   <Stat label={t`No`} value={formatInt(p.votes.no)} tone="bad" />
@@ -116,9 +145,7 @@ function ProposalContent({ hash }: { hash: string }) {
                     }
                   />
                 </div>
-                {core ? (
-                  <ThresholdNote threshold={core.threshold} className="rx-note mt-3" />
-                ) : null}
+                <ThresholdNote threshold={core?.threshold} index={from} className="rx-note mt-3" />
               </Card>
               <Card title={t`Details`} layer="network" source={stamp}>
                 <KeyValue

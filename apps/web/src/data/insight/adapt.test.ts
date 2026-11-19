@@ -141,7 +141,8 @@ describe('adaptProposals', () => {
         end_epoch: over.end ?? 5_000,
       },
       AbsoluteYesCount: over.AbsoluteYesCount ?? 0,
-      YesCount: 0,
+      // Insight's absolute count is the yes count less the no count.
+      YesCount: over.AbsoluteYesCount ?? 0,
       NoCount: 0,
       AbstainCount: 0,
     }) satisfies InsProposal
@@ -161,7 +162,7 @@ describe('adaptProposals', () => {
       ['p3', false, true],
       ['p4', false, false],
     ])
-    expect(out[0]).toMatchObject({ fundingThreshold: 10, votes: { yes: 0, no: 0, abstain: 0 } })
+    expect(out[0]).toMatchObject({ fundingThreshold: 10, votes: { yes: 50, no: 0, abstain: 0 } })
   })
 
   it('never funds a proposal whose voting window has ended, or has not begun, at the superblock', () => {

@@ -269,6 +269,13 @@ msgstr "Uma prova não foi verificada"
 #. placeholder {1}: formatInt(weighted)
 #. placeholder {2}: formatInt(regular)
 #. placeholder {3}: formatInt(evonodes)
+msgid "A proposal passes when its yes votes less its no votes reach {0}, the network’s minimum: a tenth of the {1} votes of the valid masternodes on DAPI’s list ({2} masternodes and {3} evonodes that count four times each) is less."
+msgstr "Uma proposta passa quando os votos a favor menos os votos contra chegam a {0}, o mínimo da rede: um décimo dos {1} votos dos masternodes válidos na lista do DAPI ({2} masternodes e {3} evonodes que contam quatro vezes cada) é menos."
+
+#. placeholder {0}: formatInt(votes)
+#. placeholder {1}: formatInt(weighted)
+#. placeholder {2}: formatInt(regular)
+#. placeholder {3}: formatInt(evonodes)
 msgid "A proposal passes when its yes votes less its no votes reach {0}: a tenth of the {1} votes of the valid masternodes on DAPI’s list, {2} masternodes and {3} evonodes that count four times each."
 msgstr "Uma proposta passa quando os votos a favor menos os votos contra chegam a {0}: um décimo dos {1} votos dos masternodes válidos na lista do DAPI, {2} masternodes e {3} evonodes que contam quatro vezes cada."
 
@@ -723,6 +730,9 @@ msgstr "função"
 msgid "Funded"
 msgstr "Financiada"
 
+msgid "Funded is worked out by Radar the way Dash Core builds the next superblock: the proposals that pass and whose payment window covers it, most net yes votes first, each while what is left of its {amount} budget covers it."
+msgstr "O Radar calcula Financiada como o Dash Core monta o próximo superbloco: as propostas que passam e cuja janela de pagamento o cobre, as de mais votos líquidos a favor primeiro, cada uma enquanto o que resta do orçamento de {amount} a cobrir."
+
 msgid "Funding threshold"
 msgstr "Limite de financiamento"
 
@@ -852,12 +862,6 @@ msgstr "O Insight não conseguiu devolver as transações mais antigas deste end
 
 msgid "Insight could not return this address’s transactions."
 msgstr "O Insight não conseguiu devolver as transações deste endereço."
-
-msgid "Insight doesn’t report funding, and the time of the next superblock isn’t known, so no proposal is shown as Funded. Passing is worked out by Radar from Insight’s vote counts."
-msgstr "O Insight não informa o financiamento e a hora do próximo superbloco não é conhecida, por isso nenhuma proposta aparece como financiada. O Radar calcula «Aprovada» a partir das contagens de votos do Insight."
-
-msgid "Insight doesn’t report funding. Funded and Passing are worked out by Radar from Insight’s vote counts and the time of the next superblock."
-msgstr "O Insight não informa o financiamento. O Radar calcula «Financiada» e «Aprovada» a partir das contagens de votos do Insight e da hora do próximo superbloco."
 
 msgid "Insight’s {name} index is behind too: {lag}."
 msgstr "O índice {name} do Insight também está atrasado: {lag}."
@@ -1503,6 +1507,9 @@ msgstr "A oferta em circulação não está atualizada, por isso as partes são 
 msgid "The end time is an estimate."
 msgstr "A hora de término é uma estimativa."
 
+msgid "The exact funding threshold isn’t known until DAPI’s masternode list answers. Until then, Passing is Dash Core’s own flag as Hyphen reports it."
+msgstr "O limite de financiamento exato não é conhecido até que a lista de masternodes do DAPI responda. Até lá, Passando é o próprio indicador do Dash Core, como o Hyphen o informa."
+
 msgid "The full mempool and its totals need that index, so this page shows what DAPI's live feed has delivered since you opened it."
 msgstr "O mempool completo e os respetivos totais precisam desse índice, por isso esta página mostra o que o feed em direto da DAPI entregou desde que a abriu."
 
@@ -1529,6 +1536,9 @@ msgstr "O mínimo é maior que o máximo."
 
 msgid "The newest {shown} of {total} seen since you opened this page"
 msgstr "As {shown} mais recentes de {total} vistas desde que você abriu esta página"
+
+msgid "The next superblock’s budget or time isn’t known, so no proposal is shown as Funded."
+msgstr "O orçamento ou a hora do próximo superbloco não são conhecidos, então nenhuma proposta aparece como Financiada."
 
 msgid "The next transactions could not be loaded."
 msgstr "Não foi possível carregar as próximas transações."

@@ -269,6 +269,13 @@ msgstr "Bir kanıt doğrulanamadı"
 #. placeholder {1}: formatInt(weighted)
 #. placeholder {2}: formatInt(regular)
 #. placeholder {3}: formatInt(evonodes)
+msgid "A proposal passes when its yes votes less its no votes reach {0}, the network’s minimum: a tenth of the {1} votes of the valid masternodes on DAPI’s list ({2} masternodes and {3} evonodes that count four times each) is less."
+msgstr "Bir öneri, evet oyları eksi hayır oyları ağın asgarisi olan {0} sayısına ulaştığında geçer: DAPI’nin listesindeki geçerli masternode’ların {1} oyunun onda biri ({2} masternode ve her biri dört kez sayılan {3} evonode) daha azdır."
+
+#. placeholder {0}: formatInt(votes)
+#. placeholder {1}: formatInt(weighted)
+#. placeholder {2}: formatInt(regular)
+#. placeholder {3}: formatInt(evonodes)
 msgid "A proposal passes when its yes votes less its no votes reach {0}: a tenth of the {1} votes of the valid masternodes on DAPI’s list, {2} masternodes and {3} evonodes that count four times each."
 msgstr "Bir öneri, evet oyları eksi hayır oyları {0} sayısına ulaştığında geçer: bu, DAPI’nin listesindeki geçerli masternode’ların {1} oyunun onda biridir; {2} masternode ve her biri dört kez sayılan {3} evonode."
 
@@ -723,6 +730,9 @@ msgstr "fonksiyon"
 msgid "Funded"
 msgstr "Finanse edildi"
 
+msgid "Funded is worked out by Radar the way Dash Core builds the next superblock: the proposals that pass and whose payment window covers it, most net yes votes first, each while what is left of its {amount} budget covers it."
+msgstr "Radar, Finanse edildi durumunu Dash Core’un bir sonraki süper bloğu kurduğu gibi hesaplar: geçen ve ödeme penceresi onu kapsayan öneriler, en çok net evet oyu alandan başlayarak, {amount} bütçesinden kalan onu karşıladıkça."
+
 msgid "Funding threshold"
 msgstr "Finansman eşiği"
 
@@ -852,12 +862,6 @@ msgstr "Insight bu adresin en eski işlemlerini getiremedi."
 
 msgid "Insight could not return this address’s transactions."
 msgstr "Insight bu adresin işlemlerini döndüremedi."
-
-msgid "Insight doesn’t report funding, and the time of the next superblock isn’t known, so no proposal is shown as Funded. Passing is worked out by Radar from Insight’s vote counts."
-msgstr "Insight finansmanı bildirmez ve sonraki süperblokun zamanı bilinmiyor; bu yüzden hiçbir teklif finanse edilmiş gösterilmez. “Geçiyor” durumunu Radar, Insight’ın oy sayılarından hesaplar."
-
-msgid "Insight doesn’t report funding. Funded and Passing are worked out by Radar from Insight’s vote counts and the time of the next superblock."
-msgstr "Insight finansmanı bildirmez. “Finanse edildi” ve “Geçiyor” durumlarını Radar, Insight’ın oy sayılarından ve sonraki süperblokun zamanından hesaplar."
 
 msgid "Insight’s {name} index is behind too: {lag}."
 msgstr "Insight’ın {name} indeksi de geride: {lag}."
@@ -1503,6 +1507,9 @@ msgstr "Dolaşımdaki arz güncel değil, bu yüzden paylar adres bakiyeleri üz
 msgid "The end time is an estimate."
 msgstr "Bitiş zamanı bir tahmindir."
 
+msgid "The exact funding threshold isn’t known until DAPI’s masternode list answers. Until then, Passing is Dash Core’s own flag as Hyphen reports it."
+msgstr "Tam finansman eşiği, DAPI’nin masternode listesi yanıt verene kadar bilinmez. O zamana kadar Geçiyor, Hyphen’ın bildirdiği şekliyle Dash Core’un kendi işaretidir."
+
 msgid "The full mempool and its totals need that index, so this page shows what DAPI's live feed has delivered since you opened it."
 msgstr "Tam mempool ve toplamları bu dizini gerektirir; bu yüzden sayfa, açtığınızdan beri DAPI’nin canlı akışının ilettiklerini gösterir."
 
@@ -1529,6 +1536,9 @@ msgstr "Minimum, maksimumdan büyük."
 
 msgid "The newest {shown} of {total} seen since you opened this page"
 msgstr "Bu sayfayı açtığınızdan beri görülen {total} işlemin en yeni {shown} tanesi"
+
+msgid "The next superblock’s budget or time isn’t known, so no proposal is shown as Funded."
+msgstr "Bir sonraki süper bloğun bütçesi veya zamanı bilinmediğinden hiçbir öneri Finanse edildi olarak gösterilmiyor."
 
 msgid "The next transactions could not be loaded."
 msgstr "Sonraki işlemler yüklenemedi."

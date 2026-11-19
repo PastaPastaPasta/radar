@@ -269,6 +269,13 @@ msgstr "Доказательство не прошло проверку"
 #. placeholder {1}: formatInt(weighted)
 #. placeholder {2}: formatInt(regular)
 #. placeholder {3}: formatInt(evonodes)
+msgid "A proposal passes when its yes votes less its no votes reach {0}, the network’s minimum: a tenth of the {1} votes of the valid masternodes on DAPI’s list ({2} masternodes and {3} evonodes that count four times each) is less."
+msgstr "Предложение проходит, когда голоса «за» минус голоса «против» достигают {0} — минимума сети: десятая часть от {1} голосов действительных мастернод в списке DAPI ({2} мастернод и {3} эвонод, каждая из которых считается за четыре) меньше."
+
+#. placeholder {0}: formatInt(votes)
+#. placeholder {1}: formatInt(weighted)
+#. placeholder {2}: formatInt(regular)
+#. placeholder {3}: formatInt(evonodes)
 msgid "A proposal passes when its yes votes less its no votes reach {0}: a tenth of the {1} votes of the valid masternodes on DAPI’s list, {2} masternodes and {3} evonodes that count four times each."
 msgstr "Предложение проходит, когда голоса «за» минус голоса «против» достигают {0}: это десятая часть от {1} голосов действительных мастернод в списке DAPI — {2} мастернод и {3} эвонод, каждая из которых считается за четыре."
 
@@ -723,6 +730,9 @@ msgstr "функция"
 msgid "Funded"
 msgstr "Профинансировано"
 
+msgid "Funded is worked out by Radar the way Dash Core builds the next superblock: the proposals that pass and whose payment window covers it, most net yes votes first, each while what is left of its {amount} budget covers it."
+msgstr "«Профинансировано» Radar вычисляет так же, как Dash Core собирает следующий суперблок: прошедшие предложения, чьё окно выплат его покрывает, начиная с наибольшего чистого числа голосов «за», каждое — пока остатка бюджета в {amount} на него хватает."
+
 msgid "Funding threshold"
 msgstr "Порог финансирования"
 
@@ -852,12 +862,6 @@ msgstr "Insight не смог вернуть самые старые транз�
 
 msgid "Insight could not return this address’s transactions."
 msgstr "Insight не смог вернуть транзакции этого адреса."
-
-msgid "Insight doesn’t report funding, and the time of the next superblock isn’t known, so no proposal is shown as Funded. Passing is worked out by Radar from Insight’s vote counts."
-msgstr "Insight не сообщает о финансировании, а время следующего суперблока неизвестно, поэтому ни одно предложение не показано как профинансированное. «Проходит» Radar вычисляет по числу голосов из Insight."
-
-msgid "Insight doesn’t report funding. Funded and Passing are worked out by Radar from Insight’s vote counts and the time of the next superblock."
-msgstr "Insight не сообщает о финансировании. «Профинансировано» и «Проходит» Radar вычисляет по числу голосов из Insight и времени следующего суперблока."
 
 msgid "Insight’s {name} index is behind too: {lag}."
 msgstr "Индекс {name} у Insight тоже отстаёт: {lag}."
@@ -1503,6 +1507,9 @@ msgstr "Объём в обращении не актуален, поэтому �
 msgid "The end time is an estimate."
 msgstr "Время окончания — оценка."
 
+msgid "The exact funding threshold isn’t known until DAPI’s masternode list answers. Until then, Passing is Dash Core’s own flag as Hyphen reports it."
+msgstr "Точный порог финансирования неизвестен, пока не ответит список мастернод DAPI. До тех пор «Проходит» — собственный флаг Dash Core в том виде, как его сообщает Hyphen."
+
 msgid "The full mempool and its totals need that index, so this page shows what DAPI's live feed has delivered since you opened it."
 msgstr "Для полного мемпула и его итогов нужен этот индекс, поэтому страница показывает то, что живой поток DAPI доставил с момента её открытия."
 
@@ -1529,6 +1536,9 @@ msgstr "Минимум больше максимума."
 
 msgid "The newest {shown} of {total} seen since you opened this page"
 msgstr "Новейшие {shown} из {total}, замеченных с момента открытия этой страницы"
+
+msgid "The next superblock’s budget or time isn’t known, so no proposal is shown as Funded."
+msgstr "Бюджет или время следующего суперблока неизвестны, поэтому ни одно предложение не показано как профинансированное."
 
 msgid "The next transactions could not be loaded."
 msgstr "Не удалось загрузить следующие транзакции."

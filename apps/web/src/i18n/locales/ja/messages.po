@@ -269,6 +269,13 @@ msgstr "証明を検証できませんでした"
 #. placeholder {1}: formatInt(weighted)
 #. placeholder {2}: formatInt(regular)
 #. placeholder {3}: formatInt(evonodes)
+msgid "A proposal passes when its yes votes less its no votes reach {0}, the network’s minimum: a tenth of the {1} votes of the valid masternodes on DAPI’s list ({2} masternodes and {3} evonodes that count four times each) is less."
+msgstr "賛成票から反対票を引いた数がネットワークの最低値 {0} に達すると提案は可決されます。DAPI の一覧にある有効なマスターノードの票 {1}（マスターノード {2} 件と、それぞれ4票として数える Evonode {3} 件）の10分の1はこれより少ないためです。"
+
+#. placeholder {0}: formatInt(votes)
+#. placeholder {1}: formatInt(weighted)
+#. placeholder {2}: formatInt(regular)
+#. placeholder {3}: formatInt(evonodes)
 msgid "A proposal passes when its yes votes less its no votes reach {0}: a tenth of the {1} votes of the valid masternodes on DAPI’s list, {2} masternodes and {3} evonodes that count four times each."
 msgstr "賛成票から反対票を引いた数が {0} に達すると提案は可決されます。これは DAPI の一覧にある有効なマスターノードの票 {1} の10分の1で、マスターノード {2} 件と、それぞれ4票として数える Evonode {3} 件の分です。"
 
@@ -723,6 +730,9 @@ msgstr "関数"
 msgid "Funded"
 msgstr "資金確保済み"
 
+msgid "Funded is worked out by Radar the way Dash Core builds the next superblock: the proposals that pass and whose payment window covers it, most net yes votes first, each while what is left of its {amount} budget covers it."
+msgstr "「資金確保」は、Dash Core が次のスーパーブロックを組むのと同じ方法で Radar が算出します。可決され、支払い期間がそれを含む提案を、純賛成票の多い順に、{amount} の予算の残りで賄える限り採ります。"
+
 msgid "Funding threshold"
 msgstr "資金確保のしきい値"
 
@@ -852,12 +862,6 @@ msgstr "Insightはこのアドレスの最も古いトランザクションを�
 
 msgid "Insight could not return this address’s transactions."
 msgstr "Insight からこのアドレスのトランザクションを取得できませんでした。"
-
-msgid "Insight doesn’t report funding, and the time of the next superblock isn’t known, so no proposal is shown as Funded. Passing is worked out by Radar from Insight’s vote counts."
-msgstr "Insight は資金確保の状況を報告せず、次のスーパーブロックの時刻も不明なため、どの提案も「資金確保済み」とは表示されません。「可決」は Insight の票数から Radar が算出しています。"
-
-msgid "Insight doesn’t report funding. Funded and Passing are worked out by Radar from Insight’s vote counts and the time of the next superblock."
-msgstr "Insight は資金確保の状況を報告しません。「資金確保済み」と「可決」は、Insight の票数と次のスーパーブロックの時刻から Radar が算出しています。"
 
 msgid "Insight’s {name} index is behind too: {lag}."
 msgstr "Insight の {name} インデックスも遅れています: {lag}。"
@@ -1503,6 +1507,9 @@ msgstr "流通供給量が最新ではないため、割合はアドレス残高
 msgid "The end time is an estimate."
 msgstr "終了時刻は推定です。"
 
+msgid "The exact funding threshold isn’t known until DAPI’s masternode list answers. Until then, Passing is Dash Core’s own flag as Hyphen reports it."
+msgstr "正確な資金確保のしきい値は、DAPI のマスターノード一覧が応答するまでわかりません。それまでは、Hyphen が報告する Dash Core 自身のフラグで「可決」を判断します。"
+
 msgid "The full mempool and its totals need that index, so this page shows what DAPI's live feed has delivered since you opened it."
 msgstr "メモリプール全体とその合計にはそのインデックスが必要なため、このページでは、開いてから DAPI のライブフィードが届けた内容を表示します。"
 
@@ -1529,6 +1536,9 @@ msgstr "最小値が最大値を上回っています。"
 
 msgid "The newest {shown} of {total} seen since you opened this page"
 msgstr "このページを開いてから見た {total} 件のうち、新しい {shown} 件"
+
+msgid "The next superblock’s budget or time isn’t known, so no proposal is shown as Funded."
+msgstr "次のスーパーブロックの予算または時刻が不明なため、「資金確保」と表示される提案はありません。"
 
 msgid "The next transactions could not be loaded."
 msgstr "次のトランザクションを読み込めませんでした。"

@@ -269,6 +269,13 @@ msgstr "有一项证明未通过验证"
 #. placeholder {1}: formatInt(weighted)
 #. placeholder {2}: formatInt(regular)
 #. placeholder {3}: formatInt(evonodes)
+msgid "A proposal passes when its yes votes less its no votes reach {0}, the network’s minimum: a tenth of the {1} votes of the valid masternodes on DAPI’s list ({2} masternodes and {3} evonodes that count four times each) is less."
+msgstr "当赞成票减去反对票达到网络最低值 {0} 时，提案即获通过：DAPI 列表中有效主节点 {1} 票（{2} 个主节点和 {3} 个各计四票的 evonode）的十分之一低于此值。"
+
+#. placeholder {0}: formatInt(votes)
+#. placeholder {1}: formatInt(weighted)
+#. placeholder {2}: formatInt(regular)
+#. placeholder {3}: formatInt(evonodes)
 msgid "A proposal passes when its yes votes less its no votes reach {0}: a tenth of the {1} votes of the valid masternodes on DAPI’s list, {2} masternodes and {3} evonodes that count four times each."
 msgstr "当赞成票减去反对票达到 {0} 时，提案即获通过：这是 DAPI 列表中有效主节点 {1} 票的十分之一，包括 {2} 个主节点和 {3} 个各计四票的 evonode。"
 
@@ -723,6 +730,9 @@ msgstr "函数"
 msgid "Funded"
 msgstr "已获资助"
 
+msgid "Funded is worked out by Radar the way Dash Core builds the next superblock: the proposals that pass and whose payment window covers it, most net yes votes first, each while what is left of its {amount} budget covers it."
+msgstr "“已资助”由 Radar 按 Dash Core 构建下一个超级区块的方式计算：通过且付款窗口覆盖该区块的提案，按净赞成票从多到少，在 {amount} 预算的剩余部分足以支付时逐个计入。"
+
 msgid "Funding threshold"
 msgstr "资助门槛"
 
@@ -852,12 +862,6 @@ msgstr "Insight 无法返回此地址最早的交易。"
 
 msgid "Insight could not return this address’s transactions."
 msgstr "Insight 无法返回此地址的交易。"
-
-msgid "Insight doesn’t report funding, and the time of the next superblock isn’t known, so no proposal is shown as Funded. Passing is worked out by Radar from Insight’s vote counts."
-msgstr "Insight 不提供资助情况,且下一个超级区块的时间未知,因此没有提案显示为已获资助。“通过”由 Radar 根据 Insight 的票数计算。"
-
-msgid "Insight doesn’t report funding. Funded and Passing are worked out by Radar from Insight’s vote counts and the time of the next superblock."
-msgstr "Insight 不提供资助情况。“已获资助”和“通过”由 Radar 根据 Insight 的票数和下一个超级区块的时间计算。"
 
 msgid "Insight’s {name} index is behind too: {lag}."
 msgstr "Insight 的 {name} 索引也落后了:{lag}。"
@@ -1503,6 +1507,9 @@ msgstr "流通量不是最新的，因此占比以地址余额为基数。"
 msgid "The end time is an estimate."
 msgstr "结束时间为估算值。"
 
+msgid "The exact funding threshold isn’t known until DAPI’s masternode list answers. Until then, Passing is Dash Core’s own flag as Hyphen reports it."
+msgstr "在 DAPI 的主节点列表应答之前，确切的资助门槛未知。在此之前，“通过”采用 Hyphen 报告的 Dash Core 自身标志。"
+
 msgid "The full mempool and its totals need that index, so this page shows what DAPI's live feed has delivered since you opened it."
 msgstr "完整的内存池及其总计需要该索引，因此本页显示的是你打开页面后 DAPI 实时数据流送来的内容。"
 
@@ -1529,6 +1536,9 @@ msgstr "最小值大于最大值。"
 
 msgid "The newest {shown} of {total} seen since you opened this page"
 msgstr "自你打开此页面以来看到的 {total} 笔中最新的 {shown} 笔"
+
+msgid "The next superblock’s budget or time isn’t known, so no proposal is shown as Funded."
+msgstr "下一个超级区块的预算或时间未知，因此没有提案显示为“已资助”。"
 
 msgid "The next transactions could not be loaded."
 msgstr "无法加载后续交易。"

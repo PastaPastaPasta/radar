@@ -3,8 +3,10 @@ import type { HyProposal } from '@/data/hyphen/schemas'
 export type ProposalStatus = 'funded' | 'passing' | 'failing' | 'ended' | 'invalid'
 
 /**
- * Where a proposal stands, from the flags Hyphen reports. `funded` means the proposal is in the
- * budget that will be paid; `passing` means it has the net votes to be, but is not in it yet.
+ * Where a proposal stands. `funded` is Radar's working of the next superblock (`fundingView`): the proposal passes and
+ * the budget reaches it. Hyphen's own `funded` flag is Core's `fCachedFunding`, which says only that it passes, so it
+ * is never read as `funded` here. `passing` means it has the net votes but the budget doesn't reach it, or the budget
+ * isn't known.
  */
 export function proposalStatus(p: HyProposal, now: number): ProposalStatus {
   if (p.valid === false) return 'invalid'

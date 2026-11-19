@@ -38,6 +38,36 @@ async function olderProposal(): Promise<HyProposalBody> {
 afterEach(() => vi.restoreAllMocks())
 
 describe('Governance page', () => {
+  it('says the exact threshold isn’t known, and takes Core’s own flag from Hyphen, until DAPI’s list answers @HY-13', async () => {
+    vi.spyOn(core, 'masternodeList').mockReturnValue(new Promise(() => undefined))
+    const page = await fixtureBody<{ value: HyProposalBody[] }>(
+      'hyphen',
+      'mainnet',
+      'proposals--limit-100',
+    )
+    renderAt('/governance')
+    const note = await waitFor(() => {
+      const el = document.querySelector('[data-funding-threshold]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    expect(note).toHaveAttribute('data-funding-threshold', 'unknown')
+    expect(note).toHaveTextContent(
+      'The exact funding threshold isn’t known until DAPI’s masternode list answers.',
+    )
+    const rows = await waitFor(() => {
+      const all = document.querySelectorAll<HTMLElement>('tbody[data-proposal]')
+      expect(all.length).toBeGreaterThan(0)
+      return all
+    })
+    for (const row of rows) {
+      const p = page.value.find((x) => x.hash === row.dataset.proposal)!
+      const open = row.dataset.status !== 'ended' && row.dataset.status !== 'invalid'
+      if (open) expect(['funded', 'passing'].includes(row.dataset.status!)).toBe(p.funded === true)
+      expect(row.querySelector('td.rx-votes--last')).not.toHaveTextContent('/')
+    }
+  })
+
   it('shows the budget split and a proposal table with status, votes and amounts @HY-13', async () => {
     renderAt('/governance')
     expect(
@@ -317,8 +347,10 @@ describe('Governance page while Hyphen’s index is stale @IN-16 @HY-19', () => 
     tip(1_760_000_000_000)
     renderAt('/governance?network=testnet')
     await screen.findByRole('button', { name: 'test' })
-    expect(document.querySelector('[data-derived-funding]')).toHaveTextContent(
-      'worked out by Radar from Insight’s vote counts and the time of the next superblock',
+    await waitFor(() =>
+      expect(document.querySelector('[data-derived-funding]')).toHaveTextContent(
+        'Funded is worked out by Radar the way Dash Core builds the next superblock',
+      ),
     )
   })
 
@@ -327,7 +359,7 @@ describe('Governance page while Hyphen’s index is stale @IN-16 @HY-19', () => 
     renderAt('/governance?network=testnet')
     await screen.findByRole('button', { name: 'test' })
     expect(document.querySelector('[data-derived-funding]')).toHaveTextContent(
-      'time of the next superblock isn’t known',
+      'The next superblock’s budget or time isn’t known, so no proposal is shown as Funded.',
     )
     for (const row of document.querySelectorAll('[data-proposal]')) {
       expect(row).not.toHaveTextContent(/\bFunded\b/)
