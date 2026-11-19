@@ -7,7 +7,7 @@ import { sizeOption, type Series } from './census-charts'
 import { useCensusColors } from './census-colors'
 import type { Census } from './census-data'
 import { unreachableLink } from './census-links'
-import { dayMonth, dayMonthTime } from './census-format'
+import { dayMonthTime } from './census-format'
 import { radarScope, reachShare, total } from './census-math'
 import { ScrollRegion, ShareBar, useShareText } from './parts'
 import { SCOPE_NOUN } from './scope-text'
@@ -71,7 +71,15 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
         {data && data.networks.length > 0 ? (
           <ScrollRegion label={t`Address networks`} data-address-networks>
             <table className="dh-table dh-table--compact">
-              <caption className="text-left font-semibold">{t`Address networks`}</caption>
+              <caption className="text-left font-semibold">
+                {t`Address networks`}
+                <span
+                  className="block text-sm font-normal text-[var(--dh-ink-2)]"
+                  data-networks-note
+                >
+                  {t`Masternodes answering counts registered masternodes, PoSe-banned included, that answered on an address of that network; one that answers on two networks counts in both.`}
+                </span>
+              </caption>
               <thead>
                 <tr>
                   <th scope="col">{t`Network`}</th>
@@ -82,7 +90,7 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
                     {t`Reachable now`}
                   </th>
                   <th scope="col" className="text-right">
-                    {t`Masternodes`}
+                    {t`Masternodes answering`}
                   </th>
                 </tr>
               </thead>
@@ -153,7 +161,7 @@ function SizeChart({ census }: { census: Census }) {
         height={220}
         label={t`Network size over time`}
         table={{
-          columns: [t`Series`, dayMonth(doc.t[0]!), dayMonth(doc.t[count - 1]!)],
+          columns: [t`Series`, dayMonthTime(doc.t[0]!), dayMonthTime(doc.t[count - 1]!)],
           rows: series.map((s) => [
             s.name,
             formatInt(Math.round(s.values[0] ?? 0)),

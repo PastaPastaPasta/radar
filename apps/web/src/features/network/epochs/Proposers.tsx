@@ -38,7 +38,7 @@ export function Proposers() {
   }, [answer, sort])
   const columns = useProposerColumns()
   const base = (a: EpochProposers) =>
-    t`Epoch ${formatInt(a.epoch)}. Evonodes: ${formatInt(a.proposers.length)}. Blocks proposed: ${formatInt(Number(a.total))}.`
+    t`Epoch ${formatInt(a.epoch)}. Evonodes that proposed a block: ${formatInt(a.proposers.length)}. Blocks proposed: ${formatInt(Number(a.total))}.`
   const pages = answer?.pages ?? 0
   return (
     <Card

@@ -251,8 +251,8 @@ msgstr "エポック {0}"
 #. placeholder {0}: formatInt(a.epoch)
 #. placeholder {1}: formatInt(a.proposers.length)
 #. placeholder {2}: formatInt(Number(a.total))
-msgid "Epoch {0}. Evonodes: {1}. Blocks proposed: {2}."
-msgstr "エポック {0}。Evonode: {1}。提案されたブロック: {2}。"
+msgid "Epoch {0}. Evonodes that proposed a block: {1}. Blocks proposed: {2}."
+msgstr "エポック {0}。ブロックを提案したエボノード：{1}。提案されたブロック：{2}。"
 
 #. placeholder {0}: formatPercent(Math.min(ratio, 0.99), 0)
 msgid "Epoch {number} is {0} through"
@@ -264,8 +264,8 @@ msgstr "エポック {number} は終了予定を過ぎています"
 msgid "Epochs"
 msgstr "エポック"
 
-msgid "Every evonode Platform Explorer has seen validate."
-msgstr "Platform Explorer が検証を確認したすべての Evonode。"
+msgid "Every evonode Platform Explorer has ever seen validate, removed ones included, in its own states. The masternode list counts only registered evonodes."
+msgstr "Platform Explorer がこれまでに検証を確認したすべてのエボノード（削除済みを含む）を、その独自の状態で数えています。マスターノード一覧は登録済みのエボノードだけを数えます。"
 
 msgid "Every source is answering"
 msgstr "すべてのソースが応答しています"

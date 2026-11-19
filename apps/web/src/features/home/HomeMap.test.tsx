@@ -42,7 +42,8 @@ describe('the home map @RA-01', () => {
     expect(list).not.toHaveTextContent('Warsaw')
     expect(list).not.toHaveTextContent(/: 0 masternodes/)
     expect(document.querySelector('.rx-maplegend__sum')).toHaveTextContent(
-      '30 masternodes in 2 places',
+      '30 answering masternodes in 2 places',
     )
+    expect(document.querySelector('[data-map-scope]')).toHaveTextContent('PoSe-banned included')
   })
 })

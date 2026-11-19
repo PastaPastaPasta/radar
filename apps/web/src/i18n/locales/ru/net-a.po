@@ -42,6 +42,11 @@ msgstr "{0} в год"
 msgid "{0} alone has {1}."
 msgstr "На одну страну {0} приходится {1}."
 
+#. placeholder {0}: formatInt(masternodes)
+#. placeholder {1}: formatInt(places.length)
+msgid "{0} answering masternodes in {1} places"
+msgstr "{0} отвечающих мастернод в {1} местах"
+
 #. placeholder {0}: formatInt(c.fail)
 msgid "{0} fail"
 msgstr "не прошли: {0}"
@@ -63,11 +68,6 @@ msgstr "На {0} работает {1} ({noun}), а на трёх крупней�
 #. placeholder {0}: formatInt(p.masternodes)
 msgid "{0} masternodes"
 msgstr "Мастернод: {0}"
-
-#. placeholder {0}: formatInt(masternodes)
-#. placeholder {1}: formatInt(places.length)
-msgid "{0} masternodes in {1} places"
-msgstr "Мастернод: {0}, мест: {1}"
 
 #. placeholder {0}: formatInt(o.needed)
 #. placeholder {1}: formatInt(o.remaining ?? 0)
@@ -472,6 +472,10 @@ msgstr "Каждый блок Platform привязан к блоку Core."
 msgid "Earliest activation"
 msgstr "Самая ранняя активация"
 
+msgctxt "evonodes counted"
+msgid "enabled"
+msgstr "включённые"
+
 msgid "Enabled"
 msgstr "Включена"
 
@@ -616,8 +620,8 @@ msgstr "Зафиксировано"
 msgid "Locked to Core block"
 msgstr "Привязан к блоку Core"
 
-msgid "Map of the world with a disc for each place Radar found masternodes. {summary}."
-msgstr "Карта мира с кружком в каждом месте, где Radar нашёл мастерноды. {summary}."
+msgid "Map of the world with a disc for each place Radar found masternodes. {summary}, {scope}."
+msgstr "Карта мира с кругом для каждого места, где Radar нашёл мастерноды. {summary}, {scope}."
 
 msgid "Masternode list from DAPI"
 msgstr "Список мастернод от DAPI"
@@ -633,6 +637,9 @@ msgstr "Мастерноды"
 
 msgid "Masternodes answering"
 msgstr "Отвечающие мастерноды"
+
+msgid "Masternodes answering counts registered masternodes, PoSe-banned included, that answered on an address of that network; one that answers on two networks counts in both."
+msgstr "«Отвечающие мастерноды» — зарегистрированные мастерноды, включая забаненные PoSe, ответившие по адресу этой сети; мастернода, отвечающая в двух сетях, учитывается в обеих."
 
 msgid "Masternodes reachable"
 msgstr "Доступные мастерноды"
@@ -881,6 +888,9 @@ msgstr "Для последних переходов и блоков Platform н
 
 msgid "PoSe-banned"
 msgstr "Забанена PoSe"
+
+msgid "PoSe-banned included"
+msgstr "включая забаненные PoSe"
 
 msgid "Protocol"
 msgstr "Протокол"

@@ -283,6 +283,10 @@ test.describe('Network census', () => {
     await expect(networks.locator('[data-network="cjdns"]')).toContainText(
       'not crawled: disabled (CJDNS=false)',
     )
+    await expect(
+      networks.getByRole('columnheader', { name: 'Masternodes answering' }),
+    ).toBeVisible()
+    await expect(networks.locator('[data-networks-note]')).toContainText('PoSe-banned included')
 
     const size = reach.locator('[data-size-chart]')
     await expect(size.getByRole('img', { name: 'Network size over time' })).toBeVisible()

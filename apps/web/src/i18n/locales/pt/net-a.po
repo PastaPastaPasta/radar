@@ -42,6 +42,11 @@ msgstr "{0} por ano"
 msgid "{0} alone has {1}."
 msgstr "Só {0} tem {1}."
 
+#. placeholder {0}: formatInt(masternodes)
+#. placeholder {1}: formatInt(places.length)
+msgid "{0} answering masternodes in {1} places"
+msgstr "{0} masternodes que respondem em {1} locais"
+
 #. placeholder {0}: formatInt(c.fail)
 msgid "{0} fail"
 msgstr "{0} falham"
@@ -63,11 +68,6 @@ msgstr "{0} aloja {1} dos {noun}, e os três maiores fornecedores alojam {2}."
 #. placeholder {0}: formatInt(p.masternodes)
 msgid "{0} masternodes"
 msgstr "{0} masternodes"
-
-#. placeholder {0}: formatInt(masternodes)
-#. placeholder {1}: formatInt(places.length)
-msgid "{0} masternodes in {1} places"
-msgstr "{0} masternodes em {1} locais"
 
 #. placeholder {0}: formatInt(o.needed)
 #. placeholder {1}: formatInt(o.remaining ?? 0)
@@ -472,6 +472,10 @@ msgstr "Cada bloco da Platform está associado a um bloco do Core."
 msgid "Earliest activation"
 msgstr "Ativação mais cedo possível"
 
+msgctxt "evonodes counted"
+msgid "enabled"
+msgstr "ativados"
+
 msgid "Enabled"
 msgstr "Ativado"
 
@@ -616,8 +620,8 @@ msgstr "Consolidado"
 msgid "Locked to Core block"
 msgstr "Fixado ao bloco Core"
 
-msgid "Map of the world with a disc for each place Radar found masternodes. {summary}."
-msgstr "Mapa-múndi com um círculo para cada local onde o Radar encontrou masternodes. {summary}."
+msgid "Map of the world with a disc for each place Radar found masternodes. {summary}, {scope}."
+msgstr "Mapa do mundo com um disco para cada local onde o Radar encontrou masternodes. {summary}, {scope}."
 
 msgid "Masternode list from DAPI"
 msgstr "Lista de masternodes do DAPI"
@@ -633,6 +637,9 @@ msgstr "Masternodes"
 
 msgid "Masternodes answering"
 msgstr "Masternodes que respondem"
+
+msgid "Masternodes answering counts registered masternodes, PoSe-banned included, that answered on an address of that network; one that answers on two networks counts in both."
+msgstr "“Masternodes que respondem” conta os masternodes registrados, incluindo os banidos pelo PoSe, que responderam num endereço dessa rede; um que responde em duas redes conta nas duas."
 
 msgid "Masternodes reachable"
 msgstr "Masternodes alcançáveis"
@@ -881,6 +888,9 @@ msgstr "As transições e os blocos mais recentes da Platform precisam do Platfo
 
 msgid "PoSe-banned"
 msgstr "Banido pelo PoSe"
+
+msgid "PoSe-banned included"
+msgstr "incluindo os banidos pelo PoSe"
 
 msgid "Protocol"
 msgstr "Protocolo"

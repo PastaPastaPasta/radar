@@ -53,7 +53,7 @@ export function Validators({ active }: { active: boolean }) {
         className="rx-netcard"
         layer="platform"
         title={t`Validators`}
-        subtitle={t`Every evonode Platform Explorer has seen validate.`}
+        subtitle={t`Every evonode Platform Explorer has ever seen validate, removed ones included, in its own states. The masternode list counts only registered evonodes.`}
         {...queryView(total)}
         source={stampsOf(total.data, live.data, banned.data)}
         actions={

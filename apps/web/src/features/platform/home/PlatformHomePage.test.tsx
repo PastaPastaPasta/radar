@@ -125,6 +125,7 @@ describe('Platform overview', () => {
     await waitFor(() => expect(within(proposers).getAllByRole('row')).toHaveLength(11))
     const rows = within(proposers).getAllByRole('row')
     expect(proposers).toHaveTextContent('Combined from 4 proof-checked answers')
+    expect(proposers).toHaveTextContent(/Evonodes that proposed a block: \d/)
     const links = within(proposers)
       .getAllByRole('link')
       .filter((a) => /^\/mn\/[0-9a-f]{64}/.test(a.getAttribute('href') ?? ''))

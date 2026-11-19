@@ -251,8 +251,8 @@ msgstr "纪元 {0}"
 #. placeholder {0}: formatInt(a.epoch)
 #. placeholder {1}: formatInt(a.proposers.length)
 #. placeholder {2}: formatInt(Number(a.total))
-msgid "Epoch {0}. Evonodes: {1}. Blocks proposed: {2}."
-msgstr "纪元 {0}。Evonode：{1}。已提议区块：{2}。"
+msgid "Epoch {0}. Evonodes that proposed a block: {1}. Blocks proposed: {2}."
+msgstr "纪元 {0}。提议过区块的 Evonode：{1}。已提议区块：{2}。"
 
 #. placeholder {0}: formatPercent(Math.min(ratio, 0.99), 0)
 msgid "Epoch {number} is {0} through"
@@ -264,8 +264,8 @@ msgstr "纪元 {number} 已超过预计结束时间"
 msgid "Epochs"
 msgstr "纪元"
 
-msgid "Every evonode Platform Explorer has seen validate."
-msgstr "Platform Explorer 见过参与验证的每个 evonode。"
+msgid "Every evonode Platform Explorer has ever seen validate, removed ones included, in its own states. The masternode list counts only registered evonodes."
+msgstr "Platform Explorer 见过参与验证的所有 Evonode，包括已移除的，按其自身的状态统计。主节点列表只统计已注册的 Evonode。"
 
 msgid "Every source is answering"
 msgstr "所有数据源均正常响应"
