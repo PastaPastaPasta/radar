@@ -80,7 +80,9 @@ test.describe('Network census', () => {
       '2,190 masternodes answered the last crawl',
     )
     const lede = page.locator('[data-census-lede]')
-    await expect(lede).toContainText('Of the 2,207 enabled, each counted once.')
+    await expect(lede).toContainText(
+      'That is 99.2% of the 2,207 enabled masternodes, each counted once.',
+    )
     await expect(lede).toContainText('That’s 32 fewer than a day ago.')
     await expect(lede).toContainText(
       'In all 2,581 addresses answered; a node reachable on several networks counts at each.',
@@ -394,7 +396,9 @@ test.describe('Network census', () => {
   }) => {
     await pinAfterCrawl(page, 20 * DAY, 'testnet')
     await page.goto('/?network=testnet')
-    await expect(page.locator('[data-census-lede]')).toContainText('Of the ')
+    await expect(page.locator('[data-census-lede]')).toContainText(
+      'enabled masternodes, each counted once',
+    )
     await settled(page)
     await expect(page.locator('.rx-hero [data-v24-link]')).toHaveCount(0)
   })

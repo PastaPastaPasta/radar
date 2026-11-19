@@ -108,7 +108,7 @@ test.describe('The map', () => {
     await expect(h1(page)).toHaveText(/of the 12 evonodes run in/)
     await page.getByRole('button', { name: 'All reachable addresses' }).click()
     await expect(page).toHaveURL(/layer=nodes/)
-    await expect(h1(page)).toHaveText(/reachable IP addresses are in/)
+    await expect(h1(page)).toHaveText(/reachable addresses are in/)
     await expect(page.locator('[data-left-out]')).toContainText('on Tor or I2P')
     await expect(page.locator('[data-left-out]')).toContainText(
       'A node reachable on both IPv4 and IPv6 counts at each address.',

@@ -29,7 +29,7 @@ The home page says one thing first and lets the rest follow down the page. It is
 - **Left column (max 540 px):**
   - a kicker: the live dot, the live word and the network name. Nothing else.
   - **the claim**, built from the last crawl: "2,190 masternodes answered the last crawl" (48 px, weight 680, stretch 118%, balanced over two or three lines; `clamp(30px, 4.2vw, 48px)`). The number is the only part that changes.
-  - one plain paragraph (17 px, `--dh-ink-2`): "Among them 2,033 of the 2,051 enabled masternodes, 2 nodes fewer than a day ago."
+  - one plain paragraph (17 px, `--dh-ink-2`): "That is 99.2% of the 2,207 enabled masternodes, each counted once. That’s 32 fewer than a day ago. In all 2,581 addresses answered; a node reachable on several networks counts at each."
   - **six figures** in a 3 × 2 grid (2 × 3 on a phone), each a label (13 px, `--dh-ink-2`), a value (24 px, weight 650, stretch 110%) and at most one note (12.5 px, `--dh-ink-2`), with a 2 px `--dh-line` rule on its left and no box. Row one is the three layers: masternodes answering (a 4 px rule and the value in the status colour: good from 98%, warn from 90%, bad below), Core block height (ChainLocked, or "reported by one node", and the block's age), Platform block height (epoch and blocks in). Row two is the census: evonodes, countries, PoSe-banned. Every figure is a link to the list or page behind it.
   - **one source line** for the whole hero (Crawled by Radar · 3 min ago, Served by DAPI, Proof-checked).
   - the page's one amber button, "Open the map", and one secondary button, "Search Radar" with its `/` key hint. While a Core upgrade is activating, a text link to its tracker follows them.

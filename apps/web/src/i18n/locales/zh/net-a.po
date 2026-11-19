@@ -469,6 +469,9 @@ msgstr "Drive 版本"
 msgid "Each {0}-block window, blocks that set bit {1} (with the top version bits 001) count as signalling. A window with as many as its threshold locks Core 24 in. In the last {2} blocks, {3} signalled."
 msgstr "在每个 {0} 个区块的窗口中，设置了第 {1} 位（高位版本位为 001）的区块计为发出信号。达到阈值数量的窗口会将 Core 24 锁定。最近 {2} 个区块中，有 {3} 个发出了信号。"
 
+msgid "Each masternode is counted once."
+msgstr "每个主节点只计一次。"
+
 msgid "Each Platform block is locked to a Core block."
 msgstr "每个 Platform 区块都与一个 Core 区块绑定。"
 
@@ -768,9 +771,6 @@ msgstr "内存池中目前没有交易"
 msgid "No window to show yet."
 msgstr "暂无可显示的窗口。"
 
-msgid "nodes"
-msgstr "节点"
-
 msgid "Nodes"
 msgstr "节点"
 
@@ -815,9 +815,6 @@ msgstr "现在"
 msgid "of {0} so far"
 msgstr "目前共 {0}"
 
-msgid "Of the {enabled} enabled, each counted once."
-msgstr "在 {enabled} 个已启用的主节点中，每个只计一次。"
-
 msgid "Older"
 msgstr "较早"
 
@@ -840,15 +837,15 @@ msgstr "其他地址"
 msgid "Other clients"
 msgstr "其他客户端"
 
-msgid "other full nodes"
-msgstr "其他全节点"
-
 msgid "Other full nodes"
 msgstr "其他全节点"
 
 #. placeholder {0}: formatInt(total(dist.version ?? []))
 msgid "Other full nodes accept connections at {0} addresses. A node reachable on several networks counts at each, and nodes that only connect out can't be seen from outside."
 msgstr "其他全节点在 {0} 个地址上接受连接。在多个网络上可达的节点在每个网络中各计一次，只向外连接的节点从外部看不到。"
+
+msgid "other full nodes’ addresses"
+msgstr "其他全节点的地址"
 
 msgid "Other reachable addresses"
 msgstr "其他可达地址"
@@ -949,6 +946,9 @@ msgstr "可达性"
 
 msgid "Reachable"
 msgstr "可达"
+
+msgid "reachable addresses"
+msgstr "可达地址"
 
 msgid "Reachable addresses"
 msgstr "可达地址"
@@ -1088,6 +1088,10 @@ msgstr "Tenderdash P2P 已开放"
 
 msgid "Tenderdash versions"
 msgstr "Tenderdash 版本"
+
+#. placeholder {0}: formatPercent(share, 1)
+msgid "That is {0} of the {enabled} enabled masternodes, each counted once."
+msgstr "这占 {enabled} 个已启用主节点的 {0}，每个只计一次。"
 
 msgid "The activation tracker needs Radar's crawl"
 msgstr "激活跟踪器需要 Radar 的抓取"

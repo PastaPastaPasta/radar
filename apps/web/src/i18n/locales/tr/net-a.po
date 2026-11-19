@@ -469,6 +469,9 @@ msgstr "Drive sürümleri"
 msgid "Each {0}-block window, blocks that set bit {1} (with the top version bits 001) count as signalling. A window with as many as its threshold locks Core 24 in. In the last {2} blocks, {3} signalled."
 msgstr "Her {0} bloklu pencerede, bit {1}’i ayarlayan bloklar (üst sürüm bitleri 001 ile) sinyal vermiş sayılır. Eşiği kadar sinyal alan bir pencere Core 24’ü kilitler. Son {2} blokta {3} tanesi sinyal verdi."
 
+msgid "Each masternode is counted once."
+msgstr "Her masternode bir kez sayılır."
+
 msgid "Each Platform block is locked to a Core block."
 msgstr "Her Platform bloğu bir Core bloğuna bağlıdır."
 
@@ -768,9 +771,6 @@ msgstr "Şu anda mempool’da işlem yok"
 msgid "No window to show yet."
 msgstr "Henüz gösterilecek pencere yok."
 
-msgid "nodes"
-msgstr "düğümler"
-
 msgid "Nodes"
 msgstr "Düğümler"
 
@@ -815,9 +815,6 @@ msgstr "Şimdi"
 msgid "of {0} so far"
 msgstr "şimdiye kadarki {0} içinde"
 
-msgid "Of the {enabled} enabled, each counted once."
-msgstr "{enabled} etkin masternode’dan; her biri bir kez sayıldı."
-
 msgid "Older"
 msgstr "Eskiler"
 
@@ -840,15 +837,15 @@ msgstr "Diğer adresler"
 msgid "Other clients"
 msgstr "Diğer istemciler"
 
-msgid "other full nodes"
-msgstr "diğer tam düğümler"
-
 msgid "Other full nodes"
 msgstr "Diğer tam düğümler"
 
 #. placeholder {0}: formatInt(total(dist.version ?? []))
 msgid "Other full nodes accept connections at {0} addresses. A node reachable on several networks counts at each, and nodes that only connect out can't be seen from outside."
 msgstr "Diğer tam düğümler {0} adreste bağlantı kabul ediyor. Birkaç ağda erişilebilen bir düğüm her birinde sayılır; yalnızca dışarı bağlanan düğümler dışarıdan görülemez."
+
+msgid "other full nodes’ addresses"
+msgstr "diğer tam düğümlerin adresleri"
 
 msgid "Other reachable addresses"
 msgstr "Diğer erişilebilir adresler"
@@ -949,6 +946,9 @@ msgstr "Erişilebilirlik"
 
 msgid "Reachable"
 msgstr "Erişilebilir"
+
+msgid "reachable addresses"
+msgstr "erişilebilir adresler"
 
 msgid "Reachable addresses"
 msgstr "Erişilebilir adresler"
@@ -1088,6 +1088,10 @@ msgstr "Tenderdash P2P açık"
 
 msgid "Tenderdash versions"
 msgstr "Tenderdash sürümleri"
+
+#. placeholder {0}: formatPercent(share, 1)
+msgid "That is {0} of the {enabled} enabled masternodes, each counted once."
+msgstr "Bu, {enabled} etkin masternode’un {0} kadarı; her biri bir kez sayıldı."
 
 msgid "The activation tracker needs Radar's crawl"
 msgstr "Etkinleştirme izleyicisi için Radar’ın taraması gerekir"

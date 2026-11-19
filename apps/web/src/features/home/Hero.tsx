@@ -269,7 +269,9 @@ export function Hero() {
           <p className="rx-hero__lede" data-census-lede={crawl ? '' : undefined}>
             {crawl ? (
               <>
-                {t`Of the ${enabled} enabled, each counted once.`}{' '}
+                {share === undefined
+                  ? t`Each masternode is counted once.`
+                  : t`That is ${formatPercent(share, 1)} of the ${enabled} enabled masternodes, each counted once.`}{' '}
                 {change === undefined ? null : <>{change} </>}
                 {t`In all ${addresses} addresses answered; a node reachable on several networks counts at each.`}
               </>

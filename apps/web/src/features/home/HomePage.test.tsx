@@ -63,7 +63,7 @@ describe('Home page', () => {
     })
     expect(claim.closest('h1')).toHaveTextContent(/^Radar:/)
     expect(document.querySelector('[data-census-lede]')).toHaveTextContent(
-      'Of the 2,207 enabled, each counted once. That’s 32 fewer than a day ago. In all 2,581 addresses answered; a node reachable on several networks counts at each.',
+      'That is 99.2% of the 2,207 enabled masternodes, each counted once. That’s 32 fewer than a day ago. In all 2,581 addresses answered; a node reachable on several networks counts at each.',
     )
     expect(document.querySelectorAll('h1')).toHaveLength(1)
   })

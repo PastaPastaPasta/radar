@@ -469,6 +469,9 @@ msgstr "Drive のバージョン"
 msgid "Each {0}-block window, blocks that set bit {1} (with the top version bits 001) count as signalling. A window with as many as its threshold locks Core 24 in. In the last {2} blocks, {3} signalled."
 msgstr "{0} ブロックのウィンドウごとに、ビット {1}（上位バージョンビットは 001）を立てたブロックがシグナルとして数えられます。しきい値に達したウィンドウで Core 24 がロックインされます。直近 {2} ブロックのうち {3} がシグナルを発信しました。"
 
+msgid "Each masternode is counted once."
+msgstr "各マスターノードは1回だけ数えています。"
+
 msgid "Each Platform block is locked to a Core block."
 msgstr "各 Platform ブロックは Core ブロックに紐づいています。"
 
@@ -768,9 +771,6 @@ msgstr "現在メモリプールにトランザクションはありません"
 msgid "No window to show yet."
 msgstr "表示できるウィンドウはまだありません。"
 
-msgid "nodes"
-msgstr "ノード"
-
 msgid "Nodes"
 msgstr "ノード"
 
@@ -815,9 +815,6 @@ msgstr "現在"
 msgid "of {0} so far"
 msgstr "これまでの {0} のうち"
 
-msgid "Of the {enabled} enabled, each counted once."
-msgstr "有効な {enabled} 件のうち。それぞれ1回だけ数えています。"
-
 msgid "Older"
 msgstr "古い方へ"
 
@@ -840,15 +837,15 @@ msgstr "その他のアドレス"
 msgid "Other clients"
 msgstr "その他のクライアント"
 
-msgid "other full nodes"
-msgstr "その他のフルノード"
-
 msgid "Other full nodes"
 msgstr "その他のフルノード"
 
 #. placeholder {0}: formatInt(total(dist.version ?? []))
 msgid "Other full nodes accept connections at {0} addresses. A node reachable on several networks counts at each, and nodes that only connect out can't be seen from outside."
 msgstr "その他のフルノードは {0} 件のアドレスで接続を受け付けています。複数のネットワークで到達可能なノードはそれぞれで数えられ、外向きにしか接続しないノードは外から見えません。"
+
+msgid "other full nodes’ addresses"
+msgstr "その他のフルノードのアドレス"
 
 msgid "Other reachable addresses"
 msgstr "その他の到達可能なアドレス"
@@ -949,6 +946,9 @@ msgstr "到達性"
 
 msgid "Reachable"
 msgstr "到達可能"
+
+msgid "reachable addresses"
+msgstr "到達可能なアドレス"
 
 msgid "Reachable addresses"
 msgstr "到達可能なアドレス"
@@ -1088,6 +1088,10 @@ msgstr "Tenderdash P2P 開放"
 
 msgid "Tenderdash versions"
 msgstr "Tenderdash のバージョン"
+
+#. placeholder {0}: formatPercent(share, 1)
+msgid "That is {0} of the {enabled} enabled masternodes, each counted once."
+msgstr "有効なマスターノード {enabled} 件の {0} にあたり、それぞれ1回だけ数えています。"
 
 msgid "The activation tracker needs Radar's crawl"
 msgstr "有効化トラッカーには Radar のクロールが必要です"

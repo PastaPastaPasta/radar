@@ -53,7 +53,7 @@ export const NETWORK_ENDPOINTS: ApiEndpoint[] = [
     id: 'geo',
     method: 'GET',
     path: '/api/v1/{net}/geo',
-    summary: msg`Every IP address that answered the latest crawl, counted per city without the addresses themselves, and how many have no location.`,
+    summary: msg`Every reachable address the latest crawl found, counted per city without the addresses themselves, and how many have no location (Tor and I2P among them).`,
   },
   {
     id: 'masternodes',

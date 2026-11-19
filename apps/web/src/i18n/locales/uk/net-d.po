@@ -51,8 +51,8 @@ msgstr "{claimTotal, plural, one {# Evonode} few {# Evonode} many {# Evonode} ot
 msgid "{claimTotal, plural, one {# masternode} other {# masternodes}}"
 msgstr "{claimTotal, plural, one {# мастерноди} few {# мастернод} many {# мастернод} other {# мастерноди}}"
 
-msgid "{claimTotal, plural, one {# reachable IP address} other {# reachable IP addresses}}"
-msgstr "{claimTotal, plural, one {# доступна IP-адреса} few {# доступні IP-адреси} many {# доступних IP-адрес} other {# доступної IP-адреси}}"
+msgid "{claimTotal, plural, one {# reachable address} other {# reachable addresses}}"
+msgstr "{claimTotal, plural, one {# доступна адреса} few {# доступні адреси} many {# доступних адрес} other {# доступної адреси}}"
 
 msgid "{j, plural, one {Half run with # hosting provider.} other {Half run with # hosting providers.}}"
 msgstr "{j, plural, one {Половина працює в # хостинг-провайдера.} few {Половина працює в # хостинг-провайдерів.} many {Половина працює в # хостинг-провайдерів.} other {Половина працює в # хостинг-провайдера.}}"
@@ -77,8 +77,8 @@ msgstr "{n, plural, one {# Evonode} few {# Evonode} many {# Evonode} other {# Ev
 msgid "{n, plural, one {# masternode} other {# masternodes}}"
 msgstr "{n, plural, one {# мастернода} few {# мастерноди} many {# мастернод} other {# мастерноди}}"
 
-msgid "{n, plural, one {# reachable IP address} other {# reachable IP addresses}}"
-msgstr "{n, plural, one {# доступна IP-адреса} few {# доступні IP-адреси} many {# доступних IP-адрес} other {# доступної IP-адреси}}"
+msgid "{n, plural, one {# reachable address} other {# reachable addresses}}"
+msgstr "{n, plural, one {# доступна адреса} few {# доступні адреси} many {# доступних адрес} other {# доступної адреси}}"
 
 msgid "{others, plural, one {# other} other {# others}}"
 msgstr "{others, plural, one {ще #} few {ще #} many {ще #} other {ще #}}"
@@ -247,8 +247,8 @@ msgstr "Європа"
 msgid "Every 15 minutes the crawler opens a P2P connection to every registered masternode's address, to every node that answered in the past week and to new addresses it learns from our Dash node and from other nodes. It completes the version handshake and disconnects. It doesn't relay transactions and keeps only what the node announces."
 msgstr "Кожні 15 хвилин краулер відкриває P2P-з’єднання з адресою кожного зареєстрованого мастернода, з кожним вузлом, що відповів за останній тиждень, і з новими адресами, про які дізнається від нашого вузла Dash та інших вузлів. Він завершує рукостискання версії й відключається. Транзакції він не ретранслює й зберігає лише те, що оголошує вузол."
 
-msgid "Every IP address that answered the latest crawl, counted per city without the addresses themselves, and how many have no location."
-msgstr "Кожна IP-адреса, що відповіла в останньому обході, порахована за містами без самих адрес, і скільки адрес без місця."
+msgid "Every reachable address the latest crawl found, counted per city without the addresses themselves, and how many have no location (Tor and I2P among them)."
+msgstr "Кожна доступна адреса, яку знайшов останній обхід, порахована за містами без самих адрес, і скільки адрес без місця (серед них Tor та I2P)."
 
 msgid "Every registered masternode with its latest port check, user agent, location, hosting, uptime and DKG readiness. The map is drawn from this."
 msgstr "Кожен зареєстрований мастернод з останньою перевіркою порту, user agent, розташуванням, хостингом, аптаймом і готовністю до DKG. Мапа будується з цих даних."
@@ -289,8 +289,8 @@ msgstr "Половина Evonode працює в містах вище."
 msgid "Half of the masternodes run in the cities above."
 msgstr "Половина мастернод працює в містах вище."
 
-msgid "Half of the reachable IP addresses are in the cities above."
-msgstr "Половина доступних IP-адрес розташована в містах вище."
+msgid "Half of the reachable addresses are in the cities above."
+msgstr "Половина доступних адрес розташована в містах вище."
 
 msgid "Half of these {tot} run in {cities}"
 msgstr "Половина з цих {tot} працює в {cities}"
@@ -595,8 +595,8 @@ msgstr "Єдина врахована Evonode працює в місті {where}
 msgid "The only masternode counted runs in {where}"
 msgstr "Єдина врахована мастернода працює в місті {where}"
 
-msgid "The only reachable IP address is in {where}"
-msgstr "Єдина доступна IP-адреса розташована в {where}"
+msgid "The only reachable address is in {where}"
+msgstr "Єдина доступна адреса розташована в {where}"
 
 msgid "The site and the API are served from documents the crawler publishes after each crawl, so they stay up when the crawler doesn't."
 msgstr "Сайт і API віддаються з документів, які краулер публікує після кожного обходу, тому вони працюють, навіть коли краулер недоступний."

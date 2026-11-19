@@ -144,7 +144,7 @@ describe('the Map page', () => {
     await waitFor(() => expect(h1()).toHaveTextContent(/of the 12 evonodes run in/))
     await user.click(screen.getByRole('button', { name: 'All reachable addresses' }))
     await waitFor(() => expect(search().get('layer')).toBe('nodes'))
-    await waitFor(() => expect(h1()).toHaveTextContent(/reachable IP addresses are in/))
+    await waitFor(() => expect(h1()).toHaveTextContent(/reachable addresses are in/))
     expect(search().has('type')).toBe(false)
     expect(
       screen.getByText(/reachable addresses have no place, most of them on Tor or I2P/),
@@ -373,7 +373,7 @@ describe('the Map page', () => {
   it('keeps every reachable node’s city map when the summary fails, with its own retry @RA-50', async () => {
     server.use(http.get('*/mainnet/summary', () => new HttpResponse(null, { status: 500 })))
     renderAt('/map?layer=nodes')
-    await waitFor(() => expect(h1()).toHaveTextContent(/reachable IP addresses are in/))
+    await waitFor(() => expect(h1()).toHaveTextContent(/reachable addresses are in/))
     await waitFor(() =>
       expect(document.querySelector('[data-map-bars]')).toHaveAttribute('data-map-bars', 'error'),
     )

@@ -181,14 +181,14 @@ function useClaim(b: Board): string | undefined {
   if (claimTotal === 1) {
     const where = placeText(b.places[0]!)
     if (noun === 'evo') return t`The only evonode counted runs in ${where}`
-    if (noun === 'nodes') return t`The only reachable IP address is in ${where}`
+    if (noun === 'nodes') return t`The only reachable address is in ${where}`
     return t`The only masternode counted runs in ${where}`
   }
   const tot =
     noun === 'evo'
       ? plural(claimTotal, { one: '# evonode', other: '# evonodes' })
       : noun === 'nodes'
-        ? plural(claimTotal, { one: '# reachable IP address', other: '# reachable IP addresses' })
+        ? plural(claimTotal, { one: '# reachable address', other: '# reachable addresses' })
         : plural(claimTotal, { one: '# masternode', other: '# masternodes' })
   if (form.kind === 'one') {
     const top = b.places.find((p) => p.id === form.share.key)!
@@ -312,7 +312,7 @@ function MapBoard({ board: b, controls }: { board: Board; controls: MapSearchCon
   const noun = nounOf(b)
   const count = (n: number): string =>
     noun === 'nodes'
-      ? plural(n, { one: '# reachable IP address', other: '# reachable IP addresses' })
+      ? plural(n, { one: '# reachable address', other: '# reachable addresses' })
       : noun === 'evo'
         ? plural(n, { one: '# evonode', other: '# evonodes' })
         : plural(n, { one: '# masternode', other: '# masternodes' })
@@ -358,7 +358,7 @@ function MapBoard({ board: b, controls }: { board: Board; controls: MapSearchCon
 
   const halfLine =
     noun === 'nodes'
-      ? t`Half of the reachable IP addresses are in the cities above.`
+      ? t`Half of the reachable addresses are in the cities above.`
       : noun === 'evo'
         ? b.narrowed
           ? t`Half of these evonodes run in the cities above.`

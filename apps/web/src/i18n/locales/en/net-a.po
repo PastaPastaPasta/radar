@@ -468,6 +468,9 @@ msgstr "Drive versions"
 msgid "Each {0}-block window, blocks that set bit {1} (with the top version bits 001) count as signalling. A window with as many as its threshold locks Core 24 in. In the last {2} blocks, {3} signalled."
 msgstr "Each {0}-block window, blocks that set bit {1} (with the top version bits 001) count as signalling. A window with as many as its threshold locks Core 24 in. In the last {2} blocks, {3} signalled."
 
+msgid "Each masternode is counted once."
+msgstr "Each masternode is counted once."
+
 msgid "Each Platform block is locked to a Core block."
 msgstr "Each Platform block is locked to a Core block."
 
@@ -767,9 +770,6 @@ msgstr "No transactions in the mempool right now"
 msgid "No window to show yet."
 msgstr "No window to show yet."
 
-msgid "nodes"
-msgstr "nodes"
-
 msgid "Nodes"
 msgstr "Nodes"
 
@@ -814,9 +814,6 @@ msgstr "Now"
 msgid "of {0} so far"
 msgstr "of {0} so far"
 
-msgid "Of the {enabled} enabled, each counted once."
-msgstr "Of the {enabled} enabled, each counted once."
-
 msgid "Older"
 msgstr "Older"
 
@@ -839,15 +836,15 @@ msgstr "Other addresses"
 msgid "Other clients"
 msgstr "Other clients"
 
-msgid "other full nodes"
-msgstr "other full nodes"
-
 msgid "Other full nodes"
 msgstr "Other full nodes"
 
 #. placeholder {0}: formatInt(total(dist.version ?? []))
 msgid "Other full nodes accept connections at {0} addresses. A node reachable on several networks counts at each, and nodes that only connect out can't be seen from outside."
 msgstr "Other full nodes accept connections at {0} addresses. A node reachable on several networks counts at each, and nodes that only connect out can't be seen from outside."
+
+msgid "other full nodes’ addresses"
+msgstr "other full nodes’ addresses"
 
 msgid "Other reachable addresses"
 msgstr "Other reachable addresses"
@@ -948,6 +945,9 @@ msgstr "Reachability"
 
 msgid "Reachable"
 msgstr "Reachable"
+
+msgid "reachable addresses"
+msgstr "reachable addresses"
 
 msgid "Reachable addresses"
 msgstr "Reachable addresses"
@@ -1087,6 +1087,10 @@ msgstr "Tenderdash P2P open"
 
 msgid "Tenderdash versions"
 msgstr "Tenderdash versions"
+
+#. placeholder {0}: formatPercent(share, 1)
+msgid "That is {0} of the {enabled} enabled masternodes, each counted once."
+msgstr "That is {0} of the {enabled} enabled masternodes, each counted once."
 
 msgid "The activation tracker needs Radar's crawl"
 msgstr "The activation tracker needs Radar's crawl"

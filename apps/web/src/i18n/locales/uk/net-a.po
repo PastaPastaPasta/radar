@@ -469,6 +469,9 @@ msgstr "Версії Drive"
 msgid "Each {0}-block window, blocks that set bit {1} (with the top version bits 001) count as signalling. A window with as many as its threshold locks Core 24 in. In the last {2} blocks, {3} signalled."
 msgstr "У кожному {0}-блоковому вікні блоки, що встановлюють біт {1} (із верхніми бітами версії 001), вважаються сигналізуючими. Вікно, де їх не менше за поріг, фіксує Core 24. В останніх {2} блоках сигналізували {3}."
 
+msgid "Each masternode is counted once."
+msgstr "Кожна мастернода рахується один раз."
+
 msgid "Each Platform block is locked to a Core block."
 msgstr "Кожен блок Platform прив’язаний до блока Core."
 
@@ -768,9 +771,6 @@ msgstr "Зараз у мемпулі немає транзакцій"
 msgid "No window to show yet."
 msgstr "Вікна для показу ще немає."
 
-msgid "nodes"
-msgstr "вузли"
-
 msgid "Nodes"
 msgstr "Вузли"
 
@@ -815,9 +815,6 @@ msgstr "Зараз"
 msgid "of {0} so far"
 msgstr "із {0} поки що"
 
-msgid "Of the {enabled} enabled, each counted once."
-msgstr "З {enabled} увімкнених, кожна врахована один раз."
-
 msgid "Older"
 msgstr "Старіші"
 
@@ -840,15 +837,15 @@ msgstr "Інші адреси"
 msgid "Other clients"
 msgstr "Інші клієнти"
 
-msgid "other full nodes"
-msgstr "інші повні вузли"
-
 msgid "Other full nodes"
 msgstr "Інші повні вузли"
 
 #. placeholder {0}: formatInt(total(dist.version ?? []))
 msgid "Other full nodes accept connections at {0} addresses. A node reachable on several networks counts at each, and nodes that only connect out can't be seen from outside."
 msgstr "Інші повні вузли приймають з’єднання на {0} адресах. Вузол, доступний у кількох мережах, враховується в кожній, а вузли, що лише самі підключаються, ззовні не видно."
+
+msgid "other full nodes’ addresses"
+msgstr "адрес інших повних вузлів"
 
 msgid "Other reachable addresses"
 msgstr "Інші доступні адреси"
@@ -949,6 +946,9 @@ msgstr "Досяжність"
 
 msgid "Reachable"
 msgstr "Доступний"
+
+msgid "reachable addresses"
+msgstr "доступних адрес"
 
 msgid "Reachable addresses"
 msgstr "Доступні адреси"
@@ -1088,6 +1088,10 @@ msgstr "Tenderdash P2P відкрито"
 
 msgid "Tenderdash versions"
 msgstr "Версії Tenderdash"
+
+#. placeholder {0}: formatPercent(share, 1)
+msgid "That is {0} of the {enabled} enabled masternodes, each counted once."
+msgstr "Це {0} з {enabled} увімкнених мастернод, кожна врахована один раз."
 
 msgid "The activation tracker needs Radar's crawl"
 msgstr "Для трекера активації потрібен обхід Radar"
