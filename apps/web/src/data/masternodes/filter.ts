@@ -84,11 +84,12 @@ const CRAWL_FACETS: ReadonlySet<keyof typeof facetValues> = new Set([
 ])
 
 /**
- * A row passes when it matches every field the filter sets; within a field, any of its values will do. While no row
+ * A row passes when it matches every field the filter sets; within a field, any of its values will do. The search
+ * text is words, and a row must hold each of them ("hetzner falkenstein"). While no row
  * carries a crawl (Radar refused or down), the crawl's facets are ignored: they could only empty the list.
  */
 export function filterMnRows(rows: readonly MnRow[], filter: MnFilter): MnRow[] {
-  const q = filter.q?.trim().toLowerCase()
+  const terms = filter.q?.trim().toLowerCase().split(/\s+/).filter(Boolean) ?? []
   const crawled = rows.some((r) => r.crawl)
   const sets = (Object.keys(facetValues) as (keyof typeof facetValues)[]).flatMap((k) => {
     const wanted = !crawled && CRAWL_FACETS.has(k) ? undefined : csv(filter[k])
@@ -96,7 +97,7 @@ export function filterMnRows(rows: readonly MnRow[], filter: MnFilter): MnRow[] 
   })
   return rows.filter(
     (row) =>
-      (!q || searchText(row).includes(q)) &&
+      (terms.length === 0 || terms.every((term) => searchText(row).includes(term))) &&
       sets.every(([k, wanted]) => {
         if (k === 'dkg') return dkgMatches(row, wanted)
         const v = facetValues[k](row)
