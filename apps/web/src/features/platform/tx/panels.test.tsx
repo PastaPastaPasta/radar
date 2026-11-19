@@ -109,6 +109,70 @@ describe('TypePanel', () => {
     expect(actions[1]).toHaveTextContent(/Amount2\.5\s*SANS/)
   })
 
+  const SANS = 'AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB'
+  const SANS_CONTRACT = 'ENDv6HL8MrkAhotcM5vBDaTy4ameZzyHN4MWB7mp13TR'
+  const tokenBatch = (...entries: Record<string, unknown>[]) =>
+    dto(1, {
+      ownerId: ID,
+      transitions: entries.map((e) => ({
+        $transition: 'token',
+        $tokenId: SANS,
+        $dataContractId: SANS_CONTRACT,
+        ...e,
+      })),
+    })
+
+  it('says base units, not a skeleton for ever, for a token whose ID is not one', async () => {
+    const { container } = await renderInApp(
+      <TypePanel
+        net="mainnet"
+        decoded={tokenBatch({ $action: 'mint', $tokenId: 'TOK1', amount: 5 })}
+      />,
+    )
+    const action = container.querySelector('[data-batch-entry="0"]')!
+    expect(action).toHaveTextContent(/Amount5 base units/)
+    expect(action.querySelector('.rx-skel, [data-skeleton]')).toBeNull()
+  })
+
+  it('reads a direct purchase’s token count in whole tokens and its agreed price in credits', async () => {
+    const { container } = await renderInApp(
+      <TypePanel
+        net="mainnet"
+        decoded={tokenBatch({
+          $action: 'directPurchase',
+          tokenCount: 500_000_000,
+          totalAgreedPrice: 2_000_000,
+        })}
+      />,
+    )
+    const action = container.querySelector('[data-batch-entry="0"]')!
+    expect(action).toHaveTextContent(/Amount5\s*SANS/)
+    expect(action).toHaveTextContent(/Price/)
+  })
+
+  it('shows a set price as one price, as prices by amount, or as purchases turned off', async () => {
+    const { container } = await renderInApp(
+      <TypePanel
+        net="mainnet"
+        decoded={tokenBatch(
+          { $action: 'setPriceForDirectPurchase', price: { $type: 'singlePrice', price: 1_000 } },
+          {
+            $action: 'setPriceForDirectPurchase',
+            price: { $type: 'setPrices', prices: { '100000000': 1_000, '1000000000': 9_000 } },
+          },
+          { $action: 'setPriceForDirectPurchase', price: null },
+        )}
+      />,
+    )
+    const [single, tiers, off] = [...container.querySelectorAll('[data-batch-entry]')]
+    expect(single).toHaveTextContent(/Price/)
+    expect(single).not.toHaveTextContent('singlePrice')
+    expect(tiers!.querySelectorAll('[data-price-tiers] li')).toHaveLength(2)
+    expect(tiers).toHaveTextContent(/From 1\s*SANS/)
+    expect(tiers).toHaveTextContent(/From 10\s*SANS/)
+    expect(off).toHaveTextContent('None: direct purchase is turned off')
+  })
+
   it('names the evonode, the poll and the choice of a masternode vote', async () => {
     const proTx = '001cb9381b08d784f4c1e1e220906874ea9e88f7124ebdf8baf0782007afad4f'
     const { base58Encode } = await import('@/lib/base58')
