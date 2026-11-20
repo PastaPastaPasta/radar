@@ -12,6 +12,7 @@ import { useDocumentTitle, useNetwork } from '@/features/entity'
 import { formatBytes, formatInt } from '@/lib/format'
 import { formatAmountText } from '@/lib/units'
 import { useFollowTip } from '../follow-tip'
+import { IndexDiffered } from '../IndexDiffered'
 import { useIndexedFirst } from '../indexed-first'
 import {
   Amount,
@@ -70,7 +71,11 @@ export function TxPage({ txid }: { txid: string }) {
   const valid = TXID.test(txid)
   useDocumentTitle(t`Transaction ${txid.slice(0, 8)}…`)
   const dapiTx = useQuery({ ...coreQueries.tx(net, txid), enabled: valid })
-  const tx = useIndexedFirst(dapiTx, coreQueries.indexedTx(net, txid), valid)
+  const { query: tx, differed } = useIndexedFirst(dapiTx, coreQueries.indexedTx(net, txid), {
+    enabled: valid,
+    net,
+    same: (a, b) => a.height === b.height,
+  })
   const found = tx.data?.data
   const tipHeight = useFollowTip(net, {
     keys: [coreQueries.tx(net, txid).queryKey],
@@ -105,6 +110,7 @@ export function TxPage({ txid }: { txid: string }) {
       tx={tx.data.data}
       stamp={stampOf(tx.data)}
       tipHeight={tipHeight}
+      differed={differed}
     />
   )
 }
@@ -117,10 +123,12 @@ function TxView({
   tx,
   stamp,
   tipHeight,
+  differed,
 }: {
   tx: DecodedTx
   stamp: SourceStamp
   tipHeight: number | undefined
+  differed: boolean
 }) {
   const { t } = useLingui()
   const net = useNetwork()
@@ -325,6 +333,7 @@ function TxView({
                   </span>
                 )}
                 <SourceLine stamp={stamp} />
+                {differed ? <IndexDiffered /> : null}
                 {hy.data ? <SourceLine stamp={stampOf(hy.data)} /> : null}
               </div>
             </>
@@ -361,11 +370,19 @@ function TxView({
           />
           <Stat
             label={mined ? t`Mined` : t`Status`}
-            value={mined && tx.time ? <Time ms={tx.time} mode="relative" live /> : t`Unconfirmed`}
+            value={
+              mined && tx.time ? (
+                <Time ms={tx.time} mode="relative" live />
+              ) : mined ? (
+                t`In block ${formatInt(tx.height ?? 0)}`
+              ) : (
+                t`Unconfirmed`
+              )
+            }
             note={
               mined && tx.time ? (
                 <Time ms={tx.time} mode="absolute" />
-              ) : firstSeen ? (
+              ) : mined ? undefined : firstSeen ? (
                 <>
                   {t`First seen`} <Time ms={firstSeen.at} mode="absolute" />
                 </>
@@ -508,7 +525,7 @@ function RawData({ tx }: { tx: DecodedTx }) {
       <summary style={{ cursor: 'pointer', fontWeight: 600 }}>{t`Raw data`}</summary>
       {open ? (
         <>
-          <p className="rx-note">{t`The transaction as Radar decoded it from DAPI's bytes. Amounts are in duffs.`}</p>
+          <p className="rx-note">{t`The transaction as Radar decoded it from its raw bytes, checked against its ID. Amounts are in duffs.`}</p>
           <pre className="rx-mono" style={{ overflow: 'auto', maxHeight: 420 }}>
             {jsonOf(tx)}
           </pre>

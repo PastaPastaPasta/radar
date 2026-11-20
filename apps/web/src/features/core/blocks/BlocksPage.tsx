@@ -9,6 +9,7 @@ import type { BlockRow } from '@/data/core/types'
 import { stampOf, type SourceStamp } from '@/data/envelope'
 import { insQueries } from '@/data/insight/queries'
 import { useIndexHealth } from '@/data/index-health'
+import { useHyphenFit } from '@/data/hyphen/fit'
 import {
   Entity,
   PageLink,
@@ -207,17 +208,27 @@ function useInsightRows(window: Window | null, enabled: boolean): PageRows {
 
 /**
  * Indexed first (§4.7): the latest page from Hyphen's list, in one request and without waiting for DAPI's tip, shown
- * as "checking with DAPI" until DAPI's rows have all landed. Undefined when it is not shown.
+ * as "checking with DAPI" until DAPI's rows have all landed, and only while the probe finds Hyphen's index current.
+ * Once DAPI's rows have settled on a network they own the page for the rest of the mount: a new block starts a new
+ * DAPI read, and Hyphen's older rows must not come back while it runs. Undefined when it is not shown.
  */
-function useIndexedLatestRows(wanted: boolean): PageRows | undefined {
+function useIndexedLatestRows(
+  latest: boolean,
+  dapi: PageRows,
+  broken: boolean,
+): PageRows | undefined {
   const net = useNetwork()
-  const on = wanted && earlyAnswers()
+  const fit = useHyphenFit(net)
+  const [dapiOwns, setDapiOwns] = useState<ReadonlySet<string>>(() => new Set())
+  if (latest && dapi.settled && !dapiOwns.has(net)) setDapiOwns(new Set(dapiOwns).add(net))
+  const on =
+    latest && earlyAnswers() && !dapiOwns.has(net) && !dapi.settled && !dapi.failed && !broken
   const query = useQuery({
     ...coreQueries.indexedLatestRows(net, LATEST_BLOCK_ROWS),
     enabled: on,
   })
   const data = query.data
-  if (!on || !data || data.data.length === 0) return undefined
+  if (!on || !fit || !data || data.data.length === 0) return undefined
   return {
     rows: data.data,
     settled: false,
@@ -389,9 +400,7 @@ export function BlocksPage({
   const hyphenRows = useHyphenRows(window, pageSource.source === 'hyphen')
   const insightRows = useInsightRows(window, pageSource.source === 'insight')
   const latest = !date && from === undefined && pageSource.source === 'dapi'
-  const indexedRows = useIndexedLatestRows(
-    latest && !dapiRows.settled && !dapiRows.failed && range.state !== 'error',
-  )
+  const indexedRows = useIndexedLatestRows(latest, dapiRows, range.state === 'error')
   const page =
     indexedRows ?? { dapi: dapiRows, hyphen: hyphenRows, insight: insightRows }[pageSource.source]
   const dayStart = date ? dayStartMs(date) : 0
@@ -612,7 +621,7 @@ export function BlocksPage({
                 rowLink={(r) => ({ to: '/block/$id', params: { id: String(r.height) } })}
                 live={{ newRowIds: fresh }}
                 paging={
-                  window
+                  window && !indexedRows
                     ? {
                         kind: 'cursor',
                         prev: window.newer ? (link(window.newer) as never) : undefined,

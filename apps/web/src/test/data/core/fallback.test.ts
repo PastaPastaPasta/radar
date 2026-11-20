@@ -304,13 +304,17 @@ describe('indexed first: Hyphen answers while DAPI is asked (§4.7)', () => {
     const { core, hyphen } = setup()
     hyphenHasTx(hyphen)
     current(hyphen)
+    hyphen.block.mockResolvedValue(
+      sourced('hyphen', { blockHeight: BLOCK_HEIGHT, blockTime: 1_700_000_000_000 }) as never,
+    )
     const tx = await core.indexedTx('mainnet', TXID)
     expect(tx?.source).toBe('hyphen')
     expect(tx?.fallback).toBe('dapi-cold')
     expect(tx?.data.txid).toBe(TXID)
     expect(tx?.data.height).toBe(BLOCK_HEIGHT)
-    // No block read for the time: DAPI's answer brings it.
-    expect(hyphen.block).not.toHaveBeenCalled()
+    // A mined transaction carries its block's time, so it never reads as unconfirmed.
+    expect(hyphen.block).toHaveBeenCalledWith('mainnet', BLOCK_HEIGHT, undefined)
+    expect(tx?.data.time).toBe(1_700_000_000_000)
   })
 
   it('refuses bytes that do not hash to the id asked for', async () => {
@@ -344,25 +348,26 @@ describe('indexed first: Hyphen answers while DAPI is asked (§4.7)', () => {
 
   it("gives Hyphen's newest rows in one request, unless they are hours old", async () => {
     const now = Date.now()
-    const page = (top: number) =>
+    const tip = BLOCK_HEIGHT + 10
+    const page = (time: number, top = tip) =>
       sourced('hyphen', {
         items: [
           {
-            blockHeight: 12,
+            blockHeight: top,
             blockHash: 'aa'.repeat(32),
-            blockTime: top,
+            blockTime: time,
             txCount: 3,
             blockSize: 400,
           },
           {
-            blockHeight: 11,
+            blockHeight: top - 1,
             blockHash: 'bb'.repeat(32),
-            blockTime: top,
+            blockTime: time,
             txCount: 1,
             blockSize: 300,
           },
         ],
-        asOfHeight: 12,
+        asOfHeight: top,
       })
     const { core, hyphen } = setup()
     current(hyphen)
@@ -370,9 +375,13 @@ describe('indexed first: Hyphen answers while DAPI is asked (§4.7)', () => {
     const rows = await core.indexedLatestRows('mainnet', 2)
     expect(hyphen.blocks).toHaveBeenCalledWith('mainnet', { limit: 2 }, undefined)
     expect(rows?.fallback).toBe('dapi-cold')
-    expect(rows?.data.map((r) => r.height)).toEqual([12, 11])
+    expect(rows?.data.map((r) => r.height)).toEqual([tip, tip - 1])
 
     hyphen.blocks.mockResolvedValue(page(now - 3 * 60 * 60_000))
+    expect(await core.indexedLatestRows('mainnet', 2)).toBeNull()
+
+    // A page from a replica that trails the index the probe measured is no latest page either.
+    hyphen.blocks.mockResolvedValue(page(now - 60_000, tip - 7))
     expect(await core.indexedLatestRows('mainnet', 2)).toBeNull()
   })
 
