@@ -75,3 +75,9 @@ export function safeProposalUrl(url: string | null | undefined): URL | undefined
     return undefined
   }
 }
+
+/** The page claim's counts: every open proposal, and those with the votes, wherever their payment window falls. */
+export function claimCounts(count: BudgetSplit['count']): { open: number; voted: number } {
+  const voted = count.funded + count.passing + count.outside
+  return { open: voted + count.failing, voted }
+}

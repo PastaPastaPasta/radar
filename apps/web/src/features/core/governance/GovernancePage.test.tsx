@@ -513,6 +513,15 @@ describe('Governance cycle', () => {
     )
   })
 
+  it('says “Any moment now”, not a frozen 0, once a superblock’s estimated time has passed', async () => {
+    // One block to go, read ten minutes ago: the estimate has passed and the re-read gives the same tip.
+    const at = Date.now() - 600_000
+    tipAt(2_575_479, at, at)
+    renderAt('/governance')
+    const card = await cycle()
+    await waitFor(() => expect(countdown(card, 'data-superblock-eta')).toBe('Any moment now'))
+  })
+
   it('ticks the countdown every second', async () => {
     tipAt(2_575_470, Date.now())
     renderAt('/governance')

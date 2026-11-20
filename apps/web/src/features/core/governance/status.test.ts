@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { HyProposal } from '@/data/hyphen/schemas'
-import { budgetSplit, proposalStatus, safeProposalUrl } from './status'
+import { budgetSplit, claimCounts, proposalStatus, safeProposalUrl } from './status'
 
 const NOW = Date.parse('2026-11-10T12:00:00Z')
 
@@ -60,6 +60,8 @@ describe('proposal status', () => {
     )
     expect(split).toMatchObject({ passing: 200n, outside: 100n, failing: 50n })
     expect(split.count).toEqual({ funded: 0, passing: 1, failing: 1, outside: 2 })
+    // The headline still counts them as having the votes, as the list's filters do.
+    expect(claimCounts(split.count)).toEqual({ open: 4, voted: 3 })
   })
 
   it('leaves every passing proposal under passing while the superblock time is unknown', () => {

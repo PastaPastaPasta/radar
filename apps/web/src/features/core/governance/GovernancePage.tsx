@@ -30,7 +30,7 @@ import { governanceClaim } from '../claims'
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { insQueries } from '@/data/insight/queries'
 import { governanceQueries, insightGovernanceQueries } from './queries'
-import { budgetSplit, netVotes, proposalStatus, type ProposalStatus } from './status'
+import { budgetSplit, claimCounts, netVotes, proposalStatus, type ProposalStatus } from './status'
 import { ThresholdNote } from './ThresholdNote'
 import { CycleCard } from './CycleCard'
 import {
@@ -128,8 +128,8 @@ function GovernanceContent() {
     () => budgetSplit(proposals, now, budget?.superblockAt),
     [proposals, now, budget],
   )
-  const { funded, passing, failing } = split.count
-  usePageClaim(data ? governanceClaim(funded + passing + failing, funded + passing) : undefined)
+  const claim = claimCounts(split.count)
+  usePageClaim(data ? governanceClaim(claim.open, claim.voted) : undefined)
   const stamp = data ? stampOf(data) : undefined
   const listStamps = hy.data && earlier.length > 0 && stamp ? [stamp, stampOf(hy.data)] : stamp
   const stamps = listStamps

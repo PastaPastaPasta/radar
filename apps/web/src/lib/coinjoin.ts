@@ -1,6 +1,6 @@
 import type { NetworkId } from './network'
 
-/** Dash Core's `CoinJoin::vecStandardDenominations`, in duffs: 10, 1, 0.1, 0.01 and 0.001 DASH, each plus a ten-thousandth. */
+/** Dash Core's `CoinJoin::vecStandardDenominations`, in duffs: 10, 1, 0.1, 0.01 and 0.001 DASH, each a hundred-thousandth larger. */
 export const COINJOIN_DENOMINATIONS: readonly bigint[] = [
   1_000_010_000n,
   100_001_000n,

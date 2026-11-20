@@ -25,6 +25,7 @@ const STALE_POLL_MS = 60_000
 
 /** A countdown that ticks every second while it is on screen, and says once when it reaches zero. */
 function Countdown({ to, onDone }: { to: number; onDone?: () => void }) {
+  const { t } = useLingui()
   const [now, setNow] = useState(() => Date.now())
   useEffect(() => {
     const id = window.setInterval(() => setNow(Date.now()), 1000)
@@ -40,8 +41,8 @@ function Countdown({ to, onDone }: { to: number; onDone?: () => void }) {
     if (!done) told.current = false
   }, [done, onDone])
   return (
-    <time dateTime={formatIsoUtc(to)} data-countdown>
-      {formatCountdown(to - now)}
+    <time dateTime={formatIsoUtc(to)} data-countdown data-due={done ? '' : undefined}>
+      {done ? t`Any moment now` : formatCountdown(to - now)}
     </time>
   )
 }
@@ -232,8 +233,8 @@ function BudgetUse({
       <dl className="grid gap-4 sm:grid-cols-3">
         <div>
           <dt className="rx-dim text-sm">{t`Passing proposals ask for`}</dt>
-          <dd className="m-0" data-cycle-passing data-duffs={duffs(money?.passing, false)}>
-            {figure(money?.passing, false)}
+          <dd className="m-0" data-cycle-passing data-duffs={duffs(money?.passing, true)}>
+            {figure(money?.passing, true)}
           </dd>
         </div>
         <div>
