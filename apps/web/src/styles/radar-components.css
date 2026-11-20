@@ -2280,6 +2280,9 @@ button.rx-src--proof:hover {
   font: var(--dh-w-strong) var(--dh-fs-body)/1.3 var(--dh-font);
   color: var(--dh-ink);
 }
+.rx-empty__t[tabindex='-1']:focus {
+  outline: none;
+}
 .rx-empty__b {
   margin: 0;
   font-size: var(--dh-fs-ui);
