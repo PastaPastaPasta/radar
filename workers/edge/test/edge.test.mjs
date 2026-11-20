@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
 import { after, before, describe, it } from 'node:test'
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs'
+import { mkdtempSync, readFileSync, realpathSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
+import { createRequire } from 'node:module'
 import { Miniflare } from 'miniflare'
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)))
@@ -232,11 +233,21 @@ describe('first data for immutable pages', () => {
     })
   }
   after(() => release())
-  const inlined = async (p, init) => {
-    const html = await (await get(p, init)).text()
+  const NAVIGATE = { 'sec-fetch-mode': 'navigate', 'sec-fetch-dest': 'document' }
+  const payload = async (p, headers = NAVIGATE) => {
+    const html = await (await get(p, { headers })).text()
     const m = /<script type="application\/json" id="radar-first-data">([^<]*)<\/script>/.exec(html)
-    return m ? JSON.parse(m[1]).reads : null
+    return m ? JSON.parse(m[1]) : null
   }
+  /** The inlined bodies by path, after checking each says when the edge read it. */
+  const inlined = async (p, init) => {
+    const data = await payload(p, { ...NAVIGATE, ...init?.headers })
+    if (!data) return null
+    assert.ok(Math.abs(Date.now() - data.at) < 60_000)
+    for (const read of Object.values(data.reads)) assert.ok(read.fetchedAt <= data.at)
+    return Object.fromEntries(Object.entries(data.reads).map(([k, v]) => [k, v.body]))
+  }
+  const settle = () => new Promise((r) => setTimeout(r, 300))
   /** The first visit only warms the edge cache; a later one gets the answers. */
   const warmed = async (p) => {
     for (let i = 0; i < 20; i++) {
@@ -316,11 +327,46 @@ describe('first data for immutable pages', () => {
     assert.equal(await warmed(`/tx/${txid}`), null)
   })
 
-  // Hyphen here never answers within the test, so a page that waited for it would never arrive.
-  it('never waits for Hyphen, however slow it is', { timeout: 180_000 }, async () => {
+  it('reads Hyphen ahead only for a navigation, and keeps its "not found" for a while', async () => {
     const { txid } = ids()
-    hyphen(minedTx(txid, TIP - 100), { delayMs: { '*': 3_600_000 } })
-    assert.equal(await inlined(`/tx/${txid}`), null)
+    const routes = minedTx(txid, TIP - 100)
+    delete routes[`rawtx/${txid}`]
+    hyphen(routes)
+    await get(`/tx/${txid}`)
+    await get(`/tx/${txid}`, { headers: { 'sec-fetch-mode': 'cors' } })
+    await settle()
+    assert.equal(upstreamCalls.length, 0)
+    const rawReads = () => upstreamCalls.filter((r) => r.url.includes(`/rawtx/${txid}`)).length
+    await payload(`/tx/${txid}`)
+    for (let i = 0; i < 50 && rawReads() === 0; i++) await settle()
+    await new Promise((r) => setTimeout(r, 2000))
+    const before = rawReads()
+    for (let i = 0; i < 3; i++) assert.equal(await inlined(`/tx/${txid}`), null)
+    await settle()
+    assert.equal(rawReads(), before)
+  })
+
+  it('reads nothing for search crawlers', async () => {
+    const { txid } = ids()
+    hyphen(minedTx(txid, TIP - 100))
+    for (const ua of [
+      'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+      'Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)',
+      'Mozilla/5.0 (compatible; Yahoo! Slurp; http://help.yahoo.com/help/us/ysearch/slurp)',
+    ])
+      assert.equal(await payload(`/tx/${txid}`, { ...NAVIGATE, 'user-agent': ua }), null, ua)
+    await settle()
+    assert.equal(upstreamCalls.filter((r) => r.url.includes(txid)).length, 0)
+  })
+
+  it("drops the shell's validators from a page it added data to", async () => {
+    const { txid } = ids()
+    hyphen(minedTx(txid, TIP - 100))
+    assert.ok(await warmed(`/tx/${txid}`))
+    const res = await get(`/tx/${txid}`, { headers: NAVIGATE })
+    assert.match(await res.text(), /radar-first-data/)
+    assert.equal(res.headers.get('etag'), null)
+    assert.equal(res.headers.get('last-modified'), null)
   })
 
   it('never inlines an unconfirmed tx', async () => {
@@ -385,7 +431,10 @@ describe('first data for immutable pages', () => {
     const html = await (await get(`/tx/${txid}`)).text()
     assert.doesNotMatch(html, /<\/script><script>x\(\)/)
     const m = /id="radar-first-data">([^<]*)<\/script>/.exec(html)
-    assert.equal(JSON.parse(m[1]).reads[`/x/hy/mainnet/tx/${txid}`].note, '</script><script>x()')
+    assert.equal(
+      JSON.parse(m[1]).reads[`/x/hy/mainnet/tx/${txid}`].body.note,
+      '</script><script>x()',
+    )
   })
 })
 
@@ -1207,6 +1256,48 @@ describe('per-entity title and OG', () => {
       assert.equal(upstreamCalls.length, 1, agent)
       assert.match(upstreamCalls[0].headers.get('user-agent'), /^Radar\//, agent)
       assert.match(html, /<title>Evonode eeeeeeee…eeeeee · Radar<\/title>/, agent)
+    }
+  })
+})
+
+describe('fetchFirstData', () => {
+  it('answers while Hyphen and its own deadline are both still pending', async () => {
+    const { build } = createRequire(
+      realpathSync(path.join(root, 'node_modules/wrangler/package.json')),
+    )('esbuild')
+    const out = await build({
+      entryPoints: [path.join(root, 'src/first-data.ts')],
+      bundle: true,
+      format: 'esm',
+      platform: 'neutral',
+      write: false,
+    })
+    const { fetchFirstData } = await import(
+      `data:text/javascript;base64,${Buffer.from(out.outputFiles[0].text).toString('base64')}`
+    )
+    const saved = { fetch: globalThis.fetch, caches: globalThis.caches }
+    let asked = 0
+    globalThis.fetch = () => {
+      asked += 1
+      return new Promise(() => {})
+    }
+    globalThis.caches = { default: { match: async () => undefined, put: async () => {} } }
+    const later = []
+    try {
+      const data = await fetchFirstData(
+        'https://radar.test',
+        { net: 'mainnet', kind: 'tx', id: 'ab'.repeat(32) },
+        { waitUntil: (p) => later.push(p) },
+        { budgetMs: 3_600_000, warm: true },
+      )
+      assert.equal(data, null)
+      assert.ok(asked > 0)
+      const pending = Symbol('pending')
+      for (const p of later)
+        assert.equal(await Promise.race([p, Promise.resolve(pending)]), pending)
+    } finally {
+      globalThis.fetch = saved.fetch
+      globalThis.caches = saved.caches
     }
   })
 })

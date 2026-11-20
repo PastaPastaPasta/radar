@@ -1,8 +1,8 @@
 import { HYPHEN_API_BASE, resolveHyphenRequest, type HyphenNetwork } from './hyphen-path'
 import { handleProxy } from './proxy'
 
-/** The HTML never waits longer than this for the page's first data; past it the page reads Hyphen itself. */
-export const FIRST_DATA_BUDGET_MS = 300
+/** The HTML never waits longer than this for the edge cache; past it the page reads Hyphen itself. */
+export const FIRST_DATA_BUDGET_MS = 100
 /** A block this close to the tip may still be reorganised away, so nothing in it is inlined. */
 export const REORG_DEPTH = 6
 export const FIRST_DATA_ELEMENT_ID = 'radar-first-data'
@@ -12,6 +12,10 @@ export const FIRST_DATA_ELEMENT_ID = 'radar-first-data'
  */
 const IMMUTABLE_TTL_SECONDS = 86_400
 const READ_TTL_SECONDS = 60
+/** Hyphen's 404 is kept this long, so a stream of visits to an id it lacks does not become a stream of reads. */
+const MISSING_TTL_SECONDS = 60
+const FETCHED_AT = 'x-radar-fetched-at'
+const MISSING = 'x-radar-missing'
 
 const TXID = /^[0-9a-f]{64}$/i
 const BLOCK_HEIGHT = /^\d{1,9}$/
@@ -37,9 +41,17 @@ export function firstDataPlan(url: URL): FirstDataPlan | null {
   return kind === 'block' && BLOCK_HEIGHT.test(id) ? { net, kind, id: String(Number(id)) } : null
 }
 
+/** One inlined read: the body the pass-through returned, and when the edge read it from Hyphen (ms epoch). */
+export interface FirstRead {
+  body: unknown
+  fetchedAt: number
+}
+
 export interface FirstData {
-  /** Same-origin `/x/hy/…` paths, each with the JSON body the pass-through returned for it. */
-  reads: Record<string, unknown>
+  /** When the edge built this page (ms epoch); the page uses none of it once that is older than its window. */
+  at: number
+  /** Same-origin `/x/hy/…` paths, each with the read the pass-through returned for it. */
+  reads: Record<string, FirstRead>
 }
 
 type Json = Record<string, unknown>
@@ -64,31 +76,42 @@ function upstream(origin: string, path: string) {
     : null
 }
 
-/** What the edge cache holds for this read, without asking Hyphen. */
-async function cached(origin: string, path: string): Promise<Json | null> {
+type Cached = { read: FirstRead } | { missing: true } | null
+
+/** What the edge cache holds for this read (an answer, or Hyphen's recent "not found"), without asking Hyphen. */
+async function cached(origin: string, path: string): Promise<Cached> {
   const up = upstream(origin, path)
   const hit = up
     ? await edgeCache()
         ?.match(up.key)
         .catch(() => undefined)
     : undefined
-  return hit ? hit.json<Json>().catch(() => null) : null
+  if (!hit) return null
+  if (hit.headers.has(MISSING)) return { missing: true }
+  const body = await hit.json<Json>().catch(() => null)
+  const fetchedAt = Number(hit.headers.get(FETCHED_AT))
+  return body && fetchedAt > 0 ? { read: { body, fetchedAt } } : null
 }
 
 /**
- * Reads Hyphen through the pass-through after the response has gone, and keeps a JSON 200 in the edge cache for the
- * next visit: Hyphen's own zone does not let a Worker's subrequest cache its answers.
+ * Reads Hyphen through the pass-through after the response has gone, and keeps a JSON 200 (or, for a while, a 404) in
+ * the edge cache for the next visit: Hyphen's own zone does not let a Worker's subrequest cache its answers.
  */
 function warm(origin: string, path: string, ctx: Ctx): void {
   const up = upstream(origin, path)
   const cache = edgeCache()
   if (!up || !cache) return
-  const ttl = up.immutable ? IMMUTABLE_TTL_SECONDS : READ_TTL_SECONDS
   const work = async () => {
     const res = await handleProxy(new Request(up.url), up.url)
+    if (res.status === 404) {
+      res.body?.cancel().catch(() => undefined)
+      const headers = { 'cache-control': `public, max-age=${MISSING_TTL_SECONDS}`, [MISSING]: '1' }
+      return cache.put(up.key, new Response(null, { headers }))
+    }
     if (res.status !== 200) return res.body?.cancel()
     const body = await res.json<Json>()
-    const headers = { 'cache-control': `public, max-age=${ttl}` }
+    const ttl = up.immutable ? IMMUTABLE_TTL_SECONDS : READ_TTL_SECONDS
+    const headers = { 'cache-control': `public, max-age=${ttl}`, [FETCHED_AT]: String(Date.now()) }
     await cache.put(up.key, Response.json(body, { headers }))
   }
   ctx.waitUntil(work().catch(() => undefined))
@@ -103,13 +126,23 @@ const settled = (detail: Json): boolean => {
   return height !== undefined && tip !== undefined && tip - height >= REORG_DEPTH
 }
 
+interface Options {
+  /** Whether a miss is fetched for the next visit: only a person's own navigation does. */
+  warm: boolean
+}
+
 /** Each read from the edge cache, warming the ones it lacks for the next visit. */
-async function fromCache(origin: string, paths: string[], ctx: Ctx): Promise<(Json | null)[]> {
+async function fromCache(
+  origin: string,
+  paths: string[],
+  ctx: Ctx,
+  opts: Options,
+): Promise<(FirstRead | null)[]> {
   const found = await Promise.all(paths.map((p) => cached(origin, p)))
   paths.forEach((p, i) => {
-    if (!found[i]) warm(origin, p, ctx)
+    if (!found[i] && opts.warm) warm(origin, p, ctx)
   })
-  return found
+  return found.map((f) => (f && 'read' in f ? f.read : null))
 }
 
 async function gather(
@@ -117,26 +150,30 @@ async function gather(
   plan: FirstDataPlan,
   deadline: Promise<null>,
   ctx: Ctx,
+  opts: Options,
 ): Promise<FirstData | null> {
   const base = `/x/hy/${plan.net}`
   const paths =
     plan.kind === 'tx'
       ? [`${base}/rawtx/${plan.id}`, `${base}/tx/${plan.id}`, `${base}/status`]
       : [`${base}/rawblock/${plan.id}`, `${base}/block/${plan.id}`, `${base}/status`]
-  const found = await Promise.race([fromCache(origin, paths, ctx), deadline])
+  const found = await Promise.race([fromCache(origin, paths, ctx, opts), deadline])
   if (!found) return null
   const [raw, detail, status] = found
-  if (!raw || !detail || !settled(detail)) return null
-  if (plan.kind === 'block' && detail.orphanedAt != null) return null
-  const reads: Record<string, unknown> = { [paths[0]!]: raw, [paths[1]!]: detail }
+  const d = (detail?.body ?? null) as Json | null
+  if (!raw || !detail || !d || !settled(d)) return null
+  if (plan.kind === 'block' && d.orphanedAt != null) return null
+  const reads: Record<string, FirstRead> = { [paths[0]!]: raw, [paths[1]!]: detail }
   if (status) reads[paths[2]!] = status
   if (plan.kind === 'tx') {
     // The tx page also reads its block for the time.
-    const blockPath = `${base}/block/${num(detail.blockHeight)}`
-    const [block] = (await Promise.race([fromCache(origin, [blockPath], ctx), deadline])) ?? [null]
+    const blockPath = `${base}/block/${num(d.blockHeight)}`
+    const [block] = (await Promise.race([fromCache(origin, [blockPath], ctx, opts), deadline])) ?? [
+      null,
+    ]
     if (block) reads[blockPath] = block
   }
-  return { reads }
+  return { at: Date.now(), reads }
 }
 
 /**
@@ -149,14 +186,14 @@ export async function fetchFirstData(
   origin: string,
   plan: FirstDataPlan,
   ctx: Ctx,
-  budgetMs = FIRST_DATA_BUDGET_MS,
+  { budgetMs = FIRST_DATA_BUDGET_MS, warm = true }: { budgetMs?: number; warm?: boolean } = {},
 ): Promise<FirstData | null> {
   let timer: ReturnType<typeof setTimeout> | undefined
   const deadline = new Promise<null>((resolve) => {
     timer = setTimeout(() => resolve(null), budgetMs)
   })
   try {
-    return await gather(origin, plan, deadline, ctx).catch(() => null)
+    return await gather(origin, plan, deadline, ctx, { warm }).catch(() => null)
   } finally {
     clearTimeout(timer)
   }
@@ -168,11 +205,29 @@ export function firstDataTag(data: FirstData): string {
   return `<script type="application/json" id="${FIRST_DATA_ELEMENT_ID}">${json}</script>`
 }
 
-/** Adds the first data at the end of the body. */
+/** Adds the first data at the end of the body. The page now differs from the stored shell, so its validators go. */
 export function withFirstData(res: Response, data: FirstData | null): Response {
   if (!data) return res
   const tag = firstDataTag(data)
+  const out = new Response(res.body, res)
+  out.headers.delete('etag')
+  out.headers.delete('last-modified')
   return new HTMLRewriter()
     .on('body', { element: (el) => void el.append(tag, { html: true }) })
-    .transform(res)
+    .transform(out)
+}
+
+/** Crawlers the link-preview pattern (`bot|crawler|spider|…`) does not already name. */
+const OTHER_CRAWLERS = /slurp|ia_archiver|archive\.org|yandex|baiduspider|petalsearch|seznam/i
+
+export function isCrawler(userAgent: string | null): boolean {
+  return userAgent !== null && OTHER_CRAWLERS.test(userAgent)
+}
+
+/** A person's own navigation to the page, the only request worth reading Hyphen ahead for. */
+export function isNavigation(request: Request): boolean {
+  return (
+    request.headers.get('sec-fetch-mode') === 'navigate' ||
+    request.headers.get('sec-fetch-dest') === 'document'
+  )
 }

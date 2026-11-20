@@ -1,4 +1,4 @@
-import { fetchFirstData, firstDataPlan, withFirstData } from './first-data'
+import { fetchFirstData, firstDataPlan, isCrawler, isNavigation, withFirstData } from './first-data'
 import { withSecurityHeaders } from './headers'
 import { genericOg, isLinkPreviewAgent, matchOgRoute, resolveOg, rewriteHead } from './og'
 import { preloadFiles, preloadTable, withPreloads } from './preload'
@@ -67,13 +67,17 @@ async function handle(request: Request, env: Env, ctx: ExecutionContext): Promis
     })
   }
 
+  const ua = request.headers.get('user-agent')
   const plan =
-    request.method === 'GET' && !isLinkPreviewAgent(request.headers.get('user-agent'))
+    request.method === 'GET' && !isLinkPreviewAgent(ua) && !isCrawler(ua)
       ? firstDataPlan(url)
       : null
-  // The page's first Hyphen reads start beside the shell's own fetch.
+  // The page's first Hyphen reads are looked up beside the shell's own fetch.
   const firstData = plan
-    ? fetchFirstData(url.origin, plan, ctx, Number(env.FIRST_DATA_BUDGET_MS) || undefined)
+    ? fetchFirstData(url.origin, plan, ctx, {
+        budgetMs: Number(env.FIRST_DATA_BUDGET_MS) || undefined,
+        warm: isNavigation(request),
+      })
     : null
 
   const served = await serveAssets(request, env, url)
