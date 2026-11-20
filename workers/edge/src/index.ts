@@ -9,6 +9,8 @@ export interface Env {
   ASSETS: Fetcher
   /** How long the HTML may wait for a tx or block page's first data (ms); tests on a slow machine raise it. */
   FIRST_DATA_BUDGET_MS?: string
+  /** `off` for a fixture build (`review/serve.mjs`), which never uses first data. */
+  FIRST_DATA?: string
 }
 
 const STATIC_FILE =
@@ -69,7 +71,10 @@ async function handle(request: Request, env: Env, ctx: ExecutionContext): Promis
 
   const ua = request.headers.get('user-agent')
   const plan =
-    request.method === 'GET' && !isLinkPreviewAgent(ua) && !isCrawler(ua)
+    request.method === 'GET' &&
+    env.FIRST_DATA !== 'off' &&
+    !isLinkPreviewAgent(ua) &&
+    !isCrawler(ua)
       ? firstDataPlan(url)
       : null
   // The page's first Hyphen reads are looked up beside the shell's own fetch.

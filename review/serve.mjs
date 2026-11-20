@@ -55,7 +55,12 @@ const mf = new Miniflare({
     },
   ],
   compatibilityDate: wrangler.compatibility_date,
-  bindings: wrangler.vars,
+  // A fixture build reads its recorded answers and never the edge's first data, so the Worker reads no live Hyphen
+  // for it (and keeps Miniflare's slow cache out of every tx and block navigation).
+  bindings: {
+    ...wrangler.vars,
+    ...(existsSync(path.join(dist, 'mockServiceWorker.js')) ? { FIRST_DATA: 'off' } : {}),
+  },
   host: values.host,
   port: Number(values.port),
   assets: {
