@@ -346,7 +346,7 @@ describe('first data for immutable pages', () => {
     assert.equal(rawReads(), before)
   })
 
-  it('reads nothing for search crawlers', async () => {
+  it('reads no first data for search crawlers', async () => {
     const { txid } = ids()
     hyphen(minedTx(txid, TIP - 100))
     for (const ua of [
@@ -356,7 +356,10 @@ describe('first data for immutable pages', () => {
     ])
       assert.equal(await payload(`/tx/${txid}`, { ...NAVIGATE, 'user-agent': ua }), null, ua)
     await settle()
-    assert.equal(upstreamCalls.filter((r) => r.url.includes(txid)).length, 0)
+    // Googlebot and bingbot are link-preview agents, so each gets the one title read (`tx/{id}`) a preview gets;
+    // none of the page's first data (raw bytes, status, block) is read for any of them.
+    const reads = upstreamCalls.map((r) => new URL(r.url).pathname)
+    assert.deepEqual(reads, [`/api/v1/tx/${txid}`, `/api/v1/tx/${txid}`])
   })
 
   it("drops the shell's validators from a page it added data to", async () => {
