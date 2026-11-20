@@ -55,8 +55,6 @@ before(async () => {
     compatibilityDate: '2026-08-01',
     // The production budget (300 ms) is shorter than one Miniflare round trip on a loaded machine.
     bindings: { FIRST_DATA_BUDGET_MS: String(BUDGET_MS) },
-    // Miniflare's cache takes seconds per call on a loaded machine; the edge cache is checked on the preview Worker.
-    cache: false,
     assets: {
       directory: path.join(root, 'test/site'),
       binding: 'ASSETS',
@@ -239,6 +237,15 @@ describe('first data for immutable pages', () => {
     const m = /<script type="application\/json" id="radar-first-data">([^<]*)<\/script>/.exec(html)
     return m ? JSON.parse(m[1]).reads : null
   }
+  /** The first visit only warms the edge cache; a later one gets the answers. */
+  const warmed = async (p) => {
+    for (let i = 0; i < 20; i++) {
+      const reads = await inlined(p)
+      if (reads) return reads
+      await new Promise((r) => setTimeout(r, 100))
+    }
+    return null
+  }
   const minedTx = (txid, height, asOf = TIP) => ({
     status,
     [`rawtx/${txid}`]: { rawtx: '00' },
@@ -253,62 +260,68 @@ describe('first data for immutable pages', () => {
     ...extra,
   })
 
-  it('inlines the reads a mined tx page starts with, keyed by their pass-through paths', async () => {
+  it('sends the shell at once on a first visit and inlines the reads on the next, keyed by their pass-through paths', async () => {
     const { txid } = ids()
-    hyphen(minedTx(txid, TIP - 100))
-    const reads = await inlined(`/tx/${txid.toUpperCase()}`)
+    const height = TIP - 100 - n
+    hyphen(minedTx(txid, height))
+    assert.equal(await inlined(`/tx/${txid}`), null)
+    assert.ok(upstreamCalls.every((r) => r.url.startsWith('https://hy.kw.vg/api/v1/')))
+    // The block's time is a read that needs the tx, so it is warmed by the visit that first finds the tx.
+    await warmed(`/tx/${txid.toUpperCase()}`)
+    const reads = await warmed(`/tx/${txid}`).then(async (r) =>
+      r?.[`/x/hy/mainnet/block/${height}`] ? r : warmed(`/tx/${txid}`),
+    )
     assert.deepEqual(Object.keys(reads).sort(), [
-      `/x/hy/mainnet/block/${TIP - 100}`,
+      `/x/hy/mainnet/block/${height}`,
       `/x/hy/mainnet/rawtx/${txid}`,
       '/x/hy/mainnet/status',
       `/x/hy/mainnet/tx/${txid}`,
     ])
-    assert.equal(reads[`/x/hy/mainnet/tx/${txid}`].blockHeight, TIP - 100)
-    assert.ok(upstreamCalls.every((r) => r.url.startsWith('https://hy.kw.vg/api/v1/')))
+    assert.equal(reads[`/x/hy/mainnet/tx/${txid}`].blockHeight, height)
+  })
+
+  it('answers from the edge cache without asking Hyphen again', async () => {
+    const { txid } = ids()
+    hyphen(minedTx(txid, TIP - 100))
+    assert.ok(await warmed(`/tx/${txid}`))
+    reset()
+    assert.ok((await inlined(`/tx/${txid}`))?.[`/x/hy/mainnet/rawtx/${txid}`])
+    assert.deepEqual(
+      upstreamCalls.filter((r) => /\/(rawtx|tx)\//.test(r.url)),
+      [],
+    )
   })
 
   it('inlines a block by height or by hash, on the network the link names', async () => {
     const { hash } = ids()
-    const h = TIP - 6
+    const h = TIP - 6 - n
     hyphen({ status, [`rawblock/${h}`]: { rawblock: '00' }, [`block/${h}`]: block(hash, h) })
-    const byHeight = await inlined(`/block/${h}?network=testnet`)
-    assert.deepEqual(Object.keys(byHeight).sort(), [
-      `/x/hy/testnet/block/${h}`,
-      `/x/hy/testnet/rawblock/${h}`,
-      '/x/hy/testnet/status',
-    ])
+    const byHeight = await warmed(`/block/${h}?network=testnet`)
+    assert.ok(byHeight[`/x/hy/testnet/rawblock/${h}`])
+    assert.ok(byHeight[`/x/hy/testnet/block/${h}`])
     assert.ok(upstreamCalls.every((r) => r.url.startsWith('https://ts.kw.vg/api/v1/')))
     hyphen({
       status,
       [`rawblock/${hash}`]: { rawblock: '00' },
       [`block/${hash}`]: block(hash, TIP - 50),
     })
-    assert.ok((await inlined(`/block/${hash}`))[`/x/hy/mainnet/rawblock/${hash}`])
+    assert.ok((await warmed(`/block/${hash}`))[`/x/hy/mainnet/rawblock/${hash}`])
   })
 
-  it('sends the shell alone when a read misses', async () => {
+  it('never inlines when a read misses', async () => {
     const { txid } = ids()
     const routes = minedTx(txid, TIP - 100)
     delete routes[`rawtx/${txid}`]
     hyphen(routes)
-    assert.equal(await inlined(`/tx/${txid}`), null)
+    assert.equal(await warmed(`/tx/${txid}`), null)
   })
 
-  it('sends the shell alone, without waiting, when Hyphen is slow', async () => {
+  it('never waits for Hyphen, however slow it is', async () => {
     const { txid } = ids()
     hyphen(minedTx(txid, TIP - 100), { delayMs: { '*': 4 * BUDGET_MS } })
     const started = Date.now()
     assert.equal(await inlined(`/tx/${txid}`), null)
-    assert.ok(Date.now() - started < 3 * BUDGET_MS, `took ${Date.now() - started} ms`)
-  })
-
-  it('inlines what is back in time when only the block time is slow', async () => {
-    const { txid } = ids()
-    hyphen(minedTx(txid, TIP - 77 - n), { delayMs: { block: 4 * BUDGET_MS } })
-    const reads = await inlined(`/tx/${txid}`)
-    assert.ok(reads[`/x/hy/mainnet/rawtx/${txid}`])
-    assert.ok(reads[`/x/hy/mainnet/tx/${txid}`])
-    assert.equal(reads[`/x/hy/mainnet/block/${TIP - 77 - n}`], undefined)
+    assert.ok(Date.now() - started < 2 * BUDGET_MS, `took ${Date.now() - started} ms`)
   })
 
   it('never inlines an unconfirmed tx', async () => {
@@ -318,26 +331,26 @@ describe('first data for immutable pages', () => {
       [`rawtx/${txid}`]: { rawtx: '00' },
       [`tx/${txid}`]: { txHash: txid, blockHeight: null, asOfHeight: TIP },
     })
-    assert.equal(await inlined(`/tx/${txid}`), null)
+    assert.equal(await warmed(`/tx/${txid}`), null)
   })
 
   it('never inlines a block, or a tx in a block, within six blocks of the tip', async () => {
     const a = ids()
     hyphen(minedTx(a.txid, TIP - 5))
-    assert.equal(await inlined(`/tx/${a.txid}`), null)
+    assert.equal(await warmed(`/tx/${a.txid}`), null)
     hyphen({
       status,
       [`rawblock/${a.hash}`]: { rawblock: '00' },
       [`block/${a.hash}`]: block(a.hash, TIP - 5),
     })
-    assert.equal(await inlined(`/block/${a.hash}`), null)
+    assert.equal(await warmed(`/block/${a.hash}`), null)
     const b = ids()
     hyphen({
       status,
       [`rawblock/${b.hash}`]: { rawblock: '00' },
       [`block/${b.hash}`]: block(b.hash, TIP - 100, { orphanedAt: '2026-11-18T00:00:00Z' }),
     })
-    assert.equal(await inlined(`/block/${b.hash}`), null)
+    assert.equal(await warmed(`/block/${b.hash}`), null)
   })
 
   it('reads nothing for a bad id, a devnet, a Decentralized only link or a link preview', async () => {
@@ -354,6 +367,7 @@ describe('first data for immutable pages', () => {
       `/tx/${txid}?sources=decentralized`,
     ])
       assert.equal(await inlined(p), null, p)
+    await new Promise((r) => setTimeout(r, 200))
     assert.equal(upstreamCalls.length, 0)
     // A preview reads its own one backend answer for the title, never the page's first data.
     const preview = await inlined(`/tx/${txid}`, {
@@ -368,6 +382,7 @@ describe('first data for immutable pages', () => {
     const routes = minedTx(txid, TIP - 100)
     routes[`tx/${txid}`] = { ...routes[`tx/${txid}`], note: '</script><script>x()' }
     hyphen(routes)
+    assert.ok(await warmed(`/tx/${txid}`))
     const html = await (await get(`/tx/${txid}`)).text()
     assert.doesNotMatch(html, /<\/script><script>x\(\)/)
     const m = /id="radar-first-data">([^<]*)<\/script>/.exec(html)

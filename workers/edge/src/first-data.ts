@@ -48,30 +48,50 @@ interface Ctx {
   waitUntil(promise: Promise<unknown>): void
 }
 
-/**
- * One read through the pass-through, kept in the edge cache: Hyphen's own zone does not let a Worker's subrequest
- * cache its answers, so repeats would otherwise pay Hyphen's round trip each time. Null on anything but a JSON 200.
- */
-async function read(origin: string, path: string, ctx: Ctx): Promise<Json | null> {
+const edgeCache = (): Cache | undefined =>
+  typeof caches === 'undefined' ? undefined : caches.default
+
+/** The pass-through's own mapping of a read, which also says whether it can ever change. */
+function upstream(origin: string, path: string) {
   const url = new URL(origin + path)
   const resolved = resolveHyphenRequest(url.pathname, '')
-  if (!resolved.ok) return null
-  const key = new Request(`${resolved.url.href}#radar-first-data`)
-  const cache = typeof caches === 'undefined' ? undefined : caches.default
-  const hit = await cache?.match(key).catch(() => undefined)
-  if (hit) return hit.json<Json>().catch(() => null)
-  const res = await handleProxy(new Request(url), url)
-  if (res.status !== 200) {
-    res.body?.cancel().catch(() => undefined)
-    return null
+  return resolved.ok
+    ? {
+        url,
+        key: new Request(`${resolved.url.href}#radar-first-data`),
+        immutable: resolved.immutable,
+      }
+    : null
+}
+
+/** What the edge cache holds for this read, without asking Hyphen. */
+async function cached(origin: string, path: string): Promise<Json | null> {
+  const up = upstream(origin, path)
+  const hit = up
+    ? await edgeCache()
+        ?.match(up.key)
+        .catch(() => undefined)
+    : undefined
+  return hit ? hit.json<Json>().catch(() => null) : null
+}
+
+/**
+ * Reads Hyphen through the pass-through after the response has gone, and keeps a JSON 200 in the edge cache for the
+ * next visit: Hyphen's own zone does not let a Worker's subrequest cache its answers.
+ */
+function warm(origin: string, path: string, ctx: Ctx): void {
+  const up = upstream(origin, path)
+  const cache = edgeCache()
+  if (!up || !cache) return
+  const ttl = up.immutable ? IMMUTABLE_TTL_SECONDS : READ_TTL_SECONDS
+  const work = async () => {
+    const res = await handleProxy(new Request(up.url), up.url)
+    if (res.status !== 200) return res.body?.cancel()
+    const body = await res.json<Json>()
+    const headers = { 'cache-control': `public, max-age=${ttl}` }
+    await cache.put(up.key, Response.json(body, { headers }))
   }
-  const body = await res.json<Json>().catch(() => null)
-  if (body && cache) {
-    const ttl = resolved.immutable ? IMMUTABLE_TTL_SECONDS : READ_TTL_SECONDS
-    const stored = Response.json(body, { headers: { 'cache-control': `public, max-age=${ttl}` } })
-    ctx.waitUntil(cache.put(key, stored).catch(() => undefined))
-  }
-  return body
+  ctx.waitUntil(work().catch(() => undefined))
 }
 
 const num = (v: unknown): number | undefined => (typeof v === 'number' ? v : undefined)
@@ -83,6 +103,15 @@ const settled = (detail: Json): boolean => {
   return height !== undefined && tip !== undefined && tip - height >= REORG_DEPTH
 }
 
+/** Each read from the edge cache, warming the ones it lacks for the next visit. */
+async function fromCache(origin: string, paths: string[], ctx: Ctx): Promise<(Json | null)[]> {
+  const found = await Promise.all(paths.map((p) => cached(origin, p)))
+  paths.forEach((p, i) => {
+    if (!found[i]) warm(origin, p, ctx)
+  })
+  return found
+}
+
 async function gather(
   origin: string,
   plan: FirstDataPlan,
@@ -92,32 +121,29 @@ async function gather(
   const base = `/x/hy/${plan.net}`
   const paths =
     plan.kind === 'tx'
-      ? [`${base}/rawtx/${plan.id}`, `${base}/tx/${plan.id}`]
-      : [`${base}/rawblock/${plan.id}`, `${base}/block/${plan.id}`]
-  // The page measures the index with Hyphen's status beside these; it is inlined if it is back in time.
-  const status = read(origin, `${base}/status`, ctx).catch(() => null)
-  const first = await Promise.race([Promise.all(paths.map((p) => read(origin, p, ctx))), deadline])
-  if (!first) return null
-  const [raw, detail] = first
+      ? [`${base}/rawtx/${plan.id}`, `${base}/tx/${plan.id}`, `${base}/status`]
+      : [`${base}/rawblock/${plan.id}`, `${base}/block/${plan.id}`, `${base}/status`]
+  const found = await Promise.race([fromCache(origin, paths, ctx), deadline])
+  if (!found) return null
+  const [raw, detail, status] = found
   if (!raw || !detail || !settled(detail)) return null
   if (plan.kind === 'block' && detail.orphanedAt != null) return null
   const reads: Record<string, unknown> = { [paths[0]!]: raw, [paths[1]!]: detail }
-  // A tx page also reads its block for the time; that read needs the first, so it gets what is left of the budget.
-  const blockPath = `${base}/block/${num(detail.blockHeight)}`
-  const block = plan.kind === 'tx' ? read(origin, blockPath, ctx).catch(() => null) : null
-  const [st, blk] = await Promise.race([
-    Promise.all([status, block]),
-    deadline.then(() => [null, null] as const),
-  ])
-  if (st) reads[`${base}/status`] = st
-  if (blk) reads[blockPath] = blk
+  if (status) reads[paths[2]!] = status
+  if (plan.kind === 'tx') {
+    // The tx page also reads its block for the time.
+    const blockPath = `${base}/block/${num(detail.blockHeight)}`
+    const [block] = (await Promise.race([fromCache(origin, [blockPath], ctx), deadline])) ?? [null]
+    if (block) reads[blockPath] = block
+  }
   return { reads }
 }
 
 /**
- * The Hyphen answers the page would read first, fetched through the pass-through, or null when the tx and its bytes
- * (or the block and its bytes) are not both back within `budgetMs`, a read failed, the tx is unconfirmed or the block
- * is within `REORG_DEPTH` of Hyphen's tip.
+ * The Hyphen answers the page would read first, from the edge cache, or null when the tx and its bytes (or the block
+ * and its bytes) are not both there within `budgetMs`, the tx is unconfirmed or the block is within `REORG_DEPTH` of
+ * Hyphen's tip. A miss warms the cache for the next visit after the response has gone, so the HTML never waits for
+ * Hyphen itself.
  */
 export async function fetchFirstData(
   origin: string,
