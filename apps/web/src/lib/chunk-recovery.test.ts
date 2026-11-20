@@ -160,4 +160,14 @@ describe('the router’s reload keys', () => {
     expect(sessionStorage.length).toBe(1)
     expect(sessionStorage.getItem(RELOAD_KEY)).toBe('1')
   })
+
+  it('stay just after Radar reloaded for a chunk, so the router cannot reload again', () => {
+    const T = 1_800_000_000_000
+    sessionStorage.setItem(`tanstack_router_reload:${MISSING}`, '1')
+    sessionStorage.setItem(RELOAD_KEY, String(T))
+    clearRouterReloads(T + 1_000)
+    expect(sessionStorage.getItem(`tanstack_router_reload:${MISSING}`)).toBe('1')
+    clearRouterReloads(T + RELOAD_GUARD_MS + 1)
+    expect(sessionStorage.getItem(`tanstack_router_reload:${MISSING}`)).toBeNull()
+  })
 })

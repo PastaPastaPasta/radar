@@ -1,5 +1,6 @@
 import { QueryClient } from '@tanstack/react-query'
 import { createQueryClientConfig, createPersister, watchSourceMode } from '@/data/query'
+import { watchCrawls } from '@/data/radar/crawl-events'
 
 function openPersister() {
   if (typeof indexedDB === 'undefined') return undefined
@@ -24,5 +25,6 @@ export function createQueryClient(): QueryClient {
     },
   })
   watchSourceMode(client)
+  watchCrawls(client)
   return client
 }

@@ -6,6 +6,7 @@ import { humanizeSpan } from '../health-lag'
 import { fetchSourced, lastModifiedMs, requireEndpoint } from '../http'
 import { RADAR_GLOBAL_BASE } from '../endpoints'
 import { mapSourced, type Sourced } from '../envelope'
+import { announceNewerCrawl } from './crawl-events'
 import {
   RadarActivationSchema,
   RadarBenchSchema,
@@ -104,6 +105,7 @@ function noteCrawl(net: NetworkId, id: number | null | undefined, finished: numb
   const checkedAt = Date.now()
   if (!had || finished >= had.finished) crawls.set(net, { id: id ?? null, finished, checkedAt })
   else had.checkedAt = checkedAt
+  if (had && finished > had.finished) announceNewerCrawl(net, finished)
 }
 
 /**

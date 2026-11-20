@@ -87,7 +87,9 @@ export function reloadForChunk(
  * Forgets the router's reload keys once a page has loaded. They never expire by themselves, and Safari gives every
  * failed import the same message, so a key left over from one deploy would change how the next one recovers.
  */
-export function clearRouterReloads(): void {
+export function clearRouterReloads(now = Date.now()): void {
+  // Just after Radar's own reload the keys stay, so the router cannot reload again if this load fails too.
+  if (reloadedRecently(now)) return
   try {
     const keys: string[] = []
     for (let i = 0; i < sessionStorage.length; i++) {
