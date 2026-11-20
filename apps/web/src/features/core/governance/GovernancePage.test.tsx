@@ -350,7 +350,10 @@ describe('Governance page while Hyphen’s index is stale @IN-16 @HY-19', () => 
     await waitFor(() =>
       expect(document.querySelector('.rx-page__src [data-source="insight"]')).not.toBeNull(),
     )
-    expect(document.querySelector('[data-page] [data-source="hyphen"]')).toBeNull()
+    // The past superblocks in the cycle card are Hyphen's own blocks; the proposal list must not be.
+    expect(
+      document.querySelector('[data-page] [data-source="hyphen"]:not(#cycle [data-source])'),
+    ).toBeNull()
   })
 
   it('adds the proposals only Hyphen still has after Insight’s, labelled as Hyphen’s and behind', async () => {
@@ -558,9 +561,11 @@ describe('Governance cycle', () => {
       return [...all]
     })
     expect(rows.map((r) => r.dataset.superblock)).toEqual(['2558864', '2542248', '2525632'])
-    await waitFor(() => expect(rows[0]!.querySelector('[data-paid]')).toHaveTextContent('5,393'))
-    expect(rows[1]!.querySelector('[data-paid]')).toHaveTextContent('6,810')
-    expect(rows[2]!.querySelector('[data-paid]')).toHaveTextContent('6,817')
+    await waitFor(() => {
+      expect(rows[0]!.querySelector('[data-paid]')).toHaveTextContent('5,393')
+      expect(rows[1]!.querySelector('[data-paid]')).toHaveTextContent('6,810')
+      expect(rows[2]!.querySelector('[data-paid]')).toHaveTextContent('6,817')
+    })
     expect(rows[0]).toHaveTextContent('21 Oct 2026')
     expect(card.querySelector('[data-past-superblocks] [data-source="hyphen"]')).not.toBeNull()
   })

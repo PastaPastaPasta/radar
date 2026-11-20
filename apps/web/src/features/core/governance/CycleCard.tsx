@@ -2,13 +2,12 @@ import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
-import { stampOf, type Sourced, type SourceStamp } from '@/data/envelope'
+import { stampOf, type SourceStamp } from '@/data/envelope'
 import {
-  BLOCK_MS,
   cycleBudget,
   insightBehind,
-  measuredBlockMs,
-  pastSuperblocks,
+  showsPastTime,
+  type PastSuperblock,
   superblockEta,
   superblockPaid,
   votingDeadline,
@@ -21,8 +20,8 @@ import { Entity } from '@/features/entity'
 import { Amount, Card, ErrorState, Skeleton, SourceLine, Stat } from '@/ui'
 import type { BudgetSplit } from './status'
 
-/** How many earlier superblocks the cycle card lists. */
-const PAST = 3
+/** How often the cycle is read again while a time it shows has passed or Insight is behind. */
+const STALE_POLL_MS = 60_000
 
 /** A countdown that ticks every second while it is on screen, and says once when it reaches zero. */
 function Countdown({ to, onDone }: { to: number; onDone?: () => void }) {
@@ -62,20 +61,17 @@ export function CycleCard({
   proposalsFailed?: boolean
 }) {
   const { t } = useLingui()
-  const query = useQuery(insQueries.governanceCycle(net))
+  const query = useQuery({
+    ...insQueries.governanceCycle(net),
+    refetchInterval: (q) =>
+      q.state.data && showsPastTime(q.state.data.data, Date.now()) ? STALE_POLL_MS : false,
+  })
   const c = query.data?.data
   const info = query.data ? stampOf(query.data) : undefined
   const tipStamp = query.data?.tipStamp
-  const heights = c ? pastSuperblocks(c, PAST) : []
-  const blocks = useQueries({ queries: heights.map((h) => hyQueries.block(net, h)) })
-  const measured = measuredBlockMs(
-    heights.map((height, i) => ({ height, time: blocks[i]?.data?.data?.blockTime })),
-  )
-  // Future blocks count from when DAPI's tip was read, not the tip's own time, so a stalled chain never counts to 0.
-  const pace = { blockMs: measured ?? BLOCK_MS, now: tipStamp?.fetchedAt ?? 0 }
-  const minutes = formatNumber(pace.blockMs / 60_000, { maximumFractionDigits: 2 })
-  const eta = c ? superblockEta(c, pace) : undefined
-  const deadline = c ? votingDeadline(c, pace) : undefined
+  const minutes = c ? formatNumber(c.blockMs / 60_000, { maximumFractionDigits: 2 }) : ''
+  const eta = c ? superblockEta(c) : undefined
+  const deadline = c ? votingDeadline(c) : undefined
   const behind = c?.tip && insightBehind(c) ? c.tip.height : undefined
   const noTip =
     c && !c.tip
@@ -132,7 +128,7 @@ export function CycleCard({
                 note={
                   eta === undefined || !c?.tip || c.nextSuperblock == null
                     ? noTip
-                    : measured !== undefined
+                    : c.rateMeasured
                       ? plural(c.nextSuperblock - c.tip.height, {
                           one: `# block to go, at ${minutes} minutes a block, as the last superblocks ran`,
                           other: `# blocks to go, at ${minutes} minutes a block, as the last superblocks ran`,
@@ -199,7 +195,7 @@ export function CycleCard({
             pending={query.isPending || (!split && !proposalsFailed)}
             failed={proposalsFailed}
           />
-          {c ? <PastSuperblocks net={net} heights={heights} blocks={blocks} /> : null}
+          {c ? <PastSuperblocks net={net} past={c.past} stamp={query.data?.pastStamp} /> : null}
         </div>
       )}
     </Card>
@@ -277,14 +273,15 @@ function BudgetUse({
 /** The last superblocks, newest first, each with its date and what it paid, from Hyphen's blocks. */
 function PastSuperblocks({
   net,
-  heights,
-  blocks,
+  past,
+  stamp,
 }: {
   net: NetworkId
-  heights: number[]
-  blocks: readonly { data?: Sourced<{ blockTime: number } | null>; isError: boolean }[]
+  past: readonly PastSuperblock[]
+  stamp: SourceStamp | undefined
 }) {
   const { t } = useLingui()
+  const heights = past.map((p) => p.height)
   const coinbases = useQueries({
     queries: heights.flatMap((h) => [
       hyQueries.blockTxs(net, h, { limit: 1 }),
@@ -293,50 +290,51 @@ function PastSuperblocks({
   })
   if (heights.length === 0) return null
   const failed =
-    blocks.some((q) => q.isError && !q.data) || coinbases.some((q) => q.isError && !q.data)
-  const stamp = blocks.find((q) => q.data)?.data
+    past.some((p) => p.time === undefined) || coinbases.some((q) => q.isError && !q.data)
   return (
     <div className="grid gap-2" data-past-superblocks>
       <h3 className="m-0 text-sm font-semibold">{t`Last superblocks`}</h3>
-      <div className="rx-tablewrap">
-        <table className="rx-table">
-          <caption className="dh-sr">{t`Last superblocks: height, date and what each paid`}</caption>
-          <thead>
-            <tr>
-              <th scope="col">{t`Superblock`}</th>
-              <th scope="col">{t`Date`}</th>
-              <th scope="col" className="r">
-                {t`Paid to proposals, about`}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {heights.map((h, i) => {
-              const time = blocks[i]?.data?.data?.blockTime
-              const sb = coinbase(coinbases[2 * i]?.data?.data.items)
-              const before = coinbase(coinbases[2 * i + 1]?.data?.data.items)
-              const paid =
-                sb !== undefined && before !== undefined ? superblockPaid(sb, before) : undefined
-              return (
-                <tr key={h} data-superblock={h}>
-                  <td>
-                    <Entity kind="block" id={String(h)} label={formatInt(h)} />
-                  </td>
-                  <td>{time === undefined ? '—' : formatDate(time, { time: false })}</td>
-                  <td className="r rx-num" data-paid>
-                    {paid === undefined ? '—' : <Amount value={paid} kind="duffs" />}
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
+      <div className="rx-tablewrap rx-tablewrap--scroll">
+        <div className="rx-tablescroll">
+          <table className="rx-table">
+            <caption className="dh-sr">{t`Last superblocks: height, date and what each paid`}</caption>
+            <thead>
+              <tr>
+                <th scope="col">{t`Superblock`}</th>
+                <th scope="col">{t`Date`}</th>
+                <th scope="col" className="r">
+                  {t`Paid, about`}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {heights.map((h, i) => {
+                const time = past[i]?.time
+                const sb = coinbase(coinbases[2 * i]?.data?.data.items)
+                const before = coinbase(coinbases[2 * i + 1]?.data?.data.items)
+                const paid =
+                  sb !== undefined && before !== undefined ? superblockPaid(sb, before) : undefined
+                return (
+                  <tr key={h} data-superblock={h}>
+                    <td>
+                      <Entity kind="block" id={String(h)} label={formatInt(h)} />
+                    </td>
+                    <td>{time === undefined ? '—' : formatDate(time, { time: false })}</td>
+                    <td className="r rx-num" data-paid>
+                      {paid === undefined ? '—' : <Amount value={paid} kind="duffs" />}
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
       <p className="rx-note m-0">
         {failed
           ? t`Some superblocks couldn’t be read from Hyphen; their figures show —.`
           : t`Paid is the superblock’s coinbase less the coinbase of the block before it, to the nearest 0.01 DASH.`}{' '}
-        {stamp ? <SourceLine stamp={stampOf(stamp)} compact /> : null}
+        {stamp ? <SourceLine stamp={stamp} compact /> : null}
       </p>
     </div>
   )

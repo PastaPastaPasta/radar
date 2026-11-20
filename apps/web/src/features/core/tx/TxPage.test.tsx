@@ -162,6 +162,21 @@ describe('Transaction page', () => {
     })
   })
 
+  it('calls a mix-shaped transaction CoinJoin only once its fee is known to be 0', async () => {
+    // Neither DAPI's input values nor Hyphen's fee arrive, so the fee stays unknown.
+    vi.spyOn(core, 'prevouts').mockReturnValue(new Promise(() => undefined))
+    server.use(
+      http.get(`*/x/hy/mainnet/tx/${COINJOIN}`, () => HttpResponse.json({}, { status: 503 })),
+    )
+    renderAt(`/tx/${COINJOIN}`)
+    await waitFor(() => expect(document.querySelector('.rx-rec [data-type]')).not.toBeNull(), {
+      timeout: 4000,
+    })
+    expect(document.querySelector('.rx-rec [data-type]')).toHaveAttribute('data-type', 'transfer')
+    expect(document.querySelector('[data-coinjoin-note]')).toBeNull()
+    expect(screen.queryByText('CoinJoin mixes pay none')).toBeNull()
+  })
+
   it('says nothing of CoinJoin on a payment', async () => {
     renderAt(`/tx/${TESTNET_NORMAL}?network=testnet`)
     await waitFor(() => expect(document.querySelector('.rx-rec [data-type]')).not.toBeNull(), {

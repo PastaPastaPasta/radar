@@ -3,6 +3,7 @@ import {
   BLOCK_MS,
   cycleBudget,
   insightBehind,
+  showsPastTime,
   measuredBlockMs,
   pastSuperblocks,
   superblockEta,
@@ -20,7 +21,14 @@ const MAINNET: GovernanceCycle = {
   lastSuperblock: 2_558_864,
   cycleBlocks: 16_616,
   maturityBlocks: 1_662,
-  tip: { height: 2_574_480, time: Date.UTC(2026, 10, 20, 8, 0) },
+  tip: {
+    height: 2_574_480,
+    time: Date.UTC(2026, 10, 20, 8, 0),
+    readAt: Date.UTC(2026, 10, 20, 8, 0),
+  },
+  past: [],
+  blockMs: BLOCK_MS,
+  rateMeasured: false,
 }
 
 const AT_TIP = { blockMs: BLOCK_MS, now: MAINNET.tip!.time }
@@ -29,6 +37,15 @@ describe('the next superblock', () => {
   it('is due at Dash Core’s 2.62 minutes a block from the tip', () => {
     expect(BLOCK_MS).toBe(157_200)
     expect(superblockEta(MAINNET, AT_TIP)).toBe(MAINNET.tip!.time + 1_000 * BLOCK_MS)
+  })
+
+  it('uses the cycle’s own rate and read time by default, so every figure shares one estimate', () => {
+    const c = {
+      ...MAINNET,
+      blockMs: 157_600,
+      tip: { ...MAINNET.tip!, readAt: MAINNET.tip!.time + 60_000 },
+    }
+    expect(superblockEta(c)).toBe(MAINNET.tip!.time + 60_000 + 1_000 * 157_600)
   })
 
   it('counts at the rate it is given', () => {
@@ -43,7 +60,7 @@ describe('the next superblock', () => {
   })
 
   it('has no time once DAPI’s tip is at or past it: Insight is behind', () => {
-    const behind = { ...MAINNET, tip: { height: 2_575_480, time: MAINNET.tip!.time } }
+    const behind = { ...MAINNET, tip: { ...MAINNET.tip!, height: 2_575_480 } }
     expect(insightBehind(behind)).toBe(true)
     expect(superblockEta(behind, AT_TIP)).toBeUndefined()
     expect(insightBehind(MAINNET)).toBe(false)
@@ -55,10 +72,30 @@ describe('the next superblock', () => {
   })
 })
 
+describe('reading the cycle again', () => {
+  const at = superblockEta(MAINNET)!
+
+  it('is asked for while the superblock time shown has passed, and not before', () => {
+    expect(showsPastTime(MAINNET, at - 1)).toBe(false)
+    expect(showsPastTime(MAINNET, at)).toBe(true)
+  })
+
+  it('is asked for while the deadline shown has passed but the tip is still below it', () => {
+    const before = { ...MAINNET, tip: { ...MAINNET.tip!, height: 2_573_000 } }
+    const deadline = votingDeadline(before)!.at!
+    expect(showsPastTime(before, deadline - 1)).toBe(false)
+    expect(showsPastTime(before, deadline + 1)).toBe(true)
+  })
+
+  it('is asked for while Insight is behind the chain', () => {
+    expect(showsPastTime({ ...MAINNET, tip: { ...MAINNET.tip!, height: 2_575_480 } }, 0)).toBe(true)
+  })
+})
+
 describe('the voting deadline', () => {
   it('is the start of the maturity window, still ahead while the tip is below it', () => {
     const d = votingDeadline(
-      { ...MAINNET, tip: { height: 2_573_000, time: 0 } },
+      { ...MAINNET, tip: { height: 2_573_000, time: 0, readAt: 0 } },
       { blockMs: BLOCK_MS, now: 0 },
     )
     expect(d).toEqual({ height: 2_573_818, at: 818 * BLOCK_MS, passed: false })

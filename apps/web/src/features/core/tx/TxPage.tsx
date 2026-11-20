@@ -242,8 +242,8 @@ function TxView({
 
   const noValue = movesNoValue(tx)
   const spendsNothing = !coinbase && tx.inputs.length === 0 && fee === 0n
-  // A mix pays no fee; one shaped like a mix that does pay one is a payment after all.
-  const coinjoin = tx.type === 'coinjoin' && (fee === undefined || fee === 0n)
+  // Shaped like a mix, it is called one only once its fee is known to be 0; until then, or with a fee, a payment.
+  const coinjoin = tx.type === 'coinjoin' && fee === 0n
   const type = tx.type === 'coinjoin' && !coinjoin ? 'transfer' : tx.type
   const feeRate =
     fee !== undefined && tx.size > 0

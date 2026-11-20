@@ -16,6 +16,14 @@ export interface CycleTip {
   height: number
   /** ms */
   time: number
+  /** ms: when DAPI's answer was read, which blocks still to come are counted from. */
+  readAt: number
+}
+
+/** A past superblock's height and, when its block could be read, its time (ms). */
+export interface PastSuperblock {
+  height: number
+  time: number | undefined
 }
 
 /** Dash Core's `getgovernanceinfo`, as far as the cycle needs it, and the tip its heights are measured against. */
@@ -29,7 +37,19 @@ export interface GovernanceCycle {
   /** Blocks before a superblock in which its payments are settled: Core's `superblockmaturitywindow`. */
   maturityBlocks: number | null
   tip: CycleTip | undefined
+  /** The last superblocks, newest first, with their times when known. */
+  past: PastSuperblock[]
+  /** The block rate every time here is estimated at: the past superblocks' own, or Dash Core's 2.62 minutes. */
+  blockMs: number
+  /** True when `blockMs` was measured from the past superblocks. */
+  rateMeasured: boolean
 }
+
+/** The one estimate every superblock time of a cycle is made with: its block rate, from when its tip was read. */
+export const cyclePace = (c: GovernanceCycle): Pace => ({
+  blockMs: c.blockMs,
+  now: c.tip?.readAt ?? 0,
+})
 
 /** When a height is due: blocks still to come are counted from the later of the tip's time and now. */
 export function heightAt(tip: CycleTip, height: number, pace: Pace = corePace()): number {
@@ -42,7 +62,7 @@ export const insightBehind = (c: GovernanceCycle): boolean =>
   c.tip !== undefined && c.nextSuperblock != null && c.tip.height >= c.nextSuperblock
 
 /** The next superblock's estimated time (ms); undefined without its height or a tip, or when Insight is behind. */
-export function superblockEta(c: GovernanceCycle, pace: Pace = corePace()): number | undefined {
+export function superblockEta(c: GovernanceCycle, pace: Pace = cyclePace(c)): number | undefined {
   if (c.nextSuperblock == null || !c.tip || insightBehind(c)) return undefined
   return heightAt(c.tip, c.nextSuperblock, pace)
 }
@@ -69,7 +89,7 @@ export function measuredBlockMs(
  */
 export function votingDeadline(
   c: GovernanceCycle,
-  pace: Pace = corePace(),
+  pace: Pace = cyclePace(c),
 ): { height: number; at: number | undefined; passed: boolean | undefined } | undefined {
   if (c.nextSuperblock == null || c.maturityBlocks == null) return undefined
   const height = c.nextSuperblock - c.maturityBlocks
@@ -80,8 +100,25 @@ export function votingDeadline(
   }
 }
 
+/**
+ * The cycle shows a superblock or voting-deadline time already past, or Insight is behind the chain: it should be read
+ * again until a later superblock arrives.
+ */
+export function showsPastTime(c: GovernanceCycle, now: number): boolean {
+  if (insightBehind(c)) return true
+  const eta = superblockEta(c)
+  const deadline = votingDeadline(c)
+  return (
+    (eta !== undefined && eta <= now) ||
+    (deadline?.at !== undefined && deadline.passed === false && deadline.at <= now)
+  )
+}
+
 /** The last `count` superblocks' heights, newest first, counted back a cycle at a time from the last one. */
-export function pastSuperblocks(c: GovernanceCycle, count: number): number[] {
+export function pastSuperblocks(
+  c: Pick<GovernanceCycle, 'lastSuperblock' | 'cycleBlocks'>,
+  count: number,
+): number[] {
   if (c.lastSuperblock == null || c.cycleBlocks == null || c.cycleBlocks <= 0) return []
   const out: number[] = []
   for (let h = c.lastSuperblock; h > 0 && out.length < count; h -= c.cycleBlocks) out.push(h)

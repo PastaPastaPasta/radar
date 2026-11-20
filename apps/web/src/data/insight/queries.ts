@@ -1,7 +1,16 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query'
 import type { NetworkId } from '@/lib/network'
 import { mapSourced, stampOf, type SourceStamp, type Sourced } from '../envelope'
-import { heightAt, superblockEta, type CycleTip, type GovernanceCycle } from '../governance-cycle'
+import {
+  BLOCK_MS,
+  heightAt,
+  measuredBlockMs,
+  pastSuperblocks,
+  superblockEta,
+  type CycleTip,
+  type GovernanceCycle,
+  type PastSuperblock,
+} from '../governance-cycle'
 import type { HyPage, HyProposal } from '../hyphen/schemas'
 import { insKeys } from '../query/keys'
 import { dataClass } from '../query/stale'
@@ -25,7 +34,10 @@ async function chainTip(
     .then((m) => m.core.tip(net, signal))
     .catch(() => undefined)
   if (!tip || tip.fallback) return undefined
-  return { tip: { height: tip.data.height, time: tip.data.time }, stamp: stampOf(tip) }
+  return {
+    tip: { height: tip.data.height, time: tip.data.time, readAt: tip.fetchedAt },
+    stamp: stampOf(tip),
+  }
 }
 
 /** When the next superblock is due, from DAPI's tip at the block target, or undefined when either is missing. */
@@ -39,8 +51,31 @@ async function superblockTime(
   return tip ? heightAt(tip.tip, info.nextsuperblock) : undefined
 }
 
-/** A governance cycle and the DAPI tip its times were counted from (its stamp, when there was one). */
-export type SourcedCycle = Sourced<GovernanceCycle> & { tipStamp?: SourceStamp }
+/** A governance cycle, with the stamps of DAPI's tip it was timed by and of Hyphen's past superblocks, when read. */
+export type SourcedCycle = Sourced<GovernanceCycle> & {
+  tipStamp?: SourceStamp
+  pastStamp?: SourceStamp
+}
+
+/** How many past superblocks a cycle reads, to list them and to measure the chain's block rate. */
+const PAST_SUPERBLOCKS = 3
+
+/** The past superblocks' times from Hyphen; a block it can't give has no time. */
+async function pastTimes(
+  net: NetworkId,
+  heights: number[],
+  signal: AbortSignal,
+): Promise<{ past: PastSuperblock[]; stamp?: SourceStamp }> {
+  const { hyphen } = await import('../hyphen/client')
+  const read = await Promise.all(
+    heights.map((h) => hyphen.block(net, h, signal).catch(() => undefined)),
+  )
+  const first = read.find((r) => r?.data)
+  return {
+    past: heights.map((height, i) => ({ height, time: read[i]?.data?.blockTime })),
+    ...(first ? { stamp: stampOf(first) } : {}),
+  }
+}
 
 const toBudget = (s: SourcedCycle): Sourced<SuperblockBudget | null> =>
   mapSourced(s, (c) => {
@@ -54,8 +89,16 @@ const governanceCycle = (net: NetworkId) =>
     queryKey: insKeys(net, 'governance-cycle'),
     queryFn: async ({ signal }): Promise<SourcedCycle> => {
       const info = await insight.governanceInfo(net, signal)
-      const tip = info.data.nextsuperblock == null ? undefined : await chainTip(net, signal)
       const i = info.data
+      const heights = pastSuperblocks(
+        { lastSuperblock: i.lastsuperblock ?? null, cycleBlocks: i.superblockcycle ?? null },
+        PAST_SUPERBLOCKS,
+      )
+      const [tip, times] = await Promise.all([
+        i.nextsuperblock == null ? undefined : chainTip(net, signal),
+        pastTimes(net, heights, signal),
+      ])
+      const measured = measuredBlockMs(times.past)
       return {
         ...mapSourced(info, (): GovernanceCycle => ({
           budget: i.governancebudget,
@@ -64,8 +107,12 @@ const governanceCycle = (net: NetworkId) =>
           cycleBlocks: i.superblockcycle ?? null,
           maturityBlocks: i.superblockmaturitywindow ?? null,
           tip: tip?.tip,
+          past: times.past,
+          blockMs: measured ?? BLOCK_MS,
+          rateMeasured: measured !== undefined,
         })),
         ...(tip ? { tipStamp: tip.stamp } : {}),
+        ...(times.stamp ? { pastStamp: times.stamp } : {}),
       }
     },
     ...dataClass('index'),
