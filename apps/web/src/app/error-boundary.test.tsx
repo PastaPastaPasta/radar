@@ -9,6 +9,8 @@ function Page() {
   return <p>the page</p>
 }
 
+const page = () => document.querySelector<HTMLElement>('[data-error-page]')!
+
 const setOnline = (online: boolean) => {
   Object.defineProperty(navigator, 'onLine', { value: online, configurable: true })
 }
@@ -32,7 +34,7 @@ describe('the page error boundary', () => {
         <Page />
       </ErrorBoundary>,
     )
-    expect(screen.getByRole('alert')).toHaveTextContent('This page couldn’t be shown')
+    expect(page()).toHaveTextContent('This page couldn’t be shown')
   })
 
   it('says it is offline, not broken, when a page fails to render offline @NX-77', () => {
@@ -43,8 +45,8 @@ describe('the page error boundary', () => {
       </ErrorBoundary>,
     )
     expect(screen.queryByText('This page couldn’t be shown')).toBeNull()
-    expect(screen.getByRole('status')).toHaveTextContent('You’re offline')
-    expect(screen.getByRole('status')).toHaveTextContent('loads when the connection returns')
+    expect(page()).toHaveTextContent('You’re offline')
+    expect(page()).toHaveTextContent('loads when the connection returns')
   })
 
   it('shows the page again by itself when the connection returns @NX-77', () => {
@@ -73,7 +75,7 @@ describe('the page error boundary', () => {
         <Page />
       </ErrorBoundary>,
     )
-    expect(screen.getByRole('status')).toHaveTextContent('You’re offline')
+    expect(page()).toHaveTextContent('You’re offline')
     act(() => {
       window.dispatchEvent(new Event('online'))
     })
@@ -87,17 +89,17 @@ describe('the page error boundary', () => {
         <Page />
       </ErrorBoundary>,
     )
-    const page = screen.getByRole('alert')
-    expect(page).toHaveAttribute('data-error-page', 'error')
+    const shown = page()
+    expect(shown).toHaveAttribute('data-error-page', 'error')
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
       'This page couldn’t be shown',
     )
     expect(screen.getByRole('button', { name: 'Reload' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Go home' })).toHaveAttribute('href', '/')
-    expect(page.querySelector('details[data-error-detail]')).toHaveTextContent(
+    expect(shown.querySelector('details[data-error-detail]')).toHaveTextContent(
       'Error: the page broke',
     )
-    expect(page.querySelector('details')).not.toHaveAttribute('open')
+    expect(shown.querySelector('details')).not.toHaveAttribute('open')
   })
 
   it('retries a chunk that failed online, then reloads once, then shows the page that says so', () => {
@@ -111,7 +113,7 @@ describe('the page error boundary', () => {
       </ErrorBoundary>,
     )
     expect(reload).toHaveBeenCalledOnce()
-    expect(screen.getByRole('status')).toHaveTextContent('Loading the current version of Radar')
+    expect(page()).toHaveTextContent('Loading the current version of Radar')
     first.unmount()
 
     render(
@@ -120,11 +122,11 @@ describe('the page error boundary', () => {
       </ErrorBoundary>,
     )
     expect(reload).toHaveBeenCalledOnce()
-    const page = screen.getByRole('status')
-    expect(page).toHaveAttribute('data-error-page', 'chunk')
-    expect(page).toHaveTextContent('This page couldn’t be loaded')
-    expect(page).toHaveTextContent('Radar was probably updated')
-    expect(page.querySelector('details')).toBeNull()
+    const shown = page()
+    expect(shown).toHaveAttribute('data-error-page', 'chunk')
+    expect(shown).toHaveTextContent('This page couldn’t be loaded')
+    expect(shown).toHaveTextContent('Radar was probably updated')
+    expect(shown.querySelector('details')).toBeNull()
     expect(screen.getByRole('link', { name: 'Go home' })).toHaveAttribute(
       'href',
       '/?network=testnet',

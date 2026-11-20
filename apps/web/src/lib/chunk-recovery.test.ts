@@ -1,10 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import {
-  countRouterReloads,
-  guardRouterReloads,
+  clearRouterReloads,
   RELOAD_GUARD_MS,
   RELOAD_KEY,
   isChunkFailure,
+  mayReloadForChunk,
   onPreloadError,
   reloadForChunk,
   reloadedRecently,
@@ -13,10 +13,13 @@ import {
 
 const MISSING =
   'Failed to fetch dynamically imported module: https://x.invalid/assets/MempoolPage-abc.js'
+const SAFARI = 'Importing a module script failed.'
 const chunkError = (message = MISSING) => new TypeError(message)
 const setOnline = (online: boolean) => {
   Object.defineProperty(navigator, 'onLine', { value: online, configurable: true })
 }
+const preloadError = (error: unknown) =>
+  Object.assign(new Event('vite:preloadError', { cancelable: true }), { payload: error })
 
 beforeEach(() => {
   sessionStorage.clear()
@@ -32,7 +35,7 @@ describe('chunk failures', () => {
   it.each([
     MISSING,
     'error loading dynamically imported module',
-    'Importing a module script failed.',
+    SAFARI,
     'Unable to preload CSS for /assets/x.css',
   ])('reads "%s" as a chunk that failed to load', (message) => {
     expect(isChunkFailure(new TypeError(message))).toBe(true)
@@ -67,43 +70,48 @@ describe('retrying an import once', () => {
 describe('the guarded reload', () => {
   const T = 1_800_000_000_000
 
-  it('reloads once, records when, and tells the router not to reload too', () => {
+  it('reloads once and records when', () => {
     const reload = vi.fn()
-    expect(reloadForChunk(chunkError(), T, reload)).toBe(true)
+    expect(reloadForChunk(T, reload)).toBe(true)
     expect(reload).toHaveBeenCalledOnce()
     expect(sessionStorage.getItem(RELOAD_KEY)).toBe(String(T))
-    expect(sessionStorage.getItem(`tanstack_router_reload:${MISSING}`)).toBe('1')
     expect(reloadedRecently(T + 1000)).toBe(true)
   })
 
   it('does not reload again inside the guard window, so a broken build never loops', () => {
     const reload = vi.fn()
-    expect(reloadForChunk(chunkError(), T, reload)).toBe(true)
-    expect(
-      reloadForChunk(chunkError('error loading dynamically imported module'), T + 5000, reload),
-    ).toBe(false)
+    expect(reloadForChunk(T, reload)).toBe(true)
+    expect(reloadForChunk(T + 5000, reload)).toBe(false)
     expect(reload).toHaveBeenCalledOnce()
   })
 
   it('reloads again for a later deploy, once the guard window has passed', () => {
     const reload = vi.fn()
-    reloadForChunk(chunkError(), T, reload)
-    const later = chunkError(MISSING.replace('abc', 'def'))
-    expect(reloadForChunk(later, T + RELOAD_GUARD_MS + 1, reload)).toBe(true)
+    reloadForChunk(T, reload)
+    expect(reloadForChunk(T + RELOAD_GUARD_MS + 1, reload)).toBe(true)
     expect(reload).toHaveBeenCalledTimes(2)
   })
 
-  it('does not reload when the router already reloaded for this failure', () => {
-    sessionStorage.setItem(`tanstack_router_reload:${MISSING}`, '1')
+  it('does not count a reload stamped in the future as recent', () => {
+    sessionStorage.setItem(RELOAD_KEY, String(T + 60_000))
+    expect(reloadedRecently(T)).toBe(false)
+  })
+
+  it('recovers by itself after every deploy on Safari, whose message never changes', () => {
     const reload = vi.fn()
-    expect(reloadForChunk(chunkError(), T, reload)).toBe(false)
-    expect(reload).not.toHaveBeenCalled()
+    onPreloadError(preloadError(chunkError(SAFARI)))
+    expect(reloadForChunk(T, reload)).toBe(true)
+    // The next deploy, later in the same tab: the router's key from the first is still there.
+    onPreloadError(preloadError(chunkError(SAFARI)))
+    expect(mayReloadForChunk(T + RELOAD_GUARD_MS + 1)).toBe(true)
+    expect(reloadForChunk(T + RELOAD_GUARD_MS + 1, reload)).toBe(true)
+    expect(reload).toHaveBeenCalledTimes(2)
   })
 
   it('does not reload offline, where the reload would land on the browser’s error page', () => {
     setOnline(false)
     const reload = vi.fn()
-    expect(reloadForChunk(chunkError(), T, reload)).toBe(false)
+    expect(reloadForChunk(T, reload)).toBe(false)
     expect(reload).not.toHaveBeenCalled()
   })
 
@@ -112,88 +120,43 @@ describe('the guarded reload', () => {
       throw new DOMException('blocked', 'SecurityError')
     })
     const reload = vi.fn()
-    expect(reloadForChunk(chunkError(), T, reload)).toBe(false)
+    expect(reloadForChunk(T, reload)).toBe(false)
     expect(reload).not.toHaveBeenCalled()
-  })
-})
-
-describe('the router’s own reload', () => {
-  it('counts as the guarded reload, so the page does not reload a second time', () => {
-    const target = new EventTarget()
-    countRouterReloads(target)
-    sessionStorage.setItem(`tanstack_router_reload:${MISSING}`, '1')
-    target.dispatchEvent(new Event('pagehide'))
-    expect(reloadedRecently()).toBe(true)
-    const reload = vi.fn()
-    expect(
-      reloadForChunk(chunkError('error loading dynamically imported module'), Date.now(), reload),
-    ).toBe(false)
-    expect(reload).not.toHaveBeenCalled()
-  })
-
-  it('is not made a second time while Radar’s own reload is recent', () => {
-    const undo = guardRouterReloads()
-    try {
-      const key = `tanstack_router_reload:${MISSING}`
-      expect(sessionStorage.getItem(key)).toBeNull()
-      reloadForChunk(chunkError('error loading dynamically imported module'), Date.now(), vi.fn())
-      expect(sessionStorage.getItem(key)).toBe('1')
-      expect(sessionStorage.getItem('other')).toBeNull()
-      sessionStorage.setItem(RELOAD_KEY, String(Date.now() - RELOAD_GUARD_MS - 1))
-      expect(sessionStorage.getItem(key)).toBeNull()
-    } finally {
-      undo()
-    }
-  })
-
-  it('does not count a key from before this page was opened', () => {
-    sessionStorage.setItem(`tanstack_router_reload:${MISSING}`, '1')
-    const target = new EventTarget()
-    countRouterReloads(target)
-    target.dispatchEvent(new Event('pagehide'))
-    expect(reloadedRecently()).toBe(false)
   })
 })
 
 describe("Vite's preload error", () => {
-  const preloadError = (message: string) =>
-    Object.assign(new Event('vite:preloadError', { cancelable: true }), {
-      payload: new TypeError(message),
-    })
-
-  it('reloads once online and stops Vite from throwing', () => {
-    const reload = vi.fn()
-    const event = preloadError(MISSING)
-    onPreloadError(event, 1, reload)
-    expect(reload).toHaveBeenCalledOnce()
-    expect(event.defaultPrevented).toBe(true)
+  it('tells the router not to reload for a chunk failure, and lets the error through', () => {
+    const event = preloadError(chunkError())
+    onPreloadError(event)
+    expect(event.defaultPrevented).toBe(false)
+    expect(sessionStorage.getItem(`tanstack_router_reload:${MISSING}`)).toBe('1')
+    expect(sessionStorage.getItem(RELOAD_KEY)).toBeNull()
   })
 
-  it('leaves a module that loaded and then threw to the error page, without reloading', () => {
-    const reload = vi.fn()
-    const event = Object.assign(new Event('vite:preloadError', { cancelable: true }), {
-      payload: new SyntaxError('Unexpected end of input'),
-    })
-    onPreloadError(event, 1, reload)
-    expect(reload).not.toHaveBeenCalled()
+  it('does the same offline @NX-77', () => {
+    setOnline(false)
+    const event = preloadError(chunkError())
+    onPreloadError(event)
+    expect(event.defaultPrevented).toBe(false)
+    expect(sessionStorage.getItem(`tanstack_router_reload:${MISSING}`)).toBe('1')
+  })
+
+  it('leaves a module that loaded and then threw alone', () => {
+    const event = preloadError(new SyntaxError('Unexpected end of input'))
+    onPreloadError(event)
     expect(event.defaultPrevented).toBe(false)
     expect(sessionStorage.length).toBe(0)
   })
+})
 
-  it('lets the error through to the error page once the reload has been tried', () => {
-    const reload = vi.fn()
-    onPreloadError(preloadError(MISSING), 1, reload)
-    const again = preloadError(MISSING)
-    onPreloadError(again, 2, reload)
-    expect(reload).toHaveBeenCalledOnce()
-    expect(again.defaultPrevented).toBe(false)
-  })
-
-  it('offline, marks the router’s reload as done instead of reloading @NX-77', () => {
-    setOnline(false)
-    const reload = vi.fn()
-    onPreloadError(preloadError(MISSING), 1, reload)
-    expect(reload).not.toHaveBeenCalled()
-    expect(sessionStorage.getItem(`tanstack_router_reload:${MISSING}`)).toBe('1')
+describe('the router’s reload keys', () => {
+  it('are cleared, leaving every other key', () => {
+    sessionStorage.setItem(`tanstack_router_reload:${MISSING}`, '1')
+    sessionStorage.setItem(`tanstack_router_reload:${SAFARI}`, '1')
+    sessionStorage.setItem(RELOAD_KEY, '1')
+    clearRouterReloads()
+    expect(sessionStorage.length).toBe(1)
+    expect(sessionStorage.getItem(RELOAD_KEY)).toBe('1')
   })
 })

@@ -1,9 +1,16 @@
 import { t } from '@lingui/core/macro'
 import { useRouter, type ErrorComponentProps } from '@tanstack/react-router'
-import { Component, useEffect, useState, type ErrorInfo, type ReactNode } from 'react'
 import {
-  countRouterReloads,
-  guardRouterReloads,
+  Component,
+  useEffect,
+  useRef,
+  useState,
+  type ErrorInfo,
+  type MouseEvent,
+  type ReactNode,
+} from 'react'
+import {
+  clearRouterReloads,
   isChunkFailure,
   mayReloadForChunk,
   onPreloadError,
@@ -13,12 +20,12 @@ import { Icon } from '@/ui/icon'
 
 export { isChunkFailure }
 
+/** Asks the shell's route announcer to read the page title again: a page that fails says so even without a new address. */
+export const ROUTE_TITLE_EVENT = 'radar:route-title'
+
 if (typeof window !== 'undefined') {
-  window.addEventListener('vite:preloadError', (event) => {
-    onPreloadError(event)
-  })
-  countRouterReloads()
-  guardRouterReloads()
+  window.addEventListener('vite:preloadError', onPreloadError)
+  clearRouterReloads()
 }
 
 interface Props {
@@ -46,14 +53,14 @@ function useChunkRecovery(error: Error, retry: () => void): Recovery {
   const [state] = useState<Recovery>(() => {
     if (!chunk || !online()) return 'failed'
     if (!retried.has(error.message)) return 'retrying'
-    return mayReloadForChunk(error) ? 'reloading' : 'failed'
+    return mayReloadForChunk() ? 'reloading' : 'failed'
   })
   useEffect(() => {
     if (state === 'retrying') {
       retried.add(error.message)
       retry()
     } else if (state === 'reloading') {
-      reloadForChunk(error)
+      reloadForChunk()
     }
   }, [state, error, retry])
   return state
@@ -62,7 +69,15 @@ function useChunkRecovery(error: Error, retry: () => void): Recovery {
 function useTitle(title: string) {
   useEffect(() => {
     document.title = `${title} · Radar`
+    window.dispatchEvent(new Event(ROUTE_TITLE_EVENT))
   }, [title])
+}
+
+/** Full navigation home, except where the visitor asked for a new tab or window. */
+function goHome(e: MouseEvent<HTMLAnchorElement>) {
+  if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+  e.preventDefault()
+  window.location.assign(homeHref())
 }
 
 /** Home on the network the page was on, loaded in full so a stale build's code is not asked for again. */
@@ -90,6 +105,7 @@ function kindOf(error: Error): Kind {
 function ErrorPage({ error, retry }: { error: Error; retry: () => void }) {
   const kind = kindOf(error)
   const recovery = useChunkRecovery(error, retry)
+  const heading = useRef<HTMLHeadingElement>(null)
 
   useEffect(() => {
     if (kind !== 'offline') return
@@ -118,8 +134,12 @@ function ErrorPage({ error, retry }: { error: Error; retry: () => void }) {
     },
   }[kind]
   useTitle(copy.title)
+  const shown = !(kind === 'chunk' && recovery !== 'failed')
+  useEffect(() => {
+    if (shown) heading.current?.focus()
+  }, [shown])
 
-  if (kind === 'chunk' && recovery !== 'failed') {
+  if (!shown) {
     return (
       <div role="status" aria-busy="true" data-error-page="recovering" className="rx-empty">
         <p className="rx-empty__t">{t`Loading the current version of Radar…`}</p>
@@ -129,7 +149,6 @@ function ErrorPage({ error, retry }: { error: Error; retry: () => void }) {
 
   return (
     <article
-      role={kind === 'error' ? 'alert' : 'status'}
       data-error-page={kind}
       data-offline-notice={kind === 'offline' ? '' : undefined}
       className="rx-empty rx-empty--error"
@@ -137,7 +156,9 @@ function ErrorPage({ error, retry }: { error: Error; retry: () => void }) {
       <span className="rx-empty__tile">
         <Icon name={kind === 'offline' ? 'globe' : 'alert'} />
       </span>
-      <h1 className="rx-empty__t text-2xl">{copy.title}</h1>
+      <h1 ref={heading} tabIndex={-1} className="rx-empty__t text-2xl">
+        {copy.title}
+      </h1>
       <p className="rx-empty__b">{copy.body}</p>
       <p className="flex flex-wrap justify-center gap-2">
         <button
@@ -149,14 +170,7 @@ function ErrorPage({ error, retry }: { error: Error; retry: () => void }) {
         >
           {t`Reload`}
         </button>
-        <a
-          href={homeHref()}
-          className="dh-btn"
-          onClick={(e) => {
-            e.preventDefault()
-            window.location.assign(homeHref())
-          }}
-        >
+        <a href={homeHref()} className="dh-btn" onClick={goHome}>
           {t`Go home`}
         </a>
       </p>

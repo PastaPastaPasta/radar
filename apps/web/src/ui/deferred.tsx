@@ -1,4 +1,4 @@
-import { useEffect, useState, type ComponentType, type ReactNode } from 'react'
+import { Component, useEffect, useState, type ComponentType, type ReactNode } from 'react'
 import { retryChunk } from '@/lib/chunk-recovery'
 
 /**
@@ -41,4 +41,20 @@ export function deferred<P extends object>(
     return typeof fallback === 'function' ? fallback(props) : fallback
   }
   return Deferred
+}
+
+/** Shows `fallback` instead of its children once they throw: for small extras, such as a hover card, whose failure must not take the page with it. */
+export class QuietBoundary extends Component<
+  { children: ReactNode; fallback?: ReactNode },
+  { failed: boolean }
+> {
+  override state = { failed: false }
+
+  static getDerivedStateFromError(): { failed: boolean } {
+    return { failed: true }
+  }
+
+  override render(): ReactNode {
+    return this.state.failed ? (this.props.fallback ?? null) : this.props.children
+  }
 }

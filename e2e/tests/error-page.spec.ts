@@ -13,7 +13,15 @@ interface FixtureHooks {
 
 /** Opens the home page, then makes the mempool page's files it has not loaded yet gone (as after a deploy) or broken. */
 async function homeThenFail(page: Page, mode: 'missing' | 'broken'): Promise<void> {
-  await page.addInitScript(() => performance.setResourceTimingBufferSize(10_000))
+  await page.addInitScript(() => {
+    performance.setResourceTimingBufferSize(10_000)
+    // Notes, across reloads, whether the page ever said its code is broken while it was only recovering.
+    new MutationObserver(() => {
+      if (document.querySelector('[data-error-page="error"]')) {
+        sessionStorage.setItem('e2e.saw-code-error', '1')
+      }
+    }).observe(document, { childList: true, subtree: true })
+  })
   await page.goto('/')
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
   await page.evaluate((m) => {
@@ -32,6 +40,9 @@ async function follow(page: Page, path: string): Promise<void> {
     a.remove()
   }, path)
 }
+
+const sawCodeError = (page: Page) =>
+  page.evaluate(() => sessionStorage.getItem('e2e.saw-code-error') === '1')
 
 const restoreChunks = (page: Page) =>
   page.evaluate(() => {
@@ -61,6 +72,8 @@ test.describe('the error page', () => {
     await expect(page.getByText('Something went wrong')).toHaveCount(0)
     await expect(page.locator('#root dashhq-bar')).toBeAttached()
     await expect(errorPage.getByRole('link', { name: 'Go home' })).toBeVisible()
+    await expect(errorPage.getByRole('heading', { level: 1 })).toBeFocused()
+    expect(await sawCodeError(page), 'recovery never shows the page for broken code').toBe(false)
 
     await restoreChunks(page)
     await errorPage.getByRole('button', { name: 'Reload' }).click()
@@ -80,7 +93,6 @@ test.describe('the error page', () => {
 
     const errorPage = page.locator('[data-error-page="error"]')
     await expect(errorPage).toBeVisible()
-    await expect(errorPage).toHaveAttribute('role', 'alert')
     await expect(errorPage.getByRole('heading', { level: 1 })).toHaveText(
       'This page couldn’t be shown',
     )
@@ -97,5 +109,23 @@ test.describe('the error page', () => {
     await errorPage.getByRole('link', { name: 'Go home' }).click()
     await expect(page.getByRole('heading', { level: 1, name: /^Radar:/ })).toBeVisible()
     expect(new URL(page.url()).pathname).toBe('/')
+  })
+
+  test('a link hovered on a stale tab fails to preload without reloading the page @NX-77', async ({
+    page,
+  }) => {
+    await homeThenFail(page, 'missing')
+    let loads = 0
+    page.on('load', () => {
+      loads++
+    })
+    const preload = page.waitForRequest((r) => r.url().includes('/assets/mempool-'))
+    await page.locator('a[href="/mempool"]').first().hover()
+    await preload
+    await page.waitForTimeout(2000)
+    expect(loads, 'a failed preload never reloads the page').toBe(0)
+    expect(new URL(page.url()).pathname).toBe('/')
+    await expect(page.locator('[data-error-page]')).toHaveCount(0)
+    await expect(page.getByRole('heading', { level: 1, name: /^Radar:/ })).toBeVisible()
   })
 })

@@ -1,7 +1,7 @@
 import { t } from '@lingui/core/macro'
 import { Outlet, useRouterState } from '@tanstack/react-router'
 import { useEffect, useState, type ReactNode } from 'react'
-import { ErrorBoundary } from '@/app/error-boundary'
+import { ErrorBoundary, ROUTE_TITLE_EVENT } from '@/app/error-boundary'
 import { GlobalMounts } from '@/app/global-mounts'
 import { NetworkGate } from '@/app/network-context'
 import { useLiveTip } from '@/app/live-tip'
@@ -24,6 +24,11 @@ function RouteAnnouncer() {
     const id = setTimeout(() => setMessage(document.title), 100)
     return () => clearTimeout(id)
   }, [pathname])
+  useEffect(() => {
+    const read = () => setMessage(document.title)
+    window.addEventListener(ROUTE_TITLE_EVENT, read)
+    return () => window.removeEventListener(ROUTE_TITLE_EVENT, read)
+  }, [])
   return (
     <p id="route-announcer" aria-live="polite" className="sr-only">
       {message}

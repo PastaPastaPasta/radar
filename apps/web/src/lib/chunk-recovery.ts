@@ -21,7 +21,10 @@ export const RELOAD_GUARD_MS = 2 * 60_000
 
 const ROUTER_PREFIX = 'tanstack_router_reload:'
 
-/** The key TanStack Router sets before its own reload of a lazy route component; set here too so it doesn't reload twice. */
+/**
+ * TanStack Router reloads the page by itself, once per message, when a lazy route component's code is gone, unless this
+ * key is set. Radar sets it for every chunk failure so its own recovery runs instead.
+ */
 const routerKey = (error: Error) => `${ROUTER_PREFIX}${error.message}`
 
 function read(key: string): string | null {
@@ -44,76 +47,44 @@ function write(key: string, value: string): boolean {
 /** True when a reload for a failed chunk happened within the guard window. */
 export function reloadedRecently(now = Date.now()): boolean {
   const at = Number(read(RELOAD_KEY))
-  return Number.isFinite(at) && at > 0 && now - at < RELOAD_GUARD_MS
+  return Number.isFinite(at) && at > 0 && now >= at && now - at < RELOAD_GUARD_MS
 }
 
 /** Whether `reloadForChunk` would reload now, without reloading. */
-export function mayReloadForChunk(error: Error, now = Date.now()): boolean {
+export function mayReloadForChunk(now = Date.now()): boolean {
   if (typeof navigator !== 'undefined' && !navigator.onLine) return false
-  return !reloadedRecently(now) && read(routerKey(error)) === null
+  return !reloadedRecently(now)
 }
 
 /**
  * Reloads the page once for a failed chunk, keeping the address. False when it must not: offline (the reload would end
- * on the browser's own error page), a reload already happened within the guard window or the router already reloaded
- * for this error, or storage is blocked (with no guard a reload could loop).
+ * on the browser's own error page), a reload already happened within the guard window, or storage is blocked (with no
+ * guard a reload could loop).
  */
 export function reloadForChunk(
-  error: Error,
   now = Date.now(),
   reload: () => void = () => window.location.reload(),
 ): boolean {
-  if (!mayReloadForChunk(error, now)) return false
+  if (!mayReloadForChunk(now)) return false
   if (!write(RELOAD_KEY, String(now))) return false
-  write(routerKey(error), '1')
   reload()
   return true
 }
 
-function routerKeys(): Set<string> {
-  const keys = new Set<string>()
+/**
+ * Forgets the router's reload keys once a page has loaded. They never expire by themselves, and Safari gives every
+ * failed import the same message, so a key left over from one deploy would change how the next one recovers.
+ */
+export function clearRouterReloads(): void {
   try {
+    const keys: string[] = []
     for (let i = 0; i < sessionStorage.length; i++) {
       const key = sessionStorage.key(i)
-      if (key?.startsWith(ROUTER_PREFIX)) keys.add(key)
+      if (key?.startsWith(ROUTER_PREFIX)) keys.push(key)
     }
+    for (const key of keys) sessionStorage.removeItem(key)
   } catch {
-    // Storage blocked: the router cannot reload by itself either.
-  }
-  return keys
-}
-
-/**
- * TanStack Router reloads once by itself when a lazy route component's code is gone, setting its key first. A key that
- * appeared while this page was open means the page is leaving for that reload, which then counts as the guarded one.
- */
-export function countRouterReloads(target: Pick<Window, 'addEventListener'> = window): void {
-  const before = routerKeys()
-  target.addEventListener('pagehide', () => {
-    for (const key of routerKeys()) {
-      if (!before.has(key)) {
-        write(RELOAD_KEY, String(Date.now()))
-        return
-      }
-    }
-  })
-}
-
-/**
- * TanStack Router reloads by itself once for each failed lazy route component, keyed by the error's message and with
- * no time guard, so a second missing file after Radar's own reload would reload the page again. While a reload is
- * recent, the router reads its key as already set. Returns the undo.
- */
-export function guardRouterReloads(): () => void {
-  const proto = Storage.prototype
-  // eslint-disable-next-line @typescript-eslint/unbound-method -- called below with the storage as `this`
-  const getItem = proto.getItem
-  proto.getItem = function (this: Storage, key: string): string | null {
-    if (key.startsWith(ROUTER_PREFIX) && reloadedRecently()) return '1'
-    return getItem.call(this, key)
-  }
-  return () => {
-    proto.getItem = getItem
+    // Storage blocked: nothing was stored.
   }
 }
 
@@ -128,17 +99,14 @@ export async function retryChunk<T>(load: () => Promise<T>): Promise<T> {
 }
 
 /**
- * Vite's `vite:preloadError`: a chunk's dependency failed to preload. Online, the page reloads once into the current
- * build; once that has been tried, or offline, the error goes on to the error page. Offline, the router's own reload is
- * marked as done so it doesn't land on the browser's error page either.
+ * Vite's `vite:preloadError`, which every dynamic import that fails passes through, before the router sees the error.
+ * For a chunk failure it sets the router's reload key, so the router leaves the error to Radar's recovery (retry, one
+ * guarded reload, then the error page) instead of reloading by itself. The event is never cancelled: a cancelled one
+ * makes the import resolve with no module, which would break the page as if its code were wrong. Nothing reloads here,
+ * so a failed background preload (a hovered link, the search dialog) never reloads the page.
  */
-export function onPreloadError(event: Event, now = Date.now(), reload?: () => void): void {
+export function onPreloadError(event: Event): void {
   const error = (event as Event & { payload?: unknown }).payload
-  // Vite passes every failed dynamic import through this event, including a module that loaded and then threw.
   if (!(error instanceof Error) || !isChunkFailure(error)) return
-  if (typeof navigator !== 'undefined' && !navigator.onLine) {
-    write(routerKey(error), '1')
-    return
-  }
-  if (reloadForChunk(error, now, reload)) event.preventDefault()
+  write(routerKey(error), '1')
 }
