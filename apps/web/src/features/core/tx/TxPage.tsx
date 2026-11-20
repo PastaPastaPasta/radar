@@ -133,11 +133,15 @@ function TxView({
   const { t } = useLingui()
   const net = useNetwork()
   const units = useUnits()
+  // A hosted index may keep a mined tx's answer, and the tip height in it, for hours; until the live tip is known only
+  // a node's own count is shown, as on the block page.
   const confirmations =
     tx.height === undefined
       ? undefined
       : tipHeight === undefined
-        ? tx.confirmations
+        ? stamp.source === 'dapi'
+          ? tx.confirmations
+          : undefined
         : Math.max(1, tipHeight - tx.height + 1)
   const coinbase = isCoinbaseTx(tx)
   const mined = tx.height !== undefined

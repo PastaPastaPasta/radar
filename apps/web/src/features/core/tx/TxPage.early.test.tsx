@@ -1,12 +1,23 @@
 import { screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type * as ClientModule from '@/data/core/client'
+import type * as FollowTip from '../follow-tip'
 import { core } from '@/data/core/client'
 import { enableEarlyAnswers } from '@/data/early'
 import { renderAt } from '../hy-shared/test-utils'
 
 const probe = vi.hoisted(() => ({ fit: true }))
 vi.mock('@/data/hyphen/fit', () => ({ useHyphenFit: () => probe.fit }))
+
+const tip = vi.hoisted(() => ({ unknown: false }))
+vi.mock('../follow-tip', async (original) => {
+  const actual = await original<typeof FollowTip>()
+  return {
+    ...actual,
+    useFollowTip: (...args: Parameters<typeof actual.useFollowTip>) =>
+      tip.unknown ? undefined : actual.useFollowTip(...args),
+  }
+})
 
 vi.mock('@/data/core/client', async (original) => {
   const actual = await original<typeof ClientModule>()
@@ -55,6 +66,19 @@ describe('Transaction page, indexed first', () => {
     vi.restoreAllMocks()
     enableEarlyAnswers(false)
     probe.fit = true
+    tip.unknown = false
+  })
+
+  it("shows no confirmation count from the index's own, possibly hours-old, tip until the live tip is known", async () => {
+    enableEarlyAnswers()
+    tip.unknown = true
+    const dapi = indexedFirst((tx) => ({ ...tx, confirmations: 723 }))
+    renderAt(`/tx/${TRANSFER}`)
+    await waitFor(() => expect(minedStat()).not.toBeNull())
+    expect(checking().length).toBeGreaterThan(0)
+    expect(screen.queryByText(/confirmations?$/)).toBeNull()
+    dapi.release()
+    await waitFor(() => expect(checking()).toHaveLength(0))
   })
 
   it('shows a mined transaction from the index as mined, by its block, before its time is known', async () => {
