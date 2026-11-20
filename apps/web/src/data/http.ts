@@ -340,6 +340,7 @@ async function readSourced<S extends z.ZodType, N extends 'throw' | 'null' = 'th
       data: body as Out,
     }
     if (sourceTime === undefined) out.asOfFetched = true
+    if (inlined) out.inlined = true
     const height = req.height?.(body)
     if (height !== undefined) out.height = height
     if (height !== undefined && req.heightChain) out.heightChain = req.heightChain

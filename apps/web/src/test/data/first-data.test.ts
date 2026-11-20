@@ -100,6 +100,20 @@ describe('first data the edge inlined', () => {
     expect(healthRegistry.get('mainnet', 'hyphen').lastOkAt).toBeUndefined()
   })
 
+  it("leaves Hyphen's lag to live reads: an inlined status measures nothing", async () => {
+    inline(page(Date.now()))
+    const lag = vi.spyOn(healthRegistry, 'setLag')
+    const inlinedStatus = await hyphen.status('mainnet', undefined, 99_999_999)
+    expect(inlinedStatus.inlined).toBe(true)
+    expect(fetchMock).not.toHaveBeenCalled()
+    expect(lag).not.toHaveBeenCalled()
+    const live = await hyphen.status('mainnet', undefined, 99_999_999)
+    expect(live.inlined).toBeUndefined()
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    expect(lag).toHaveBeenCalled()
+    lag.mockRestore()
+  })
+
   it('never answers the probe, whose job is to measure Hyphen itself', async () => {
     inline(page(Date.now()))
     await hyphen.status('mainnet', undefined, undefined, { probe: true })
