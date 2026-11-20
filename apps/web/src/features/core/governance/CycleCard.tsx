@@ -15,7 +15,7 @@ import { insQueries } from '@/data/insight/queries'
 import { formatCountdown, formatDate, formatInt, formatIsoUtc } from '@/lib/format'
 import type { NetworkId } from '@/lib/network'
 import { Entity } from '@/features/entity'
-import { Amount, Card, ErrorState, SourceLine, Stat } from '@/ui'
+import { Amount, Card, ErrorState, Skeleton, SourceLine, Stat } from '@/ui'
 import type { BudgetSplit } from './status'
 
 /** How many earlier superblocks the cycle card lists. */
@@ -40,7 +40,15 @@ function Countdown({ to }: { to: number }) {
  * `getgovernanceinfo` through Insight and DAPI's tip; this cycle's budget against what passing proposals ask for; and
  * the last few superblocks with what each paid, from Hyphen's blocks.
  */
-export function CycleCard({ net, split }: { net: NetworkId; split: BudgetSplit | undefined }) {
+export function CycleCard({
+  net,
+  split,
+  proposalsFailed = false,
+}: {
+  net: NetworkId
+  split: BudgetSplit | undefined
+  proposalsFailed?: boolean
+}) {
   const { t } = useLingui()
   const query = useQuery(insQueries.governanceCycle(net))
   const c = query.data?.data
@@ -151,7 +159,12 @@ export function CycleCard({ net, split }: { net: NetworkId; split: BudgetSplit |
               />
             </div>
           </div>
-          <BudgetUse money={money} known={eta !== undefined} />
+          <BudgetUse
+            money={money}
+            known={eta !== undefined}
+            pending={query.isPending || (!split && !proposalsFailed)}
+            failed={proposalsFailed}
+          />
           {c ? <PastSuperblocks net={net} heights={pastSuperblocks(c, PAST)} /> : null}
         </div>
       )}
@@ -163,43 +176,58 @@ export function CycleCard({ net, split }: { net: NetworkId; split: BudgetSplit |
 function BudgetUse({
   money,
   known,
+  pending,
+  failed,
 }: {
   money: ReturnType<typeof cycleBudget> | undefined
   known: boolean
+  pending: boolean
+  failed: boolean
 }) {
   const { t } = useLingui()
-  if (!money) return null
+  const figure = (value: bigint | undefined, needsTime: boolean) =>
+    pending ? (
+      <Skeleton shape="line" width="8ch" />
+    ) : value === undefined || (needsTime && !known) ? (
+      '—'
+    ) : (
+      <Amount value={value} kind="duffs" />
+    )
+  const duffs = (value: bigint | undefined, needsTime: boolean) =>
+    pending || value === undefined || (needsTime && !known) ? undefined : String(value)
   return (
-    <div className="grid gap-2" data-cycle-use>
+    <div className="grid gap-2" data-cycle-use aria-busy={pending ? true : undefined}>
       <dl className="grid gap-4 sm:grid-cols-3">
         <div>
           <dt className="rx-dim text-sm">{t`Passing proposals ask for`}</dt>
-          <dd className="m-0" data-cycle-passing data-duffs={String(money.passing)}>
-            <Amount value={money.passing} kind="duffs" />
+          <dd className="m-0" data-cycle-passing data-duffs={duffs(money?.passing, false)}>
+            {figure(money?.passing, false)}
           </dd>
         </div>
         <div>
           <dt className="rx-dim text-sm">{t`The superblock would pay`}</dt>
-          <dd
-            className="m-0"
-            data-cycle-funded
-            data-duffs={known ? String(money.funded) : undefined}
-          >
-            {known ? <Amount value={money.funded} kind="duffs" /> : '—'}
+          <dd className="m-0" data-cycle-funded data-duffs={duffs(money?.funded, true)}>
+            {figure(money?.funded, true)}
           </dd>
         </div>
         <div>
           <dt className="rx-dim text-sm">{t`Left unallocated`}</dt>
-          <dd className="m-0" data-cycle-left data-duffs={known ? String(money.left) : undefined}>
-            {known ? <Amount value={money.left} kind="duffs" /> : '—'}
+          <dd className="m-0" data-cycle-left data-duffs={duffs(money?.left, true)}>
+            {figure(money?.left, true)}
           </dd>
         </div>
       </dl>
-      <p className="rx-note m-0">
-        {money.over > 0n
-          ? t`Passing proposals ask for more than the budget; the ones with fewer net votes that don’t fit wait for a later superblock.`
-          : t`Worked out by Radar from the proposals below and Core’s budget, as Funded is.`}
-      </p>
+      {pending ? null : (
+        <p className="rx-note m-0">
+          {failed
+            ? t`The proposals couldn’t be read, so what they ask for isn’t known.`
+            : !known
+              ? t`What the superblock would pay and what is left need its time, which isn’t known.`
+              : money && money.over > 0n
+                ? t`Passing proposals ask for more than the budget; the ones with fewer net votes that don’t fit wait for a later superblock.`
+                : t`Worked out by Radar from the proposals below and Core’s budget, as Funded is.`}
+        </p>
+      )}
     </div>
   )
 }

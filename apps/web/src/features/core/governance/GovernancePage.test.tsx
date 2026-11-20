@@ -513,6 +513,69 @@ describe('Governance cycle', () => {
     expect(card.querySelector('[data-cycle-budget]')).toHaveTextContent('6,828.26')
   })
 
+  it('never shows Funded, Passing or the cycle’s totals as 0 while the budget read is pending', async () => {
+    // DAPI's recorded tip, so Hyphen's index is current and lists the proposals.
+    resetHealthRegistry()
+    const info = await fixtureBody<unknown>('insight', 'mainnet', 'gobject__info')
+    let release!: () => void
+    const held = new Promise<void>((r) => (release = r))
+    server.use(
+      http.get('*/insight-api/gobject/info', async () => {
+        await held
+        return HttpResponse.json(info as Record<string, unknown>)
+      }),
+    )
+    renderAt('/governance')
+    await waitFor(() =>
+      expect(document.querySelectorAll('tbody[data-proposal]').length).toBeGreaterThan(5),
+    )
+    const stat = (label: string) =>
+      [...document.querySelectorAll<HTMLElement>('[data-budget] .rx-stat')].find((el) =>
+        el.textContent?.startsWith(label),
+      )!
+    for (const label of ['Funded', 'Passing, not yet funded']) {
+      expect(stat(label)).toHaveAttribute('aria-busy', 'true')
+      expect(stat(label).querySelector('.rx-stat__value')).toBeNull()
+    }
+    const use = document.querySelector<HTMLElement>('#cycle [data-cycle-use]')
+    if (use) {
+      expect(use).toHaveAttribute('aria-busy', 'true')
+      for (const sel of ['[data-cycle-passing]', '[data-cycle-funded]', '[data-cycle-left]'])
+        expect(use.querySelector(sel)).not.toHaveAttribute('data-duffs')
+    }
+    const text = (sel: string) => document.querySelector(sel)?.textContent ?? ''
+    expect(text('#cycle [data-next-superblock]')).not.toContain('#')
+    expect(text('#cycle [data-cycle-budget]')).not.toMatch(/\d/)
+
+    release()
+    await waitFor(() => expect(stat('Funded')).not.toHaveAttribute('aria-busy'))
+    expect(stat('Funded').querySelector('.rx-stat__value')).not.toHaveTextContent(/^0\b/)
+    await waitFor(() =>
+      expect(document.querySelector('#cycle [data-cycle-use]')).not.toHaveAttribute('aria-busy'),
+    )
+    for (const sel of ['[data-cycle-passing]', '[data-cycle-funded]', '[data-cycle-left]'])
+      expect(text(`#cycle ${sel}`)).not.toMatch(/^0\b/)
+  })
+
+  it('says the budget can’t be read, with no 0, when Insight fails', async () => {
+    // DAPI's recorded tip, so Hyphen's index is current and lists the proposals.
+    resetHealthRegistry()
+    server.use(http.get('*/insight-api/gobject/info', () => HttpResponse.json({}, { status: 503 })))
+    renderAt('/governance')
+    const funded = await waitFor(
+      () => {
+        const el = [...document.querySelectorAll<HTMLElement>('[data-budget] .rx-stat')].find(
+          (x) => x.textContent?.startsWith('Funded') && !x.hasAttribute('aria-busy'),
+        )
+        expect(el).toBeDefined()
+        return el!
+      },
+      { timeout: 10_000 },
+    )
+    expect(funded).toHaveTextContent('—')
+    expect(funded).toHaveTextContent('Core’s budget couldn’t be read from Insight')
+  })
+
   it('says Insight is not answering when Core’s cycle can’t be read', async () => {
     server.use(http.get('*/insight-api/gobject/info', () => HttpResponse.json({}, { status: 503 })))
     renderAt('/governance')
