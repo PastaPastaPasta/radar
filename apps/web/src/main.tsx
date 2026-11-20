@@ -27,7 +27,7 @@ async function start(container: HTMLElement) {
   }
   enableLiveTip()
   preconnectHostedSources()
-  // The first route's chunks and loaders start now, while the locale's catalog is still on its way.
+  // The first route starts now; its loaders wait in the root route for the locale's catalog.
   const queryClient = createQueryClient()
   const router = createAppRouter(queryClient)
   void router.load().catch(() => undefined)
