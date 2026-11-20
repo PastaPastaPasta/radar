@@ -163,7 +163,8 @@ async function stampedByCrawl<T>(
 ): Promise<Sourced<T>> {
   const [out, known] = await Promise.all([read, crawlOf(net)])
   const id = crawlId?.(out.data)
-  const time = await crawlTime(net, id, known)
+  // Another document may have named a newer crawl while this one was in flight.
+  const time = await crawlTime(net, id, crawls.get(net) ?? known)
   if (!time) {
     const latest = crawls.get(net)
     const earlier = id != null && latest?.id != null && id < latest.id
@@ -250,15 +251,19 @@ export const radar = {
   },
 
   async summary(net: NetworkId, signal?: AbortSignal): Promise<Sourced<RadarSummary>> {
-    const out = await fetchSourced({
-      source: 'radar',
-      net,
-      url: () => `${netBase(net)}/summary`,
-      schema: RadarSummarySchema,
-      signal,
-      asOf: (b) => b.crawl.finished,
-      height: (b) => b.crawl.tip_height,
-    })
+    // Radar's status is read alongside on a cold page, so a summary of an older crawl is not taken for the latest.
+    const [out] = await Promise.all([
+      fetchSourced({
+        source: 'radar',
+        net,
+        url: () => `${netBase(net)}/summary`,
+        schema: RadarSummarySchema,
+        signal,
+        asOf: (b) => b.crawl.finished,
+        height: (b) => b.crawl.tip_height,
+      }),
+      crawlOf(net),
+    ])
     noteCrawl(net, out.data.crawl.id, out.data.crawl.finished)
     const latest = crawls.get(net)
     const earlier = latest?.id != null && out.data.crawl.id < latest.id

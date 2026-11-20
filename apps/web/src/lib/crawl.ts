@@ -18,7 +18,7 @@ export const CRAWL_CATCH_UP_MS = 60_000
 export const CRAWL_CATCH_UPS = 2
 
 interface CrawlQuery {
-  state: { data?: { radarTime?: string }; dataUpdatedAt: number }
+  state: { data?: { radarTime?: string }; dataUpdatedAt: number; status?: string }
 }
 
 const catchUps = new WeakMap<object, { at: number; n: number }>()
@@ -26,10 +26,11 @@ const catchUps = new WeakMap<object, { at: number; n: number }>()
 /**
  * A crawl document's `refetchInterval`: once per `CRAWL_REFRESH_MS`, or after `CRAWL_CATCH_UP_MS` while it trails the
  * latest crawl, at most `CRAWL_CATCH_UPS` times in a row, so a Radar that stops publishing is not asked every minute.
+ * A read that failed waits the full interval too.
  */
 export function crawlRefreshMs(query: CrawlQuery): number {
-  const { data, dataUpdatedAt } = query.state
-  if (data?.radarTime !== 'earlier-crawl') {
+  const { data, dataUpdatedAt, status } = query.state
+  if (data?.radarTime !== 'earlier-crawl' || status === 'error') {
     catchUps.delete(query)
     return CRAWL_REFRESH_MS
   }

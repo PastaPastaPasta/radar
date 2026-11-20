@@ -120,6 +120,7 @@ describe('the guarded reload', () => {
       throw new DOMException('blocked', 'SecurityError')
     })
     const reload = vi.fn()
+    expect(mayReloadForChunk(T)).toBe(false)
     expect(reloadForChunk(T, reload)).toBe(false)
     expect(reload).not.toHaveBeenCalled()
   })

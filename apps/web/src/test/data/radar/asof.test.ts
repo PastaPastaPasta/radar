@@ -255,6 +255,23 @@ describe('every document the crawl built carries the crawl’s finish time', () 
     }
   })
 
+  it('takes a cold page’s summary of an older crawl for an earlier crawl, not the latest', async () => {
+    forgetCrawls()
+    const status = await fixtureBody<{
+      networks: { mainnet: { crawl: { last_id: number; last_finished: number } } }
+    }>('radar', 'global', 'status')
+    const latest = status.networks.mainnet.crawl
+    server.use(http.get(`${BASE}/status`, () => HttpResponse.json(status)))
+    await serve('radar', 'mainnet', 'summary', `${BASE}/mainnet/summary`, {}, (body) => {
+      const crawl = body.crawl as { id: number; finished: number }
+      crawl.id = latest.last_id - 1
+      crawl.finished = latest.last_finished - 900
+    })
+    const out = await radar.summary('mainnet')
+    expect(out.radarTime).toBe('earlier-crawl')
+    expect(out.asOf).toBe(out.data.crawl.finished)
+  })
+
   it('keeps its own stamp when the crawl is unknown', async () => {
     forgetCrawls()
     server.use(

@@ -29,9 +29,6 @@ import { agedFromRead, pushed } from './freshness'
 import { HomeMap } from './HomeMap'
 import { TIP_POLL_MS, usePlatformTip } from './platform-tip'
 
-/** Nothing pushes a new crawl, so the claim is read again while the page stays open, well inside the age at which it would look out of date. */
-const CENSUS_POLL_MS = 5 * 60_000
-
 const UNKNOWN = 'Unknown'
 
 type Dist = readonly (readonly [string, number])[] | undefined
@@ -208,7 +205,7 @@ export function Hero() {
   const off = useDecentralizedOnly()
   const devnet = isDevnet(net)
   const radarOn = !devnet && !off
-  const census = { enabled: radarOn, refetchInterval: CENSUS_POLL_MS }
+  const census = { enabled: radarOn }
   const summary = useQuery({ ...radarQueries.summary(net), ...census })
   const activation = useQuery({ ...radarQueries.activation(net), enabled: radarOn })
   const geo = useQuery({ ...radarQueries.geo(net), ...census })

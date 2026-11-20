@@ -8,8 +8,8 @@ import {
   isCrawlStale,
 } from './crawl'
 
-const query = (radarTime: string | undefined, dataUpdatedAt: number) => ({
-  state: { data: radarTime ? { radarTime } : undefined, dataUpdatedAt },
+const query = (radarTime: string | undefined, dataUpdatedAt: number, status = 'success') => ({
+  state: { data: radarTime ? { radarTime } : undefined, dataUpdatedAt, status },
 })
 
 describe('the crawl threshold @RA-12', () => {
@@ -52,5 +52,12 @@ describe('refreshing crawl documents', () => {
     q.state.data = { radarTime: 'earlier-crawl' }
     q.state.dataUpdatedAt = 100
     expect(crawlRefreshMs(q)).toBe(CRAWL_CATCH_UP_MS)
+  })
+
+  it('waits the full interval while reading a trailing document fails', () => {
+    const q = query('earlier-crawl', 1, 'error')
+    for (let attempt = 0; attempt < CRAWL_CATCH_UPS + 2; attempt++) {
+      expect(crawlRefreshMs(q)).toBe(CRAWL_REFRESH_MS)
+    }
   })
 })

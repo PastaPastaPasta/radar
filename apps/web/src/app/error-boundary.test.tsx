@@ -134,6 +134,26 @@ describe('the page error boundary', () => {
     vi.unstubAllGlobals()
     sessionStorage.clear()
   })
+
+  it('shows the page, not a lasting loading state, when storage refuses the reload guard', () => {
+    sessionStorage.clear()
+    broken.error = new TypeError('Failed to fetch dynamically imported module: /assets/blocked.js')
+    const reload = vi.fn()
+    vi.stubGlobal('location', { ...window.location, reload, search: '' })
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new DOMException('blocked', 'SecurityError')
+    })
+    render(
+      <ErrorBoundary>
+        <Page />
+      </ErrorBoundary>,
+    )
+    expect(reload).not.toHaveBeenCalled()
+    expect(page()).toHaveAttribute('data-error-page', 'chunk')
+    expect(screen.getByRole('button', { name: 'Reload' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Go home' })).toBeInTheDocument()
+    vi.unstubAllGlobals()
+  })
 })
 
 describe('a page whose code fails to load offline @NX-77', () => {

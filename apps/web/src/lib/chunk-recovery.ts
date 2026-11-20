@@ -50,10 +50,22 @@ export function reloadedRecently(now = Date.now()): boolean {
   return Number.isFinite(at) && at > 0 && now >= at && now - at < RELOAD_GUARD_MS
 }
 
+/** Whether storage takes a write, so the reload guard can be recorded. */
+function writable(): boolean {
+  const probe = `${RELOAD_KEY}:probe`
+  if (!write(probe, '1')) return false
+  try {
+    sessionStorage.removeItem(probe)
+  } catch {
+    return false
+  }
+  return true
+}
+
 /** Whether `reloadForChunk` would reload now, without reloading. */
 export function mayReloadForChunk(now = Date.now()): boolean {
   if (typeof navigator !== 'undefined' && !navigator.onLine) return false
-  return !reloadedRecently(now)
+  return !reloadedRecently(now) && writable()
 }
 
 /**
