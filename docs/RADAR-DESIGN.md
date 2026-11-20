@@ -461,7 +461,7 @@ Compact mark (the family source tag): 20 px min height, 1 × 6 px padding, 1 px 
 | `dapi` — Served by DAPI | neutral, antenna glyph; the serving node in a tooltip |
 | `pe` / `hyphen` — Indexed by … | neutral, database glyph |
 | `hyphen` fallback — Indexed by Hyphen · DAPI busy / unreachable | neutral; "DAPI unreachable" also turns the mark `--stale` |
-| `radar` — Crawled by Radar | neutral, radar glyph |
+| `radar` — Crawled by Radar (· an earlier crawl) / Checked by Radar | neutral, radar glyph |
 | `local` — Computed in your browser | neutral, cpu glyph |
 | `rate` — Price from … | neutral, coin glyph |
 
