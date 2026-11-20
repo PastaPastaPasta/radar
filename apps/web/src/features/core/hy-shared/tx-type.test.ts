@@ -11,18 +11,24 @@ interface Out {
 
 /** What DAPI's decoder says of the same outputs. */
 const decoded = (vout: readonly Out[]) =>
-  fromDecoder({
-    txTypeName: 'classic',
-    isCoinbase: false,
-    outputs: vout.map((o, n) => ({
-      n,
-      value: 0,
-      scriptPubKeyHex: o.scriptPubKey.hex,
-      scriptPubKeyAsm: '',
-      scriptType: o.scriptPubKey.hex.startsWith('6a') ? ('nulldata' as const) : ('p2pkh' as const),
-      address: null,
-    })),
-  })
+  fromDecoder(
+    {
+      txTypeName: 'classic',
+      isCoinbase: false,
+      inputs: [],
+      outputs: vout.map((o, n) => ({
+        n,
+        value: 0,
+        scriptPubKeyHex: o.scriptPubKey.hex,
+        scriptPubKeyAsm: '',
+        scriptType: o.scriptPubKey.hex.startsWith('6a')
+          ? ('nulldata' as const)
+          : ('p2pkh' as const),
+        address: null,
+      })),
+    },
+    'mainnet',
+  )
 
 describe('Hyphen’s data type and Radar’s', () => {
   it('agree on a transaction whose only output is OP_RETURN', async () => {

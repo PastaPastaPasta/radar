@@ -105,6 +105,9 @@ msgstr "{outCount, plural, other {出力 #件}}"
 msgid "{types, plural, one {# type} other {# types}}"
 msgstr "{types, plural, other {# 種類}}"
 
+msgid "A CoinJoin mix."
+msgstr "CoinJoin ミックスです。"
+
 msgid "A contract’s groups with position, threshold and members."
 msgstr "コントラクトのグループ（位置、しきい値、メンバー）。"
 
@@ -263,6 +266,9 @@ msgstr "Coinbase ペイロード"
 msgid "Coinbase transactions pay none"
 msgstr "Coinbase トランザクションは支払いません"
 
+msgid "CoinJoin mixes pay none"
+msgstr "CoinJoin ミックスは手数料を払いません"
+
 msgid "Collateral"
 msgstr "担保"
 
@@ -364,6 +370,9 @@ msgstr "DAPI"
 
 msgid "DAPI is busy. Open this page to load them."
 msgstr "DAPI が混み合っています。読み込むにはこのページを開いてください。"
+
+msgid "Dash Core relays a mix without a fee, so its inputs add up to exactly its outputs. Radar calls a transaction CoinJoin by that shape, the way Dash Core checks one: as many inputs as outputs, and every output a standard denomination paid to a plain address."
+msgstr "Dash Core はミックスを手数料なしで中継するため、入力の合計は出力の合計とちょうど一致します。Radar はこの形で CoinJoin と判定します。Dash Core と同じく、入力と出力が同数で、すべての出力が通常のアドレスへの標準額面であることを確認します。"
 
 msgid "data"
 msgstr "データ"
@@ -1152,6 +1161,9 @@ msgstr "設定"
 
 msgid "Settlement"
 msgstr "確定状況"
+
+msgid "Several wallets each put in coins of one standard size (10.0001, 1.00001, 0.100001, 0.0100001 or 0.00100001 DASH: a round amount plus a hundred-thousandth of it) and take the same amounts back at new addresses, which makes each output hard to link to the input it came from. A masternode coordinates the round."
+msgstr "複数のウォレットがそれぞれ標準サイズのコイン(10.0001、1.00001、0.100001、0.0100001、0.00100001 DASH:きりのよい額にその 10 万分の 1 を加えた額)を出し、同じ額を新しいアドレスで受け取ります。これにより、各出力がどの入力から来たかを結び付けにくくなります。ラウンドはマスターノードが取りまとめます。"
 
 msgid "Share index"
 msgstr "シェアのインデックス"

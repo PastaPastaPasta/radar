@@ -105,6 +105,9 @@ msgstr "{outCount, plural, one {# saída} many {# de saídas} other {# saídas}}
 msgid "{types, plural, one {# type} other {# types}}"
 msgstr "{types, plural, one {# tipo} other {# tipos}}"
 
+msgid "A CoinJoin mix."
+msgstr "Uma mistura CoinJoin."
+
 msgid "A contract’s groups with position, threshold and members."
 msgstr "Os grupos de um contrato, com posição, limite e membros."
 
@@ -263,6 +266,9 @@ msgstr "Payload da coinbase"
 msgid "Coinbase transactions pay none"
 msgstr "As transações coinbase não pagam nenhuma"
 
+msgid "CoinJoin mixes pay none"
+msgstr "Misturas CoinJoin não pagam taxa"
+
 msgid "Collateral"
 msgstr "Colateral"
 
@@ -364,6 +370,9 @@ msgstr "DAPI"
 
 msgid "DAPI is busy. Open this page to load them."
 msgstr "O DAPI está ocupado. Abra esta página para os carregar."
+
+msgid "Dash Core relays a mix without a fee, so its inputs add up to exactly its outputs. Radar calls a transaction CoinJoin by that shape, the way Dash Core checks one: as many inputs as outputs, and every output a standard denomination paid to a plain address."
+msgstr "O Dash Core retransmite uma mistura sem taxa, então suas entradas somam exatamente suas saídas. O Radar chama uma transação de CoinJoin por esse formato, como o Dash Core a verifica: tantas entradas quanto saídas, e cada saída uma denominação padrão paga a um endereço simples."
 
 msgid "data"
 msgstr "dados"
@@ -1152,6 +1161,9 @@ msgstr "Definições"
 
 msgid "Settlement"
 msgstr "Liquidação"
+
+msgid "Several wallets each put in coins of one standard size (10.0001, 1.00001, 0.100001, 0.0100001 or 0.00100001 DASH: a round amount plus a hundred-thousandth of it) and take the same amounts back at new addresses, which makes each output hard to link to the input it came from. A masternode coordinates the round."
+msgstr "Várias carteiras colocam moedas de um tamanho padrão (10,0001, 1,00001, 0,100001, 0,0100001 ou 0,00100001 DASH: um valor redondo mais um centésimo de milésimo dele) e recebem os mesmos valores de volta em endereços novos, o que torna difícil ligar cada saída à entrada de onde veio. Um masternode coordena a rodada."
 
 msgid "Share index"
 msgstr "Índice da participação"

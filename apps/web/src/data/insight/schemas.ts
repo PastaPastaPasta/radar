@@ -138,6 +138,9 @@ export const InsGovernanceInfoSchema = z.object({
     fundingthreshold: z.number(),
     governancebudget: zCoins,
     nextsuperblock: z.number().nullish(),
+    lastsuperblock: z.number().nullish(),
+    superblockcycle: z.number().nullish(),
+    superblockmaturitywindow: z.number().nullish(),
   }),
 })
 export type InsGovernanceInfo = z.output<typeof InsGovernanceInfoSchema>['result']

@@ -41,6 +41,7 @@ import { useHyphenFit } from '@/data/hyphen/fit'
 import { useIndexHealth } from '@/data/index-health'
 import { StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { insQueries } from '@/data/insight/queries'
+import { CoinJoinNote } from './CoinJoinNote'
 import { insightSpendsOf } from './spend'
 import { IoTables } from './IoTables'
 import { PayloadRows, usePayloadInfo } from './Payload'
@@ -251,13 +252,18 @@ function TxView({
 
   const noValue = movesNoValue(tx)
   const spendsNothing = !coinbase && tx.inputs.length === 0 && fee === 0n
+  // Shaped like a mix, it is called one only once its fee is known to be 0; until then, or with a fee, a payment.
+  const coinjoin = tx.type === 'coinjoin' && fee === 0n
+  const type = tx.type === 'coinjoin' && !coinjoin ? 'transfer' : tx.type
   const feeRate =
     fee !== undefined && tx.size > 0
       ? (Number(fee) / tx.size).toFixed(1).replace(/\.0$/, '')
       : undefined
 
   let feeNote: string | undefined
-  if (fee !== undefined) {
+  if (coinjoin && fee === 0n) {
+    feeNote = t`CoinJoin mixes pay none`
+  } else if (fee !== undefined) {
     if (feeRate) {
       feeNote = spendsNothing
         ? t`${feeRate} duffs a byte: it spends no coins`
@@ -296,7 +302,7 @@ function TxView({
           share
           kicker={
             <>
-              <TypeBadge type={tx.type} />
+              <TypeBadge type={type} />
               <span>
                 {t`Version ${tx.version}`} ·{' '}
                 {plural(tx.inputs.length, { one: '# input', other: '# inputs' })},{' '}
@@ -392,6 +398,7 @@ function TxView({
             }
           />
         </div>
+        {coinjoin ? <CoinJoinNote /> : null}
       </CoreBand>
 
       <div className="dh-container" style={{ paddingBlock: '28px 64px' }}>

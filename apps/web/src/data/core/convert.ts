@@ -1,4 +1,5 @@
 import type * as Wasm from '@radar/core-decode'
+import { isCoinJoinMix } from '@/lib/coinjoin'
 import type { NetworkId } from '@/lib/network'
 import type { CoreTxType } from '@/lib/tx-types'
 import { isDevnet } from '@/lib/network'
@@ -24,20 +25,23 @@ const TX_TYPES: Partial<Record<Wasm.TxTypeName, CoreTxType>> = {
 }
 
 /**
- * The badge type of a transaction. A classic coinbase is `coinbase` too, and a classic transaction whose every output
- * is OP_RETURN pays no one, so it is `data`. Types Dash Core does not have yet (DIP-26 shared-masternode transactions)
+ * The badge type of a transaction. A classic coinbase is `coinbase` too, a classic transaction whose every output
+ * is OP_RETURN pays no one, so it is `data`, and one shaped like a CoinJoin mix is `coinjoin` (`isCoinJoinMix`). Types Dash Core does not have yet (DIP-26 shared-masternode transactions)
  * have no badge and read as `transfer`; their `payload.kind` is the exact type.
  */
 export function coreTxType(
-  tx: Pick<Wasm.DecodedTx, 'txTypeName' | 'isCoinbase' | 'outputs'>,
+  tx: Pick<Wasm.DecodedTx, 'txTypeName' | 'isCoinbase' | 'inputs' | 'outputs'>,
+  net: NetworkId,
 ): CoreTxType {
   if (tx.isCoinbase) return 'coinbase'
-  if (
-    tx.txTypeName === 'classic' &&
-    tx.outputs.length > 0 &&
-    tx.outputs.every((o) => o.scriptType === 'nulldata')
-  )
-    return 'data'
+  if (tx.txTypeName === 'classic') {
+    if (tx.outputs.length > 0 && tx.outputs.every((o) => o.scriptType === 'nulldata')) return 'data'
+    const outputs = tx.outputs.map((o) => ({
+      value: BigInt(o.value),
+      scriptPubKey: o.scriptPubKeyHex,
+    }))
+    if (isCoinJoinMix({ inputs: tx.inputs.length, outputs }, net)) return 'coinjoin'
+  }
   return TX_TYPES[tx.txTypeName] ?? 'transfer'
 }
 
@@ -73,10 +77,10 @@ export interface TxPlace {
   time?: number
 }
 
-export function mapTx(tx: Wasm.DecodedTx, place: TxPlace = {}): DecodedTx {
+export function mapTx(tx: Wasm.DecodedTx, net: NetworkId, place: TxPlace = {}): DecodedTx {
   return {
     txid: tx.txid,
-    type: coreTxType(tx),
+    type: coreTxType(tx, net),
     version: tx.version,
     lockTime: tx.lockTime,
     size: tx.size,
@@ -126,7 +130,7 @@ export function blockHeightOf(block: Wasm.DecodedBlock): number | undefined {
   return height
 }
 
-export function mapBlock(block: Wasm.DecodedBlock, height: number): DecodedBlock {
+export function mapBlock(block: Wasm.DecodedBlock, height: number, net: NetworkId): DecodedBlock {
   const time = block.time * 1000
   const place: TxPlace = { blockHash: block.hash, height, time }
   return {
@@ -139,7 +143,7 @@ export function mapBlock(block: Wasm.DecodedBlock, height: number): DecodedBlock
     bits: block.bits.toString(16).padStart(8, '0'),
     nonce: block.nonce,
     size: block.size,
-    txs: block.txs.map((t) => mapTx(t, place)),
+    txs: block.txs.map((t) => mapTx(t, net, place)),
     chainLocked: false,
   }
 }

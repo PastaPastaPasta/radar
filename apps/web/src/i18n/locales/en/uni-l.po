@@ -104,6 +104,9 @@ msgstr "{outCount, plural, one {# output} other {# outputs}}"
 msgid "{types, plural, one {# type} other {# types}}"
 msgstr "{types, plural, one {# type} other {# types}}"
 
+msgid "A CoinJoin mix."
+msgstr "A CoinJoin mix."
+
 msgid "A contract’s groups with position, threshold and members."
 msgstr "A contract’s groups with position, threshold and members."
 
@@ -262,6 +265,9 @@ msgstr "Coinbase payload"
 msgid "Coinbase transactions pay none"
 msgstr "Coinbase transactions pay none"
 
+msgid "CoinJoin mixes pay none"
+msgstr "CoinJoin mixes pay none"
+
 msgid "Collateral"
 msgstr "Collateral"
 
@@ -363,6 +369,9 @@ msgstr "DAPI"
 
 msgid "DAPI is busy. Open this page to load them."
 msgstr "DAPI is busy. Open this page to load them."
+
+msgid "Dash Core relays a mix without a fee, so its inputs add up to exactly its outputs. Radar calls a transaction CoinJoin by that shape, the way Dash Core checks one: as many inputs as outputs, and every output a standard denomination paid to a plain address."
+msgstr "Dash Core relays a mix without a fee, so its inputs add up to exactly its outputs. Radar calls a transaction CoinJoin by that shape, the way Dash Core checks one: as many inputs as outputs, and every output a standard denomination paid to a plain address."
 
 msgid "data"
 msgstr "data"
@@ -1151,6 +1160,9 @@ msgstr "Settings"
 
 msgid "Settlement"
 msgstr "Settlement"
+
+msgid "Several wallets each put in coins of one standard size (10.0001, 1.00001, 0.100001, 0.0100001 or 0.00100001 DASH: a round amount plus a hundred-thousandth of it) and take the same amounts back at new addresses, which makes each output hard to link to the input it came from. A masternode coordinates the round."
+msgstr "Several wallets each put in coins of one standard size (10.0001, 1.00001, 0.100001, 0.0100001 or 0.00100001 DASH: a round amount plus a hundred-thousandth of it) and take the same amounts back at new addresses, which makes each output hard to link to the input it came from. A masternode coordinates the round."
 
 msgid "Share index"
 msgstr "Share index"

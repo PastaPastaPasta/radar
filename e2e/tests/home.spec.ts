@@ -112,11 +112,16 @@ test.describe('Home', () => {
     await expect(page).toHaveURL(/\/block\/2570085/)
   })
 
-  test('shows height, difficulty, supply and size, each once @HY-01', async ({ page }) => {
+  test('shows height, difficulty, hash rate, supply and size, each once @HY-01', async ({
+    page,
+  }) => {
     await page.goto('/')
     await expect(page.locator('[data-pulse="core"]')).toContainText('2,570,085')
     const headline = page.locator('[data-headline]')
     await expect(headline).toContainText('Difficulty')
+    // 106,426,839.80 × 2³² ÷ 150 s
+    await expect(headline.locator('[data-hashrate]')).toContainText('3.05 PH/s')
+    await expect(headline.locator('[data-hashrate]')).toContainText('Estimated from the difficulty')
     await expect(headline).toContainText('Circulating supply')
     await expect(headline).toContainText('Blockchain size')
     await expect(headline).not.toContainText('2,570,085')
@@ -181,7 +186,7 @@ test.describe('Home', () => {
 
   test('reads the Core figures again when a new block arrives @HY-01', async ({ page }) => {
     await page.goto('/')
-    const difficulty = page.locator('[data-headline] .rx-fig').filter({ hasText: 'Difficulty' })
+    const difficulty = page.locator('[data-headline] .rx-fig').filter({ hasText: /^\s*Difficulty/ })
     await expect(difficulty).toContainText(/\d/)
     await expect(difficulty).not.toHaveAttribute('aria-busy', 'true')
     await expect
@@ -313,7 +318,7 @@ test.describe('Home', () => {
     page,
   }) => {
     await page.goto('/')
-    await expect(page.locator('[data-headline] .rx-fig')).toHaveCount(3)
+    await expect(page.locator('[data-headline] .rx-fig')).toHaveCount(4)
     await expect(page.getByRole('table', { name: 'Pending transactions' })).toBeVisible()
     const line = page.locator('#core [data-section-sources]')
     await expect(line.locator('[data-source="hyphen"]')).toHaveCount(1)

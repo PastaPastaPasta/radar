@@ -29,9 +29,25 @@ msgstr "(цей сайт передає запит до {0})"
 msgid "[circular]"
 msgstr "[циклічне посилання]"
 
+#. placeholder {0}: c.nextSuperblock - c.tip.height
+msgid "{0, plural, one {# block to go, at {minutes} minutes a block, as the last superblocks ran} other {# blocks to go, at {minutes} minutes a block, as the last superblocks ran}}"
+msgstr "{0, plural, one {Залишився # блок, по {minutes} хвилини на блок, як ішли останні суперблоки} few {Залишилося # блоки, по {minutes} хвилини на блок, як ішли останні суперблоки} many {Залишилося # блоків, по {minutes} хвилини на блок, як ішли останні суперблоки} other {Залишилося # блоку, по {minutes} хвилини на блок, як ішли останні суперблоки}}"
+
+#. placeholder {0}: c.nextSuperblock - c.tip.height
+msgid "{0, plural, one {# block to go, at Dash Core’s 2.62 minutes a block} other {# blocks to go, at Dash Core’s 2.62 minutes a block}}"
+msgstr "{0, plural, one {Залишився # блок, по 2,62 хвилини на блок, як рахує Dash Core} few {Залишилося # блоки, по 2,62 хвилини на блок, як рахує Dash Core} many {Залишилося # блоків, по 2,62 хвилини на блок, як рахує Dash Core} other {Залишилося # блоку, по 2,62 хвилини на блок, як рахує Dash Core}}"
+
+#. placeholder {0}: split.count.outside
+msgid "{0, plural, one {# more proposal passes on votes, but its payment window doesn’t cover the next superblock, so it isn’t counted here.} other {# more proposals pass on votes, but their payment windows don’t cover the next superblock, so they aren’t counted here.}}"
+msgstr "{0, plural, one {Ще # пропозиція проходить за голосами, але її період виплат не охоплює наступний суперблок, тож її тут не враховано.} few {Ще # пропозиції проходять за голосами, але їхні періоди виплат не охоплюють наступний суперблок, тож їх тут не враховано.} many {Ще # пропозицій проходять за голосами, але їхні періоди виплат не охоплюють наступний суперблок, тож їх тут не враховано.} other {Ще # пропозиції проходять за голосами, але їхні періоди виплат не охоплюють наступний суперблок, тож їх тут не враховано.}}"
+
 #. placeholder {0}: Math.floor(ms / 60_000)
 msgid "{0, plural, one {last block header # minute ago} other {last block header # minutes ago}}"
 msgstr "{0, plural, one {останній заголовок блоку # хвилину тому} few {останній заголовок блоку # хвилини тому} many {останній заголовок блоку # хвилин тому} other {останній заголовок блоку # хвилини тому}}"
+
+#. placeholder {0}: c.cycleBlocks
+msgid "{0, plural, one {One superblock every # block} other {One superblock every # blocks}}"
+msgstr "{0, plural, one {Один суперблок кожен # блок} few {Один суперблок кожні # блоки} many {Один суперблок кожні # блоків} other {Один суперблок кожні # блоку}}"
 
 #. placeholder {0}: formatInt(first.total)
 msgid "{0} addresses ranked"
@@ -147,6 +163,9 @@ msgstr "{d} д"
 msgid "{d} d {h} h"
 msgstr "{d} д {h} год"
 
+msgid "{d} d {h} h {m} min"
+msgstr "{d} д {h} год {m} хв"
+
 msgid "{days, plural, one {# day} other {# days}}"
 msgstr "{days, plural, one {# день} few {# дні} many {# днів} other {# дня}}"
 
@@ -155,6 +174,9 @@ msgstr "{h} год"
 
 msgid "{h} h {m} min"
 msgstr "{h} год {m} хв"
+
+msgid "{h} h {m} min {s} s"
+msgstr "{h} год {m} хв {s} с"
 
 msgid "{hours, plural, one {# hour} other {# hours}}"
 msgstr "{hours, plural, one {# година} few {# години} many {# годин} other {# години}}"
@@ -173,6 +195,9 @@ msgstr "{label}: до"
 
 msgid "{m} min"
 msgstr "{m} хв"
+
+msgid "{min} min {s} s"
+msgstr "{min} хв {s} с"
 
 msgid "{minutes, plural, one {# minute} other {# minutes}}"
 msgstr "{minutes, plural, one {# хвилина} few {# хвилини} many {# хвилин} other {# хвилини}}"
@@ -348,6 +373,15 @@ msgstr "Блокування активів"
 msgid "Asset unlock"
 msgstr "Розблокування активів"
 
+#. placeholder {0}: formatInt(deadline.height)
+#. placeholder {1}: formatDate(deadline.at)
+msgid "At block #{0}, about {1}"
+msgstr "На блоці #{0}, близько {1}"
+
+#. placeholder {0}: formatInt(deadline.height)
+msgid "At block #{0}: the superblock’s payments are being settled"
+msgstr "На блоці #{0}: виплати суперблоку визначаються"
+
 msgid "Back to Mainnet"
 msgstr "Назад до основної мережі"
 
@@ -392,6 +426,9 @@ msgstr "Бюджетні пропозиції"
 
 msgid "Budget proposals and where their votes stand. Voting happens in Governance."
 msgstr "Бюджетні пропозиції та стан голосування за них. Голосують у Governance."
+
+msgid "Budget this cycle"
+msgstr "Бюджет цього циклу"
 
 msgid "Camera"
 msgstr "Камера"
@@ -453,6 +490,12 @@ msgstr "закрити"
 msgid "Coinbase"
 msgstr "Coinbase"
 
+msgid "CoinJoin"
+msgstr "CoinJoin"
+
+msgid "CoinJoin, inferred from the transaction’s total and zero fee; its page checks each output"
+msgstr "CoinJoin, визначено за сумою та нульовою комісією транзакції; її сторінка перевіряє кожен вихід"
+
 msgid "Collapse all"
 msgstr "Згорнути все"
 
@@ -511,6 +554,12 @@ msgstr "Адреса Core"
 msgid "Core block"
 msgstr "Блок Core"
 
+msgid "Core gave no maturity window"
+msgstr "Core не вказав вікно дозрівання"
+
+msgid "Core gave no next superblock"
+msgstr "Core не вказав наступний суперблок"
+
 msgid "Core transaction"
 msgstr "Транзакція Core"
 
@@ -519,6 +568,12 @@ msgstr "Версія Core"
 
 msgid "Core versions"
 msgstr "Версії Core"
+
+msgid "Core’s budget couldn’t be read from Insight"
+msgstr "Не вдалося прочитати бюджет Core з Insight"
+
+msgid "Core’s budget couldn’t be read from Insight, so the split isn’t drawn."
+msgstr "Не вдалося прочитати бюджет Core з Insight, тож розподіл не показано."
 
 msgid "Core's tip, blocks, transactions, ChainLocks and live feeds. Radar spreads its requests over many nodes and checks each block against its header."
 msgstr "Вершина Core, блоки, транзакції, ChainLock і живі потоки. Radar розподіляє запити між багатьма вузлами та звіряє кожен блок з його заголовком."
@@ -550,6 +605,9 @@ msgstr "Виведення кредитів"
 msgid "DAPI addresses"
 msgstr "Адреси DAPI"
 
+msgid "DAPI’s tip couldn’t be read, so its time isn’t estimated."
+msgstr "Не вдалося прочитати вершину DAPI, тож час не оцінюється."
+
 msgid "Data"
 msgstr "Дані"
 
@@ -558,6 +616,12 @@ msgstr "Контракт даних"
 
 msgid "Data sources"
 msgstr "Джерела даних"
+
+msgid "Date"
+msgstr "Дата"
+
+msgid "Deadline passed"
+msgstr "Термін минув"
 
 msgid "Decentralized"
 msgstr "Децентралізовано"
@@ -613,6 +677,10 @@ msgstr "Передача документа"
 
 msgid "Down"
 msgstr "Не працює"
+
+#. placeholder {0}: formatDate(eta)
+msgid "Due about {0}"
+msgstr "Очікується близько {0}"
 
 msgid "Earlier proposals below are from Hyphen’s index, as of that block, not live."
 msgstr "Раніші пропозиції нижче взято з індексу Hyphen станом на цей блок, не наживо."
@@ -745,6 +813,9 @@ msgstr "Поріг фінансування"
 msgid "Governance"
 msgstr "Управління"
 
+msgid "Governance cycle"
+msgstr "Цикл управління"
+
 msgid "Governance proposal"
 msgstr "Пропозиція щодо управління"
 
@@ -872,6 +943,10 @@ msgstr "Insight не зміг повернути найдавніші транз
 msgid "Insight could not return this address’s transactions."
 msgstr "Insight не зміг повернути транзакції цієї адреси."
 
+#. placeholder {0}: formatInt(behind)
+msgid "Insight is behind: DAPI’s tip is already at block #{0}."
+msgstr "Insight відстає: вершина DAPI вже на блоці #{0}."
+
 msgid "Insight’s {name} index is behind too: {lag}."
 msgstr "Індекс {name} у Insight теж відстає: {lag}."
 
@@ -913,6 +988,15 @@ msgstr "останній обхід завершено {0} тому"
 #. placeholder {0}: formatRelative(clampSkew(last, now), now)
 msgid "last good {0}"
 msgstr "остання успішна {0}"
+
+msgid "Last superblocks"
+msgstr "Останні суперблоки"
+
+msgid "Last superblocks: height, date and what each paid"
+msgstr "Останні суперблоки: висота, дата і сума виплат кожного"
+
+msgid "Left unallocated"
+msgstr "Не розподілено"
 
 msgid "Link copied"
 msgstr "Посилання скопійовано"
@@ -1007,6 +1091,9 @@ msgstr "Новіші"
 
 msgid "Next"
 msgstr "Далі"
+
+msgid "Next superblock"
+msgstr "Наступний суперблок"
 
 msgid "No"
 msgstr "Ні"
@@ -1111,11 +1198,23 @@ msgstr "Сторінки"
 msgid "Pagination"
 msgstr "Посторінкова навігація"
 
+msgid "Paid is the superblock’s coinbase less the coinbase of the block before it, to the nearest 0.01 DASH."
+msgstr "Виплачено — coinbase суперблоку мінус coinbase попереднього блоку, з точністю до 0,01 DASH."
+
 msgid "Paid to"
 msgstr "Виплачено"
 
+msgid "Paid, about"
+msgstr "Виплачено, приблизно"
+
 msgid "Passing"
 msgstr "Проходить"
+
+msgid "Passing proposals ask for"
+msgstr "Прохідні пропозиції запитують"
+
+msgid "Passing proposals ask for more than the budget; the ones with fewer net votes that don’t fit wait for a later superblock."
+msgstr "Прохідні пропозиції запитують більше за бюджет; ті, що мають менше чистих голосів і не вміщуються, чекають наступного суперблоку."
 
 msgid "Passing, not yet funded"
 msgstr "Проходить, ще не профінансовано"
@@ -1427,6 +1526,9 @@ msgstr "Розмір"
 msgid "Slow"
 msgstr "Повільно"
 
+msgid "Some superblocks couldn’t be read from Hyphen; their figures show —."
+msgstr "Деякі суперблоки не вдалося прочитати з Hyphen; їхні значення показано як —."
+
 msgid "Something went wrong"
 msgstr "Щось пішло не так"
 
@@ -1473,6 +1575,12 @@ msgstr "Зупинено з {since}"
 
 msgid "Summary"
 msgstr "Підсумок"
+
+msgid "Superblock"
+msgstr "Суперблок"
+
+msgid "Superblock in"
+msgstr "До суперблоку"
 
 msgid "Supply concentration"
 msgstr "Концентрація пропозиції"
@@ -1549,8 +1657,17 @@ msgstr "Мінімум більший за максимум."
 msgid "The newest {shown} of {total} seen since you opened this page"
 msgstr "Найновіші {shown} із {total}, помічених від відкриття цієї сторінки"
 
+msgid "The next superblock, when its voting closes, and what its budget covers"
+msgstr "Наступний суперблок, коли закривається голосування і що покриває його бюджет"
+
+msgid "The next superblock’s budget or time isn’t known"
+msgstr "Бюджет або час наступного суперблоку невідомі"
+
 msgid "The next superblock’s budget or time isn’t known, so no proposal is shown as Funded."
 msgstr "Бюджет або час наступного суперблоку невідомі, тож жодна пропозиція не показана як профінансована."
+
+msgid "The next superblock’s budget or time isn’t known, so the split isn’t drawn."
+msgstr "Бюджет або час наступного суперблоку невідомі, тож розподіл не показано."
 
 msgid "The next transactions could not be loaded."
 msgstr "Не вдалося завантажити наступні транзакції."
@@ -1560,6 +1677,9 @@ msgstr "Platform SDK"
 
 msgid "The price feed"
 msgstr "Джерело цін"
+
+msgid "The proposals couldn’t be read, so what they ask for isn’t known."
+msgstr "Не вдалося прочитати пропозиції, тож невідомо, скільки вони запитують."
 
 msgid "The QR code could not be drawn here. The address above is the same."
 msgstr "Не вдалося намалювати QR-код. Адреса вище — та сама."
@@ -1587,6 +1707,9 @@ msgstr "Джерело надіслало дані, які Radar не зміг �
 
 msgid "The start date is after the end date."
 msgstr "Дата початку пізніша за дату завершення."
+
+msgid "The superblock would pay"
+msgstr "Суперблок виплатить"
 
 #. placeholder {0}: formatInt(basis.height)
 #. placeholder {1}: formatInt(height)
@@ -1814,6 +1937,12 @@ msgstr "Голосувати в Governance"
 msgid "Votes"
 msgstr "Голоси"
 
+msgid "Voting closes"
+msgstr "Голосування закривається"
+
+msgid "Voting has closed, but this is still worked out from the votes as they stand now, not from what Core has settled."
+msgstr "Голосування закрито, але це все ще обчислено за поточними голосами, а не за тим, що визначив Core."
+
 msgid "Voting window"
 msgstr "Вікно голосування"
 
@@ -1829,6 +1958,9 @@ msgstr "Стежимо за новими транзакціями цієї ад�
 msgid "Watching since"
 msgstr "Спостереження з"
 
+msgid "What the superblock would pay and what is left need its time, which isn’t known."
+msgstr "Скільки виплатить суперблок і скільки залишиться, залежить від його часу, а він невідомий."
+
 msgid "When"
 msgstr "Коли"
 
@@ -1840,6 +1972,9 @@ msgstr "Які існують evonode: список читається приб�
 
 msgid "Which sources Radar may use"
 msgstr "Які джерела може використовувати Radar"
+
+msgid "Worked out by Radar from the proposals below and Core’s budget, as Funded is."
+msgstr "Обчислено Radar за пропозиціями нижче та бюджетом Core, як і «Профінансовано»."
 
 msgid "Yes"
 msgstr "Так"

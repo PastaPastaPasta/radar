@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "url": "/x/hy/mainnet/block/2542248/txs?limit=1" },
+  "recordedAt": "2026-11-19T16:58:43.102Z",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "public, max-age=86400, s-maxage=604800, immutable"
+  },
+  "body": {
+    "asOfHeight": 2575345,
+    "totalCount": 6,
+    "value": [
+      {
+        "txHash": "76ba32119d65565fafb62fea9d39be2fd04f101c2ce59eac6fc178cd8f8ade40",
+        "blockHeight": 2542248,
+        "blockPos": 0,
+        "txVersion": 3,
+        "txType": "coinbase",
+        "lockTime": 500928672,
+        "txSize": 850,
+        "valueOut": 681164420858,
+        "inputCount": 1,
+        "outputCount": 18,
+        "tags": { "mined": true, "coinbase": true }
+      }
+    ],
+    "nextCursor": "7b2261734f66486569676874223a323537353334352c22626c6f636b486569676874223a323534323234382c22626c6f636b506f73223a302c2274786964223a2237366261333231313964363535363566616662363266656139643339626532666430346631303163326365353965616336666331373863643866386164653430227d"
+  }
+}

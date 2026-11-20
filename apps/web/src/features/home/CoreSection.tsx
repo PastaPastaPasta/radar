@@ -12,6 +12,7 @@ import { useIndexHealth } from '@/data/index-health'
 import { dapiKeys } from '@/data/query'
 import { Entity, PageLink, useCatchUpToTip, useNetwork, useRefetchOnRise } from '@/features/entity'
 import { formatBytes, formatInt, formatSignificant } from '@/lib/format'
+import { formatHashrate, hashrateFromDifficulty } from '@/lib/hashrate'
 import { isDevnet } from '@/lib/network'
 import {
   Amount,
@@ -58,7 +59,7 @@ function useHyphenBlocked() {
   }
 }
 
-/** Difficulty, supply and size, read again on each new block; the height itself is the hero's Core figure. */
+/** Difficulty, hash rate, supply and size, read again on each new block; the height itself is the hero's Core figure. */
 function useCoreFigures() {
   const { t } = useLingui()
   const { net, fit, lag, hyphenDown, devnet, stale, off } = useHyphenBlocked()
@@ -99,6 +100,19 @@ function useCoreFigures() {
           value={status.data ? formatSignificant(status.data.data.difficulty) : '—'}
           loading={status.isPending}
           source={sources.status}
+        />
+        <Figure
+          layer="core"
+          label={t`Hash rate`}
+          value={
+            status.data?.data.difficulty
+              ? formatHashrate(hashrateFromDifficulty(status.data.data.difficulty))
+              : '—'
+          }
+          note={t`Estimated from the difficulty`}
+          loading={status.isPending}
+          source={sources.status}
+          attrs={{ 'data-hashrate': '' }}
         />
         {dapiOnly ? (
           <Figure

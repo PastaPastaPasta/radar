@@ -105,6 +105,9 @@ msgstr "{outCount, plural, one {# вихід} few {# виходи} many {# ви�
 msgid "{types, plural, one {# type} other {# types}}"
 msgstr "{types, plural, one {# тип} few {# типи} many {# типів} other {# типу}}"
 
+msgid "A CoinJoin mix."
+msgstr "Мікс CoinJoin."
+
 msgid "A contract’s groups with position, threshold and members."
 msgstr "Групи контракту: позиція, поріг і учасники."
 
@@ -263,6 +266,9 @@ msgstr "Корисне навантаження coinbase"
 msgid "Coinbase transactions pay none"
 msgstr "Транзакції coinbase їх не сплачують"
 
+msgid "CoinJoin mixes pay none"
+msgstr "Мікси CoinJoin не платять комісії"
+
 msgid "Collateral"
 msgstr "Застава"
 
@@ -364,6 +370,9 @@ msgstr "DAPI"
 
 msgid "DAPI is busy. Open this page to load them."
 msgstr "DAPI зайнятий. Відкрийте цю сторінку, щоб їх завантажити."
+
+msgid "Dash Core relays a mix without a fee, so its inputs add up to exactly its outputs. Radar calls a transaction CoinJoin by that shape, the way Dash Core checks one: as many inputs as outputs, and every output a standard denomination paid to a plain address."
+msgstr "Dash Core передає мікс без комісії, тож сума входів точно дорівнює сумі виходів. Radar називає транзакцію CoinJoin за цією формою, так, як її перевіряє Dash Core: входів стільки ж, скільки виходів, і кожен вихід — стандартний номінал на звичайну адресу."
 
 msgid "data"
 msgstr "дані"
@@ -1152,6 +1161,9 @@ msgstr "Налаштування"
 
 msgid "Settlement"
 msgstr "Підтвердження"
+
+msgid "Several wallets each put in coins of one standard size (10.0001, 1.00001, 0.100001, 0.0100001 or 0.00100001 DASH: a round amount plus a hundred-thousandth of it) and take the same amounts back at new addresses, which makes each output hard to link to the input it came from. A masternode coordinates the round."
+msgstr "Кілька гаманців вносять монети одного стандартного розміру (10,0001, 1,00001, 0,100001, 0,0100001 або 0,00100001 DASH: кругла сума плюс її стотисячна частка) і отримують ті самі суми на нові адреси, тож кожен вихід важко пов’язати з входом, з якого він прийшов. Раунд координує мастернода."
 
 msgid "Share index"
 msgstr "Індекс частки"

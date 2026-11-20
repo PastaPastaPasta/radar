@@ -105,6 +105,9 @@ msgstr "{outCount, plural, other {# 个输出}}"
 msgid "{types, plural, one {# type} other {# types}}"
 msgstr "{types, plural, other {# 种类型}}"
 
+msgid "A CoinJoin mix."
+msgstr "一笔 CoinJoin 混币交易。"
+
 msgid "A contract’s groups with position, threshold and members."
 msgstr "合约的群组，含位置、阈值和成员。"
 
@@ -263,6 +266,9 @@ msgstr "Coinbase 载荷"
 msgid "Coinbase transactions pay none"
 msgstr "Coinbase 交易不支付"
 
+msgid "CoinJoin mixes pay none"
+msgstr "CoinJoin 混币不付手续费"
+
 msgid "Collateral"
 msgstr "抵押品"
 
@@ -364,6 +370,9 @@ msgstr "DAPI"
 
 msgid "DAPI is busy. Open this page to load them."
 msgstr "DAPI 繁忙。请打开此页面以加载。"
+
+msgid "Dash Core relays a mix without a fee, so its inputs add up to exactly its outputs. Radar calls a transaction CoinJoin by that shape, the way Dash Core checks one: as many inputs as outputs, and every output a standard denomination paid to a plain address."
+msgstr "Dash Core 免手续费转发混币交易,因此其输入总额正好等于输出总额。Radar 按这种形态将交易认定为 CoinJoin,与 Dash Core 的检查方式一致:输入与输出数量相同,且每个输出都是支付到普通地址的标准面额。"
 
 msgid "data"
 msgstr "数据"
@@ -1152,6 +1161,9 @@ msgstr "设置"
 
 msgid "Settlement"
 msgstr "结算"
+
+msgid "Several wallets each put in coins of one standard size (10.0001, 1.00001, 0.100001, 0.0100001 or 0.00100001 DASH: a round amount plus a hundred-thousandth of it) and take the same amounts back at new addresses, which makes each output hard to link to the input it came from. A masternode coordinates the round."
+msgstr "多个钱包各自投入一种标准面额的币(10.0001、1.00001、0.100001、0.0100001 或 0.00100001 DASH:一个整齐的基数加上它的十万分之一),并在新地址取回相同金额,这使每个输出很难与其来源输入关联起来。由一个主节点协调这一轮。"
 
 msgid "Share index"
 msgstr "份额索引"

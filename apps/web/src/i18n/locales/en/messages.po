@@ -29,9 +29,25 @@ msgstr "(this site passes the request on to {0})"
 msgid "[circular]"
 msgstr "[circular]"
 
+#. placeholder {0}: c.nextSuperblock - c.tip.height
+msgid "{0, plural, one {# block to go, at {minutes} minutes a block, as the last superblocks ran} other {# blocks to go, at {minutes} minutes a block, as the last superblocks ran}}"
+msgstr "{0, plural, one {# block to go, at {minutes} minutes a block, as the last superblocks ran} other {# blocks to go, at {minutes} minutes a block, as the last superblocks ran}}"
+
+#. placeholder {0}: c.nextSuperblock - c.tip.height
+msgid "{0, plural, one {# block to go, at Dash Core’s 2.62 minutes a block} other {# blocks to go, at Dash Core’s 2.62 minutes a block}}"
+msgstr "{0, plural, one {# block to go, at Dash Core’s 2.62 minutes a block} other {# blocks to go, at Dash Core’s 2.62 minutes a block}}"
+
+#. placeholder {0}: split.count.outside
+msgid "{0, plural, one {# more proposal passes on votes, but its payment window doesn’t cover the next superblock, so it isn’t counted here.} other {# more proposals pass on votes, but their payment windows don’t cover the next superblock, so they aren’t counted here.}}"
+msgstr "{0, plural, one {# more proposal passes on votes, but its payment window doesn’t cover the next superblock, so it isn’t counted here.} other {# more proposals pass on votes, but their payment windows don’t cover the next superblock, so they aren’t counted here.}}"
+
 #. placeholder {0}: Math.floor(ms / 60_000)
 msgid "{0, plural, one {last block header # minute ago} other {last block header # minutes ago}}"
 msgstr "{0, plural, one {last block header # minute ago} other {last block header # minutes ago}}"
+
+#. placeholder {0}: c.cycleBlocks
+msgid "{0, plural, one {One superblock every # block} other {One superblock every # blocks}}"
+msgstr "{0, plural, one {One superblock every # block} other {One superblock every # blocks}}"
 
 #. placeholder {0}: formatInt(first.total)
 msgid "{0} addresses ranked"
@@ -147,6 +163,9 @@ msgstr "{d} d"
 msgid "{d} d {h} h"
 msgstr "{d} d {h} h"
 
+msgid "{d} d {h} h {m} min"
+msgstr "{d} d {h} h {m} min"
+
 msgid "{days, plural, one {# day} other {# days}}"
 msgstr "{days, plural, one {# day} other {# days}}"
 
@@ -155,6 +174,9 @@ msgstr "{h} h"
 
 msgid "{h} h {m} min"
 msgstr "{h} h {m} min"
+
+msgid "{h} h {m} min {s} s"
+msgstr "{h} h {m} min {s} s"
 
 msgid "{hours, plural, one {# hour} other {# hours}}"
 msgstr "{hours, plural, one {# hour} other {# hours}}"
@@ -173,6 +195,9 @@ msgstr "{label} to"
 
 msgid "{m} min"
 msgstr "{m} min"
+
+msgid "{min} min {s} s"
+msgstr "{min} min {s} s"
 
 msgid "{minutes, plural, one {# minute} other {# minutes}}"
 msgstr "{minutes, plural, one {# minute} other {# minutes}}"
@@ -348,6 +373,15 @@ msgstr "Asset lock"
 msgid "Asset unlock"
 msgstr "Asset unlock"
 
+#. placeholder {0}: formatInt(deadline.height)
+#. placeholder {1}: formatDate(deadline.at)
+msgid "At block #{0}, about {1}"
+msgstr "At block #{0}, about {1}"
+
+#. placeholder {0}: formatInt(deadline.height)
+msgid "At block #{0}: the superblock’s payments are being settled"
+msgstr "At block #{0}: the superblock’s payments are being settled"
+
 msgid "Back to Mainnet"
 msgstr "Back to Mainnet"
 
@@ -392,6 +426,9 @@ msgstr "Budget proposals"
 
 msgid "Budget proposals and where their votes stand. Voting happens in Governance."
 msgstr "Budget proposals and where their votes stand. Voting happens in Governance."
+
+msgid "Budget this cycle"
+msgstr "Budget this cycle"
 
 msgid "Camera"
 msgstr "Camera"
@@ -453,6 +490,12 @@ msgstr "close"
 msgid "Coinbase"
 msgstr "Coinbase"
 
+msgid "CoinJoin"
+msgstr "CoinJoin"
+
+msgid "CoinJoin, inferred from the transaction’s total and zero fee; its page checks each output"
+msgstr "CoinJoin, inferred from the transaction’s total and zero fee; its page checks each output"
+
 msgid "Collapse all"
 msgstr "Collapse all"
 
@@ -511,6 +554,12 @@ msgstr "Core address"
 msgid "Core block"
 msgstr "Core block"
 
+msgid "Core gave no maturity window"
+msgstr "Core gave no maturity window"
+
+msgid "Core gave no next superblock"
+msgstr "Core gave no next superblock"
+
 msgid "Core transaction"
 msgstr "Core transaction"
 
@@ -519,6 +568,12 @@ msgstr "Core version"
 
 msgid "Core versions"
 msgstr "Core versions"
+
+msgid "Core’s budget couldn’t be read from Insight"
+msgstr "Core’s budget couldn’t be read from Insight"
+
+msgid "Core’s budget couldn’t be read from Insight, so the split isn’t drawn."
+msgstr "Core’s budget couldn’t be read from Insight, so the split isn’t drawn."
 
 msgid "Core's tip, blocks, transactions, ChainLocks and live feeds. Radar spreads its requests over many nodes and checks each block against its header."
 msgstr "Core's tip, blocks, transactions, ChainLocks and live feeds. Radar spreads its requests over many nodes and checks each block against its header."
@@ -550,6 +605,9 @@ msgstr "Credit withdrawal"
 msgid "DAPI addresses"
 msgstr "DAPI addresses"
 
+msgid "DAPI’s tip couldn’t be read, so its time isn’t estimated."
+msgstr "DAPI’s tip couldn’t be read, so its time isn’t estimated."
+
 msgid "Data"
 msgstr "Data"
 
@@ -558,6 +616,12 @@ msgstr "Data contract"
 
 msgid "Data sources"
 msgstr "Data sources"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "Deadline passed"
+msgstr "Deadline passed"
 
 msgid "Decentralized"
 msgstr "Decentralized"
@@ -613,6 +677,10 @@ msgstr "Document transfer"
 
 msgid "Down"
 msgstr "Down"
+
+#. placeholder {0}: formatDate(eta)
+msgid "Due about {0}"
+msgstr "Due about {0}"
 
 msgid "Earlier proposals below are from Hyphen’s index, as of that block, not live."
 msgstr "Earlier proposals below are from Hyphen’s index, as of that block, not live."
@@ -745,6 +813,9 @@ msgstr "Funding threshold"
 msgid "Governance"
 msgstr "Governance"
 
+msgid "Governance cycle"
+msgstr "Governance cycle"
+
 msgid "Governance proposal"
 msgstr "Governance proposal"
 
@@ -872,6 +943,10 @@ msgstr "Insight could not return this address’s oldest transactions."
 msgid "Insight could not return this address’s transactions."
 msgstr "Insight could not return this address’s transactions."
 
+#. placeholder {0}: formatInt(behind)
+msgid "Insight is behind: DAPI’s tip is already at block #{0}."
+msgstr "Insight is behind: DAPI’s tip is already at block #{0}."
+
 msgid "Insight’s {name} index is behind too: {lag}."
 msgstr "Insight’s {name} index is behind too: {lag}."
 
@@ -913,6 +988,15 @@ msgstr "last crawl finished {0} ago"
 #. placeholder {0}: formatRelative(clampSkew(last, now), now)
 msgid "last good {0}"
 msgstr "last good {0}"
+
+msgid "Last superblocks"
+msgstr "Last superblocks"
+
+msgid "Last superblocks: height, date and what each paid"
+msgstr "Last superblocks: height, date and what each paid"
+
+msgid "Left unallocated"
+msgstr "Left unallocated"
 
 msgid "Link copied"
 msgstr "Link copied"
@@ -1007,6 +1091,9 @@ msgstr "Newer"
 
 msgid "Next"
 msgstr "Next"
+
+msgid "Next superblock"
+msgstr "Next superblock"
 
 msgid "No"
 msgstr "No"
@@ -1111,11 +1198,23 @@ msgstr "Pages"
 msgid "Pagination"
 msgstr "Pagination"
 
+msgid "Paid is the superblock’s coinbase less the coinbase of the block before it, to the nearest 0.01 DASH."
+msgstr "Paid is the superblock’s coinbase less the coinbase of the block before it, to the nearest 0.01 DASH."
+
 msgid "Paid to"
 msgstr "Paid to"
 
+msgid "Paid, about"
+msgstr "Paid, about"
+
 msgid "Passing"
 msgstr "Passing"
+
+msgid "Passing proposals ask for"
+msgstr "Passing proposals ask for"
+
+msgid "Passing proposals ask for more than the budget; the ones with fewer net votes that don’t fit wait for a later superblock."
+msgstr "Passing proposals ask for more than the budget; the ones with fewer net votes that don’t fit wait for a later superblock."
 
 msgid "Passing, not yet funded"
 msgstr "Passing, not yet funded"
@@ -1427,6 +1526,9 @@ msgstr "Size"
 msgid "Slow"
 msgstr "Slow"
 
+msgid "Some superblocks couldn’t be read from Hyphen; their figures show —."
+msgstr "Some superblocks couldn’t be read from Hyphen; their figures show —."
+
 msgid "Something went wrong"
 msgstr "Something went wrong"
 
@@ -1473,6 +1575,12 @@ msgstr "Stopped since {since}"
 
 msgid "Summary"
 msgstr "Summary"
+
+msgid "Superblock"
+msgstr "Superblock"
+
+msgid "Superblock in"
+msgstr "Superblock in"
 
 msgid "Supply concentration"
 msgstr "Supply concentration"
@@ -1549,8 +1657,17 @@ msgstr "The minimum is above the maximum."
 msgid "The newest {shown} of {total} seen since you opened this page"
 msgstr "The newest {shown} of {total} seen since you opened this page"
 
+msgid "The next superblock, when its voting closes, and what its budget covers"
+msgstr "The next superblock, when its voting closes, and what its budget covers"
+
+msgid "The next superblock’s budget or time isn’t known"
+msgstr "The next superblock’s budget or time isn’t known"
+
 msgid "The next superblock’s budget or time isn’t known, so no proposal is shown as Funded."
 msgstr "The next superblock’s budget or time isn’t known, so no proposal is shown as Funded."
+
+msgid "The next superblock’s budget or time isn’t known, so the split isn’t drawn."
+msgstr "The next superblock’s budget or time isn’t known, so the split isn’t drawn."
 
 msgid "The next transactions could not be loaded."
 msgstr "The next transactions could not be loaded."
@@ -1560,6 +1677,9 @@ msgstr "The Platform SDK"
 
 msgid "The price feed"
 msgstr "The price feed"
+
+msgid "The proposals couldn’t be read, so what they ask for isn’t known."
+msgstr "The proposals couldn’t be read, so what they ask for isn’t known."
 
 msgid "The QR code could not be drawn here. The address above is the same."
 msgstr "The QR code could not be drawn here. The address above is the same."
@@ -1587,6 +1707,9 @@ msgstr "The source sent something Radar couldn't read"
 
 msgid "The start date is after the end date."
 msgstr "The start date is after the end date."
+
+msgid "The superblock would pay"
+msgstr "The superblock would pay"
 
 #. placeholder {0}: formatInt(basis.height)
 #. placeholder {1}: formatInt(height)
@@ -1814,6 +1937,12 @@ msgstr "Vote in Governance"
 msgid "Votes"
 msgstr "Votes"
 
+msgid "Voting closes"
+msgstr "Voting closes"
+
+msgid "Voting has closed, but this is still worked out from the votes as they stand now, not from what Core has settled."
+msgstr "Voting has closed, but this is still worked out from the votes as they stand now, not from what Core has settled."
+
 msgid "Voting window"
 msgstr "Voting window"
 
@@ -1829,6 +1958,9 @@ msgstr "Watching for new transactions on this address."
 msgid "Watching since"
 msgstr "Watching since"
 
+msgid "What the superblock would pay and what is left need its time, which isn’t known."
+msgstr "What the superblock would pay and what is left need its time, which isn’t known."
+
 msgid "When"
 msgstr "When"
 
@@ -1840,6 +1972,9 @@ msgstr "Which evonodes exist, read about once an hour (a saved list or the built
 
 msgid "Which sources Radar may use"
 msgstr "Which sources Radar may use"
+
+msgid "Worked out by Radar from the proposals below and Core’s budget, as Funded is."
+msgstr "Worked out by Radar from the proposals below and Core’s budget, as Funded is."
 
 msgid "Yes"
 msgstr "Yes"

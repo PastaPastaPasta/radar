@@ -643,6 +643,32 @@ test.describe('governance', () => {
     await expectNoSideScroll(page)
   })
 
+  test('shows the governance cycle: next superblock, countdown, voting deadline, budget and the last superblocks @HY-13', async ({
+    page,
+  }) => {
+    await page.goto('/governance')
+    const cycle = page.locator('#cycle')
+    await expect(cycle.locator('[data-next-superblock]')).toContainText('#2,575,480', {
+      timeout: 15_000,
+    })
+    await expect(cycle.locator('[data-superblock-eta] [data-countdown]')).toHaveText(
+      /\d+ (d|h|min) /,
+    )
+    await expect(cycle.locator('[data-voting-deadline]')).toHaveAttribute(
+      'data-voting-deadline',
+      '2573818',
+    )
+    await expect(cycle.locator('[data-cycle-budget]')).toContainText('6,828.26')
+    const rows = cycle.locator('[data-past-superblocks] tr[data-superblock]')
+    await expect(rows).toHaveCount(3)
+    await expect(rows.first().locator('[data-paid]')).toContainText('5,393')
+    await expect(rows.nth(1).locator('[data-paid]')).toContainText('6,810')
+    await expect(cycle.locator('[data-cycle-use] [data-cycle-left]')).toBeVisible()
+    await settled(page)
+    await expectAccessible(page)
+    await expectNoSideScroll(page)
+  })
+
   test('shows a chevron on each proposal name that turns when it opens, with a hover and focus style @HY-13', async ({
     page,
   }) => {

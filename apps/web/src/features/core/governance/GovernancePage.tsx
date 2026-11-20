@@ -1,3 +1,4 @@
+import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
@@ -27,9 +28,11 @@ import {
 } from '@/ui'
 import { governanceClaim } from '../claims'
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
+import { insQueries } from '@/data/insight/queries'
 import { governanceQueries, insightGovernanceQueries } from './queries'
-import { budgetSplit, netVotes, proposalStatus, type ProposalStatus } from './status'
+import { budgetSplit, claimCounts, netVotes, proposalStatus, type ProposalStatus } from './status'
 import { ThresholdNote } from './ThresholdNote'
+import { CycleCard } from './CycleCard'
 import {
   fundingView,
   useFundingThreshold,
@@ -96,6 +99,13 @@ function GovernanceContent() {
   const threshold = core?.threshold
   const sb = useSuperblockBudget(net)
   const budget = sb?.budget
+  // Funded and Passing-not-yet-funded split on the budget: until it is read they are not figures yet.
+  const budgetRead = useQuery(insQueries.superblockBudget(net))
+  const budgetPending = budgetRead.isPending
+  const budgetMissing = !budgetPending && !budget
+  const budgetNote = budgetRead.isError
+    ? t`Core’s budget couldn’t be read from Insight`
+    : t`The next superblock’s budget or time isn’t known`
   const from: ProposalIndex = insight ? 'insight' : 'hyphen'
   const proposals = useMemo(
     () => rank(fundingView(data?.data.items ?? [], threshold, from, budget)),
@@ -114,9 +124,12 @@ function GovernanceContent() {
       ),
     )
   }, [insight, hy.data, proposals, rank, threshold])
-  const split = useMemo(() => budgetSplit(proposals, now), [proposals, now])
-  const { funded, passing, failing } = split.count
-  usePageClaim(data ? governanceClaim(funded + passing + failing, funded + passing) : undefined)
+  const split = useMemo(
+    () => budgetSplit(proposals, now, budget?.superblockAt),
+    [proposals, now, budget],
+  )
+  const claim = claimCounts(split.count)
+  usePageClaim(data ? governanceClaim(claim.open, claim.voted) : undefined)
   const stamp = data ? stampOf(data) : undefined
   const listStamps = hy.data && earlier.length > 0 && stamp ? [stamp, stampOf(hy.data)] : stamp
   const stamps = listStamps
@@ -169,6 +182,11 @@ function GovernanceContent() {
             : undefined
         }
       />
+      <CycleCard
+        net={net}
+        split={data ? split : undefined}
+        proposalsFailed={query.isError && !query.data}
+      />
       <Card
         title={t`Budget`}
         subtitle={t`Open proposals by what their payment would be`}
@@ -180,43 +198,63 @@ function GovernanceContent() {
           <ErrorState error={query.error} onRetry={() => void query.refetch()} />
         ) : (
           <div className="grid gap-4 md:grid-cols-[minmax(0,320px)_1fr] md:items-center">
-            <Chart
-              option={option}
-              height={220}
-              label={t`Requested payments of open proposals: funded, passing and not passing`}
-              loading={waiting}
-              table={{
-                columns: [t`Status`, t`Proposals`, t`Requested`],
-                rows: (['funded', 'passing', 'failing'] as const).map((s) => [
-                  s === 'funded'
-                    ? t`Funded`
-                    : s === 'passing'
-                      ? t`Passing, not yet funded`
-                      : t`Not passing`,
-                  split.count[s],
-                  `${formatInt(split[s] / DUFFS_PER_DASH)} DASH`,
-                ]),
-              }}
-            />
+            {budgetMissing && !waiting ? (
+              <p className="rx-note m-0" data-budget-chart="missing">
+                {budgetRead.isError
+                  ? t`Core’s budget couldn’t be read from Insight, so the split isn’t drawn.`
+                  : t`The next superblock’s budget or time isn’t known, so the split isn’t drawn.`}
+              </p>
+            ) : (
+              <Chart
+                option={option}
+                height={220}
+                label={t`Requested payments of open proposals: funded, passing and not passing`}
+                loading={waiting || budgetPending}
+                table={{
+                  columns: [t`Status`, t`Proposals`, t`Requested`],
+                  rows: (['funded', 'passing', 'failing'] as const).map((s) => [
+                    s === 'funded'
+                      ? t`Funded`
+                      : s === 'passing'
+                        ? t`Passing, not yet funded`
+                        : t`Not passing`,
+                    split.count[s],
+                    `${formatInt(split[s] / DUFFS_PER_DASH)} DASH`,
+                  ]),
+                }}
+              />
+            )}
             <div className="grid gap-4 sm:grid-cols-3" data-budget>
               <Stat
                 label={t`Funded`}
-                value={<Amount value={split.funded} kind="duffs" compact />}
-                note={t`${formatInt(split.count.funded)} proposals`}
+                value={budgetMissing ? '—' : <Amount value={split.funded} kind="duffs" compact />}
+                note={budgetMissing ? budgetNote : t`${formatInt(split.count.funded)} proposals`}
+                loading={waiting || budgetPending}
                 tone="good"
               />
               <Stat
                 label={t`Passing, not yet funded`}
-                value={<Amount value={split.passing} kind="duffs" compact />}
-                note={t`${formatInt(split.count.passing)} proposals`}
+                value={budgetMissing ? '—' : <Amount value={split.passing} kind="duffs" compact />}
+                note={budgetMissing ? budgetNote : t`${formatInt(split.count.passing)} proposals`}
+                loading={waiting || budgetPending}
                 tone="info"
               />
               <Stat
                 label={t`Not passing`}
                 value={<Amount value={split.failing} kind="duffs" compact />}
                 note={t`${formatInt(split.count.failing)} proposals`}
+                loading={waiting}
                 tone="warn"
               />
+              {!budgetMissing && !waiting && !budgetPending && split.count.outside > 0 ? (
+                <p className="rx-note m-0 sm:col-span-3" data-budget-outside>
+                  {plural(split.count.outside, {
+                    one: '# more proposal passes on votes, but its payment window doesn’t cover the next superblock, so it isn’t counted here.',
+                    other:
+                      '# more proposals pass on votes, but their payment windows don’t cover the next superblock, so they aren’t counted here.',
+                  })}
+                </p>
+              ) : null}
             </div>
           </div>
         )}

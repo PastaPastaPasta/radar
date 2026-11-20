@@ -106,6 +106,21 @@ export function formatDuration(ms: number): string {
   return t`${s} s`
 }
 
+const pad2 = (n: number) => String(n).padStart(2, '0')
+
+/** A countdown to its three largest units, by the second below a day: "2 d 14 h 05 min", "3 h 05 min 09 s", "5 min 09 s". */
+export function formatCountdown(ms: number): string {
+  const total = Math.max(0, Math.floor(ms / SECOND))
+  const d = Math.floor(total / 86400)
+  const h = Math.floor((total % 86400) / 3600)
+  const min = Math.floor((total % 3600) / 60)
+  const m = pad2(min)
+  const s = pad2(total % 60)
+  if (d > 0) return t`${d} d ${h} h ${m} min`
+  if (h > 0) return t`${h} h ${m} min ${s} s`
+  return t`${min} min ${s} s`
+}
+
 export interface DateOptions {
   utc?: boolean
   time?: boolean

@@ -29,9 +29,25 @@ msgstr "（本站会把请求转发给 {0}）"
 msgid "[circular]"
 msgstr "[循环]"
 
+#. placeholder {0}: c.nextSuperblock - c.tip.height
+msgid "{0, plural, one {# block to go, at {minutes} minutes a block, as the last superblocks ran} other {# blocks to go, at {minutes} minutes a block, as the last superblocks ran}}"
+msgstr "{0, plural, other {还有 # 个区块,按最近几个超级区块的实际速度每块 {minutes} 分钟计}}"
+
+#. placeholder {0}: c.nextSuperblock - c.tip.height
+msgid "{0, plural, one {# block to go, at Dash Core’s 2.62 minutes a block} other {# blocks to go, at Dash Core’s 2.62 minutes a block}}"
+msgstr "{0, plural, other {还有 # 个区块,按 Dash Core 的每块 2.62 分钟计}}"
+
+#. placeholder {0}: split.count.outside
+msgid "{0, plural, one {# more proposal passes on votes, but its payment window doesn’t cover the next superblock, so it isn’t counted here.} other {# more proposals pass on votes, but their payment windows don’t cover the next superblock, so they aren’t counted here.}}"
+msgstr "{0, plural, other {另有 # 个提案按票数通过,但其付款期不包含下一个超级区块,因此此处不计入。}}"
+
 #. placeholder {0}: Math.floor(ms / 60_000)
 msgid "{0, plural, one {last block header # minute ago} other {last block header # minutes ago}}"
 msgstr "{0, plural, other {最后一个区块头：# 分钟前}}"
+
+#. placeholder {0}: c.cycleBlocks
+msgid "{0, plural, one {One superblock every # block} other {One superblock every # blocks}}"
+msgstr "{0, plural, other {每 # 个区块一个超级区块}}"
 
 #. placeholder {0}: formatInt(first.total)
 msgid "{0} addresses ranked"
@@ -147,6 +163,9 @@ msgstr "{d}天"
 msgid "{d} d {h} h"
 msgstr "{d}天{h}小时"
 
+msgid "{d} d {h} h {m} min"
+msgstr "{d} 天 {h} 小时 {m} 分"
+
 msgid "{days, plural, one {# day} other {# days}}"
 msgstr "{days, plural, other {# 天}}"
 
@@ -155,6 +174,9 @@ msgstr "{h}小时"
 
 msgid "{h} h {m} min"
 msgstr "{h}小时{m}分钟"
+
+msgid "{h} h {m} min {s} s"
+msgstr "{h} 小时 {m} 分 {s} 秒"
 
 msgid "{hours, plural, one {# hour} other {# hours}}"
 msgstr "{hours, plural, other {# 小时}}"
@@ -173,6 +195,9 @@ msgstr "{label}至"
 
 msgid "{m} min"
 msgstr "{m}分钟"
+
+msgid "{min} min {s} s"
+msgstr "{min} 分 {s} 秒"
 
 msgid "{minutes, plural, one {# minute} other {# minutes}}"
 msgstr "{minutes, plural, other {# 分钟}}"
@@ -348,6 +373,15 @@ msgstr "资产锁定"
 msgid "Asset unlock"
 msgstr "资产解锁"
 
+#. placeholder {0}: formatInt(deadline.height)
+#. placeholder {1}: formatDate(deadline.at)
+msgid "At block #{0}, about {1}"
+msgstr "在区块 #{0},约 {1}"
+
+#. placeholder {0}: formatInt(deadline.height)
+msgid "At block #{0}: the superblock’s payments are being settled"
+msgstr "在区块 #{0}:超级区块的付款正在确定"
+
 msgid "Back to Mainnet"
 msgstr "返回主网"
 
@@ -392,6 +426,9 @@ msgstr "预算提案"
 
 msgid "Budget proposals and where their votes stand. Voting happens in Governance."
 msgstr "预算提案及其投票情况。投票请前往 Governance 进行。"
+
+msgid "Budget this cycle"
+msgstr "本周期预算"
 
 msgid "Camera"
 msgstr "摄像头"
@@ -453,6 +490,12 @@ msgstr "关闭"
 msgid "Coinbase"
 msgstr "Coinbase"
 
+msgid "CoinJoin"
+msgstr "CoinJoin"
+
+msgid "CoinJoin, inferred from the transaction’s total and zero fee; its page checks each output"
+msgstr "CoinJoin,根据交易总额和零手续费推断;其页面会逐一检查输出"
+
 msgid "Collapse all"
 msgstr "全部收起"
 
@@ -511,6 +554,12 @@ msgstr "Core 地址"
 msgid "Core block"
 msgstr "Core 区块"
 
+msgid "Core gave no maturity window"
+msgstr "Core 未给出成熟窗口"
+
+msgid "Core gave no next superblock"
+msgstr "Core 未给出下一个超级区块"
+
 msgid "Core transaction"
 msgstr "Core 交易"
 
@@ -519,6 +568,12 @@ msgstr "Core 版本"
 
 msgid "Core versions"
 msgstr "Core 版本"
+
+msgid "Core’s budget couldn’t be read from Insight"
+msgstr "无法从 Insight 读取 Core 的预算"
+
+msgid "Core’s budget couldn’t be read from Insight, so the split isn’t drawn."
+msgstr "无法从 Insight 读取 Core 的预算,因此不绘制分布。"
 
 msgid "Core's tip, blocks, transactions, ChainLocks and live feeds. Radar spreads its requests over many nodes and checks each block against its header."
 msgstr "Core 链顶、区块、交易、ChainLock 和实时数据流。Radar 把请求分散到许多节点，并对照区块头检查每个区块。"
@@ -550,6 +605,9 @@ msgstr "积分提现"
 msgid "DAPI addresses"
 msgstr "DAPI 地址"
 
+msgid "DAPI’s tip couldn’t be read, so its time isn’t estimated."
+msgstr "无法读取 DAPI 的链顶,因此不估算时间。"
+
 msgid "Data"
 msgstr "数据"
 
@@ -558,6 +616,12 @@ msgstr "数据合约"
 
 msgid "Data sources"
 msgstr "数据来源"
+
+msgid "Date"
+msgstr "日期"
+
+msgid "Deadline passed"
+msgstr "已截止"
 
 msgid "Decentralized"
 msgstr "去中心化"
@@ -613,6 +677,10 @@ msgstr "转移文档"
 
 msgid "Down"
 msgstr "中断"
+
+#. placeholder {0}: formatDate(eta)
+msgid "Due about {0}"
+msgstr "预计约 {0}"
 
 msgid "Earlier proposals below are from Hyphen’s index, as of that block, not live."
 msgstr "下面较早的提案来自 Hyphen 的索引,截至该区块,并非实时。"
@@ -745,6 +813,9 @@ msgstr "资助门槛"
 msgid "Governance"
 msgstr "治理"
 
+msgid "Governance cycle"
+msgstr "治理周期"
+
 msgid "Governance proposal"
 msgstr "治理提案"
 
@@ -872,6 +943,10 @@ msgstr "Insight 无法返回此地址最早的交易。"
 msgid "Insight could not return this address’s transactions."
 msgstr "Insight 无法返回此地址的交易。"
 
+#. placeholder {0}: formatInt(behind)
+msgid "Insight is behind: DAPI’s tip is already at block #{0}."
+msgstr "Insight 落后了:DAPI 的链顶已在区块 #{0}。"
+
 msgid "Insight’s {name} index is behind too: {lag}."
 msgstr "Insight 的 {name} 索引也落后了:{lag}。"
 
@@ -913,6 +988,15 @@ msgstr "上次抓取完成于 {0}前"
 #. placeholder {0}: formatRelative(clampSkew(last, now), now)
 msgid "last good {0}"
 msgstr "上次正常 {0}"
+
+msgid "Last superblocks"
+msgstr "最近的超级区块"
+
+msgid "Last superblocks: height, date and what each paid"
+msgstr "最近的超级区块:高度、日期及各自支付的金额"
+
+msgid "Left unallocated"
+msgstr "未分配"
 
 msgid "Link copied"
 msgstr "链接已复制"
@@ -1007,6 +1091,9 @@ msgstr "较新"
 
 msgid "Next"
 msgstr "下一页"
+
+msgid "Next superblock"
+msgstr "下一个超级区块"
 
 msgid "No"
 msgstr "否"
@@ -1111,11 +1198,23 @@ msgstr "页面"
 msgid "Pagination"
 msgstr "分页"
 
+msgid "Paid is the superblock’s coinbase less the coinbase of the block before it, to the nearest 0.01 DASH."
+msgstr "支付额为超级区块的 coinbase 减去前一个区块的 coinbase,精确到 0.01 DASH。"
+
 msgid "Paid to"
 msgstr "支付给"
 
+msgid "Paid, about"
+msgstr "支付额(约)"
+
 msgid "Passing"
 msgstr "通过"
+
+msgid "Passing proposals ask for"
+msgstr "通过中的提案申请"
+
+msgid "Passing proposals ask for more than the budget; the ones with fewer net votes that don’t fit wait for a later superblock."
+msgstr "通过中的提案申请超过预算;净票数较少且放不下的提案将等待之后的超级区块。"
 
 msgid "Passing, not yet funded"
 msgstr "已通过，尚未获得资助"
@@ -1427,6 +1526,9 @@ msgstr "大小"
 msgid "Slow"
 msgstr "较慢"
 
+msgid "Some superblocks couldn’t be read from Hyphen; their figures show —."
+msgstr "部分超级区块无法从 Hyphen 读取;其数值显示为 —。"
+
 msgid "Something went wrong"
 msgstr "出了点问题"
 
@@ -1473,6 +1575,12 @@ msgstr "自 {since} 起停止"
 
 msgid "Summary"
 msgstr "摘要"
+
+msgid "Superblock"
+msgstr "超级区块"
+
+msgid "Superblock in"
+msgstr "距超级区块"
 
 msgid "Supply concentration"
 msgstr "供应集中度"
@@ -1549,8 +1657,17 @@ msgstr "最小值大于最大值。"
 msgid "The newest {shown} of {total} seen since you opened this page"
 msgstr "自你打开此页面以来看到的 {total} 笔中最新的 {shown} 笔"
 
+msgid "The next superblock, when its voting closes, and what its budget covers"
+msgstr "下一个超级区块、其投票何时截止,以及预算能覆盖多少"
+
+msgid "The next superblock’s budget or time isn’t known"
+msgstr "下一个超级区块的预算或时间未知"
+
 msgid "The next superblock’s budget or time isn’t known, so no proposal is shown as Funded."
 msgstr "下一个超级区块的预算或时间未知，因此没有提案显示为“已资助”。"
+
+msgid "The next superblock’s budget or time isn’t known, so the split isn’t drawn."
+msgstr "下一个超级区块的预算或时间未知,因此不绘制分布。"
 
 msgid "The next transactions could not be loaded."
 msgstr "无法加载后续交易。"
@@ -1560,6 +1677,9 @@ msgstr "Platform SDK"
 
 msgid "The price feed"
 msgstr "价格数据"
+
+msgid "The proposals couldn’t be read, so what they ask for isn’t known."
+msgstr "无法读取提案,因此不知道它们申请多少。"
 
 msgid "The QR code could not be drawn here. The address above is the same."
 msgstr "此处无法绘制二维码，上方的地址与其相同。"
@@ -1587,6 +1707,9 @@ msgstr "数据源返回了 Radar 无法读取的内容"
 
 msgid "The start date is after the end date."
 msgstr "开始日期晚于结束日期。"
+
+msgid "The superblock would pay"
+msgstr "超级区块将支付"
 
 #. placeholder {0}: formatInt(basis.height)
 #. placeholder {1}: formatInt(height)
@@ -1814,6 +1937,12 @@ msgstr "前往 Governance 投票"
 msgid "Votes"
 msgstr "票数"
 
+msgid "Voting closes"
+msgstr "投票截止"
+
+msgid "Voting has closed, but this is still worked out from the votes as they stand now, not from what Core has settled."
+msgstr "投票已截止,但此处仍按当前票数计算,而非 Core 已确定的结果。"
+
 msgid "Voting window"
 msgstr "投票窗口"
 
@@ -1829,6 +1958,9 @@ msgstr "正在监视此地址的新交易。"
 msgid "Watching since"
 msgstr "监视起始时间"
 
+msgid "What the superblock would pay and what is left need its time, which isn’t known."
+msgstr "超级区块将支付多少以及剩余多少取决于其时间,而时间未知。"
+
 msgid "When"
 msgstr "时间"
 
@@ -1840,6 +1972,9 @@ msgstr "有哪些 evonode，大约每小时读取一次（读取失败时，会�
 
 msgid "Which sources Radar may use"
 msgstr "Radar 可以使用哪些数据源"
+
+msgid "Worked out by Radar from the proposals below and Core’s budget, as Funded is."
+msgstr "与“已获资助”一样,由 Radar 根据下方提案和 Core 的预算计算。"
 
 msgid "Yes"
 msgstr "是"

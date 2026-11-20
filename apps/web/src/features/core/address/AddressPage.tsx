@@ -198,7 +198,7 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
       {
         id: 'type',
         header: t`Type`,
-        cell: ({ row }) => <TxTypeBadge type={row.original.txType} />,
+        cell: ({ row }) => <TxTypeBadge type={row.original.txType} row={row.original} />,
         meta: { phone: 'hidden' },
       },
       {
