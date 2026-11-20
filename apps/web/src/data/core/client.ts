@@ -9,6 +9,8 @@ import {
 } from '../dapi-core'
 import type { DapiRpc } from '../dapi-core'
 import type { CoreCache } from '../dapi-core/cache'
+import { earlyAnswers } from '../early'
+import { INDEX_STALE_BLOCKS } from '../index-state'
 import { stampOf, type FallbackReason, type Sourced } from '../envelope'
 import { sourceOff } from '../endpoints'
 import { abortedError, disabledByMode, isSourceError, SourceError } from '../errors'
@@ -164,6 +166,9 @@ async function limited<T, R>(
   if (failure) throw failure.error
   return out
 }
+
+/** Past this age Hyphen's newest block is not shown as the latest page while DAPI's is read. */
+const INDEXED_LATEST_MAX_AGE_MS = 2 * 60 * 60_000
 
 export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & CoreClientHooks {
   const { decoder } = deps
@@ -702,7 +707,12 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     }
   }
 
-  async function hyphenRawTx(net: NetworkId, txid: string, signal?: AbortSignal) {
+  async function hyphenRawTx(
+    net: NetworkId,
+    txid: string,
+    signal?: AbortSignal,
+    { time: withTime = true }: { time?: boolean } = {},
+  ) {
     const [raw, detail] = await Promise.all([
       deps.hyphen.rawTx(net, txid, signal),
       deps.hyphen.tx(net, txid, signal),
@@ -720,7 +730,9 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     const height = detail.data.blockHeight ?? undefined
     const asOfHeight = detail.data.asOfHeight
     const block =
-      height === undefined ? null : await deps.hyphen.block(net, height, signal).catch(() => null)
+      height === undefined || !withTime
+        ? null
+        : await deps.hyphen.block(net, height, signal).catch(() => null)
     const lock =
       height === undefined ? lockFields('none') : hyphenLockFields(net, height, asOfHeight)
     return {
@@ -880,6 +892,23 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
       insight: () => insightBlock(net, ref, signal).then((found) => (found.data ? found : null)),
     })
 
+  /**
+   * Whether Hyphen's index keeps up with its own node, read beside an indexed-first answer (one same-origin request the
+   * edge caches). Before the probe has measured it against an outside tip this is the only check, and it catches the
+   * stall where the index stops while the node follows the chain.
+   */
+  const indexCurrent = (net: NetworkId, signal?: AbortSignal): Promise<boolean> =>
+    deps.hyphen.status(net, signal).then(
+      (s) => {
+        const heights = Object.values(s.data.indices).map((i) => i.indexedHeight)
+        return heights.length > 0 && s.data.blockHeight - Math.min(...heights) <= INDEX_STALE_BLOCKS
+      },
+      () => false,
+    )
+
+  const validRef = (ref: BlockRef): boolean =>
+    'hash' in ref ? isHex(ref.hash, 32) : Number.isInteger(ref.height) && ref.height >= 0
+
   function normalizedTxid(txid: string): string | null {
     const id = txid.trim().toLowerCase()
     return isHex(id, 32) ? id : null
@@ -952,8 +981,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
       opts: CoreCallOptions = {},
     ): Promise<Sourced<DecodedBlock | null>> {
       const byHash = 'hash' in ref
-      if (byHash && !isHex(ref.hash, 32)) return dapi(null)
-      if (!byHash && !(Number.isInteger(ref.height) && ref.height >= 0)) return dapi(null)
+      if (!validRef(ref)) return dapi(null)
       const cache = await getCache()
       const hit = byHash
         ? await cache?.getBlockByHash(net, ref.hash.toLowerCase())
@@ -1044,6 +1072,46 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
         ...(raw.lock === 'claimed' ? { chainLockClaim: 'one-node' as const } : {}),
       }
       return dapi(data, { node: raw.node, height: raw.height })
+    },
+
+    async indexedTx(net: NetworkId, txid: string, signal?: AbortSignal) {
+      const id = normalizedTxid(txid)
+      if (!id || !earlyAnswers() || !hyphenFit(net)) return null
+      const [found, current] = await Promise.all([
+        hyphenRawTx(net, id, signal, { time: false }),
+        indexCurrent(net, signal),
+      ])
+      return found && current ? { ...hostedTxResult(found), fallback: 'dapi-cold' as const } : null
+    },
+
+    async indexedLatestRows(net: NetworkId, count: number, signal?: AbortSignal) {
+      if (count <= 0 || !earlyAnswers() || !hyphenFit(net)) return null
+      const [page, current] = await Promise.all([
+        deps.hyphen.blocks(net, { limit: count }, signal),
+        indexCurrent(net, signal),
+      ])
+      const top = page.data.items[0]
+      const asOf = page.data.asOfHeight ?? top?.blockHeight
+      if (!current || asOf === undefined || !top) return null
+      // Hyphen's own heights can agree while both have stopped: a newest block hours old is no latest page.
+      if (deps.now() - top.blockTime > INDEXED_LATEST_MAX_AGE_MS) return null
+      return fromHyphen(
+        page,
+        page.data.items.map((b) => hyphenRow(net, b, asOf)),
+        'dapi-cold',
+        { height: asOf },
+      )
+    },
+
+    async indexedBlock(net: NetworkId, ref: BlockRef, signal?: AbortSignal) {
+      if (!validRef(ref) || !earlyAnswers() || !hyphenFit(net)) return null
+      const [found, current] = await Promise.all([
+        hyphenBlock(net, ref, signal, { claim: false }),
+        indexCurrent(net, signal),
+      ])
+      return found.data && current
+        ? { ...found, data: found.data, fallback: 'dapi-cold' as const }
+        : null
     },
 
     async prevouts(net: NetworkId, tx: DecodedTx, signal?: AbortSignal) {
@@ -1321,21 +1389,28 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     const top = lockedTag.find((b) => b.blockHeight === lockedTop)
     if (top) claimLock(net, 'hyphen', { height: top.blockHeight, hash: top.blockHash })
     const asOf = page.data.asOfHeight ?? indexed
-    const toRow = (b: HyBlockSummary): BlockRow => ({
-      height: b.blockHeight,
-      hash: b.blockHash,
-      time: b.blockTime,
-      txCount: b.txCount,
-      size: b.blockSize,
-      ...hyphenLockFields(net, b.blockHeight, asOf),
-    })
-    return fromHyphen(page, items.map(toRow), fallback, { height: page.data.asOfHeight })
+    return fromHyphen(
+      page,
+      items.map((b) => hyphenRow(net, b, asOf)),
+      fallback,
+      { height: page.data.asOfHeight },
+    )
   }
+
+  const hyphenRow = (net: NetworkId, b: HyBlockSummary, asOf: number): BlockRow => ({
+    height: b.blockHeight,
+    hash: b.blockHash,
+    time: b.blockTime,
+    txCount: b.txCount,
+    size: b.blockSize,
+    ...hyphenLockFields(net, b.blockHeight, asOf),
+  })
 
   async function hyphenBlock(
     net: NetworkId,
     ref: BlockRef,
     signal?: AbortSignal,
+    { claim = true }: { claim?: boolean } = {},
   ): Promise<Sourced<DecodedBlock | null>> {
     const id = 'hash' in ref ? ref.hash.toLowerCase() : ref.height
     const [raw, detail] = await Promise.all([
@@ -1353,7 +1428,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
         message: (e as Error).message,
       })
     }
-    if (detail.data.live?.tags?.chainlock === true) {
+    if (claim && detail.data.live?.tags?.chainlock === true) {
       claimLock(net, 'hyphen', { height: block.height, hash: block.hash })
     }
     const lock = hyphenLockFields(net, block.height, detail.data.asOfHeight)

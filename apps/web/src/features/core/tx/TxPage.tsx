@@ -12,6 +12,7 @@ import { useDocumentTitle, useNetwork } from '@/features/entity'
 import { formatBytes, formatInt } from '@/lib/format'
 import { formatAmountText } from '@/lib/units'
 import { useFollowTip } from '../follow-tip'
+import { useIndexedFirst } from '../indexed-first'
 import {
   Amount,
   Badge,
@@ -68,7 +69,8 @@ export function TxPage({ txid }: { txid: string }) {
   const net = useNetwork()
   const valid = TXID.test(txid)
   useDocumentTitle(t`Transaction ${txid.slice(0, 8)}…`)
-  const tx = useQuery({ ...coreQueries.tx(net, txid), enabled: valid })
+  const dapiTx = useQuery({ ...coreQueries.tx(net, txid), enabled: valid })
+  const tx = useIndexedFirst(dapiTx, coreQueries.indexedTx(net, txid), valid)
   const found = tx.data?.data
   const tipHeight = useFollowTip(net, {
     keys: [coreQueries.tx(net, txid).queryKey],

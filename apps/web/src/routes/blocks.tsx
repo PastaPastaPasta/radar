@@ -12,11 +12,22 @@ const blocksSearch = z.object({
 
 export const Route = createFileRoute('/blocks')({
   validateSearch: blocksSearch,
-  loaderDeps: ({ search }) => ({ network: search.network, net: search.net }),
+  loaderDeps: ({ search }) => ({
+    network: search.network,
+    net: search.net,
+    latest: search.date === undefined && search.from === undefined,
+  }),
   loader: async ({ context, deps, preload }) => {
     const net = routeNetwork(deps)
     const { blocksPrefetch } = await import('@/data/query/route-prefetch')
-    return prefetchForRoute(context.queryClient, net, blocksPrefetch(net), { preload })
+    return prefetchForRoute(
+      context.queryClient,
+      net,
+      blocksPrefetch(net, { latest: deps.latest, preload }),
+      {
+        preload,
+      },
+    )
   },
   component: BlocksRoute,
 })

@@ -1,9 +1,12 @@
 import { queryOptions } from '@tanstack/react-query'
 import type { NetworkId } from '@/lib/network'
 import type { Sourced } from '../envelope'
-import { dapiKeys, dataClass, viewKeys } from '../query'
+import { dapiKeys, dataClass, hyKeys, viewKeys } from '../query'
 import { core } from './client'
 import type { BlockRef, CoreCallOptions, DecodedTx } from './types'
+
+/** Rows on a page of `/blocks`, and in the indexed latest page the route loader starts. */
+export const LATEST_BLOCK_ROWS = 20
 
 const SETTLED_STALE_MS = 15_000
 const LOCKED_STALE_MS = 5 * 60_000
@@ -63,6 +66,28 @@ export const coreQueries = {
       queryKey: dapiKeys(net, 'tx', { txid: txid.toLowerCase() }),
       queryFn: ({ signal }) => core.tx(net, txid, signal, opts),
       ...settled(),
+    }),
+  /** Hyphen's checked answer for the page to show until DAPI's arrives (§4.7, indexed first). */
+  indexedTx: (net: NetworkId, txid: string) =>
+    queryOptions({
+      queryKey: hyKeys(net, 'indexed-tx', { txid: txid.toLowerCase() }),
+      queryFn: ({ signal }) => core.indexedTx(net, txid, signal),
+      ...dataClass('live'),
+      retry: false,
+    }),
+  indexedBlock: (net: NetworkId, ref: BlockRef) =>
+    queryOptions({
+      queryKey: hyKeys(net, 'indexed-block', refKey(ref)),
+      queryFn: ({ signal }) => core.indexedBlock(net, ref, signal),
+      ...dataClass('live'),
+      retry: false,
+    }),
+  indexedLatestRows: (net: NetworkId, count: number) =>
+    queryOptions({
+      queryKey: hyKeys(net, 'indexed-latest-rows', { count }),
+      queryFn: ({ signal }) => core.indexedLatestRows(net, count, signal),
+      ...dataClass('live'),
+      retry: false,
     }),
   prevouts: (net: NetworkId, tx: DecodedTx) =>
     queryOptions({

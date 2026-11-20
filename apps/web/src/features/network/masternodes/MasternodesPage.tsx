@@ -1,9 +1,12 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
+import { earlyAnswers } from '@/data/early'
 import { useDecentralizedOnly } from '@/data/health'
-import { mnRowsQuery, type MnRow } from '@/data/masternodes/rows'
+import { joinMnRows, mnRowsQuery, type MnRow } from '@/data/masternodes/rows'
+import { radarQueries } from '@/data/radar/queries'
 import { PageFrame, useNetwork } from '@/features/entity'
+import type { NetworkId } from '@/lib/network'
 import { Empty, ErrorState, SegFilter, Skeleton, Unavailable } from '@/ui'
 import { masternodesClaim } from './claim'
 import { ListActions, ListView, useMnMatches } from './ListView'
@@ -17,7 +20,11 @@ export function MasternodesPage() {
   const { search } = controls
   const mode = useDecentralizedOnly()
   const list = useQuery(mnRowsQuery(net))
-  const data = list.data?.data
+  const early = useCrawlFirst(
+    net,
+    earlyAnswers() && list.data === undefined && !list.isError && !mode,
+  )
+  const data = (list.data ?? early)?.data
   const crawl = data?.radar != null && data.rows.some((r) => r.crawl)
   const stamps = useMemo(
     () => (data ? [data.dapi, data.radar].flatMap((s) => (s ? [s] : [])) : []),
@@ -67,7 +74,7 @@ export function MasternodesPage() {
             </p>
           )
         ) : null}
-        {list.isPending ? (
+        {list.isPending && !data ? (
           <Skeleton shape="row" count={8} />
         ) : list.isError || !data ? (
           <ErrorState error={list.error} onRetry={() => void list.refetch()} />
@@ -80,6 +87,19 @@ export function MasternodesPage() {
         )}
       </div>
     </PageFrame>
+  )
+}
+
+/**
+ * Index for the set (rule 4): Radar's crawl lists every masternode in one request, while DAPI's list is a stream of a
+ * megabyte or more. Until DAPI's lands, the crawl's rows stand alone, stamped as Radar's (`joinMnRows` without a list);
+ * the joined rows replace them.
+ */
+function useCrawlFirst(net: NetworkId, wanted: boolean) {
+  const crawl = useQuery({ ...radarQueries.masternodes(net), enabled: wanted })
+  return useMemo(
+    () => (wanted && crawl.data ? joinMnRows(crawl.data, undefined) : undefined),
+    [wanted, crawl.data],
   )
 }
 

@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
-import { mapSourced, type FallbackReason, type Sourced } from '@/data/envelope'
+import type { FallbackReason } from '@/data/envelope'
 import { useDecentralizedOnly } from '@/data/health'
-import { peQueries } from '@/data/pe/queries'
-import { platformTipQuery, type PlatformTip } from '@/data/sdk/queries'
+import { peQueries, peTipOf } from '@/data/pe/queries'
+import { platformTipQuery } from '@/data/sdk/queries'
 import { isDevnet, type NetworkId } from '@/lib/network'
 import { useAfterIdle } from '@/ui'
 
@@ -25,15 +25,7 @@ export function usePlatformTip(net: NetworkId) {
   const explorerTip = useQuery({
     ...peQueries.status(net),
     enabled: !sdkOnly && !sdkTip.data,
-    select: (s): Sourced<PlatformTip> =>
-      mapSourced(s, (d) => ({
-        height: d.tenderdash.block.height,
-        epoch: {
-          number: d.epoch.number,
-          firstBlockHeight: Number(d.epoch.firstBlockHeight),
-          startedAt: d.epoch.startTime,
-        },
-      })),
+    select: peTipOf,
   })
   if (sdkTip.data) return { data: sdkTip.data, isError: false, sdkOnly }
   const fallback: FallbackReason = sdkTip.isError ? 'sdk-down' : 'sdk-cold'

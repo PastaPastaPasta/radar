@@ -3,6 +3,7 @@ import { resolve } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createCoreClient } from '@/data/core/client'
 import { createCoreDecoder } from '@/data/core/decode'
+import { enableEarlyAnswers } from '@/data/early'
 import { instantLockView } from '@/data/core/lock-state'
 import { SourceError, isSourceError } from '@/data/errors'
 import type { HealthState } from '@/data/health'
@@ -279,5 +280,119 @@ describe('Decentralized only mode never falls back to a hosted index @W2-25 @X-0
     }
     for (const fn of Object.values(hyphen)) expect(fn).not.toHaveBeenCalled()
     for (const fn of Object.values(insight)) expect(fn).not.toHaveBeenCalled()
+  })
+})
+
+describe('indexed first: Hyphen answers while DAPI is asked (§4.7)', () => {
+  beforeEach(() => {
+    writeSourceMode('all')
+    enableEarlyAnswers()
+  })
+  afterEach(() => {
+    enableEarlyAnswers(false)
+  })
+
+  const current = (h: ReturnType<typeof setup>['hyphen'], behind = 0) =>
+    h.status.mockResolvedValue(
+      sourced('hyphen', {
+        blockHeight: BLOCK_HEIGHT + 10,
+        indices: { blocks: { indexedHeight: BLOCK_HEIGHT + 10 - behind, updatedAt: 0 } },
+      }),
+    )
+
+  it("gives Hyphen's checked transaction, stamped as standing in until DAPI answers", async () => {
+    const { core, hyphen } = setup()
+    hyphenHasTx(hyphen)
+    current(hyphen)
+    const tx = await core.indexedTx('mainnet', TXID)
+    expect(tx?.source).toBe('hyphen')
+    expect(tx?.fallback).toBe('dapi-cold')
+    expect(tx?.data.txid).toBe(TXID)
+    expect(tx?.data.height).toBe(BLOCK_HEIGHT)
+    // No block read for the time: DAPI's answer brings it.
+    expect(hyphen.block).not.toHaveBeenCalled()
+  })
+
+  it('refuses bytes that do not hash to the id asked for', async () => {
+    const { core, hyphen } = setup()
+    hyphenHasTx(hyphen)
+    current(hyphen)
+    const other = '11'.repeat(32)
+    await expect(core.indexedTx('mainnet', other)).rejects.toMatchObject({
+      kind: 'invalid-response',
+    })
+  })
+
+  it('shows nothing from an index that has fallen behind its own node', async () => {
+    const { core, hyphen } = setup()
+    hyphenHasTx(hyphen)
+    current(hyphen, 40)
+    expect(await core.indexedTx('mainnet', TXID)).toBeNull()
+  })
+
+  it("gives Hyphen's checked block", async () => {
+    const { core, hyphen } = setup()
+    current(hyphen)
+    hyphen.rawBlock.mockResolvedValue(sourced('hyphen', { rawblock }) as never)
+    hyphen.block.mockResolvedValue(
+      sourced('hyphen', { blockHeight: BLOCK_HEIGHT, asOfHeight: BLOCK_HEIGHT + 3 }) as never,
+    )
+    const block = await core.indexedBlock('mainnet', { hash: BLOCK })
+    expect(block?.fallback).toBe('dapi-cold')
+    expect(block?.data.hash).toBe(BLOCK)
+  })
+
+  it("gives Hyphen's newest rows in one request, unless they are hours old", async () => {
+    const now = Date.now()
+    const page = (top: number) =>
+      sourced('hyphen', {
+        items: [
+          {
+            blockHeight: 12,
+            blockHash: 'aa'.repeat(32),
+            blockTime: top,
+            txCount: 3,
+            blockSize: 400,
+          },
+          {
+            blockHeight: 11,
+            blockHash: 'bb'.repeat(32),
+            blockTime: top,
+            txCount: 1,
+            blockSize: 300,
+          },
+        ],
+        asOfHeight: 12,
+      })
+    const { core, hyphen } = setup()
+    current(hyphen)
+    hyphen.blocks.mockResolvedValue(page(now - 60_000))
+    const rows = await core.indexedLatestRows('mainnet', 2)
+    expect(hyphen.blocks).toHaveBeenCalledWith('mainnet', { limit: 2 }, undefined)
+    expect(rows?.fallback).toBe('dapi-cold')
+    expect(rows?.data.map((r) => r.height)).toEqual([12, 11])
+
+    hyphen.blocks.mockResolvedValue(page(now - 3 * 60 * 60_000))
+    expect(await core.indexedLatestRows('mainnet', 2)).toBeNull()
+  })
+
+  it('asks nothing while Hyphen is known stale, in Decentralized only mode, on a devnet, or when turned off', async () => {
+    const stale = setup({ hyphen: 'stale' })
+    expect(await stale.core.indexedTx('mainnet', TXID)).toBeNull()
+    expect(await stale.core.indexedLatestRows('mainnet', 20)).toBeNull()
+    expect(stale.hyphen.rawTx).not.toHaveBeenCalled()
+
+    const devnet = setup()
+    expect(await devnet.core.indexedBlock('devnet-ruby', { height: 5 })).toBeNull()
+
+    writeSourceMode('decentralized')
+    const off = setup()
+    expect(await off.core.indexedTx('mainnet', TXID)).toBeNull()
+    writeSourceMode('all')
+
+    enableEarlyAnswers(false)
+    const disabled = setup()
+    expect(await disabled.core.indexedTx('mainnet', TXID)).toBeNull()
+    expect(disabled.hyphen.rawTx).not.toHaveBeenCalled()
   })
 })

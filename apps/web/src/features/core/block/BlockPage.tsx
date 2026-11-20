@@ -37,6 +37,7 @@ import { useIndexHealth } from '@/data/index-health'
 import { StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { insQueries } from '@/data/insight/queries'
 import { parseBlockRef } from '@/lib/core/block-ref'
+import { useIndexedFirst } from '../indexed-first'
 
 export const TXS_PER_PAGE = 100
 
@@ -44,7 +45,15 @@ export function BlockPage({ id, page = 1 }: { id: string; page?: number }) {
   const { t } = useLingui()
   const net = useNetwork()
   const ref = parseBlockRef(id)
-  const block = useQuery({ ...coreQueries.block(net, ref ?? { height: 0 }), enabled: ref !== null })
+  const dapiBlock = useQuery({
+    ...coreQueries.block(net, ref ?? { height: 0 }),
+    enabled: ref !== null,
+  })
+  const block = useIndexedFirst(
+    dapiBlock,
+    coreQueries.indexedBlock(net, ref ?? { height: 0 }),
+    ref !== null,
+  )
   const height = ref && 'height' in ref ? ref.height : block.data?.data?.height
   useDocumentTitle(height === undefined ? t`Block` : t`Block ${formatInt(height)}`)
   const tipHeight = useFollowTip(net, {

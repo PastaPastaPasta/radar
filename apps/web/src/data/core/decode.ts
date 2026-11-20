@@ -31,11 +31,16 @@ function invalid(what: string, cause: unknown): SourceError {
 export function createCoreDecoder(load: () => Promise<WasmCore>): CoreDecoder & {
   /** X11 hash of an 80-byte header. */
   headerHash(header: Uint8Array, net: NetworkId): Promise<string>
+  /** Starts loading the wasm now, so a page whose first answer needs decoding doesn't wait for it after the answer. */
+  warm(): void
 } {
   let loaded: Promise<WasmCore> | undefined
   const wasm = () => (loaded ??= load())
 
   return {
+    warm() {
+      void wasm().catch(() => undefined)
+    },
     async block(bytes, net, expectHeight): Promise<DecodedBlock> {
       const core = await wasm()
       let raw: Wasm.DecodedBlock
