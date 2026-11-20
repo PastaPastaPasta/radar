@@ -105,6 +105,9 @@ msgstr "{outCount, plural, one {# Output} other {# Outputs}}"
 msgid "{types, plural, one {# type} other {# types}}"
 msgstr "{types, plural, one {# Typ} other {# Typen}}"
 
+msgid "A CoinJoin mix."
+msgstr "Ein CoinJoin-Mix."
+
 msgid "A contract’s groups with position, threshold and members."
 msgstr "Die Gruppen eines Vertrags mit Position, Schwellenwert und Mitgliedern."
 
@@ -263,6 +266,9 @@ msgstr "Coinbase-Payload"
 msgid "Coinbase transactions pay none"
 msgstr "Coinbase-Transaktionen zahlen keine"
 
+msgid "CoinJoin mixes pay none"
+msgstr "CoinJoin-Mixe zahlen keine"
+
 msgid "Collateral"
 msgstr "Collateral"
 
@@ -364,6 +370,9 @@ msgstr "DAPI"
 
 msgid "DAPI is busy. Open this page to load them."
 msgstr "DAPI ist ausgelastet. Öffne diese Seite, um sie zu laden."
+
+msgid "Dash Core relays a mix without a fee, so its inputs add up to exactly its outputs. Radar calls a transaction CoinJoin by that shape, the way Dash Core checks one: as many inputs as outputs, and every output a standard denomination paid to a plain address."
+msgstr "Dash Core leitet einen Mix ohne Gebühr weiter, daher ergeben seine Eingaben genau seine Ausgaben. Radar nennt eine Transaktion CoinJoin nach dieser Form, so wie Dash Core sie prüft: so viele Eingaben wie Ausgaben, und jede Ausgabe ist eine Standardstückelung an eine einfache Adresse."
 
 msgid "data"
 msgstr "Daten"
@@ -1151,6 +1160,9 @@ msgstr "Einstellungen"
 
 msgid "Settlement"
 msgstr "Abwicklung"
+
+msgid "Several wallets each put in coins of one standard size (10, 1, 0.1, 0.01 or 0.001 DASH, each with a ten-thousandth added) and take the same amounts back at new addresses, so no one can tell which output belongs to whom. A masternode coordinates the round."
+msgstr "Mehrere Wallets geben je Münzen einer Standardgröße ein (10, 1, 0,1, 0,01 oder 0,001 DASH, jeweils plus ein Zehntausendstel) und erhalten dieselben Beträge an neuen Adressen zurück, sodass niemand sagen kann, welche Ausgabe wem gehört. Ein Masternode koordiniert die Runde."
 
 msgid "Share index"
 msgstr "Anteilsindex"

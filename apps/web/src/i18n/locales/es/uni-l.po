@@ -105,6 +105,9 @@ msgstr "{outCount, plural, one {# salida} many {# de salidas} other {# salidas}}
 msgid "{types, plural, one {# type} other {# types}}"
 msgstr "{types, plural, one {# tipo} other {# tipos}}"
 
+msgid "A CoinJoin mix."
+msgstr "Una mezcla CoinJoin."
+
 msgid "A contract’s groups with position, threshold and members."
 msgstr "Los grupos de un contrato, con posición, umbral y miembros."
 
@@ -263,6 +266,9 @@ msgstr "Payload de coinbase"
 msgid "Coinbase transactions pay none"
 msgstr "Las transacciones coinbase no pagan ninguna"
 
+msgid "CoinJoin mixes pay none"
+msgstr "Las mezclas CoinJoin no pagan ninguna"
+
 msgid "Collateral"
 msgstr "Colateral"
 
@@ -364,6 +370,9 @@ msgstr "DAPI"
 
 msgid "DAPI is busy. Open this page to load them."
 msgstr "DAPI está ocupado. Abre esta página para cargarlos."
+
+msgid "Dash Core relays a mix without a fee, so its inputs add up to exactly its outputs. Radar calls a transaction CoinJoin by that shape, the way Dash Core checks one: as many inputs as outputs, and every output a standard denomination paid to a plain address."
+msgstr "Dash Core retransmite una mezcla sin comisión, así que sus entradas suman exactamente sus salidas. Radar llama CoinJoin a una transacción por esa forma, como la comprueba Dash Core: tantas entradas como salidas, y cada salida una denominación estándar pagada a una dirección simple."
 
 msgid "data"
 msgstr "datos"
@@ -1151,6 +1160,9 @@ msgstr "Ajustes"
 
 msgid "Settlement"
 msgstr "Liquidación"
+
+msgid "Several wallets each put in coins of one standard size (10, 1, 0.1, 0.01 or 0.001 DASH, each with a ten-thousandth added) and take the same amounts back at new addresses, so no one can tell which output belongs to whom. A masternode coordinates the round."
+msgstr "Varias carteras aportan cada una monedas de un tamaño estándar (10, 1, 0,1, 0,01 o 0,001 DASH, cada una más una diezmilésima) y recuperan los mismos importes en direcciones nuevas, de modo que nadie puede saber qué salida pertenece a quién. Un masternode coordina la ronda."
 
 msgid "Share index"
 msgstr "Índice de participación"

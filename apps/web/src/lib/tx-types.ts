@@ -1,5 +1,6 @@
 export type CoreTxType =
   | 'transfer'
+  | 'coinjoin'
   | 'data'
   | 'coinbase'
   | 'pro-reg'

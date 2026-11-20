@@ -92,6 +92,31 @@ test.describe('Transaction page', () => {
     await expect(page.locator('#out-0')).toBeVisible()
   })
 
+  test('calls a CoinJoin mix “CoinJoin”, not a payment, and says why it pays no fee @IN-05', async ({
+    page,
+  }) => {
+    await page.goto(`/tx/${TRANSFER}`)
+    const badge = page.locator('.rx-rec__kicker .rx-type').first()
+    await expect(badge).toHaveAttribute('data-type', 'coinjoin')
+    await expect(badge).toHaveText('CoinJoin')
+    const note = page.locator('[data-coinjoin-note]')
+    await expect(note).toContainText('A CoinJoin mix.')
+    await expect(note).toContainText('without a fee')
+    await expect(page.locator('.rx-kpis')).toContainText('CoinJoin mixes pay none')
+    await expectAccessible(page)
+  })
+
+  test('labels the CoinJoin mixes in a block’s transaction list @IN-04', async ({ page }) => {
+    await page.goto('/block/2570010')
+    const badge = page
+      .locator(`a[href="/tx/${TRANSFER}"]`)
+      .first()
+      .locator('xpath=ancestor::*[.//*[contains(@class, "rx-type")]][1]')
+      .locator('.rx-type')
+    await expect(badge).toHaveAttribute('data-type', 'coinjoin')
+    await expect(page.locator('.rx-type[data-type="coinjoin"]').first()).toHaveText('CoinJoin')
+  })
+
   test('opens at an output named in the link @IN-05', async ({ page }) => {
     await page.goto(`/tx/${TRANSFER}#out-1`)
     const row = page.locator('#out-1')

@@ -105,6 +105,9 @@ msgstr "{outCount, plural, one {# выход} few {# выхода} many {# вы�
 msgid "{types, plural, one {# type} other {# types}}"
 msgstr "{types, plural, one {# тип} few {# типа} many {# типов} other {# типа}}"
 
+msgid "A CoinJoin mix."
+msgstr "Микс CoinJoin."
+
 msgid "A contract’s groups with position, threshold and members."
 msgstr "Группы контракта: позиция, порог и участники."
 
@@ -263,6 +266,9 @@ msgstr "Полезная нагрузка coinbase"
 msgid "Coinbase transactions pay none"
 msgstr "Транзакции coinbase их не платят"
 
+msgid "CoinJoin mixes pay none"
+msgstr "Миксы CoinJoin не платят комиссию"
+
 msgid "Collateral"
 msgstr "Залог"
 
@@ -364,6 +370,9 @@ msgstr "DAPI"
 
 msgid "DAPI is busy. Open this page to load them."
 msgstr "DAPI занят. Откройте эту страницу, чтобы загрузить их."
+
+msgid "Dash Core relays a mix without a fee, so its inputs add up to exactly its outputs. Radar calls a transaction CoinJoin by that shape, the way Dash Core checks one: as many inputs as outputs, and every output a standard denomination paid to a plain address."
+msgstr "Dash Core передаёт микс без комиссии, поэтому сумма входов в точности равна сумме выходов. Radar называет транзакцию CoinJoin по этой форме, как её проверяет Dash Core: входов столько же, сколько выходов, и каждый выход — стандартный номинал на обычный адрес."
 
 msgid "data"
 msgstr "данные"
@@ -1151,6 +1160,9 @@ msgstr "Настройки"
 
 msgid "Settlement"
 msgstr "Подтверждение"
+
+msgid "Several wallets each put in coins of one standard size (10, 1, 0.1, 0.01 or 0.001 DASH, each with a ten-thousandth added) and take the same amounts back at new addresses, so no one can tell which output belongs to whom. A masternode coordinates the round."
+msgstr "Несколько кошельков вносят монеты одного стандартного размера (10, 1, 0,1, 0,01 или 0,001 DASH, к каждому добавлена одна десятитысячная) и получают те же суммы на новые адреса, так что никто не может сказать, какой выход чей. Раунд координирует мастернода."
 
 msgid "Share index"
 msgstr "Индекс доли"

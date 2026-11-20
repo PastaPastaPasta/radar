@@ -34,6 +34,7 @@ export const KIND_META: Record<EntityKind, KindMeta> = {
 
 export const TYPE_META: Record<CoreTxType | TransitionType | BatchType, KindMeta> = {
   transfer: { label: msg`Payment`, layer: 'core', icon: 'tx' },
+  coinjoin: { label: msg`CoinJoin`, layer: 'core', icon: 'swap' },
   data: { label: msg`Data`, layer: 'core', icon: 'doc' },
   coinbase: { label: msg`Coinbase`, layer: 'core', icon: 'coin' },
   'asset-lock': { label: msg`Asset lock`, layer: 'core', icon: 'cl' },

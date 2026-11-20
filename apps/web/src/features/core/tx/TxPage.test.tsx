@@ -25,6 +25,8 @@ const MAINNET = {
   assetlock: '2972859ef7fdc7a52397b7f844d69888414e22dcaa2be2b6e432a81c7b812cf6',
   assetunlock: '5d0c5900e0e0d260c7b952f2cf0496d274d538c755b1f56e21a72f42c315a63a',
 }
+/** The recorded mainnet transfer is a CoinJoin mix: nine inputs and nine outputs of 0.0100001 DASH, no fee. */
+const COINJOIN = MAINNET.transfer
 const MNHF = '46a47fe65c9fd29e9379f3f74020df33dabb1d4095c8da6b1fa05e508b74a491'
 const TESTNET_NORMAL = '92fe2c05fde07f7cb7d1e2189b352e2003f76b536e6b81d78458ac096c1e9cf6'
 /** Spends output 0 of `uprevtx`'s transaction in its own block-time neighbour; see the recorded Hyphen address history. */
@@ -138,6 +140,35 @@ describe('Transaction page', () => {
     expect(document.querySelector('#in-0')).not.toBeNull()
     expect(document.querySelector('#out-0')).not.toBeNull()
     expect(document.querySelector('[data-source="dapi"]')).not.toBeNull()
+  })
+
+  it('labels a CoinJoin mix CoinJoin, not Payment, and says why it pays no fee', async () => {
+    renderAt(`/tx/${COINJOIN}`)
+    const note = await waitFor(
+      () => {
+        const el = document.querySelector('[data-coinjoin-note]')
+        expect(el).not.toBeNull()
+        return el!
+      },
+      { timeout: 4000 },
+    )
+    expect(note).toHaveTextContent('A CoinJoin mix.')
+    expect(note).toHaveTextContent('without a fee')
+    const badge = document.querySelector('.rx-rec [data-type]')
+    expect(badge).toHaveAttribute('data-type', 'coinjoin')
+    expect(badge).toHaveTextContent('CoinJoin')
+    await waitFor(() => expect(screen.getByText('CoinJoin mixes pay none')).toBeInTheDocument(), {
+      timeout: 4000,
+    })
+  })
+
+  it('says nothing of CoinJoin on a payment', async () => {
+    renderAt(`/tx/${TESTNET_NORMAL}?network=testnet`)
+    await waitFor(() => expect(document.querySelector('.rx-rec [data-type]')).not.toBeNull(), {
+      timeout: 4000,
+    })
+    expect(document.querySelector('[data-coinjoin-note]')).toBeNull()
+    expect(document.querySelector('.rx-rec [data-type]')).toHaveAttribute('data-type', 'transfer')
   })
 
   it('counts one input and one output in the singular @IN-05', async () => {

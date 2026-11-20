@@ -45,16 +45,16 @@ export function createCoreDecoder(load: () => Promise<WasmCore>): CoreDecoder & 
         throw invalid('block', cause)
       }
       if (expectHeight !== undefined && expectHeight < bip34Height(net)) {
-        return mapBlock(raw, expectHeight)
+        return mapBlock(raw, expectHeight, net)
       }
       const height = blockHeightOf(raw)
       if (height === undefined) throw invalid('block', new Error(NO_HEIGHT))
-      return mapBlock(raw, height)
+      return mapBlock(raw, height, net)
     },
     async tx(bytes, net): Promise<DecodedTx> {
       const core = await wasm()
       try {
-        return mapTx(await core.decodeTx(bytes, wasmNetwork(net)))
+        return mapTx(await core.decodeTx(bytes, wasmNetwork(net)), net)
       } catch (cause) {
         throw invalid('transaction', cause)
       }

@@ -105,6 +105,9 @@ msgstr "{outCount, plural, one {# sortie} many {# de sorties} other {# sorties}}
 msgid "{types, plural, one {# type} other {# types}}"
 msgstr "{types, plural, one {# type} other {# types}}"
 
+msgid "A CoinJoin mix."
+msgstr "Un mixage CoinJoin."
+
 msgid "A contract’s groups with position, threshold and members."
 msgstr "Les groupes d’un contrat, avec position, seuil et membres."
 
@@ -263,6 +266,9 @@ msgstr "Charge utile coinbase"
 msgid "Coinbase transactions pay none"
 msgstr "Les transactions coinbase n’en paient aucun"
 
+msgid "CoinJoin mixes pay none"
+msgstr "Les mixages CoinJoin n’en paient pas"
+
 msgid "Collateral"
 msgstr "Collatéral"
 
@@ -364,6 +370,9 @@ msgstr "DAPI"
 
 msgid "DAPI is busy. Open this page to load them."
 msgstr "DAPI est occupé. Ouvrez cette page pour les charger."
+
+msgid "Dash Core relays a mix without a fee, so its inputs add up to exactly its outputs. Radar calls a transaction CoinJoin by that shape, the way Dash Core checks one: as many inputs as outputs, and every output a standard denomination paid to a plain address."
+msgstr "Dash Core relaie un mixage sans frais, donc ses entrées totalisent exactement ses sorties. Radar appelle une transaction CoinJoin d’après cette forme, comme Dash Core la vérifie : autant d’entrées que de sorties, et chaque sortie une dénomination standard versée à une adresse simple."
 
 msgid "data"
 msgstr "données"
@@ -1151,6 +1160,9 @@ msgstr "Paramètres"
 
 msgid "Settlement"
 msgstr "Règlement"
+
+msgid "Several wallets each put in coins of one standard size (10, 1, 0.1, 0.01 or 0.001 DASH, each with a ten-thousandth added) and take the same amounts back at new addresses, so no one can tell which output belongs to whom. A masternode coordinates the round."
+msgstr "Plusieurs portefeuilles apportent chacun des pièces d’une taille standard (10, 1, 0,1, 0,01 ou 0,001 DASH, chacune plus un dix-millième) et récupèrent les mêmes montants à de nouvelles adresses, de sorte que personne ne peut dire quelle sortie appartient à qui. Un masternode coordonne le tour."
 
 msgid "Share index"
 msgstr "Index de la part"
