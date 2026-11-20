@@ -4,6 +4,7 @@ import { getActiveNetwork } from './active-network'
 import { endpoint, sourceOff, type EndpointSource } from './endpoints'
 import type { HeightChain, SourceId, Sourced } from './envelope'
 import { SourceError, disabledByMode, type SourceErrorKind } from './errors'
+import { firstDataResponse } from './first-data'
 import { healthRegistry } from './health'
 import { queryLog } from './query-log'
 import type { NetworkId } from '@/lib/network'
@@ -253,15 +254,21 @@ async function readSourced<S extends z.ZodType, N extends 'throw' | 'null' = 'th
   try {
     let res: Response
     try {
-      res = await fetch(`${resolveUrl(url)}${req.probe ? PROBE_FRAGMENT : ''}`, {
-        method: req.method ?? 'GET',
-        headers: {
-          accept: 'application/json',
-          ...(req.body === undefined ? {} : { 'content-type': 'application/json' }),
-        },
-        body: req.body === undefined ? undefined : JSON.stringify(req.body),
-        signal: controller.signal,
-      })
+      const inlined =
+        (req.method ?? 'GET') === 'GET' && req.body === undefined
+          ? firstDataResponse(resolveUrl(url))
+          : undefined
+      res =
+        inlined ??
+        (await fetch(`${resolveUrl(url)}${req.probe ? PROBE_FRAGMENT : ''}`, {
+          method: req.method ?? 'GET',
+          headers: {
+            accept: 'application/json',
+            ...(req.body === undefined ? {} : { 'content-type': 'application/json' }),
+          },
+          body: req.body === undefined ? undefined : JSON.stringify(req.body),
+          signal: controller.signal,
+        }))
     } catch (cause) {
       throw interrupted(cause) ?? fail({ kind: 'network', cause })
     }
