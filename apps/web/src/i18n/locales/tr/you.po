@@ -346,6 +346,9 @@ msgstr "Platform SDK’nın burada ve bu tarayıcının depolamasında verdiği 
 msgid "Give it a name."
 msgstr "Ona bir ad verin."
 
+msgid "Go home"
+msgstr "Ana sayfaya git"
+
 msgid "Governance"
 msgstr "Yönetişim"
 
@@ -376,6 +379,9 @@ msgstr "Bağlantı kopyalandı"
 
 msgid "Lists come from indexes: Platform Explorer and Radar’s own crawler. Radar reads the rows from the index and then checks each row’s facts with proofs where it can; the checked value wins over the index’s. Without an index, you can still open anything whose ID you know. Decentralized only mode switches the indexes off to show exactly that: only what DAPI nodes and the Platform SDK can answer."
 msgstr "Listeler dizinlerden gelir: Platform Explorer ve Radar’ın kendi tarayıcısı. Radar satırları dizinden okur, ardından mümkün olduğunda her satırın bilgilerini kanıtlarla denetler; denetlenen değer dizinin değerine üstün gelir. Dizin olmadan da kimliğini bildiğiniz her şeyi açabilirsiniz. “Yalnızca merkeziyetsiz” modu, tam olarak bunu göstermek için dizinleri kapatır: yalnızca DAPI düğümlerinin ve Platform SDK’nın yanıtlayabildikleri."
+
+msgid "Loading the current version of Radar…"
+msgstr "Radar’ın güncel sürümü yükleniyor…"
 
 msgid "Log copied"
 msgstr "Günlük kopyalandı"
@@ -566,6 +572,9 @@ msgstr "GitHub’da Radar"
 msgid "Radar only reads. To top up an identity, register a name, or work with a token, a contract or a Platform address, use Bridge. To vote on a proposal or as a masternode, use Governance. Each link opens in a new tab and carries the network you were looking at."
 msgstr "Radar yalnızca okur. Bir kimliğe bakiye yüklemek, ad kaydetmek veya bir token, sözleşme ya da Platform adresiyle çalışmak için Bridge’i kullanın. Bir teklife veya masternode olarak oy vermek için Governance’ı kullanın. Her bağlantı yeni bir sekmede açılır ve baktığınız ağı taşır."
 
+msgid "Radar was probably updated while this tab was open, so part of the page it asked for no longer exists. Reload to get the current version."
+msgstr "Radar büyük olasılıkla bu sekme açıkken güncellendi, bu yüzden istenen sayfanın bir kısmı artık yok. Güncel sürümü almak için yeniden yükleyin."
+
 msgid "Radar’s code is open source under the MIT licence. Where it adapts code or data from another project, that project is listed here and in the file it lives in. Libraries installed through npm and cargo keep their own licences."
 msgstr "Radar’ın kodu MIT lisansıyla açık kaynaktır. Başka bir projeden kod veya veri uyarladığı yerde, o proje burada ve bulunduğu dosyada listelenir. npm ve cargo ile kurulan kitaplıklar kendi lisanslarını korur."
 
@@ -676,8 +685,8 @@ msgstr "DASH tutarlarının yanında USD değerini göster"
 msgid "Show times in UTC"
 msgstr "Saatleri UTC olarak göster"
 
-msgid "Something in the page broke. The rest of Radar still works."
-msgstr "Sayfada bir şey bozuldu. Radar’ın geri kalanı çalışmaya devam ediyor."
+msgid "Something in this page broke. The rest of Radar still works: reload to try again, or start from the home page."
+msgstr "Bu sayfada bir şey bozuldu. Radar’ın geri kalanı çalışmaya devam ediyor: yeniden denemek için sayfayı yenileyin ya da ana sayfadan başlayın."
 
 msgid "Source"
 msgstr "Kaynak"
@@ -688,14 +697,14 @@ msgstr "Kaynaklar"
 msgid "Sources and licences"
 msgstr "Kaynaklar ve lisanslar"
 
+msgid "Technical detail"
+msgstr "Teknik ayrıntı"
+
 msgid "Test coins have no value, so Testnet and devnets never show USD."
 msgstr "Test coin’lerin değeri yoktur; bu yüzden Testnet ve devnet’lerde USD hiç gösterilmez."
 
 msgid "Text that isn’t translated yet appears in English. Hashes, IDs and amounts are never translated."
 msgstr "Henüz çevrilmemiş metinler İngilizce görünür. Hash’ler, kimlik numaraları ve tutarlar asla çevrilmez."
-
-msgid "The connection dropped while it loaded. Try again."
-msgstr "Yüklenirken bağlantı koptu. Tekrar dene."
 
 msgid "The current epoch"
 msgstr "Geçerli epoch"
@@ -788,9 +797,6 @@ msgstr "Radar’ın ne sorduğunu ve ona ne söylendiğini denetleme araçları.
 
 msgid "Total credits on Platform"
 msgstr "Platform’daki toplam kredi"
-
-msgid "Try again"
-msgstr "Tekrar dene"
 
 msgid "Unit for amounts"
 msgstr "Tutarlar için birim"

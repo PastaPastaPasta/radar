@@ -1,4 +1,5 @@
 import { useEffect, useState, type ComponentType, type ReactNode } from 'react'
+import { retryChunk } from '@/lib/chunk-recovery'
 
 /**
  * A component whose code loads on first mount, showing `fallback` until it arrives. Use it instead of
@@ -14,7 +15,7 @@ export function deferred<P extends object>(
   let failed: { error: unknown } | undefined
   let loading: Promise<void> | undefined
   const start = () =>
-    (loading ??= load().then(
+    (loading ??= retryChunk(load).then(
       (component) => {
         loaded = component
       },

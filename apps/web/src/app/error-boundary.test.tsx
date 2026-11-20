@@ -81,14 +81,56 @@ describe('the page error boundary', () => {
     vi.unstubAllGlobals()
   })
 
-  it('says a chunk that failed while online could not be loaded @NX-77', () => {
-    broken.error = new TypeError('error loading dynamically imported module')
+  it('names what broke behind a disclosure, and offers Reload and Go home', () => {
     render(
       <ErrorBoundary>
         <Page />
       </ErrorBoundary>,
     )
-    expect(screen.getByRole('status')).toHaveTextContent('This page couldn’t be loaded')
+    const page = screen.getByRole('alert')
+    expect(page).toHaveAttribute('data-error-page', 'error')
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      'This page couldn’t be shown',
+    )
+    expect(screen.getByRole('button', { name: 'Reload' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Go home' })).toHaveAttribute('href', '/')
+    expect(page.querySelector('details[data-error-detail]')).toHaveTextContent(
+      'Error: the page broke',
+    )
+    expect(page.querySelector('details')).not.toHaveAttribute('open')
+  })
+
+  it('retries a chunk that failed online, then reloads once, then shows the page that says so', () => {
+    sessionStorage.clear()
+    broken.error = new TypeError('Failed to fetch dynamically imported module: /assets/gone.js')
+    const reload = vi.fn()
+    vi.stubGlobal('location', { ...window.location, reload, search: '?network=testnet' })
+    const first = render(
+      <ErrorBoundary>
+        <Page />
+      </ErrorBoundary>,
+    )
+    expect(reload).toHaveBeenCalledOnce()
+    expect(screen.getByRole('status')).toHaveTextContent('Loading the current version of Radar')
+    first.unmount()
+
+    render(
+      <ErrorBoundary>
+        <Page />
+      </ErrorBoundary>,
+    )
+    expect(reload).toHaveBeenCalledOnce()
+    const page = screen.getByRole('status')
+    expect(page).toHaveAttribute('data-error-page', 'chunk')
+    expect(page).toHaveTextContent('This page couldn’t be loaded')
+    expect(page).toHaveTextContent('Radar was probably updated')
+    expect(page.querySelector('details')).toBeNull()
+    expect(screen.getByRole('link', { name: 'Go home' })).toHaveAttribute(
+      'href',
+      '/?network=testnet',
+    )
+    vi.unstubAllGlobals()
+    sessionStorage.clear()
   })
 })
 
@@ -107,10 +149,5 @@ describe('a page whose code fails to load offline @NX-77', () => {
     setOnline(false)
     window.dispatchEvent(failedImport('Failed to fetch dynamically imported module: /assets/x.js'))
     expect(sessionStorage.getItem(KEY)).toBe('1')
-  })
-
-  it('lets the router reload once while online, when a newer build replaced the file', () => {
-    window.dispatchEvent(failedImport('Failed to fetch dynamically imported module: /assets/x.js'))
-    expect(sessionStorage.getItem(KEY)).toBeNull()
   })
 })

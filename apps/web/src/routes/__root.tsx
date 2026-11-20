@@ -1,6 +1,6 @@
 import { createRootRouteWithContext } from '@tanstack/react-router'
 import { activateNetwork, activateSourceMode, networkMiddlewares, rootSearch } from '@/app/search'
-import { AppShell, NotFoundPage } from '@/shell'
+import { AppShell, NotFoundPage, RootError } from '@/shell'
 import type { RouterContext } from '../router'
 
 export const Route = createRootRouteWithContext<RouterContext>()({
@@ -12,5 +12,6 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     activateNetwork(search)
   },
   component: AppShell,
+  errorComponent: RootError,
   notFoundComponent: NotFoundPage,
 })

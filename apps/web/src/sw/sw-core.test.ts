@@ -168,6 +168,26 @@ describe('respond', () => {
     expect(storage.stores.size).toBe(0)
   })
 
+  it('never answers an online page with the cached shell, so a reload after a deploy gets the new file names', async () => {
+    const { env, fetched } = setup()
+    await precache(env)
+    fetched.length = 0
+    const saved = await respond(env, navigation('/saved'))!
+    expect(fetched).toEqual(['/saved'])
+    expect(saved.status).toBe(200)
+  })
+
+  it('does not store a hashed file the server no longer has, so the next build can be asked for it', async () => {
+    const { env, storage } = setup()
+    const missing: SwEnv = {
+      ...env,
+      fetch: () => Promise.resolve(new Response('', { status: 404 })),
+    }
+    const res = await respond(missing, get('/assets/Gone-ZZZ.js'))!
+    expect(res.status).toBe(404)
+    expect((await storage.open(cacheName('v1'))).entries.size).toBe(0)
+  })
+
   it('answers a page with the offline page when the network fails', async () => {
     const { env } = setup(false)
     const res = await respond(env, navigation('/identity/abc'))!

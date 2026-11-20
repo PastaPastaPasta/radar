@@ -1,5 +1,25 @@
 import { t } from '@lingui/core/macro'
-import { Component, useEffect, type ErrorInfo, type ReactNode } from 'react'
+import { useRouter, type ErrorComponentProps } from '@tanstack/react-router'
+import { Component, useEffect, useState, type ErrorInfo, type ReactNode } from 'react'
+import {
+  countRouterReloads,
+  guardRouterReloads,
+  isChunkFailure,
+  mayReloadForChunk,
+  onPreloadError,
+  reloadForChunk,
+} from '@/lib/chunk-recovery'
+import { Icon } from '@/ui/icon'
+
+export { isChunkFailure }
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('vite:preloadError', (event) => {
+    onPreloadError(event)
+  })
+  countRouterReloads()
+  guardRouterReloads()
+}
 
 interface Props {
   children: ReactNode
@@ -10,64 +30,157 @@ interface State {
   error: Error | null
 }
 
-const CHUNK_FAILURE =
-  /dynamically imported module|importing a module script failed|ChunkLoadError|Loading (CSS )?chunk/i
+const online = () => typeof navigator === 'undefined' || navigator.onLine
 
-/** A page's code that could not be fetched: the connection dropped, or a newer build replaced the file. */
-export const isChunkFailure = (error: Error): boolean =>
-  CHUNK_FAILURE.test(`${error.name} ${error.message}`)
+/** The failures already retried once in this page load, by message. */
+const retried = new Set<string>()
 
-/** What an error means for the reader: nothing is wrong with the page, only the connection. */
-const isOffline = (error: Error): boolean =>
-  (typeof navigator !== 'undefined' && !navigator.onLine) || isChunkFailure(error)
+type Recovery = 'retrying' | 'reloading' | 'failed'
 
 /**
- * The router reloads the page once when a page's code fails to load. Offline, that reload ends on the browser's own
- * error page, so the failure is marked as already tried and the offline notice shows instead.
+ * A failed chunk is retried once, then the page reloads once into the current build, then the error page shows. Offline
+ * nothing is tried: the page waits for the connection.
  */
-export function keepPageWhenOffline(event: Event): void {
-  const error = (event as Event & { payload?: unknown }).payload
-  if (navigator.onLine || !(error instanceof Error)) return
-  try {
-    sessionStorage.setItem(`tanstack_router_reload:${error.message}`, '1')
-  } catch {
-    // Storage blocked: the router's reload goes ahead.
-  }
-}
-if (typeof window !== 'undefined') window.addEventListener('vite:preloadError', keepPageWhenOffline)
-
-/** A failed chunk is not fetched again by React or the router, so that page starts over. */
-function recover(error: Error, reset: () => void): void {
-  if (isChunkFailure(error)) window.location.reload()
-  else reset()
-}
-
-function Offline({ error, reset }: { error: Error; reset: () => void }) {
-  const online = typeof navigator === 'undefined' || navigator.onLine
+function useChunkRecovery(error: Error, retry: () => void): Recovery {
+  const chunk = isChunkFailure(error)
+  const [state] = useState<Recovery>(() => {
+    if (!chunk || !online()) return 'failed'
+    if (!retried.has(error.message)) return 'retrying'
+    return mayReloadForChunk(error) ? 'reloading' : 'failed'
+  })
   useEffect(() => {
-    const retry = () => recover(error, reset)
-    window.addEventListener('online', retry)
-    return () => {
-      window.removeEventListener('online', retry)
+    if (state === 'retrying') {
+      retried.add(error.message)
+      retry()
+    } else if (state === 'reloading') {
+      reloadForChunk(error)
     }
-  }, [error, reset])
+  }, [state, error, retry])
+  return state
+}
+
+function useTitle(title: string) {
+  useEffect(() => {
+    document.title = `${title} · Radar`
+  }, [title])
+}
+
+/** Home on the network the page was on, loaded in full so a stale build's code is not asked for again. */
+function homeHref(): string {
+  const network = new URLSearchParams(window.location.search).get('network')
+  return network ? `/?${new URLSearchParams({ network }).toString()}` : '/'
+}
+
+const keys = new WeakMap<Error, number>()
+let nextKey = 0
+/** Each failure gets a fresh page, so a retry that fails again starts the recovery's next step. */
+const keyOf = (error: Error) => {
+  let k = keys.get(error)
+  if (k === undefined) keys.set(error, (k = nextKey++))
+  return k
+}
+
+type Kind = 'chunk' | 'offline' | 'error'
+
+function kindOf(error: Error): Kind {
+  if (!online()) return 'offline'
+  return isChunkFailure(error) ? 'chunk' : 'error'
+}
+
+function ErrorPage({ error, retry }: { error: Error; retry: () => void }) {
+  const kind = kindOf(error)
+  const recovery = useChunkRecovery(error, retry)
+
+  useEffect(() => {
+    if (kind !== 'offline') return
+    const back = () => {
+      if (isChunkFailure(error)) window.location.reload()
+      else retry()
+    }
+    window.addEventListener('online', back)
+    return () => {
+      window.removeEventListener('online', back)
+    }
+  }, [kind, error, retry])
+
+  const copy = {
+    offline: {
+      title: t`You’re offline`,
+      body: t`This page loads when the connection returns. Radar will try again by itself.`,
+    },
+    chunk: {
+      title: t`This page couldn’t be loaded`,
+      body: t`Radar was probably updated while this tab was open, so part of the page it asked for no longer exists. Reload to get the current version.`,
+    },
+    error: {
+      title: t`This page couldn’t be shown`,
+      body: t`Something in this page broke. The rest of Radar still works: reload to try again, or start from the home page.`,
+    },
+  }[kind]
+  useTitle(copy.title)
+
+  if (kind === 'chunk' && recovery !== 'failed') {
+    return (
+      <div role="status" aria-busy="true" data-error-page="recovering" className="rx-empty">
+        <p className="rx-empty__t">{t`Loading the current version of Radar…`}</p>
+      </div>
+    )
+  }
+
   return (
-    <div role="status" data-offline-notice className="grid gap-3">
-      <h1 className="text-2xl font-semibold">
-        {online ? t`This page couldn’t be loaded` : t`You’re offline`}
-      </h1>
-      <p>
-        {online
-          ? t`The connection dropped while it loaded. Try again.`
-          : t`This page loads when the connection returns. Radar will try again by itself.`}
-      </p>
-      <p>
-        <button type="button" onClick={() => recover(error, reset)}>
-          {t`Try again`}
+    <article
+      role={kind === 'error' ? 'alert' : 'status'}
+      data-error-page={kind}
+      data-offline-notice={kind === 'offline' ? '' : undefined}
+      className="rx-empty rx-empty--error"
+    >
+      <span className="rx-empty__tile">
+        <Icon name={kind === 'offline' ? 'globe' : 'alert'} />
+      </span>
+      <h1 className="rx-empty__t text-2xl">{copy.title}</h1>
+      <p className="rx-empty__b">{copy.body}</p>
+      <p className="flex flex-wrap justify-center gap-2">
+        <button
+          type="button"
+          className="dh-btn dh-btn--primary"
+          onClick={() => {
+            window.location.reload()
+          }}
+        >
+          {t`Reload`}
         </button>
+        <a
+          href={homeHref()}
+          className="dh-btn"
+          onClick={(e) => {
+            e.preventDefault()
+            window.location.assign(homeHref())
+          }}
+        >
+          {t`Go home`}
+        </a>
       </p>
-    </div>
+      {kind === 'error' ? (
+        <details className="rx-empty__b text-left" data-error-detail>
+          <summary>{t`Technical detail`}</summary>
+          <code className="break-all">
+            {error.name}: {error.message}
+          </code>
+        </details>
+      ) : null}
+    </article>
   )
+}
+
+/** The router's error component for every route: the branded page, inside the shell. */
+export function RouteError({ error, reset }: ErrorComponentProps) {
+  const router = useRouter({ warn: false }) as ReturnType<typeof useRouter> | undefined
+  const [retry] = useState(() => () => {
+    if (router) void router.invalidate()
+    else reset()
+  })
+  const err = error instanceof Error ? error : new Error(String(error))
+  return <ErrorPage key={keyOf(err)} error={err} retry={retry} />
 }
 
 export class ErrorBoundary extends Component<Props, State> {
@@ -89,17 +202,6 @@ export class ErrorBoundary extends Component<Props, State> {
     const { error } = this.state
     if (!error) return this.props.children
     if (this.props.fallback) return this.props.fallback(error, this.reset)
-    if (isOffline(error)) return <Offline error={error} reset={this.reset} />
-    return (
-      <div role="alert" className="grid gap-3">
-        <h1 className="text-2xl font-semibold">{t`This page couldn’t be shown`}</h1>
-        <p>{t`Something in the page broke. The rest of Radar still works.`}</p>
-        <p>
-          <button type="button" onClick={this.reset}>
-            {t`Try again`}
-          </button>
-        </p>
-      </div>
-    )
+    return <ErrorPage key={keyOf(error)} error={error} retry={this.reset} />
   }
 }

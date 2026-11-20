@@ -1,6 +1,6 @@
 import { t } from '@lingui/core/macro'
 import { Outlet, useRouterState } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { ErrorBoundary } from '@/app/error-boundary'
 import { GlobalMounts } from '@/app/global-mounts'
 import { NetworkGate } from '@/app/network-context'
@@ -31,7 +31,8 @@ function RouteAnnouncer() {
   )
 }
 
-export function AppShell() {
+/** The frame of every page. `children` stands in for the route's page, as for an error the root route caught. */
+export function AppShell({ children }: { children?: ReactNode }) {
   const { locale } = useLocale()
   useSpaLinks()
   useRenderedNetworkSync()
@@ -54,13 +55,13 @@ export function AppShell() {
             <main key={locale} id="main" tabIndex={-1} className="dh-container min-h-[60vh] py-6">
               <SectionNav />
               <ErrorBoundary>
-                <NetworkGate>
-                  <Outlet />
-                </NetworkGate>
+                <NetworkGate>{children ?? <Outlet />}</NetworkGate>
               </ErrorBoundary>
             </main>
             <ShellFooter />
-            <CommandPalette />
+            <ErrorBoundary fallback={() => null}>
+              <CommandPalette />
+            </ErrorBoundary>
             <GlobalMounts />
           </ShortcutsProvider>
         </CommandPaletteProvider>
