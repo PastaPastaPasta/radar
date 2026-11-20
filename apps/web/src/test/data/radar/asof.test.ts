@@ -173,6 +173,8 @@ describe('radar status', () => {
     const body = await fixtureBody<{
       networks: Record<'mainnet' | 'testnet', { chain: { updated: number } }>
     }>('radar', 'global', 'status')
+    // The recorded times as they are, without the fixture server's replay of the chain reading's age.
+    server.use(http.get(`${BASE}/status`, () => HttpResponse.json(body)))
     const main = await radar.status(undefined, 'mainnet')
     const test = await radar.status(undefined, 'testnet')
     expect(main.asOf).toBe(body.networks.mainnet.chain.updated * 1000)

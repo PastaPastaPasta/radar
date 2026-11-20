@@ -52,6 +52,34 @@ function withNewBlocks(url: URL, body: unknown): unknown {
   return { ...list, resultSet: [...newer, ...list.resultSet].slice(0, list.resultSet.length) }
 }
 
+interface RecordedStatus {
+  networks?: Record<string, { chain?: { updated?: number } }>
+}
+
+/**
+ * Radar's status answers with its chain reading as old as it was when recorded, by the clock in use (real, or pinned
+ * by a test), so the reference-tip rule (`CRAWL_TIP_MAX_AGE_MS` in `data/health-queries.ts`) sees the crawler keeping
+ * up, as it was. Everything else in the document keeps its recorded times.
+ */
+function withChainAge(url: URL, body: unknown, recordedAt: string): unknown {
+  const status = body as RecordedStatus
+  const recorded = Date.parse(recordedAt) / 1000
+  if (!url.pathname.endsWith('/api/v1/status') || !status?.networks || !Number.isFinite(recorded))
+    return body
+  const shift = Date.now() / 1000 - recorded
+  return {
+    ...status,
+    networks: Object.fromEntries(
+      Object.entries(status.networks).map(([net, n]) => [
+        net,
+        n.chain?.updated === undefined
+          ? n
+          : { ...n, chain: { ...n.chain, updated: Math.round(n.chain.updated + shift) } },
+      ]),
+    ),
+  }
+}
+
 function serve(method: 'GET' | 'POST') {
   return async ({ request }: { request: Request }): Promise<Response> => {
     // A probe's fragment tags the request; recordings are keyed without it.
@@ -71,7 +99,7 @@ function serve(method: 'GET' | 'POST') {
     }
     const headers = new Headers(fixture.headers)
     if (!headers.has('content-type')) headers.set('content-type', 'application/json')
-    const body = withNewBlocks(parsed, fixture.body)
+    const body = withChainAge(parsed, withNewBlocks(parsed, fixture.body), fixture.recordedAt)
     return new HttpResponse(JSON.stringify(body), { status: fixture.status, headers })
   }
 }
