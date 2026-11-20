@@ -9,6 +9,7 @@ import {
   FIRST_DATA_MAX_AGE_MS,
   resetFirstDataForTests,
 } from '@/data/first-data'
+import { healthRegistry, resetHealthRegistry } from '@/data/health'
 import { hyphen } from '@/data/hyphen/client'
 import { writeSourceMode } from '@/lib/source-mode'
 import { FixtureDapiTransport } from '@/test/msw/dapi-transport'
@@ -38,9 +39,15 @@ function inline(data: unknown) {
   const el = document.createElement('script')
   el.type = 'application/json'
   el.id = FIRST_DATA_ELEMENT_ID
-  el.textContent = JSON.stringify(data)
+  el.textContent = typeof data === 'string' ? data : JSON.stringify(data)
   document.body.append(el)
 }
+
+/** The page as the edge builds it: when it built it, and each read with when the edge read it from Hyphen. */
+const page = (at: number, fetchedAt = at - 5_000, which: Record<string, unknown> = reads) => ({
+  at,
+  reads: Object.fromEntries(Object.entries(which).map(([k, body]) => [k, { body, fetchedAt }])),
+})
 
 const fetchMock = vi.fn((url: string) => {
   const found = reads[new URL(url).pathname.replace('/testnet/', '/mainnet/')]
@@ -54,6 +61,7 @@ beforeEach(() => {
   vi.stubGlobal('fetch', fetchMock)
   writeSourceMode('all')
   enableEarlyAnswers()
+  resetHealthRegistry()
 })
 
 afterEach(() => {
@@ -64,8 +72,9 @@ afterEach(() => {
 })
 
 describe('first data the edge inlined', () => {
-  it("answers the tx page's indexed-first read without asking Hyphen again, labelled as today", async () => {
-    inline({ reads })
+  it("answers the tx page's indexed-first read without asking Hyphen again, labelled and timed as the edge read it", async () => {
+    const at = Date.now()
+    inline(page(at, at - 5_000))
     const core = createCoreClient({
       transport: () => new FixtureDapiTransport(),
       decoder,
@@ -79,32 +88,48 @@ describe('first data the edge inlined', () => {
     expect(tx?.proved).toBe(false)
     expect(tx?.data.txid).toBe(TXID)
     expect(tx?.data.height).toBe(BLOCK_HEIGHT)
+    expect(tx?.fetchedAt).toBe(at - 5_000)
     expect(fetchMock).not.toHaveBeenCalled()
     expect(document.getElementById(FIRST_DATA_ELEMENT_ID)).toBeNull()
   })
 
-  it("serves the probe's status read too, and reads what was not inlined from the network", async () => {
-    inline({ reads: { '/x/hy/mainnet/status': reads['/x/hy/mainnet/status'] } })
-    const status = await hyphen.status('mainnet', undefined, undefined, { probe: true })
-    expect(status.data.blockHeight).toBe(2571151)
-    expect(status.height).toBeDefined()
+  it('is no round trip to Hyphen, so it tells the health registry nothing', async () => {
+    inline(page(Date.now()))
+    await hyphen.tx('mainnet', TXID)
     expect(fetchMock).not.toHaveBeenCalled()
-    await hyphen.rawTx('mainnet', TXID)
+    expect(healthRegistry.get('mainnet', 'hyphen').lastOkAt).toBeUndefined()
+  })
+
+  it('never answers the probe, whose job is to measure Hyphen itself', async () => {
+    inline(page(Date.now()))
+    await hyphen.status('mainnet', undefined, undefined, { probe: true })
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    await hyphen.status('mainnet')
     expect(fetchMock).toHaveBeenCalledTimes(1)
   })
 
-  it('reads the network once the inlined answers are older than the edge would keep them', async () => {
-    vi.useFakeTimers({ toFake: ['Date'] })
-    inline({ reads })
+  it('answers each read once, so a poll in the first seconds asks Hyphen', async () => {
+    inline(page(Date.now()))
     await hyphen.tx('mainnet', TXID)
     expect(fetchMock).not.toHaveBeenCalled()
-    vi.setSystemTime(Date.now() + FIRST_DATA_MAX_AGE_MS + 1)
     await hyphen.tx('mainnet', TXID)
     expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('reads the network once the page is older than the window, counted from when the edge built it', async () => {
+    inline(page(Date.now() - FIRST_DATA_MAX_AGE_MS - 1))
+    await hyphen.tx('mainnet', TXID)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    resetFirstDataForTests()
+    vi.useFakeTimers({ toFake: ['Date'] })
+    inline(page(Date.now()))
+    vi.setSystemTime(Date.now() + FIRST_DATA_MAX_AGE_MS + 1)
+    await hyphen.rawTx('mainnet', TXID)
+    expect(fetchMock).toHaveBeenCalledTimes(2)
   })
 
   it('is never used in Decentralized only mode, and ignores anything but pass-through paths', async () => {
-    inline({ reads: { ...reads, 'https://evil.example/x': {} } })
+    inline(page(Date.now(), Date.now(), { ...reads, 'https://evil.example/x': {} }))
     writeSourceMode('decentralized')
     await expect(hyphen.tx('mainnet', TXID)).rejects.toMatchObject({ kind: 'disabled-by-mode' })
     writeSourceMode('all')
@@ -113,19 +138,19 @@ describe('first data the edge inlined', () => {
   })
 
   it('is left to production: fixture builds and page tests read what they recorded', async () => {
-    inline({ reads })
+    inline(page(Date.now()))
     enableEarlyAnswers(false)
     await hyphen.tx('mainnet', TXID)
     expect(fetchMock).toHaveBeenCalledTimes(1)
   })
 
-  it('reads the network when the inlined element is not JSON', async () => {
-    const el = document.createElement('script')
-    el.type = 'application/json'
-    el.id = FIRST_DATA_ELEMENT_ID
-    el.textContent = '{not json'
-    document.body.append(el)
+  it('reads the network when the element is not JSON or does not say when the edge built it', async () => {
+    inline('{not json')
     await hyphen.tx('mainnet', TXID)
-    expect(fetchMock).toHaveBeenCalledTimes(1)
+    resetFirstDataForTests()
+    document.getElementById(FIRST_DATA_ELEMENT_ID)?.remove()
+    inline({ reads: page(Date.now()).reads })
+    await hyphen.tx('mainnet', TXID)
+    expect(fetchMock).toHaveBeenCalledTimes(2)
   })
 })
