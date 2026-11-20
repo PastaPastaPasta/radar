@@ -97,18 +97,17 @@ Outside `apps/web`: `packages/core-decode` (Rust → wasm), `workers/edge` (rada
 
 Enforced by `import-x/no-restricted-paths` zones in `eslint.config.js` (added by WP-0, §11).
 
-| Module               | May import                                                                                                                                 | Must not import                                                                                                                                                                      |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `lib/**`             | nothing internal; small pure deps (`@noble/*`)                                                                                             | React, `data`, `ui`, `features`                                                                                                                                                      |
-| `data/**`            | `lib`, `data/**`                                                                                                                           | React (except `data/health.ts`, `data/index-health.ts`, `data/hyphen/fit.ts`, `data/query/batch.ts` and `data/core/seen-pending.ts`, which export hooks), `ui`, `features`, `routes` |
-| `data/sdk/worker/**` | `lib`, `data/sdk/methods.ts` (and `data/sdk/methods/*.ts` through it), `@dashevo/evo-sdk`, `comlink`                                       | anything else (no React, no DOM)                                                                                                                                                     |
-| `ui/**`              | `lib`, `i18n`, type-only `data/envelope.ts`, `data/health.ts` (`useSourceHealth`)                                                          | `features`, `routes`, other `data`                                                                                                                                                   |
-| `features/<x>/**`    | `ui`, `data`, `lib`, `i18n`, `features/entity`, `features/search` (their `index.ts` only)                                                  | other features' internals                                                                                                                                                            |
-| `routes/**`          | `features/*/index.ts`, `app/*`, `data/query/*`, `data/*/queries.ts` (for loaders), `data/masternodes/filter.ts` (the shared filter schema) | `ui` internals, clients directly                                                                                                                                                     |
-| `shell/**`           | `ui`, `lib`, `i18n`, `app`, `features/search` (palette)                                                                                    | `data` clients                                                                                                                                                                       |
+| Module | May import | Must not import |
+|---|---|---|
+| `lib/**` | nothing internal; small pure deps (`@noble/*`) | React, `data`, `ui`, `features` |
+| `data/**` | `lib`, `data/**` | React (except `data/health.ts`, `data/index-health.ts`, `data/hyphen/fit.ts`, `data/query/batch.ts` and `data/core/seen-pending.ts`, which export hooks), `ui`, `features`, `routes` |
+| `data/sdk/worker/**` | `lib`, `data/sdk/methods.ts` (and `data/sdk/methods/*.ts` through it), `@dashevo/evo-sdk`, `comlink` | anything else (no React, no DOM) |
+| `ui/**` | `lib`, `i18n`, type-only `data/envelope.ts`, `data/health.ts` (`useSourceHealth`) | `features`, `routes`, other `data` |
+| `features/<x>/**` | `ui`, `data`, `lib`, `i18n`, `features/entity`, `features/search` (their `index.ts` only) | other features' internals |
+| `routes/**` | `features/*/index.ts`, `app/*`, `data/query/*`, `data/*/queries.ts` (for loaders), `data/masternodes/filter.ts` (the shared filter schema) | `ui` internals, clients directly |
+| `shell/**` | `ui`, `lib`, `i18n`, `app`, `features/search` (palette) | `data` clients |
 
 `eslint.boundaries.js` also rejects:
-
 - `proved: true` literals (also behind `as const` or `satisfies`) and `{ proved }` shorthand outside `data/sdk/**`; `ui/kit/**` and tests are exempt. A variable assigned `true` and passed as `proved: flag` isn't caught; review does that;
 - `fetch`, `window.fetch`, `globalThis.fetch` and `self.fetch` anywhere outside `data/**` and tests (one scope for both rules);
 - `queryKey` arrays behind `as const`, `satisfies` or `<const>`, as well as plain ones (§5.1);
@@ -119,7 +118,6 @@ The lint rules are tested in `apps/web/src/data/boundaries.test.ts`.
 **Entry-chunk rule.** Rollup puts a module in the entry chunk when anything in the entry reaches it, even through a barrel, and keeps it there once any lazy chunk uses it. So code loaded with the app (shell, `app/`, the search and entity registries) imports from `@/ui/base`, never from the `@/ui` barrel, which also re-exports the hover card, charts and art. `features/entity` and `features/search` do the same. Pages and routes keep using `@/ui`. Nothing in the entry chunk may import a feature page, a resolver's data module, the Hyphen, DAPI or SDK clients, protobuf, charts, QR or a message catalog; they load from route chunks or on first use (`await import(...)`). `pnpm size` counts the entry chunk and the vendored shell script against a 220 kB gzipped budget.
 
 Two rules carry most of the weight:
-
 - **Features never call `fetch`, gRPC or the SDK directly.** They use `data/*/queries.ts` factories or the `data/core` and `data/sdk` clients. That keeps every figure inside an envelope.
 - **`ui` is presentational.** It gets data through props. The two exceptions are the hover-card registry (§7.4) and `SourceLine` reading source health.
 
@@ -189,7 +187,6 @@ export function local<T>(data: T): Sourced<T> // source 'local', asOf = fetchedA
 ```
 
 Rules:
-
 - Every client call resolves to `Sourced<T>` or throws `SourceError`. Nothing else crosses from `data` to `features`.
 - A lookup that finds nothing resolves to `Sourced<null>`. Not found is data, not an error, and it carries a stamp: a proved absence ("No identity with this ID, proof-checked") is a real answer.
 - A view that joins sources keeps a stamp per part. The card's `source` prop takes `SourceStamp[]`, and `SourceLine` renders both ("Served by DAPI + Crawled by Radar").
@@ -199,30 +196,30 @@ Rules:
 
 ### 2.2 What `asOf` means per source
 
-| Source    | `asOf`                                                                                                                                                                                                                                                                                                            | `height`                                         | `immutable`                                       |
-| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------- |
-| `sdk`     | `metadata.timeMs` (Platform block time of the answer)                                                                                                                                                                                                                                                             | `metadata.height`                                | finalized epochs, historic contract versions      |
-| `dapi`    | `fetchedAt`; tip-relative facts from the header stream                                                                                                                                                                                                                                                            | block height                                     | block or tx at or below the best ChainLock height |
-| `radar`   | the crawl time the answer carries, per resource (table below), else `Last-Modified`, else `fetchedAt` with `asOfFetched` set. Event times (a masternode's `last_seen` on a list row, a release's `published`, a change's `ts`, the last history bucket) stay data fields and never become the stamp by themselves | —                                                | no                                                |
-| `pe`      | `fetchedAt` (indexer lag is a health matter, §2.5)                                                                                                                                                                                                                                                                | indexed Platform height when the response has it | no                                                |
-| `hyphen`  | `fetchedAt`                                                                                                                                                                                                                                                                                                       | `asOfHeight`                                     | no                                                |
-| `insight` | `fetchedAt`, `asOfFetched` set (a block's time is an event time); `/status` also carries its tip                                                                                                                                                                                                                  | the tip height of the answer                     | no                                                |
-| `rate`    | `fetchedAt`                                                                                                                                                                                                                                                                                                       | —                                                | no                                                |
-| `local`   | computation time                                                                                                                                                                                                                                                                                                  | —                                                | inputs'                                           |
+| Source | `asOf` | `height` | `immutable` |
+|---|---|---|---|
+| `sdk` | `metadata.timeMs` (Platform block time of the answer) | `metadata.height` | finalized epochs, historic contract versions |
+| `dapi` | `fetchedAt`; tip-relative facts from the header stream | block height | block or tx at or below the best ChainLock height |
+| `radar` | the crawl time the answer carries, per resource (table below), else `Last-Modified`, else `fetchedAt` with `asOfFetched` set. Event times (a masternode's `last_seen` on a list row, a release's `published`, a change's `ts`, the last history bucket) stay data fields and never become the stamp by themselves | — | no |
+| `pe` | `fetchedAt` (indexer lag is a health matter, §2.5) | indexed Platform height when the response has it | no |
+| `hyphen` | `fetchedAt` | `asOfHeight` | no |
+| `insight` | `fetchedAt`, `asOfFetched` set (a block's time is an event time); `/status` also carries its tip | the tip height of the answer | no |
+| `rate` | `fetchedAt` | — | no |
+| `local` | computation time | — | inputs' |
 
 Radar sends no `Last-Modified` (checked against `radar.dashhq.org`, 2026-11-10; every response carries only `etag` and `cache-control: no-cache`), so each resource is stamped from a time inside its own document. The client still reads `Last-Modified` ahead of the fetch time in case the server adds it.
 
-| Resource                                                                                                                     | `asOf`                                                                                                                                                                                                                                          |
-| ---------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/status`                                                                                                                    | the **requested** network's `chain.updated` (`crawl.last_finished` sets the Radar crawl lag for both networks)                                                                                                                                  |
-| `/health`                                                                                                                    | the active network's `age_secs.crawl` (the older of both networks on a devnet), counted back from the response                                                                                                                                  |
-| `/{net}/summary`                                                                                                             | `crawl.finished`                                                                                                                                                                                                                                |
-| `/{net}/platform`                                                                                                            | `now.updated`                                                                                                                                                                                                                                   |
-| `/{net}/activation`                                                                                                          | `updated`                                                                                                                                                                                                                                       |
-| `/{net}/bench`                                                                                                               | the newest `vantages[].updated`                                                                                                                                                                                                                 |
-| `/{net}/masternodes`                                                                                                         | the newest row `last_seen`, which is the start of the latest crawl (`crawl_id` names it, but the crawl's times are only in `/summary`)                                                                                                          |
-| `/{net}/masternodes/{protx}`                                                                                                 | none: `fetchedAt`, `asOfFetched` set. Its `last_seen` is when the crawler last reached that node, which for an offline node can be days before the latest crawl                                                                                 |
-| `/masternodes/{protx}/check`                                                                                                 | `checked`                                                                                                                                                                                                                                       |
+| Resource | `asOf` |
+|---|---|
+| `/status` | the **requested** network's `chain.updated` (`crawl.last_finished` sets the Radar crawl lag for both networks) |
+| `/health` | the active network's `age_secs.crawl` (the older of both networks on a devnet), counted back from the response |
+| `/{net}/summary` | `crawl.finished` |
+| `/{net}/platform` | `now.updated` |
+| `/{net}/activation` | `updated` |
+| `/{net}/bench` | the newest `vantages[].updated` |
+| `/{net}/masternodes` | the newest row `last_seen`, which is the start of the latest crawl (`crawl_id` names it, but the crawl's times are only in `/summary`) |
+| `/{net}/masternodes/{protx}` | none: `fetchedAt`, `asOfFetched` set. Its `last_seen` is when the crawler last reached that node, which for an offline node can be days before the latest crawl |
+| `/masternodes/{protx}/check` | `checked` |
 | `/releases`, `/{net}/geo`, `/{net}/changes`, `/{net}/history`, `/masternodes/{protx}/payments`, `/masternodes/{protx}/bench` | no document time: `fetchedAt`, `asOfFetched` set. `geo` carries only `crawl_id`; `history` buckets are day or hour starts; `changes` and `payments` carry event times; a masternode benchmark's `results[].ts` is a test time on a 14-day cycle |
 
 A stamp with `asOfFetched` reads "Fetched from Radar · 6 s ago" (§7.3), never "Crawled".
@@ -231,31 +228,23 @@ A stamp with `asOfFetched` reads "Fetched from Radar · 6 s ago" (§7.3), never 
 
 ```ts
 export type SourceErrorKind =
-  | 'network' // fetch failed, CORS, TLS, DNS, refused
+  | 'network'          // fetch failed, CORS, TLS, DNS, refused
   | 'timeout'
-  | 'http' // non-2xx other than 404/429
-  | 'rate-limited' // HTTP 429 or gRPC RESOURCE_EXHAUSTED (8)
+  | 'http'             // non-2xx other than 404/429
+  | 'rate-limited'     // HTTP 429 or gRPC RESOURCE_EXHAUSTED (8)
   | 'invalid-response' // zod or protobuf decode failure
-  | 'proof-failed' // SDK returned a proof that did not verify
-  | 'unavailable' // source not offered on this network (devnet), or health is 'down' and the call was skipped
+  | 'proof-failed'     // SDK returned a proof that did not verify
+  | 'unavailable'      // source not offered on this network (devnet), or health is 'down' and the call was skipped
   | 'disabled-by-mode' // a hosted source asked while Decentralized only mode is on (§4.11): refused before any I/O
   | 'aborted'
 
 export class SourceError extends Error {
   readonly source: SourceId
   readonly kind: SourceErrorKind
-  readonly status?: number // HTTP status or gRPC code
+  readonly status?: number      // HTTP status or gRPC code
   readonly retryAfterMs?: number
   readonly node?: string
-  constructor(init: {
-    source: SourceId
-    kind: SourceErrorKind
-    message: string
-    status?: number
-    retryAfterMs?: number
-    node?: string
-    cause?: unknown
-  })
+  constructor(init: { source: SourceId; kind: SourceErrorKind; message: string; status?: number; retryAfterMs?: number; node?: string; cause?: unknown })
 }
 export function isSourceError(e: unknown): e is SourceError
 ```
@@ -275,13 +264,10 @@ export async function fetchSourced<S extends z.ZodType>(req: {
   url: string
   schema: S
   signal?: AbortSignal
-  timeoutMs?: number // default 10_000
-  notFound?: 'throw' | 'null' // default 'throw'; detail endpoints pass 'null' so 404 → Sourced<null>
+  timeoutMs?: number            // default 10_000
+  notFound?: 'throw' | 'null'   // default 'throw'; detail endpoints pass 'null' so 404 → Sourced<null>
   asOf?: (body: z.output<S>, res: Response) => number | undefined // undefined → fetchedAt
-  reject?: (
-    body: z.output<S>,
-    res: Response,
-  ) => { kind: SourceErrorKind; detail?: string } | undefined
+  reject?: (body: z.output<S>, res: Response) => { kind: SourceErrorKind; detail?: string } | undefined
   height?: (body: z.output<S>) => number | undefined
 }): Promise<Sourced<z.output<S>>>
 ```
@@ -300,18 +286,12 @@ export const radar = {
   history: (net, q: RadarHistoryQuery, signal?) => Promise<Sourced<RadarHistory>>,
   masternodes: (net, signal?) => Promise<Sourced<RadarMasternode[]>>,
   masternode: (net, protx: string, signal?) => Promise<Sourced<RadarMasternodeDetail | null>>,
-  payments: (net, protx, q: { before?: number; limit?: number }, signal?) =>
-    Promise<Sourced<RadarPayment[]>>,
+  payments: (net, protx, q: { before?: number; limit?: number }, signal?) => Promise<Sourced<RadarPayment[]>>,
   // geo, bench, mnBench, platform, activation, changes, releases …
 }
 // data/radar/queries.ts
 export const radarQueries = {
-  summary: (net: NetworkId) =>
-    queryOptions({
-      queryKey: k(net, 'radar', 'summary'),
-      queryFn: ({ signal }) => radar.summary(net, signal),
-      ...dataClass('crawl'),
-    }),
+  summary: (net: NetworkId) => queryOptions({ queryKey: k(net, 'radar', 'summary'), queryFn: ({ signal }) => radar.summary(net, signal), ...dataClass('crawl') }),
   // …
 }
 ```
@@ -335,7 +315,6 @@ export interface Page<T> {
 - **Rate**: `rate.usd(signal)` reads PE mainnet `/rate` → `Sourced<{ usd: number; provider: string }>`, used on every network. Testnet never shows fiat.
 
 **zod conventions** (`data/zod.ts`):
-
 - Schemas live in `<source>/schemas.ts`, one per endpoint, named `XxxSchema`; types are `z.output<typeof XxxSchema>` exported as `Xxx`.
 - Objects are non-strict (unknown keys stripped). Fields Radar reads are required; fields it doesn't read are left out.
 - Amounts become `bigint` at the edge: `zBigint` accepts a JSON number only if `Number.isSafeInteger`; larger values must arrive as numeric strings. Duffs, credits and token units are `bigint` everywhere after parsing; heights, counts and times are `number`.
@@ -365,11 +344,7 @@ export interface SourceHealth {
 }
 
 export const healthRegistry: {
-  report(
-    net: NetworkId,
-    source: SourceId,
-    r: { ok: boolean; latencyMs?: number; kind?: SourceErrorKind },
-  ): void // omit latencyMs when the report is not one round trip
+  report(net: NetworkId, source: SourceId, r: { ok: boolean; latencyMs?: number; kind?: SourceErrorKind }): void // omit latencyMs when the report is not one round trip
   setLag(net: NetworkId, source: SourceId, lag: SourceHealth['lag']): void
   get(net: NetworkId, source: SourceId): SourceHealth
   subscribe(cb: () => void): () => void
@@ -380,14 +355,14 @@ export function useAllSourceHealth(): SourceHealth[]
 
 State rules, applied in this order (first match wins):
 
-| State      | Condition                                                                                                                                                                                                                                         |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `down`     | 3 consecutive failures of kind `network`/`timeout`/`http`, or a last call that failed with one of those kinds while there has been no success in the last 120 s (a source that has never answered counts as silent). Recovers on the next success |
-| `stale`    | Lag over the source's threshold (below)                                                                                                                                                                                                           |
-| `degraded` | ≥ 25 % failures over the last 20 calls, any `invalid-response` in the last 5 min, or (dapi) budget pressure `tight`/`exhausted`                                                                                                                   |
-| `slow`     | p50 latency over the last 10 calls > 3 s (dapi, sdk: > 5 s)                                                                                                                                                                                       |
-| `ok`       | at least one success, none of the above                                                                                                                                                                                                           |
-| `unknown`  | no calls yet                                                                                                                                                                                                                                      |
+| State | Condition |
+|---|---|
+| `down` | 3 consecutive failures of kind `network`/`timeout`/`http`, or a last call that failed with one of those kinds while there has been no success in the last 120 s (a source that has never answered counts as silent). Recovers on the next success |
+| `stale` | Lag over the source's threshold (below) |
+| `degraded` | ≥ 25 % failures over the last 20 calls, any `invalid-response` in the last 5 min, or (dapi) budget pressure `tight`/`exhausted` |
+| `slow` | p50 latency over the last 10 calls > 3 s (dapi, sdk: > 5 s) |
+| `ok` | at least one success, none of the above |
+| `unknown` | no calls yet |
 
 A report without `latencyMs` (a stream that broke after being open for a while) leaves the latency window alone; a batch that omits keys reports the batch call's own latency.
 
@@ -395,17 +370,16 @@ The registry schedules a timer for the next time boundary (the end of the 5 min 
 
 Freshness probes are TanStack queries under `[net, 'health', source]`, refetched every 60 s while visible. They run only when a mounted card uses that source, or on `/status`:
 
-| Source  | Probe                                                                                                                | Stale when                                                                                                                                                                                                                                                                                                                                             |
-| ------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| radar   | `GET /api/v1/status`                                                                                                 | network's last crawl > 30 min (`CRAWL_STALE_MS`, the one crawl threshold; see §5.2)                                                                                                                                                                                                                                                                    |
-| pe      | `GET /status`                                                                                                        | indexer height behind Tenderdash height by > 10 blocks, or the PE status reports itself unhealthy (503)                                                                                                                                                                                                                                                |
-| hyphen  | `GET /status`                                                                                                        | min `indices.*.indexedHeight` behind the DAPI best height by more than 6 blocks, fresh again at 2 or fewer (one rule for the health state and for page routing, §4.7a), or, when DAPI has no height (or only a `fallback` one), behind Radar's crawled Core height (`chain.blocks` from Radar's `/status`) (testnet today: weeks). See §4.7a and §11.4 |
-| insight | `GET /insight-api/status` (mainnet `insight.dash.org`, testnet `insight.testnet.networks.dash.org`; none on devnets) | tip behind the DAPI best height by more than 6 blocks, fresh again at 2 or fewer (the same rule as Hyphen's, §4.7a)                                                                                                                                                                                                                                    |
-| dapi    | header stream / `getBestBlockHeight`                                                                                 | no new header for 20 min                                                                                                                                                                                                                                                                                                                               |
-| sdk     | metadata of any recent answer                                                                                        | `timeMs` older than 15 min                                                                                                                                                                                                                                                                                                                             |
+| Source | Probe | Stale when |
+|---|---|---|
+| radar | `GET /api/v1/status` | network's last crawl > 30 min (`CRAWL_STALE_MS`, §5.2) |
+| pe | `GET /status` | indexer height behind Tenderdash height by > 10 blocks, or the PE status reports itself unhealthy (503) |
+| hyphen | `GET /status` | min `indices.*.indexedHeight` behind the DAPI best height by more than 6 blocks, fresh again at 2 or fewer (one rule for the health state and for page routing, §4.7a), or, when DAPI has no height (or only a `fallback` one), behind Radar's crawled Core height (`chain.blocks` from Radar's `/status`) (testnet today: weeks). See §4.7a and §11.4 |
+| insight | `GET /insight-api/status` (mainnet `insight.dash.org`, testnet `insight.testnet.networks.dash.org`; none on devnets) | tip behind the DAPI best height by more than 6 blocks, fresh again at 2 or fewer (the same rule as Hyphen's, §4.7a) |
+| dapi | header stream / `getBestBlockHeight` | no new header for 20 min |
+| sdk | metadata of any recent answer | `timeMs` older than 15 min |
 
 The UI reads health in three places only:
-
 - `SourceLine`: dot colour and the "isn't answering (last good 4 min ago)" text.
 - `Card` with a `source` prop: greys its body and overlays the down message when that source is `down`; when it is `stale`, it keeps the content and its source line keeps the stamp. A stale index is announced once per page (§4.7a), never per card.
 - `/status` (IN-09) and the shell's status chip: `useAllSourceHealth()`.
@@ -424,21 +398,20 @@ export const isDevnet = (n: NetworkId): n is `devnet-${string}`
 
 `data/endpoints.ts`:
 
-|                                | mainnet                                     | testnet                                     | devnet                                                                      |
-| ------------------------------ | ------------------------------------------- | ------------------------------------------- | --------------------------------------------------------------------------- |
+| | mainnet | testnet | devnet |
+|---|---|---|---|
 | quorums (node list, SDK trust) | `https://quorums.mainnet.networks.dash.org` | `https://quorums.testnet.networks.dash.org` | the configured `quorumUrl`, else `https://quorums.<name>.networks.dash.org` |
-| DAPI default port              | 443                                         | 1443                                        | from config                                                                 |
-| radar                          | `https://radar.dashhq.org/api/v1/mainnet`   | `…/testnet`                                 | none                                                                        |
-| pe                             | `https://api.pe.dashhq.org`                 | `https://api.testnet.pe.dashhq.org`         | none                                                                        |
-| hyphen                         | `/x/hy/mainnet`                             | `/x/hy/testnet`                             | none                                                                        |
-| rate                           | PE mainnet `/rate`                          | none                                        | none                                                                        |
+| DAPI default port | 443 | 1443 | from config |
+| radar | `https://radar.dashhq.org/api/v1/mainnet` | `…/testnet` | none |
+| pe | `https://api.pe.dashhq.org` | `https://api.testnet.pe.dashhq.org` | none |
+| hyphen | `/x/hy/mainnet` | `/x/hy/testnet` | none |
+| rate | PE mainnet `/rate` | none | none |
 
 For a devnet, `endpoint(net, 'quorums', devnets?)` takes the `quorumUrl` of the entry in `devnets` with that name when it has one. `endpoint(net, source)` returns `null` where a cell says none; the client then throws `unavailable` without a request, and cards render `Empty kind="unsupported-network"`.
 
 ### 2.7 Edge Worker (`workers/edge`)
 
 **Hyphen pass-through (`/x/hy/{mainnet|testnet}/*`).**
-
 - Only `GET` and `HEAD`. Paths must match the API surface the app uses (`blocks`, `block/{id}`, `block/{id}/txs`, `rawblock/{id}`, `tx/{id}`, `rawtx/{id}`, `address/{a}`, `address/{a}/txs|utxos`, `balances`, `status`, `network`, `mempool`, `mempool/txs`, `metrics/latest|chart`, `proposals`, `proposal/{h}`, `proposal/{h}/votes`, `validators`, `validator/{h}`, `search`, `stream`); anything else is 404 `unknown_path`. Encoded slashes, backslashes and dot segments are 400 `bad_path`.
 - Query parameters are limited to `limit, cursor, blocks, points, q, status, type`. Others are dropped, the first value of each is kept, and the keys are sorted, so each request shape is one cache entry. A query over 1024 characters or a value over 512 is 400 `bad_query` (an address-history `cursor` is 358 characters, since it names the address and the last transaction). Add a name to `HYPHEN_PARAMS` in `workers/edge/src/hyphen-path.ts` when the client starts sending a new one; the client's `HyListQuery` type is built from that list, so an unlisted name doesn't type-check.
 - The response `content-type` is never copied. JSON (`application/json` or `+json`) is relayed as its bare media type; `/stream` also accepts `application/x-ndjson`. Any other type on a success status is 502 `{error:'bad_upstream_type'}`; an error status with a non-JSON body keeps its status with `{error:'upstream_error'}`.
@@ -450,7 +423,6 @@ For a devnet, `endpoint(net, 'quorums', devnets?)` takes the `quorumUrl` of the 
 **Content-Security-Policy (`workers/edge/src/headers.ts`).** `worker-src 'self'`: every worker loads from the origin, so there is no `blob:` grant. `img-src` keeps `blob:` (and `data:`, `https:`) for the address QR. `require-trusted-types-for 'script'` is sent report-only: ECharts' HTML tooltip writes `innerHTML`, and enforcing needs `tooltip.renderMode: 'richText'` or a policy.
 
 **Redirects (`workers/edge/src/redirects.ts`).** The old dashhq pages map to Radar's URLs with their filters translated; a URL already in the new form is a fixed point, never redirected again.
-
 - `/masternodes[.html]`: the old `sort` and `dir=desc` become `sort=-field`; `type`, `status` and `reach` are lower-cased and the old `?status=Reachable` form maps to `reach`; `host`, `version`, `dkg` and `page` are dropped.
 - `/map[.html]`: same filters; `layer=nodes` is kept, `layer=mn` (the default) dropped; `sort` dropped.
 - `/changes[.html]`: `kind` is kept when it is `joins`, `pose`, `address` or `keys`, else dropped.
@@ -460,10 +432,10 @@ For a devnet, `endpoint(net, 'quorums', devnets?)` takes the `quorumUrl` of the 
 
 **Link previews (OG tags).** HTML for `/block/*`, `/tx/*`, `/mn/*`, `/identity/*`, `/contract/*` and `/token/*` gets per-entity tags from a backend read only for link-preview and crawler user agents (bots, crawlers, spiders, Slack, WhatsApp, Facebook and similar; see `isLinkPreviewAgent` in `workers/edge/src/og.ts`). Everyone else gets the page at once with the generic per-kind tags (`Block · Radar`). The response carries `vary: user-agent`.
 
+
 **Deploying.** `wrangler deploy` from `workers/edge` (after `pnpm build`) deploys `radar-web` to explorer.dashhq.org. `wrangler deploy --env preview` deploys `radar-web-preview` to explorer-next.dashhq.org, so a preview never touches production. Both custom domains are set in `wrangler.jsonc`, not as flags: wrangler replaces a Worker's whole custom-domain set on each deploy, and in a non-interactive shell it overwrites a conflicting DNS record without asking.
 
 **Rolling back.**
-
 - **To an earlier Radar build** (seconds; the domain stays): run `npx wrangler deployments list --name radar-web` to find the version, then `npx wrangler rollback <version-id> --name radar-web -y` from `workers/edge`.
 - **Back to the Native Platform Explorer** (about 2 minutes, only until explorer-classic is retired on 2026-12-18):
   1. Detach `radar-web`'s custom domain explorer.dashhq.org in Cloudflare (Workers → radar-web → Domains). This removes its `AAAA 100::` record.
@@ -521,45 +493,19 @@ export interface WireResult<R> {
   ok: true
   data: R
   proved: boolean
-  meta?: {
-    height: number
-    coreChainLockedHeight: number
-    epoch: number
-    timeMs: number
-    protocolVersion: number
-    chainId: string
-  }
-  proof?: {
-    grovedbProof: Uint8Array
-    quorumHash: Uint8Array
-    signature: Uint8Array
-    round: number
-    blockIdHash: Uint8Array
-    quorumType: number
-  }
+  meta?: { height: number; coreChainLockedHeight: number; epoch: number; timeMs: number; protocolVersion: number; chainId: string }
+  proof?: { grovedbProof: Uint8Array; quorumHash: Uint8Array; signature: Uint8Array; round: number; blockIdHash: Uint8Array; quorumType: number }
   node?: string
   tookMs: number
 }
-export interface WireError {
-  ok: false
-  error: { kind: SourceErrorKind; message: string; code?: string }
-}
+export interface WireError { ok: false; error: { kind: SourceErrorKind; message: string; code?: string } }
 
 export interface SdkWorkerApi {
   /** Idempotent. Resolves when the SDK for that network is connected and its trusted context is prefetched. Never throws across Comlink. */
-  connect(
-    cfg: SdkNetworkConfig,
-  ): Promise<{ sdkVersion: string; protocolVersion: number; tookMs: number } | WireError>
-  call<M extends SdkMethodName>(
-    net: NetworkId,
-    method: M,
-    args: SdkMethods[M]['args'],
-  ): Promise<WireResult<SdkMethods[M]['result']> | WireError>
+  connect(cfg: SdkNetworkConfig): Promise<{ sdkVersion: string; protocolVersion: number; tookMs: number } | WireError>
+  call<M extends SdkMethodName>(net: NetworkId, method: M, args: SdkMethods[M]['args']): Promise<WireResult<SdkMethods[M]['result']> | WireError>
   /** Local wasm decoders for tools (NX-71, PE-13, PE-34): no network. */
-  decode(
-    kind: 'stateTransition' | 'dataContract' | 'document' | 'identity',
-    bytes: Uint8Array,
-  ): Promise<WireResult<unknown> | WireError>
+  decode(kind: 'stateTransition' | 'dataContract' | 'document' | 'identity', bytes: Uint8Array): Promise<WireResult<unknown> | WireError>
 }
 ```
 
@@ -575,19 +521,12 @@ export interface SdkWorkerApi {
 export interface SdkClient {
   warm(net: NetworkId): void // start loading and connecting; never awaited by UI
   state(net: NetworkId): 'cold' | 'loading' | 'ready' | 'failed'
-  call<M extends SdkMethodName>(
-    net: NetworkId,
-    method: M,
-    args: SdkMethods[M]['args'],
-    signal?: AbortSignal,
-  ): Promise<Sourced<SdkMethods[M]['result']>>
+  call<M extends SdkMethodName>(net: NetworkId, method: M, args: SdkMethods[M]['args'], signal?: AbortSignal): Promise<Sourced<SdkMethods[M]['result']>>
   decode: SdkWorkerApi['decode']
   subscribe(cb: () => void): () => void // state changes
 }
 export const sdk: SdkClient
-export const sdkQueries: {
-  [M in SdkMethodName]: (net: NetworkId, args: SdkMethods[M]['args']) => QueryOptions
-} // generated from the map
+export const sdkQueries: { [M in SdkMethodName]: (net: NetworkId, args: SdkMethods[M]['args']) => QueryOptions } // generated from the map
 ```
 
 - **Lazy loading.** `data/sdk/client.ts` imports `transport-worker.ts` on the first `warm` or `call`; that file creates `sdk.worker.ts` as a module worker through `trustedWorkerUrl` (`data/trusted-worker.ts`: a same-origin Trusted Types policy, because a plain `new Worker(url)` is a violation under `require-trusted-types-for 'script'`). The SDK package and its wasm are imported only inside the worker, so they never enter the main bundle; the wasm is fetched in parts when the worker first connects (§12c). `scripts/check-bundle.mjs` fails the build if `@dashevo/evo-sdk` appears in a main-thread chunk.
@@ -606,15 +545,15 @@ export const sdkQueries: {
 
 The shared methods are listed in §11.5 (E). The others, each in `data/sdk/methods/<area>.ts` with its data class and implemented in `data/sdk/worker/impl/<area>.ts` with the `*WithProof` call unless noted:
 
-| Area       | Methods                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `p-chain`  | `system.prefundedSpecializedBalance` (an absent balance comes back `null` and unproved, because the SDK throws rather than proving it), `shielded.poolState`, `shielded.anchors`, `shielded.mostRecentAnchor`, `shielded.encryptedNotes` (`startIndex` must be a multiple of 2048), `shielded.nullifiers`; all `live`, bytes as lower-case hex                                                                                                                                                                |
+| Area | Methods |
+|---|---|
+| `p-chain` | `system.prefundedSpecializedBalance` (an absent balance comes back `null` and unproved, because the SDK throws rather than proving it), `shielded.poolState`, `shielded.anchors`, `shielded.mostRecentAnchor`, `shielded.encryptedNotes` (`startIndex` must be a multiple of 2048), `shielded.nullifiers`; all `live`, bytes as lower-case hex |
 | `p-blocks` | `stateTransitions.decode({ data })` (base64 bytes through the wasm `StateTransition.fromBytes` and the per-type class; the body is plain JSON with bigints as strings; Platform Explorer returns the bytes but not the body) and `stateTransitions.waitForStateTransitionResult({ hash })` (`success`, `error` or `pending`): SDK 5.0.3 has only the waiting call, which waits about 30 s for an unknown hash, so the worker races it against `RESULT_WAIT_MS` (6 s) and answers `pending`. Neither is proved |
-| `p-id`     | `identities.getKeys`, `identities.nonce`, `identities.contractNonce`, `identities.contractKeys`, `identities.balanceAndRevision` (also the existence check: it answers a proved `null` for an absent identity), `identities.byNonUniquePublicKeyHash` (paged by `startAfter`), `group.identityGroups`, `voting.contestedResourceIdentityVotes`                                                                                                                                                                |
-| `p-data`   | `contracts.getHistory` (`limit` 1..10, `startAtMs` inclusive, oldest first), `documents.history` (no offset: paged by `startAtMs`, 10 a read), `group.infos`, `group.info`, `group.members` (by power, descending), `group.actions` (`status` `active` or `closed`, `startAfter` the last action id), `group.actionSigners`                                                                                                                                                                                   |
-| `p-token`  | `tokens.directPurchasePrices` (`{ basePrice, currentPrice }` or `null` when not for sale), `tokens.perpetualDistributionLastClaim` (asked only when the contract states a perpetual distribution: the node errors otherwise), `dpns.resolveName` (unproved)                                                                                                                                                                                                                                                   |
-| `p-vote`   | `group.contestedResources` (the values of the next index property after `prefix`; for DPNS, `['dash']` lists every contest Platform still holds, open and decided), `voting.contestedResourceVoteState` (tallies, abstain and lock counts, winner; a contest that does not exist answers no contenders and no winner), `voting.contestedResourceVotersForIdentity`                                                                                                                                            |
-| `tools`    | `documents.count`, `documents.sum`, `documents.average` (only where the contract has a countable or summable index), `contracts.serialized` (the bytes a document decoder needs), `system.pathElements` (GroveDB elements by path and keys)                                                                                                                                                                                                                                                                   |
+| `p-id` | `identities.getKeys`, `identities.nonce`, `identities.contractNonce`, `identities.contractKeys`, `identities.balanceAndRevision` (also the existence check: it answers a proved `null` for an absent identity), `identities.byNonUniquePublicKeyHash` (paged by `startAfter`), `group.identityGroups`, `voting.contestedResourceIdentityVotes` |
+| `p-data` | `contracts.getHistory` (`limit` 1..10, `startAtMs` inclusive, oldest first), `documents.history` (no offset: paged by `startAtMs`, 10 a read), `group.infos`, `group.info`, `group.members` (by power, descending), `group.actions` (`status` `active` or `closed`, `startAfter` the last action id), `group.actionSigners` |
+| `p-token` | `tokens.directPurchasePrices` (`{ basePrice, currentPrice }` or `null` when not for sale), `tokens.perpetualDistributionLastClaim` (asked only when the contract states a perpetual distribution: the node errors otherwise), `dpns.resolveName` (unproved) |
+| `p-vote` | `group.contestedResources` (the values of the next index property after `prefix`; for DPNS, `['dash']` lists every contest Platform still holds, open and decided), `voting.contestedResourceVoteState` (tallies, abstain and lock counts, winner; a contest that does not exist answers no contenders and no winner), `voting.contestedResourceVotersForIdentity` |
+| `tools` | `documents.count`, `documents.sum`, `documents.average` (only where the contract has a countable or summable index), `contracts.serialized` (the bytes a document decoder needs), `system.pathElements` (GroveDB elements by path and keys) |
 
 Every method needs a row in `METHOD_PAGES` (`features/tools/sdk-reference/method-pages.ts`), which `/sdk-reference` renders next to the site map; `reference.test.ts` fails without it.
 
@@ -694,18 +633,8 @@ The façade does not call Connect. It speaks to a `DapiTransport` (`data/dapi-co
 ```ts
 interface DapiTransport {
   readonly budget: Budget // the pool's request budget; the façade reads it for the §4.7 list rule
-  unary(
-    net,
-    method: DapiUnaryMethod,
-    request: Uint8Array,
-    opts?: { signal?; priority?; nodeUrl?; avoidNode? },
-  ): Promise<{ response: Uint8Array; node?: string }>
-  stream(
-    net,
-    method: DapiStreamMethod,
-    request: Uint8Array,
-    opts?,
-  ): { node?: string; messages: AsyncIterable<Uint8Array> }
+  unary(net, method: DapiUnaryMethod, request: Uint8Array, opts?: { signal?, priority?, nodeUrl?, avoidNode? }): Promise<{ response: Uint8Array; node?: string }>
+  stream(net, method: DapiStreamMethod, request: Uint8Array, opts?): { node?: string; messages: AsyncIterable<Uint8Array> }
 }
 ```
 
@@ -714,7 +643,6 @@ One Platform method goes over the same transport: `getCurrentQuorumsInfo` (`PLAT
 The production transport is `PoolDapiTransport` (`pool.ts`). `grpc-web.ts` does the framing, trailers and status mapping itself (`grpc-status` in headers or in trailers behind an HTTP 200, `ratelimit-*` parsing), without Connect. `main.tsx` calls `installProductionDapiTransport({ devnets })` (`production.ts`) in non-fixture builds; `lazy.ts` wraps the pool so that the pool, the gRPC-web client and the protobuf runtime load on the first Core request and stay out of the entry chunk.
 
 Facts that shape the client (dashmate gateway, `templates/platform/gateway/envoy.yaml.dot`):
-
 - CORS allows any origin and exposes `grpc-status`, `grpc-message`, `ratelimit-reset`, `ratelimit-limit` and `ratelimit-remaining`. Over-limit replies are HTTP 200 with `grpc-status: 8` and `ratelimit-reset` as headers.
 - The limit is per client IP per node: 150 requests per minute by default. A stream counts as one request when it opens.
 - Core streams end after at most 601 s (`max_stream_duration`). Unary requests time out upstream at 10 s.
@@ -728,19 +656,19 @@ Facts that shape the client (dashmate gateway, `templates/platform/gateway/envoy
 
 ### 4.3 Budget (`budget.ts`)
 
-| Limit         | Value                                                                                        | Why                                                                                                             |
-| ------------- | -------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| Per node      | ≤ 50 requests in any rolling 60 s, ≤ 4 in flight                                             | Under the 60/min target, well under dashmate's 150, leaving room for other tabs and for visitors behind one NAT |
-| SDK, per node | ≤ 30 requests in any rolling 60 s, ≤ 4 in flight (its own guard, below)                      | The SDK picks its own evonodes inside wasm, so it gets its own slice and reports it to the pool                 |
-| Server truth  | If `ratelimit-remaining` < 30 on a response, treat that node as full until `ratelimit-reset` | The gateway's own count includes other tabs and other people on the IP                                          |
-| Session       | ≤ 8 × 50 = 400 per rolling 60 s                                                              | Bounded by the active set                                                                                       |
+| Limit | Value | Why |
+|---|---|---|
+| Per node | ≤ 50 requests in any rolling 60 s, ≤ 4 in flight | Under the 60/min target, well under dashmate's 150, leaving room for other tabs and for visitors behind one NAT |
+| SDK, per node | ≤ 30 requests in any rolling 60 s, ≤ 4 in flight (its own guard, below) | The SDK picks its own evonodes inside wasm, so it gets its own slice and reports it to the pool |
+| Server truth | If `ratelimit-remaining` < 30 on a response, treat that node as full until `ratelimit-reset` | The gateway's own count includes other tabs and other people on the IP |
+| Session | ≤ 8 × 50 = 400 per rolling 60 s | Bounded by the active set |
 
 ```ts
 export type BudgetPressure = 'ok' | 'tight' | 'exhausted'
 export interface BudgetSnapshot {
   pressure: BudgetPressure
-  headroom: number // requests available in the next 60 s across unbenched active nodes
-  capacity: number // activeNodes × 50
+  headroom: number      // requests available in the next 60 s across unbenched active nodes
+  capacity: number      // activeNodes × 50
   benched: number
   usedLastMinute: number
 }
@@ -753,7 +681,6 @@ export const budget: {
 ```
 
 Pressure is `ok` while headroom ≥ 50 % of capacity, `tight` from 20 % to 50 % (or 3+ benched nodes), and `exhausted` below 20 % (or 6+ benched). When pressure isn't `ok`:
-
 - hedging stops;
 - prefetch on hover stops;
 - list views fall back to Hyphen (§4.7).
@@ -774,14 +701,14 @@ The budget is the `budget` member of the installed transport (`getDapiTransport(
 - **Verification.** Every answer is checked against its request before it is shown or kept (§4.4a).
 - **Bench table:**
 
-| Signal                                                         | Bench for                                                                                                                                                                                                                                                                        |
-| -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `grpc-status: 8` (RESOURCE_EXHAUSTED) or HTTP 429              | `ratelimit-reset` seconds if readable, else 60 s                                                                                                                                                                                                                                 |
-| Fetch failure (refused, TLS, CORS, DNS)                        | 1, then 5, then 10 min; for the rest of the session only after 5 misses while other nodes answered (`lastSuccessAt`). When the client itself is offline (`online()` false) or 3 distinct nodes were unreachable within 15 s with no success (`linkLooksDown`), nobody is benched |
-| `UNAVAILABLE` (14), `DEADLINE_EXCEEDED` (4), HTTP 5xx, timeout | 60 s; 10 min after 3 strikes                                                                                                                                                                                                                                                     |
-| `invalid-response` (a failed check, §4.4a)                     | as a 5xx, and reported to health with the node's name                                                                                                                                                                                                                            |
-| Behind the best tip by > 2 blocks                              | excluded from height-sensitive calls until it catches up                                                                                                                                                                                                                         |
-| `NOT_FOUND` (5)                                                | no bench: it is an answer (`Sourced<null>`)                                                                                                                                                                                                                                      |
+| Signal | Bench for |
+|---|---|
+| `grpc-status: 8` (RESOURCE_EXHAUSTED) or HTTP 429 | `ratelimit-reset` seconds if readable, else 60 s |
+| Fetch failure (refused, TLS, CORS, DNS) | 1, then 5, then 10 min; for the rest of the session only after 5 misses while other nodes answered (`lastSuccessAt`). When the client itself is offline (`online()` false) or 3 distinct nodes were unreachable within 15 s with no success (`linkLooksDown`), nobody is benched |
+| `UNAVAILABLE` (14), `DEADLINE_EXCEEDED` (4), HTTP 5xx, timeout | 60 s; 10 min after 3 strikes |
+| `invalid-response` (a failed check, §4.4a) | as a 5xx, and reported to health with the node's name |
+| Behind the best tip by > 2 blocks | excluded from height-sensitive calls until it catches up |
+| `NOT_FOUND` (5) | no bench: it is an answer (`Sourced<null>`) |
 
 Benching updates `healthRegistry` for `dapi`. The source is `down` when at least min(16, node count) distinct nodes have failed within 2 min; reports that name a node never use the consecutive-failure rule. A node chosen by the user (pinned) has its own budget slot and its failures are not reported to the source's health.
 
@@ -791,19 +718,18 @@ Benching updates `healthRegistry` for `dapi`. The source is `down` when at least
 
 Nothing that comes from a DAPI node is trusted on its word (`lib/core/verify.ts`, used by `data/core/client.ts`):
 
-| Answer                    | Check                                                                                                                                                                   | If it fails                      |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
-| raw tx                    | double-SHA256 of the bytes equals the requested txid                                                                                                                    | `invalid-response`               |
-| tx placement (block hash) | the header the node names hashes (X11) to the block hash it reported                                                                                                    | the tx is kept without placement |
-| block by hash             | header hash equals the requested hash; the hash meets its own `bits`; `bits` is not easier than the mainnet/testnet limit (devnets may set their own)                   | `invalid-response`               |
-| block by height           | the hash links to the header chain held and passes the same PoW check; height comes from the request below BIP-34 (951 mainnet, 76 testnet) and from the coinbase above | `invalid-response`               |
-| block body                | the merkle root recomputed over its txids equals the header's; a list that repeats a pair to reach the same root is refused (`mutated`)                                 | `invalid-response`               |
-| header range              | the last header's PoW and the chain links                                                                                                                               | retry on another node            |
+| Answer | Check | If it fails |
+|---|---|---|
+| raw tx | double-SHA256 of the bytes equals the requested txid | `invalid-response` |
+| tx placement (block hash) | the header the node names hashes (X11) to the block hash it reported | the tx is kept without placement |
+| block by hash | header hash equals the requested hash; the hash meets its own `bits`; `bits` is not easier than the mainnet/testnet limit (devnets may set their own) | `invalid-response` |
+| block by height | the hash links to the header chain held and passes the same PoW check; height comes from the request below BIP-34 (951 mainnet, 76 testnet) and from the coinbase above | `invalid-response` |
+| block body | the merkle root recomputed over its txids equals the header's; a list that repeats a pair to reach the same root is refused (`mutated`) | `invalid-response` |
+| header range | the last header's PoW and the chain links | retry on another node |
 
 A failed check is an `invalid-response` from that node: the pool benches it, reports it to health with the node's name and retries on another node (up to 3 tries). The bad answer is never cached. X11 proof-of-work uses the wasm `decoder.headerHash`, so no new dependency. Still M8: BLS verification of ChainLock and InstantSend signatures, and full header-chain work (the PoW of the headers shown is checked, not that they are the best chain).
 
 **Claims.** ChainLock, InstantSend, confirmations and "is in the best chain" are claims and are never stored as immutable.
-
 - `ChainLocked` is shown only when two distinct claimants report the lock for that height: two DAPI nodes, or one node plus Hyphen (`refreshLocks`, one shared lookup, 12 s deadline). Otherwise the stamp carries `chainLockClaim: 'one-node'` (likewise `instantLockClaim`), and the UI says "reported by one node" through `ChainLockBadge`, `InstantSendBadge` and `LockMark` (§7.2); a plain lock icon is never used for a one-node claim.
 - An InstantSend lock is always one source's claim (the node that answered), and is shown only until the transaction's block is ChainLocked (§4.7, "InstantSend state ends at the ChainLock").
 - Hyphen-only lock state uses the tag Hyphen sends, or depth (`HYPHEN_FINAL_DEPTH`, 24 blocks), or a corroborated claim.
@@ -811,13 +737,13 @@ A failed check is an `invalid-response` from that node: the pool benches it, rep
 
 ### 4.5 Cache (`cache.ts`, IndexedDB `radar-core`, via `idb`)
 
-| Store     | Key          | Value                                               | Written when                   |
-| --------- | ------------ | --------------------------------------------------- | ------------------------------ |
-| `blocks`  | `net:hash`   | raw bytes, height                                   | height ≤ best ChainLock height |
-| `heights` | `net:height` | hash                                                | same                           |
-| `txs`     | `net:txid`   | raw bytes, blockHash, height, `isChainLocked: true` | its block is chainlocked       |
-| `headers` | `net:height` | 80-byte header, hash                                | same                           |
-| `meta`    | `net:nodes`  | discovered node list                                | every discovery (1 h TTL)      |
+| Store | Key | Value | Written when |
+|---|---|---|---|
+| `blocks` | `net:hash` | raw bytes, height | height ≤ best ChainLock height |
+| `heights` | `net:height` | hash | same |
+| `txs` | `net:txid` | raw bytes, blockHash, height, `isChainLocked: true` | its block is chainlocked |
+| `headers` | `net:height` | 80-byte header, hash | same |
+| `meta` | `net:nodes` | discovered node list | every discovery (1 h TTL) |
 
 - The database is version 2 (older stores are dropped). `touchAll` writes at most every 10 min per entry and `trim` re-sums sizes.
 - Headers are written only at or below the corroborated lock (§4.4a) and only after the hold time `headersHold`. The only cached tx payload is the verified raw bytes (`CachedTx = { txid, bytes }`); block lists cache each locked row, and `block()` and `blockRows()` carry no `immutable` stamp.
@@ -830,12 +756,12 @@ A failed check is an `invalid-response` from that node: the pool benches it, rep
 
 All streams are shared and reference-counted per network: the first subscriber opens one, the last unsubscribe closes it after a 10 s linger.
 
-| Stream                                                                                                                    | Opened by                                                                               | Behaviour                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| ------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `subscribeToBlockHeadersWithChainLocks` (live: `fromBlockHeight = tip`, `count = 0`)                                      | `coreLive.tip`, mounted by the shell on every page                                      | Emits `{ height, hash, time }` per header and `{ height, hash }` per ChainLock (decoded in `lib/core/header.ts`, `lib/core/chainlock.ts`, no wasm). Updates `[net,'dapi','tip']` and `[net,'dapi','chainlock']` with `setQueryData`, and invalidates `[net,'view','latest-blocks']`                                                                                                                                                                                                                                                                                                                                                                             |
-| same RPC, `count = N`                                                                                                     | `core.headers(from, n)`                                                                 | Historic header range in one request (heights and times for lists, date binary search). N ≤ 2000                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| Stream | Opened by | Behaviour |
+|---|---|---|
+| `subscribeToBlockHeadersWithChainLocks` (live: `fromBlockHeight = tip`, `count = 0`) | `coreLive.tip`, mounted by the shell on every page | Emits `{ height, hash, time }` per header and `{ height, hash }` per ChainLock (decoded in `lib/core/header.ts`, `lib/core/chainlock.ts`, no wasm). Updates `[net,'dapi','tip']` and `[net,'dapi','chainlock']` with `setQueryData`, and invalidates `[net,'view','latest-blocks']` |
+| same RPC, `count = N` | `core.headers(from, n)` | Historic header range in one request (heights and times for lists, date binary search). N ≤ 2000 |
 | `subscribeToTransactionsWithProofs`, match-all bloom filter (`vData = [0xff]`, `nHashFuncs = 1`), `fromBlockHeight = tip` | the address page (IN-06) while visible (the IN-01 live feed card will share the stream) | The node replays the tip block first. `coreLive` holds those transactions back until the tip block's merkle block names them, and drops them. Afterwards it emits `tx` for every mempool transaction, `islock` for every IS lock, and `block` (`txids` read from the merkle block's partial tree, not checked against the header) for every new block. `txStatus.fallbackHint` turns on when the node sends nothing for 60 s while the tip moves, or after 3 failed opens in a row, and turns off with the next message. After 3 failed opens the stream is tried again only every 5 minutes (`TX_STREAM_RETRY_MS`), because its watchers read Hyphen meanwhile |
-| `subscribeToMasternodeList`                                                                                               | `core.masternodeList` (§4.12), one stream per read                                      | Not shared or kept open: the first message (the full list as a diff from the zero hash) is decoded into `Map<protx, DapiMnEntry>` and the stream is closed                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `subscribeToMasternodeList` | `core.masternodeList` (§4.12), one stream per read | Not shared or kept open: the first message (the full list as a diff from the zero hash) is decoded into `Map<protx, DapiMnEntry>` and the stream is closed |
 
 `SharedStream` (`streams.ts`) implements the sharing and the backoff. `coreLive` (`data/core/live.ts`) is the only code that opens these streams: `coreLive.tip(net, queryClient)` returns a release function; `.transactions(net, listener)` delivers every transaction and InstantSend lock that reaches the mempool from now on, plus a `block` event with the transaction ids of each new block (`merkleBlockTxids`); `.status(net)` and `.txStatus(net)` give the `LiveStatus` (`idle`, `connecting`, `live`, `reconnecting`, `polling`, `stopped`); `.subscribe(cb)` reports changes. The shell mounts the tip through `useLiveTip` (`app/live-tip.ts`), which loads `coreLive` on demand and which `main.tsx` enables after it installs the transport (page tests leave it off). **The connection state the page shows.** `ui/live-connection.ts` holds one shared state (`live | connecting | reconnecting | polling | stopped`, with the time of the last event) and its words (`liveView`): "Live", "Connecting…", "Reconnecting…", "Checking every 30 s", "Stopped since HH:MM" (short forms "Retrying", "Slow", "Stopped" in the phone header). Until something feeds it the state is `live`, so page tests and the kit need no stream. `features/entity/HeaderTip.tsx` (mounted by the shell bar through `HeaderTip.lazy.tsx`, which keeps the Core queries out of the entry chunk) shows the live Core height with its ChainLock state and mirrors `coreLive.status(net)` plus `navigator.onLine` into that state (`features/entity/live-connection.ts`: `idle` counts as live; offline is `stopped` from the moment the browser went offline). Every `LiveDot state="live"` and every un-paused `LiveControl` reads it. A `LiveDot` given a source-health state is not the connection and is left alone. `[data-header-tip]` carries `data-connection` and `data-up`; the word beside the height appears only when the state is not live. The "live updates stopped" notice (`LiveNotice`) is the longer explanation with its retry.
 
@@ -851,27 +777,19 @@ Features use only this façade, never `dapi-core` or Hyphen directly for Core fa
 export interface CoreClient {
   tip(net: NetworkId): Promise<Sourced<{ height: number; hash: string; time: number }>>
   chainLock(net: NetworkId): Promise<Sourced<{ height: number; hash: string }>>
-  status(net: NetworkId): Promise<Sourced<CoreChainStatus>> // getBlockchainStatus
+  status(net: NetworkId): Promise<Sourced<CoreChainStatus>>             // getBlockchainStatus
   block(net: NetworkId, ref: BlockRef): Promise<Sourced<DecodedBlock | null>>
-  tx(net: NetworkId, txid: string): Promise<Sourced<DecodedTx | null>> // with height, confirmations, isInstantLocked, isChainLocked
+  tx(net: NetworkId, txid: string): Promise<Sourced<DecodedTx | null>>  // with height, confirmations, isInstantLocked, isChainLocked
   prevouts(net: NetworkId, tx: DecodedTx): Promise<Sourced<Map<string /*txid:vout*/, PrevOut>>>
   headers(net: NetworkId, fromHeight: number, count: number): Promise<Sourced<HeaderInfo[]>>
   /** List pages: decides DAPI vs Hyphen per call (rule below). */
   blockRows(net: NetworkId, q: { fromHeight: number; count: number }): Promise<Sourced<BlockRow[]>>
-  heightAtTime(net: NetworkId, ms: number): Promise<Sourced<number>> // IN-02 binary search over headers
+  heightAtTime(net: NetworkId, ms: number): Promise<Sourced<number>>   // IN-02 binary search over headers
   nodeSelfStatus(net: NetworkId, nodeUrl: string): Promise<Sourced<DapiNodeStatus>> // evonode /mn/ page
-  masternodeList(net: NetworkId): Promise<Sourced<Map<string, DapiMnEntry>>> // §4.12
+  masternodeList(net: NetworkId): Promise<Sourced<Map<string, DapiMnEntry>>>  // §4.12
 }
 export type BlockRef = { height: number } | { hash: string }
-export interface BlockRow {
-  height: number
-  hash: string
-  time: number
-  txCount: number
-  size: number
-  chainLocked: boolean
-  pool?: string
-}
+export interface BlockRow { height: number; hash: string; time: number; txCount: number; size: number; chainLocked: boolean; pool?: string }
 ```
 
 **The fallback rule, exactly:**
@@ -886,11 +804,10 @@ Hyphen keeps the data DAPI can't give at all: addresses, spent flags, rich list,
 **Prefetch budget.** Route loaders and hover prefetch may issue DAPI calls only when pressure is `ok`, at most 1 call per hover, and only for detail routes (`/block/`, `/tx/`). A router preload passes `{ priority: 'prefetch' }` to `coreQueries.block` and `coreQueries.tx` through the `preload` flag that `blockPrefetch` and `txPrefetch` take, so it queues behind every read a visible page needs; a real navigation uses `detail`. Hover cards pass `prefetch` too.
 
 **What the façade does, as built.**
-
 - Times are ms since the epoch everywhere in `data/core` (`HeaderInfo.time`, `DecodedBlock.time`, `DecodedTx.time`, `BlockRow.time`, `tip.time`, `CoreChainStatus.medianTime`).
 - DAPI stamps use `asOf = fetchedAt` (§2.2): a block's time is an event time and never becomes `asOf`. `immutable` is set on a block when its height is at or below the best ChainLock, on a tx when `isChainLocked`, and on prevouts when every previous tx is chainlocked. Hyphen answers copy Hyphen's stamp and add `fallback`.
 - `tip` = `getBlockchainStatus` (height, hash) plus a one-header range (time): 2 requests. `chainLock` = a header range of one header from height 1; the stream sends the best ChainLock first, so that is one cheap request. Any header range also refreshes the façade's remembered best ChainLock, which `block()` uses for `chainLocked` (refreshed at most every 10 s).
-- Header hashes are X11. A range takes the hash of header _i_ from the `prevHash` of header _i+1_; only the last header is hashed, by the wasm decoder (`decodeBlock(header ‖ 0x00)`). `lib/core/header.ts` and `lib/core/chainlock.ts` parse the fields without wasm.
+- Header hashes are X11. A range takes the hash of header *i* from the `prevHash` of header *i+1*; only the last header is hashed, by the wasm decoder (`decodeBlock(header ‖ 0x00)`). `lib/core/header.ts` and `lib/core/chainlock.ts` parse the fields without wasm.
 - `blockRows(net, { fromHeight, count })` is newest first: `fromHeight`, then `count - 1` blocks below it. Its DAPI cost is `count` `getBlock` calls plus one ChainLock lookup. `pool` comes from the coinbase scriptSig through `lib/core/pools.ts`.
 - `heightAtTime(net, ms)` is the lowest height whose block time is at or after `ms` (the tip's height when `ms` is after the tip). It interpolates over header windows, usually in 2–3 requests: the first probe reads `firstWindow(back)` headers (4 × (√back + 1 % of back), between 96 and 500, centred on the guess from the average block time), later probes 128. A day close to the tip moves a fifth of the bytes it used to; one a week back still reads 500. Recorded replays ask for the same windows, so `scripts/record-dapi-fixtures.mjs --times <ms,…>` records a search from the manifest's tip.
 - `block()` by hash derives the height from the cbTx (DIP-3 on) or the BIP-34 push in the coinbase script (before), or 0 for the genesis block.
@@ -963,7 +880,7 @@ useIndexHealth(net, opts?: { insight?: boolean }): {
   - Status is `connecting | live | reconnecting | paused`; the fallback counts as `live`.
   - **What "seen" means.** The node replays the tip block and then dumps its whole mempool before it streams new transactions, with nothing to tell the two apart, so a transaction that was already pending when the page opened arrives like a new one. The page shows each as unconfirmed activity and counts them honestly: "N transactions seen since you opened this page", never "new".
   - Cost per open tab, DAPI path: one `subscribeToTransactionsWithProofs` open per stream lifetime (~590 s) plus the tip read before it, about 0.2 DAPI requests a minute, shared with any other holder; no Hyphen request to watch; three Hyphen refreshes per block (summary, first history page, UTXOs), about 1.2 a minute. Fallback: 2 Hyphen requests a minute plus the same refreshes when something new appears, and a DAPI reopen attempt every 5 minutes. A hidden tab costs nothing.
-    The history is cursor-paged 25 transactions a request (`HISTORY_LIMIT`); "Show more" sends Hyphen's `nextCursor` back unchanged, which the Worker lets through (§2.7). When a later page fails, the rows already shown stay, a `role="alert"` line says "The next transactions could not be loaded." and "Try again" asks for the same page. The watcher pauses while the tab is hidden (nothing is fetched; one resync on show).
+  The history is cursor-paged 25 transactions a request (`HISTORY_LIMIT`); "Show more" sends Hyphen's `nextCursor` back unchanged, which the Worker lets through (§2.7). When a later page fails, the rows already shown stay, a `role="alert"` line says "The next transactions could not be loaded." and "Try again" asks for the same page. The watcher pauses while the tab is hidden (nothing is fetched; one resync on show).
 - **Freshness of the Hyphen index.** `useIndexHealth(net)` (§4.7a) runs the probe and says whether the index is behind the chain once the probe has measured it. Every page that says so uses one sentence, `useHyphenLagSentence(net, lag)` in `ui/hyphen-lag.ts`: "Hyphen’s <network> index is behind the chain: <lag detail>." (`StaleIndexNotice`, `HyphenOnlyNote` and Home's `StaleNote` add what follows from it). **Mempool** (`/mempool`, HY-19) does not read a stale index at all: while the Hyphen probe says stale, and in Decentralized only mode, the page is filled from DAPI's live transaction feed (`useSeenPending`, `data/core/seen-pending.ts`, the hook behind the home's pending column, here listing the newest 100 rows). The summary counts and sums everything the hook keeps (up to `SEEN_STORE_LIMIT`, 5,000, shown as "5,000+" once the oldest are dropped), not only the rows listed, and the table's subtitle says "The newest 100 of N" when it lists fewer than it counts. It lists the transactions this page has seen arrive, minus those since mined, under "Seen since you opened this page", with a three-figure summary (count, their size, watching since) stamped DAPI and a status line that says it is not the whole mempool. `StaleIndexNotice` (or, in the mode, a compact `Unavailable`) says once why the full list and its totals are missing. The route's prefetch follows the route-prefetch rule (§4.7a): on a first visit it waits (within the loader's deadline) for the probe, then reads Hyphen's mempool only if the index is not stale. The page shows the seen view, with no notice, until the probe has decided (`index.pending`), so Hyphen's list is never shown as live before the index is known to be current; `useSeenPending` is mounted above that switch, so the rows survive a change of the index state. With a fresh index the page is Hyphen's list and summary as before ("Refreshes every 15 seconds."). **Status → Hyphen** says "It calls its sync “synced, realtime”, but its index is behind the chain" instead of repeating the claim as a fact.
 - **Block transactions on phones** (IN-03): at ≤ 640 px `BlockTxCompact` replaces the card table with one line per transaction (position, short id, amount out) and a chevron that opens its type, input and output counts, size and the full transaction link; the pager is the table's own (`Pager`, exported from `ui/data-table`). A line above says "Tap a transaction for its inputs, outputs and size".
 - **Rich list on phones** (HY-09, D07). At ≤ 640 px the page renders `RichListCompact` instead of the card table: an ordered list of two-line rows (`data-rich-compact`, `data-rank`) with nothing behind a tap. Line 1 is the rank, the address as a link to its page (`Entity`, 44 px tall), the compact balance and the share of supply; line 2, smaller and in `--dh-ink-2`, reads "Received … · Sent … · N tx" (`.rx-rich-flow`, which wraps at 320 px). "Show more" and "Back to summary" (scrolls to `#concentration`) sit below. The desktop table is unchanged.
@@ -999,15 +916,13 @@ One record in five tabs, `?tab=overview|network|platform|history|payments` (over
 
 A mode in which Radar asks no hosted backend for anything: not Hyphen (the edge's `/x/hy/*` pass-through and the stream behind it), not Insight, not Platform Explorer or its `/rate` price, not the Radar census API. Everything shown comes from DAPI nodes (Core gRPC-web) and the Platform SDK; what they cannot answer is shown as unavailable, never read from an index and never from a cache of one.
 
-**The switch** (`lib/source-mode.ts`, pure, no React). The mode in force is _link OR remembered_:
-
+**The switch** (`lib/source-mode.ts`, pure, no React). The mode in force is *link OR remembered*:
 - **Remembered**: `localStorage['radar.sources'] = 'decentralized'`, written by the switch on Settings and on Tools → Sources (`writeSourceMode`). Absent means all sources.
 - **Link**: `?sources=decentralized` (§6.2) turns it on for the visit without remembering anything.
 - `decentralizedOnly()` is the one question every gate asks. `subscribeSourceMode` tells listeners when the answer changes; `useDecentralizedOnly()` (`data/health.ts`) and `useSourceMode()` (`ui/source-mode.tsx`) are the React readings.
 - Switching it off from a page (`useSetSourceMode`, used by the switches and by `Unavailable`'s "Use all sources") clears the remembered choice and drops the param with a `replace` navigation, so neither half keeps it on.
 
 **One gate, in the data layer.** `HOSTED_SOURCES = ['radar', 'pe', 'hyphen', 'insight', 'rate']`; `sourceOff(source)` is true for those while the mode is on; `sourceInUse(net, source)` adds "and it has an endpoint on this network".
-
 1. **Clients.** `fetchSourced` (§2.4), the one function the four HTTP clients and the rate feed share, starts with `if (sourceOff(req.source)) throw disabledByMode(req.source)`: before the URL is built, before a timer or an `AbortController`, before the health registry hears anything. `openHyphenStream` (`data/hyphen/stream.ts`) has the same first line, so no `EventSource` is opened. There is no other way from the app to those hosts: features cannot call `fetch` (§1.2).
 2. **Queries and the cache.** Query keys carry the source (`[net, source, …]`, §5.1). `withDataClass` (`data/query/persister.ts`) rejects `disabled-by-mode` for a hosted key before it runs the query function or restores a persisted answer, so a remembered Hyphen page cannot paint from IndexedDB. `prefetchItem` (`data/query/loader.ts`) resolves without starting anything for a hosted key, which covers route loaders and hover prefetch.
 3. **Turning it on mid-session.** `watchSourceMode(queryClient)` (`data/query/source-mode.ts`, started in `app/query-client.ts`) answers every change with `forgetSourceHealth(HOSTED_SOURCES)`, `cancelQueries()` and `resetQueries()`: in-flight hosted requests are aborted, every hosted query drops its data and its next read meets the gate, and the health registry forgets what the hosted sources said. No reload. Switching it off does the same, and the pages read their sources again.
@@ -1017,20 +932,20 @@ The error is `SourceError` kind `disabled-by-mode` (§2.3). It is not an outage:
 
 **What each page does in the mode.**
 
-| Page                                                       | From DAPI and the SDK                                                                                                                                                                                                                                                            | Unavailable, said once                                                                                                                                                                                  |
-| ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Home                                                       | Core height, ChainLock and headline figures; latest blocks; pending transactions as "seen since you opened this page" (`useSeenPending`); Platform height and epoch from the SDK alone (no Platform Explorer stand-in while it warms)                                            | masternode census and map, Platform transitions                                                                                                                                                         |
-| Blocks, blocks by date                                     | 20 a page from DAPI; the day's height search (IN-02)                                                                                                                                                                                                                             | pages of 50 and 100 (a note)                                                                                                                                                                            |
-| Block                                                      | header, transactions, coinbase, ChainLock                                                                                                                                                                                                                                        | chainwork says "Not in DAPI"                                                                                                                                                                            |
-| Transaction                                                | everything decoded, fee and input values (`prevouts`), settlement (§4.7)                                                                                                                                                                                                         | spent flags and spending transactions (one compact state in the inputs and outputs section, only for a mined transaction); first-seen time                                                              |
-| Address                                                    | the live feed (`watchAddress`, §4.8), a "pending" card of what arrived while the page was open (stamped by the feed, `useLiveFeedStamp`: as of now while its stream is connected, never by a transaction's arrival), checked against DAPI for having been mined, and the QR code | balance, totals and history (one state for the page)                                                                                                                                                    |
-| Mempool                                                    | the seen list (§4.8)                                                                                                                                                                                                                                                             | the full list and totals (compact)                                                                                                                                                                      |
-| Rich list, Charts, Network internals, Governance, Proposal | —                                                                                                                                                                                                                                                                                | the whole page, once (`HyphenGate`)                                                                                                                                                                     |
-| Masternodes, Nodes, Map, Changes, Core 24                  | DAPI's list on `/masternodes` and `/nodes` (§4.12–4.15)                                                                                                                                                                                                                          | the crawl's columns and facets; the census, map points, changes and activation tracker                                                                                                                  |
-| Masternode                                                 | the header, the registration fields and Platform figures from DAPI's list and the SDK (§4.10)                                                                                                                                                                                    | one notice per tab for what needs Radar, Platform Explorer or Hyphen; the whole page is one `Unavailable` only when DAPI errors as well, and a ProTx DAPI's list does not have is the not-found `Empty` |
-| Status                                                     | DAPI and SDK rows and the node pool; overall line "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode."                                                                                                                                  | hosted rows stay listed as "Off in this mode" (`data-state="off"`), with no probe                                                                                                                       |
-| Search                                                     | local, DAPI and SDK resolvers                                                                                                                                                                                                                                                    | index lookups (compact)                                                                                                                                                                                 |
-| Settings, Tools                                            | everything; USD is disabled in the unit choice                                                                                                                                                                                                                                   | USD prices (compact, mainnet only: the feed is not offered elsewhere)                                                                                                                                   |
+| Page | From DAPI and the SDK | Unavailable, said once |
+|---|---|---|
+| Home | Core height, ChainLock and headline figures; latest blocks; pending transactions as "seen since you opened this page" (`useSeenPending`); Platform height and epoch from the SDK alone (no Platform Explorer stand-in while it warms) | masternode census and map, Platform transitions |
+| Blocks, blocks by date | 20 a page from DAPI; the day's height search (IN-02) | pages of 50 and 100 (a note) |
+| Block | header, transactions, coinbase, ChainLock | chainwork says "Not in DAPI" |
+| Transaction | everything decoded, fee and input values (`prevouts`), settlement (§4.7) | spent flags and spending transactions (one compact state in the inputs and outputs section, only for a mined transaction); first-seen time |
+| Address | the live feed (`watchAddress`, §4.8), a "pending" card of what arrived while the page was open (stamped by the feed, `useLiveFeedStamp`: as of now while its stream is connected, never by a transaction's arrival), checked against DAPI for having been mined, and the QR code | balance, totals and history (one state for the page) |
+| Mempool | the seen list (§4.8) | the full list and totals (compact) |
+| Rich list, Charts, Network internals, Governance, Proposal | — | the whole page, once (`HyphenGate`) |
+| Masternodes, Nodes, Map, Changes, Core 24 | DAPI's list on `/masternodes` and `/nodes` (§4.12–4.15) | the crawl's columns and facets; the census, map points, changes and activation tracker |
+| Masternode | the header, the registration fields and Platform figures from DAPI's list and the SDK (§4.10) | one notice per tab for what needs Radar, Platform Explorer or Hyphen; the whole page is one `Unavailable` only when DAPI errors as well, and a ProTx DAPI's list does not have is the not-found `Empty` |
+| Status | DAPI and SDK rows and the node pool; overall line "DAPI and the Platform SDK are answering. Hosted sources are off in Decentralized only mode." | hosted rows stay listed as "Off in this mode" (`data-state="off"`), with no probe |
+| Search | local, DAPI and SDK resolvers | index lookups (compact) |
+| Settings, Tools | everything; USD is disabled in the unit choice | USD prices (compact, mainnet only: the feed is not offered elsewhere) |
 
 Platform pages keep their SDK reads in the mode; §3.5–3.12 say, page by page, what needs Platform Explorer.
 
@@ -1038,18 +953,17 @@ The DAPI budget (§4.3) is unchanged: no page replaces an index list with a DAPI
 
 **Hosts still contacted in the mode.** Tools → Sources (`features/tools/sources/backends.ts`) lists every backend with its host, whether it is hosted by one operator, and whether it is in use, off or not offered on this network, next to the same switch. In the mode exactly these remain:
 
-| Host                                                                         | What for                                                                                                                                                                                                                                                                                | Can it be avoided?                                                                                                                                                                                                                                                                                                                                           |
-| ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| The page's own origin (`explorer.dashhq.org`)                                | The app itself: HTML, scripts, the decoder and SDK wasm, fonts, map shapes and the vendored dashhq shell (served from Radar's origin, it makes no request of its own). It sees the path of a page that is opened or reloaded directly, not in-app navigation and not what is looked up. | Only by self-hosting the build, which is static.                                                                                                                                                                                                                                                                                                             |
-| `quorums.<network>.networks.dash.org` (a devnet: its configured `quorumUrl`) | Two things. DAPI node discovery, `GET /masternodes` at most once an hour (§4.2). And the SDK's trusted context: the quorum public keys it checks proofs against. One operator (Dash Core Group) serves it.                                                                              | Discovery could run from the cached list and the bundled seeds alone (`seed.<net>.json`, 30 nodes), at the price of a node set that ages between releases; it is kept because a stale node list is the likelier failure. The quorum keys cannot be dropped without a light client that derives them from Core headers and masternode-list diffs (M8, §4.4a). |
-| DAPI evonodes, `https://<ip>:<port>`                                         | Core gRPC-web (§4) and every Platform read through the SDK (§3). Many independent operators; 8 active at a time.                                                                                                                                                                        | No: this is the decentralized source.                                                                                                                                                                                                                                                                                                                        |
+| Host | What for | Can it be avoided? |
+|---|---|---|
+| The page's own origin (`explorer.dashhq.org`) | The app itself: HTML, scripts, the decoder and SDK wasm, fonts, map shapes and the vendored dashhq shell (served from Radar's origin, it makes no request of its own). It sees the path of a page that is opened or reloaded directly, not in-app navigation and not what is looked up. | Only by self-hosting the build, which is static. |
+| `quorums.<network>.networks.dash.org` (a devnet: its configured `quorumUrl`) | Two things. DAPI node discovery, `GET /masternodes` at most once an hour (§4.2). And the SDK's trusted context: the quorum public keys it checks proofs against. One operator (Dash Core Group) serves it. | Discovery could run from the cached list and the bundled seeds alone (`seed.<net>.json`, 30 nodes), at the price of a node set that ages between releases; it is kept because a stale node list is the likelier failure. The quorum keys cannot be dropped without a light client that derives them from Core headers and masternode-list diffs (M8, §4.4a). |
+| DAPI evonodes, `https://<ip>:<port>` | Core gRPC-web (§4) and every Platform read through the SDK (§3). Many independent operators; 8 active at a time. | No: this is the decentralized source. |
 
 Nothing else is contacted by the app: no analytics, no third-party font, script or image host. The site's edge Worker reads no hosted backend for a request with `?sources=decentralized`, so a link preview of a Decentralized only link is generic (§2.7). `e2e/tests/decentralized-mode.spec.ts` walks every route case (§10) on each of its networks in the mode and fails on a request to a hosted backend or to any host outside this table.
 
 ### 4.12 DAPI's masternode list (`data/core/mn-list.ts`, `data/core/mn-list-decode.ts`)
 
 `core.masternodeList(net)` is the deterministic masternode list as one DAPI node reports it.
-
 - **Decoding.** The first message of `subscribeToMasternodeList` is Dash Core's `protx diff` answer encoded as CBOR (rs-dapi writes the RPC's JSON with `ciborium`), not the P2P `mnlistdiff` the wasm decoder reads. `mn-list-decode.ts` decodes it in TypeScript: a small RFC 8949 reader (`readCbor`), a zod schema for the entries, and a DIP-4 coinbase payload reader (`readCoinbasePayload`). No wasm change and no dependency.
 - **One read, memory only.** A read opens one stream, takes the first message (a full list: a diff from the zero hash) and closes it. The list is kept five minutes per network (`MN_LIST_TTL_MS`), shared by every caller and by concurrent reads (one flight per network), and dropped on a network reset. It is never persisted: a mainnet list is about 1.35 MB.
 - **Checks.** Field forms, no repeated ProTx, the coinbase payload's `merkleRootMNList` equal to the diff's, and the diff's block hash equal to the header DAPI reports at the coinbase's height (one extra counted DAPI read; a node that names another block is refused and reported through `reportInvalid`, and a header that cannot be read leaves the list unchecked rather than refused). A list that fails its checks, or none in time (30 s idle, 90 s overall), is asked again of other nodes, three attempts in all.
@@ -1058,7 +972,7 @@ Nothing else is contacted by the app: no analytics, no third-party font, script 
 
 ### 4.13 Network census and the Core 24 tracker (Radar's crawl)
 
-- **`/nodes`** (`features/network/nodes/`). `NodesPage` composes cards over Radar's crawl, read through `useCensus(net, scope, range, overTime)` (`census-data.ts`): `summary`, `status`, `releases`, `bench` and two `history` queries (versions over time, read only when that view is chosen, and network size). Every one is enabled only while `useCrawlAvailable(net)` says the crawl can be read (not Decentralized only mode, not a devnet). The arithmetic is in `census-math.ts` (ported from dash-nodes), chart options in `census-charts.ts`, colours from the theme (`census-colors.ts`). Scope, version view and range live in the route search (`scope`, `versions`, `days`). Census figures link to `/masternodes` with the matching `reach`, `status`, `host`, `country`, `type` or `dkg` filter. A crawl older than 30 minutes (`CRAWL_STALE_MS`) shows a stale notice (`StaleCrawl`), and a pending Core 24 activation a link to `/v24`. In the mode the page is one `Unavailable` and DAPI's own list (`DapiMasternodes`, `mnRowsQuery`); on a devnet an `Empty` and the same list.
+- **`/nodes`** (`features/network/nodes/`). `NodesPage` composes cards over Radar's crawl, read through `useCensus(net, scope, range, overTime)` (`census-data.ts`): `summary`, `status`, `releases`, `bench` and two `history` queries (versions over time, read only when that view is chosen, and network size). Every one is enabled only while `useCrawlAvailable(net)` says the crawl can be read (not Decentralized only mode, not a devnet). The arithmetic is in `census-math.ts` (ported from dash-nodes), chart options in `census-charts.ts`, colours from the theme (`census-colors.ts`). Scope, version view and range live in the route search (`scope`, `versions`, `days`). Census figures link to `/masternodes` with the matching `reach`, `status`, `host`, `country`, `type` or `dkg` filter. A crawl older than 30 minutes (`isCrawlStale`) shows a stale notice (`StaleCrawl`), and a pending Core 24 activation a link to `/v24`. In the mode the page is one `Unavailable` and DAPI's own list (`DapiMasternodes`, `mnRowsQuery`); on a devnet an `Empty` and the same list.
 - **`/v24`** (`features/network/v24/`). `V24Page` reads `radarQueries.activation(net)`, read again every minute (`POLL_MS.radarActivation`); in the mode, or on a devnet, it reads nothing and shows `Unavailable`; window, threshold and milestone arithmetic is in `v24-math.ts`. A reading older than 10 minutes shows a stale notice. `v24Pending(doc, now)` lives in `data/radar/schemas/activation.ts`, so the home and `/nodes` share it without a feature-to-feature import.
 
 ### 4.14 The masternode list (`/masternodes`, `features/network/masternodes/`)
@@ -1094,29 +1008,26 @@ Nothing else is contacted by the app: no analytics, no third-party font, script 
 ### 5.2 Data classes (`data/query/stale.ts`)
 
 ```ts
-export type DataClass =
-  'immutable' | 'structural' | 'live' | 'tip' | 'crawl' | 'index' | 'latest' | 'rate'
-export function dataClass(
-  c: DataClass,
-): Pick<QueryOptions, 'staleTime' | 'gcTime' | 'meta' | 'refetchInterval'>
+export type DataClass = 'immutable' | 'structural' | 'live' | 'tip' | 'crawl' | 'index' | 'latest' | 'rate'
+export function dataClass(c: DataClass): Pick<QueryOptions, 'staleTime' | 'gcTime' | 'meta' | 'refetchInterval'>
 ```
 
-| Class        | staleTime  | gcTime | Persisted | Polling while visible                                                                                                                                                               | Examples                                                                                            |
-| ------------ | ---------- | ------ | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| `immutable`  | ∞          | 24 h   | yes       | —                                                                                                                                                                                   | chainlocked block or tx, finalized epoch, historic contract version                                 |
-| `structural` | 5 min      | 1 h    | yes       | —                                                                                                                                                                                   | contract schema, identity keys, token config, DPNS names, Radar `/masternodes/{protx}` registration |
-| `live`       | 30 s       | 10 min | no        | —                                                                                                                                                                                   | balances, nonces, `system.status`, vote state                                                       |
-| `tip`        | ∞ (pushed) | 10 min | no        | stream; 30 s poll fallback                                                                                                                                                          | tip, ChainLock, latest blocks                                                                       |
-| `crawl`      | 5 min      | 30 min | no        | 60 s for Radar `status` and `activation`; 5 min (`CRAWL_REFRESH_MS`; 1 min while the document trails the latest crawl) for `summary`, `masternodes`, `geo`, `history` and `changes` | Radar documents                                                                                     |
-| `index`      | 30 s       | 10 min | no        | —                                                                                                                                                                                   | PE/Hyphen lists and details                                                                         |
-| `latest`     | 10 s       | 5 min  | no        | 10 s (PE latest transitions), 15 s (mempool)                                                                                                                                        | home feeds                                                                                          |
-| `rate`       | 60 s       | 30 min | no        | 60 s                                                                                                                                                                                | USD rate                                                                                            |
+| Class | staleTime | gcTime | Persisted | Polling while visible | Examples |
+|---|---|---|---|---|---|
+| `immutable` | ∞ | 24 h | yes | — | chainlocked block or tx, finalized epoch, historic contract version |
+| `structural` | 5 min | 1 h | yes | — | contract schema, identity keys, token config, DPNS names, Radar `/masternodes/{protx}` registration |
+| `live` | 30 s | 10 min | no | — | balances, nonces, `system.status`, vote state |
+| `tip` | ∞ (pushed) | 10 min | no | stream; 30 s poll fallback | tip, ChainLock, latest blocks |
+| `crawl` | 5 min | 30 min | no | 60 s for Radar `status` and `activation` only | Radar documents |
+| `index` | 30 s | 10 min | no | — | PE/Hyphen lists and details |
+| `latest` | 10 s | 5 min | no | 10 s (PE latest transitions), 15 s (mempool) | home feeds |
+| `rate` | 60 s | 30 min | no | 60 s | USD rate |
 
 - Every query carries `meta.dataClass` (spread `dataClass('live')` etc.; `meta` is `{ persist?: true; dataClass }`). `staleAfterMs(class)` is `staleTime × STALE_AGE_FACTOR (4)`, except `tip` (infinite `staleTime`), which is 20 min, and `immutable`, which never goes stale. The query client's default `persister` (`withDataClass`) stamps `SourceStamp.staleAfterMs` on every answer and on data restored from IndexedDB, and `SourceLine` turns orange at `stamp.staleAfterMs ?? STALE_AGE_MS[stamp.source]`, so a figure is judged by its class, not its source. Clients never set `staleAfterMs`; only the query layer does.
 - Polling uses `refetchInterval` with `refetchIntervalInBackground: false`, so hidden tabs never poll.
 - `POLL_MS.addressFallback` is 30 s: the address page's own history, read only while DAPI's transaction stream has given up (§4.8).
 - `refetchOnWindowFocus` is off globally, and on for `live` and `index`.
-- **One crawl age** (`data/radar/client.ts`, `lib/crawl.ts`). Every Radar document built from the crawl is stamped with the finish time of the crawl it came from, never its fetch time or the crawl's start: `summary` and `status` carry it, `masternodes` and `geo` name their crawl (`crawl_id`) and take that crawl's finish, and `history`, `changes` and a masternode's detail take the latest crawl's. The client keeps the finish of each network's recent crawls by id, and reads `status` again when a document names a newer crawl than it knows. A document of an older crawl than the latest is stamped `radarTime: 'earlier-crawl'` and says so in its label. Radar's readings outside the crawl (`platform`, its 15-minute Platform checks; `activation`; `bench`; a masternode's bench and check) are `radarTime: 'reading'`, labelled "Checked by Radar" with their own time, so their age never passes for the crawl's. Radar publishes its documents one by one after a crawl finishes, so for a while `status` can name a newer crawl than `summary` or `masternodes`. The crawl documents a page shows are read again every `CRAWL_REFRESH_MS` (5 min) while it is visible, and every `CRAWL_CATCH_UP_MS` (1 min) while one trails the latest crawl, so pages open side by side show the same crawl. A crawl turns stale at one age, `CRAWL_STALE_MS` (30 min), everywhere: the source lines and the hero (`QUIET_AGE_MS.radar`), the `/nodes` notice and Radar's health on `/status`.
+- **One crawl age** (`data/radar/client.ts`, `lib/crawl.ts`). Every Radar document built from the crawl is stamped with the finish time of the crawl it came from, never its fetch time or the crawl's start: `summary` and `status` carry it, `masternodes` and `geo` name their crawl (`crawl_id`) and take that crawl's finish, and `history`, `changes` and a masternode's detail take the latest crawl's. Radar's status is read alongside each document (one shared read), and again only when a document names a newer crawl than it says. The client keeps the finish of each network's recent crawls by id. Radar publishes its documents one by one after a crawl finishes, so for about a minute `status` can name a newer crawl than `summary` or `masternodes`: such a document is stamped `radarTime: 'earlier-crawl'` and its label says "Crawled by Radar · an earlier crawl". Radar's readings outside the crawl (`platform`, its 15-minute Platform checks; `activation`; `bench`; a masternode's bench and check) are `radarTime: 'reading'`, labelled "Checked by Radar" with their own time. A crawl starts every 15 minutes (dash-nodes' `CRAWL_INTERVAL`). The crawl documents a page shows are read again every `CRAWL_REFRESH_MS` (5 min) while it is visible, and after `CRAWL_CATCH_UP_MS` (1 min), at most `CRAWL_CATCH_UPS` (2) times in a row, while one trails the latest crawl (`crawlRefreshMs`). A crawl turns stale at one age, `CRAWL_STALE_MS` (30 min), everywhere (`isCrawlStale`): the source lines and the hero, `/map` and the `/nodes` notice, and Radar's health on `/status`. The `/v24` reading's own 10-minute notice is about the activation count, which Radar reads every minute, not about the crawl.
 - Retry: `retry: (n, e) => n < 2 && retryable(e)`, `retryDelay: (n, e) => e.retryAfterMs ?? 1000 * 2 ** n` (§2.3).
 
 ### 5.3 Persistence
@@ -1128,19 +1039,15 @@ export function dataClass(
 ```ts
 // data/query/batch.ts
 export function createBatcher<K, V>(opts: {
-  name: string // also the query resource, e.g. 'identity-balance'
+  name: string                  // also the query resource, e.g. 'identity-balance'
   source: SourceId
-  maxBatch: number // SDK: 100 (Drive's max query limit)
-  windowMs?: number // default 15
+  maxBatch: number              // SDK: 100 (Drive's max query limit)
+  windowMs?: number             // default 15
   run: (net: NetworkId, keys: K[]) => Promise<Sourced<Map<K, V | null | Error>>>
 }): Batcher<K, V>
 
 /** Backend value first; the SDK value replaces it when the batch lands. */
-export function useHydratedFact<K, V>(
-  batcher: Batcher<K, V>,
-  key: K,
-  backend: Fact<V> | undefined,
-): Fact<V> | undefined
+export function useHydratedFact<K, V>(batcher: Batcher<K, V>, key: K, backend: Fact<V> | undefined): Fact<V> | undefined
 ```
 
 - Every row calls `useHydratedFact(identityBalance, row.id, { value: row.balance, stamp: pageStamp })`. Calls within the window coalesce into one `identities.balances` call per page (chunks of 100). Each key's result is written to its own query (`[net, 'sdk', 'identity-balance', { id }]`), so the entity page reuses it.
@@ -1159,7 +1066,6 @@ export function useHydratedFact<K, V>(
 ### 5.6 Hyphen lists and lookups for features
 
 Features may not import `data/hyphen/client.ts` or `stream.ts` (§1.2), and `hyQueries` builds single-page lists only. Three small files close the gap without loosening a zone rule:
-
 - `pages.ts` exports `hyPages`: infinite-query options for the cursor-paged lists (`addressTxs`, `balances`, `mempoolTxs`, `proposalVotes`). Each keeps the earlier pages and chains `nextCursor`; their keys are `hyKeys(net, '<name>-pages', …)`, so a block event can invalidate them by prefix. Add a list here when a page needs "Show more".
 - `lookups.ts` exports `hyLookups` (`search`, `address`, `proposal`) for search resolvers, which run outside React and have no query client.
 - `fit.ts` exports `useHyphenFit(net)` (§4.7).
@@ -1179,19 +1085,19 @@ export const stringifySearch = (o: Record<string, unknown>): string // drops und
 
 Every search value is a string in the URL. Route schemas coerce it.
 
-| Kind                      | Form                                        | Example                                      |
-| ------------------------- | ------------------------------------------- | -------------------------------------------- |
-| network                   | `network=`                                  | absent = mainnet; `testnet`; `devnet-<name>` |
-| enum                      | value                                       | `view=platform`                              |
-| multi-select              | comma-joined, sorted                        | `type=evo,regular`                           |
-| sort                      | field, `-` prefix for descending            | `sort=-balance`                              |
-| page (page-based sources) | 1-based `page`, `limit` ∈ {10, 25, 50, 100} | `page=3&limit=50`                            |
-| cursor (cursor sources)   | opaque `cursor`                             | `cursor=7b22…`                               |
-| numeric range             | `min..max`, either side optional            | `bal=100..`                                  |
-| date range                | ISO dates                                   | `from=2026-10-01&to=2026-10-31`              |
-| boolean                   | `1`, absent = false                         | `banned=1`                                   |
-| text                      | `q`                                         | `q=alice`                                    |
-| tab                       | `tab`, absent = first tab                   | `tab=payments`                               |
+| Kind | Form | Example |
+|---|---|---|
+| network | `network=` | absent = mainnet; `testnet`; `devnet-<name>` |
+| enum | value | `view=platform` |
+| multi-select | comma-joined, sorted | `type=evo,regular` |
+| sort | field, `-` prefix for descending | `sort=-balance` |
+| page (page-based sources) | 1-based `page`, `limit` ∈ {10, 25, 50, 100} | `page=3&limit=50` |
+| cursor (cursor sources) | opaque `cursor` | `cursor=7b22…` |
+| numeric range | `min..max`, either side optional | `bal=100..` |
+| date range | ISO dates | `from=2026-10-01&to=2026-10-31` |
+| boolean | `1`, absent = false | `banned=1` |
+| text | `q` | `q=alice` |
+| tab | `tab`, absent = first tab | `tab=payments` |
 
 Hash fragments are used only for tx input and output anchors (`#in-3`, `#out-1`) and section anchors.
 
@@ -1202,7 +1108,7 @@ Hash fragments are used only for tx input and output anchors (`#in-3`, `#out-1`)
 - `retainSearchParams(['network'])` middleware on the root route keeps `network` on every `<Link>`, so links never drop it. Cross-network links (Radar's "exists on testnet" redirect) set it explicitly.
 - `useNetwork(): NetworkId` is the only way components read it.
 - **`sources`** is the root schema's second param. Its one value, `?sources=decentralized`, turns Decentralized only mode on for the visit (§4.11); any other value is dropped by a `replace` navigation. `retainSearchParams(['network', 'sources'])` keeps it on every `<Link>` like `network`, and the root route's `beforeLoad` hands it to `lib/source-mode.ts` (not on a preload, so hovering a link never changes the mode). Entity chips are plain `<a href>`; `entityHref` adds `sources=decentralized` while the address is what keeps the mode on (`withSourceMode`, `features/entity/network.ts`), so a chip opened in a new tab stays in it. A mode chosen in Settings is remembered and needs nothing in the address.
-- `data/active-network.ts` keeps two readings. The _active_ network follows the route being loaded (for loaders and clients, so they hit the right backend as soon as a navigation starts). The _rendered_ network follows the page on screen (`AppShell` sets it through `useRenderedNetworkSync`). Anything drawn from shared state while the old page is still up (`useSourceHealth`, `useAllSourceHealth`, `useHydratedFact`) reads the rendered one, so a slow navigation never shows the old page the new network's health or SDK-hydrated values.
+- `data/active-network.ts` keeps two readings. The *active* network follows the route being loaded (for loaders and clients, so they hit the right backend as soon as a navigation starts). The *rendered* network follows the page on screen (`AppShell` sets it through `useRenderedNetworkSync`). Anything drawn from shared state while the old page is still up (`useSourceHealth`, `useAllSourceHealth`, `useHydratedFact`) reads the rendered one, so a slow navigation never shows the old page the new network's health or SDK-hydrated values.
 
 ### 6.3 Per-route schemas
 
@@ -1224,8 +1130,7 @@ export const Route = createFileRoute('/masternodes')({
   validateSearch: masternodesSearch,
   search: { middlewares: [stripSearchParams(defaults)] },
   loaderDeps: ({ search }) => ({ net: search.network }),
-  loader: ({ context, deps }) =>
-    context.queryClient.ensureQueryData(radarQueries.masternodes(parseNetworkParam(deps.net).net)),
+  loader: ({ context, deps }) => context.queryClient.ensureQueryData(radarQueries.masternodes(parseNetworkParam(deps.net).net)),
   component: MasternodesPage,
 })
 ```
@@ -1259,7 +1164,6 @@ M0/M1 loaders: `/` (census, Platform Explorer, Hyphen probe), `/blocks` (Hyphen 
 ### 6.4 The documents query: from the address to `documents.query`
 
 The documents browser (`/contract/$id/documents/$type`) keeps its whole state in the address: `where` (the `zWhere` codec, §11.5 (B): `field~op~value` clauses, `in` values joined by `|`), `order` (a `zList` of fields, `-` for descending), `limit`, `after` (the last document id of the page shown) and `prev` (a `zList` cursor stack: Older pushes `after` onto it, Newer pops it; `nextCursor`, `prevCursor`).
-
 - **Checked before it is sent** (`features/platform/contract/doc-filters.ts`). `filterIndices` reads the type's indices, and `validateQuery` lists every rule a query breaks against them (17 rules, each a `Problem.rule` slug such as `skips-property`, `range-not-last`, `two-in` or `order-sequence`, shown as `data-rule`): which operator may sit on which index position, value types, `in` lists. A query Platform would refuse never reaches the SDK: the form lists the problems and disables Run, and an address that carries one shows the same list instead of results. A refusal from Platform for a query that passed is shown verbatim (`data-platform-error`).
 - **Serialised for the SDK** (`planQuery` in `doc-query.ts`). `sdkWhere` turns each clause into `[field, op, value]` with the SDK's operators (`==`, `<`, `<=`, `>`, `>=`, `in`, `startsWith`) and each value into the field's type (number, boolean or text); `effectiveOrder` gives `orderBy` as `[field, 'asc' | 'desc'][]`, from `order` or, for an `in` or range clause with no order, the serving index's properties ascending; `limit` is one more than the page shows (at most Drive's 100, `DRIVE_MAX`) so `hasMore` knows whether a next page exists; `after` becomes `startAfter`.
 - **DPNS.** On the DPNS `domain` type a value for `normalizedLabel` or `normalizedParentDomainName` is converted to the homograph-safe form (`homographSafe`: lower case, o→0, i and l→1) before it is sent, and the page says what it searched for.
@@ -1276,24 +1180,9 @@ The architect owns names and props; the designer owns looks (`docs/RADAR-DESIGN.
 export type Layer = 'core' | 'platform' | 'network' | 'neutral'
 export type Tone = 'neutral' | 'info' | 'success' | 'warning' | 'danger'
 export type EntityKind =
-  | 'block'
-  | 'tx'
-  | 'address'
-  | 'masternode'
-  | 'evonode'
-  | 'proposal' // Core and network
-  | 'platform-block'
-  | 'transition'
-  | 'identity'
-  | 'contract'
-  | 'document' // Platform
-  | 'token'
-  | 'name'
-  | 'platform-address'
-  | 'epoch'
-  | 'quorum'
-  | 'group'
-  | 'contest'
+  | 'block' | 'tx' | 'address' | 'masternode' | 'evonode' | 'proposal'                // Core and network
+  | 'platform-block' | 'transition' | 'identity' | 'contract' | 'document'           // Platform
+  | 'token' | 'name' | 'platform-address' | 'epoch' | 'quorum' | 'group' | 'contest'
 export type AmountUnit = 'DASH' | 'mDASH' | 'uDASH' | 'duffs'
 export type LoadState = 'loading' | 'ready' | 'empty' | 'error'
 ```
@@ -1393,7 +1282,6 @@ linkOutUrl(target): string | null
 ```
 
 **Link-outs** (`lib/linkouts.ts`, unit-tested target by target). `linkOutUrl` returns the most specific page each app has, and `null` where the app has no page for the network (`pe`, `hyphen` and `insight` cover mainnet and testnet only), in which case `LinkOut` draws nothing.
-
 - Governance (`https://gov.dashhq.org`, `?network=<net>` off mainnet): `proposal` → `/p/h/<hash>`, `contest-vote` → `/names/<label>`. Governance has no page per masternode (its `/masternodes` is the signed-in owner's keyring page), so the masternode page's "Vote in Governance" uses `masternodes` → `/masternodes`, the closest page. `landing` → `/`, the front page for the network (About's Governance link).
 - Bridge (`https://bridge.dashhq.org/`, which redirects to bridge.thepasta.org and keeps the query; `network=<net>` is always sent, since Bridge defaults to testnet): `identity` → `?mode=topup&identity=<id>`, `name` → `?mode=dpns&identity=<id>` (`id` is the owning identity), `platform-address` → `?address=<bech32m>`. `landing` → no parameter but the network (About's Bridge link, the transition tool's "Where to act"). Bridge has no screen for one contract or one token, so `contract` → `?mode=contract` and `token` → the landing screen.
 - Explorers: `pe` → `pe.dashhq.org` / `testnet.pe.dashhq.org`, `hyphen` → `hy.kw.vg` / `ts.kw.vg`, `insight` → `insight.dash.org/insight` / `insight.testnet.networks.dash.org/insight`, each followed by `path`.
@@ -1411,23 +1299,23 @@ linkOutUrl(target): string | null
 
 ### 7.3 `SourceLine` wording (i18n messages in `ui/source-labels.ts`)
 
-| Stamp                                       | Text                                                          | Glyph                            |
-| ------------------------------------------- | ------------------------------------------------------------- | -------------------------------- |
-| `sdk`, `proved`                             | Proof-checked                                                 | check; opens the proof inspector |
-| `sdk`, not proved                           | Served by DAPI · not proved                                   | —                                |
-| `sdk`, `fallback: 'sdk-down'` on a PE value | Indexed by Platform Explorer · proofs unavailable (age shown) | —                                |
-| `sdk`, `fallback: 'sdk-cold'` on a PE value | Indexed by Platform Explorer · checking…                      | spinner                          |
-| `dapi`                                      | Served by DAPI                                                | node on hover                    |
-| `radar`                                     | Crawled by Radar · 6 min ago                                  | —                                |
-| `radar`, `radarTime: 'earlier-crawl'`       | Crawled by Radar · an earlier crawl · 11 min ago              | —                                |
-| `radar`, `radarTime: 'reading'`             | Checked by Radar · 12 min ago                                 | —                                |
-| `radar`, `asOfFetched`                      | Fetched from Radar · 6 s ago                                  | —                                |
-| `pe`                                        | Indexed by Platform Explorer · 12 s ago                       | —                                |
-| `hyphen`                                    | Indexed by Hyphen · 30 s ago                                  | —                                |
-| `hyphen`, `fallback`                        | Indexed by Hyphen · DAPI busy / DAPI unreachable              | —                                |
-| `insight`                                   | Indexed by Insight · 12 s ago (the age is the fetch time)     | —                                |
-| `rate`                                      | Price from {provider} via Platform Explorer                   | —                                |
-| `local`                                     | Computed in your browser                                      | —                                |
+| Stamp | Text | Glyph |
+|---|---|---|
+| `sdk`, `proved` | Proof-checked | check; opens the proof inspector |
+| `sdk`, not proved | Served by DAPI · not proved | — |
+| `sdk`, `fallback: 'sdk-down'` on a PE value | Indexed by Platform Explorer · proofs unavailable (age shown) | — |
+| `sdk`, `fallback: 'sdk-cold'` on a PE value | Indexed by Platform Explorer · checking… | spinner |
+| `dapi` | Served by DAPI | node on hover |
+| `radar` | Crawled by Radar · 6 min ago | — |
+| `radar`, `radarTime: 'earlier-crawl'` | Crawled by Radar · an earlier crawl · 11 min ago | — |
+| `radar`, `radarTime: 'reading'` | Checked by Radar · 12 min ago | — |
+| `radar`, `asOfFetched` | Fetched from Radar · 6 s ago | — |
+| `pe` | Indexed by Platform Explorer · 12 s ago | — |
+| `hyphen` | Indexed by Hyphen · 30 s ago | — |
+| `hyphen`, `fallback` | Indexed by Hyphen · DAPI busy / DAPI unreachable | — |
+| `insight` | Indexed by Insight · 12 s ago (the age is the fetch time) | — |
+| `rate` | Price from {provider} via Platform Explorer | — |
+| `local` | Computed in your browser | — |
 
 Age is hidden when `immutable`. The age turns warning orange (`--dh-warn`; amber is reserved for the primary action) past the stamp's `staleAfterMs`, which the query layer sets from the data class (§5.2), and the dot follows `useSourceHealth`. `SourceLine` renders `data-source`, `data-proved` and `data-fallback` attributes, which e2e tests assert on (§10).
 
@@ -1509,22 +1397,22 @@ Pure function, table-tested: `classify(input: string, net: NetworkId, tip?: { co
 
 ```ts
 export type InputClass =
-  | 'int' // ^\d{1,9}$ → Core height, Platform height, epoch index (each if within range)
-  | 'hex64' // block hash, txid, ProTx, Platform block hash, transition hash, proposal hash
-  | 'hex40' // public-key hash → identity lookup
-  | 'base58-id' // 43–44 base58 chars (32 bytes) → identity, contract, token, document, validator identity
-  | 'core-address' // base58check, versions 0x4c/0x10 mainnet, 0x8c/0x13 testnet
+  | 'int'              // ^\d{1,9}$ → Core height, Platform height, epoch index (each if within range)
+  | 'hex64'            // block hash, txid, ProTx, Platform block hash, transition hash, proposal hash
+  | 'hex40'            // public-key hash → identity lookup
+  | 'base58-id'        // 43–44 base58 chars (32 bytes) → identity, contract, token, document, validator identity
+  | 'core-address'     // base58check, versions 0x4c/0x10 mainnet, 0x8c/0x13 testnet
   | 'platform-address' // bech32m, HRP dash (mainnet) / tdash (testnet)
-  | 'ip' // IPv4/IPv6 with optional :port → masternode by service address
-  | 'date' // YYYY-MM-DD → blocks on that day
-  | 'dpns' // ^[a-z0-9-]{3,63}(\.dash)?$ (case-insensitive) → name; also prefix candidate
-  | 'text' // anything else ≥ 2 chars → contract/token names, DPNS prefix
+  | 'ip'               // IPv4/IPv6 with optional :port → masternode by service address
+  | 'date'             // YYYY-MM-DD → blocks on that day
+  | 'dpns'             // ^[a-z0-9-]{3,63}(\.dash)?$ (case-insensitive) → name; also prefix candidate
+  | 'text'             // anything else ≥ 2 chars → contract/token names, DPNS prefix
 
 export interface Classified {
   raw: string
-  normalized: string // trimmed; hex lower-cased; '.dash' kept for dpns
-  classes: InputClass[] // priority order; one input may have several ("1234" is 'int' then 'dpns')
-  networkHint?: NetworkId // address prefix or HRP that names another network
+  normalized: string            // trimmed; hex lower-cased; '.dash' kept for dpns
+  classes: InputClass[]         // priority order; one input may have several ("1234" is 'int' then 'dpns')
+  networkHint?: NetworkId       // address prefix or HRP that names another network
   warning?: 'secret' | 'possible-secret' // §8.3; `secret` has no classes and an empty `normalized`
 }
 ```
@@ -1535,34 +1423,26 @@ A `networkHint` different from the current network produces one hit, "This is a 
 
 ```ts
 export interface SearchHit {
-  kind: EntityKind
-  id: string
-  title: ReactNode
-  subtitle?: ReactNode
+  kind: EntityKind; id: string
+  title: ReactNode; subtitle?: ReactNode
   href: LinkProps
   stamp: SourceStamp
-  rank: number // 100 exact by ID/hash, 80 exact name, 50 prefix, 20 text
+  rank: number                  // 100 exact by ID/hash, 80 exact name, 50 prefix, 20 text
 }
 export interface Resolver {
-  id: string // 'dapi-block', 'dapi-tx', 'pe-search', 'hy-search', 'sdk-identity', …
+  id: string                    // 'dapi-block', 'dapi-tx', 'pe-search', 'hy-search', 'sdk-identity', …
   accepts: InputClass[]
   cost: 'local' | 'index' | 'dapi' | 'sdk'
-  what?: MessageDescriptor // what it finds ("Platform blocks"); named when the lookup could not run
-  waitsForTip?: boolean // held back while a chain tip is still being read
-  resolve(
-    c: Classified,
-    ctx: { net: NetworkId; signal: AbortSignal; tip?: Tip },
-  ): Promise<SearchHit[]>
+  what?: MessageDescriptor      // what it finds ("Platform blocks"); named when the lookup could not run
+  waitsForTip?: boolean         // held back while a chain tip is still being read
+  resolve(c: Classified, ctx: { net: NetworkId; signal: AbortSignal; tip?: Tip }): Promise<SearchHit[]>
 }
-export function useSearch(
-  q: string,
-  opts: { mode: 'palette' | 'page' },
-): {
-  hits: SearchHit[] // merged (mergeHits), best first; equal ranks keep the registry's order
-  pending: string[] // resolver ids still running
-  pendingLocal: string[] // the pending `local` ones
+export function useSearch(q: string, opts: { mode: 'palette' | 'page' }): {
+  hits: SearchHit[]             // merged (mergeHits), best first; equal ranks keep the registry's order
+  pending: string[]             // resolver ids still running
+  pendingLocal: string[]        // the pending `local` ones
   failed: { id: string; error: SourceError }[]
-  skipped: string[] // index lookups left out in Decentralized only mode
+  skipped: string[]             // index lookups left out in Decentralized only mode
   classified: Classified
 }
 ```
@@ -1590,13 +1470,11 @@ Two warnings exist.
 Why 5: four leaked words of a 12-word phrase leave about 88 bits unknown, so a threshold of 5 bounds what a debounced remote search can ever receive, and it still lets real names through.
 
 For both warnings:
-
 - The value never reaches the URL, `document.title`, history, or any resolver that sends anything off the device. `planResolvers` keeps only `cost: 'local'` resolvers for a flagged input, so pure parsing and local exact matches still answer, and every `index`, `dapi` and `sdk` resolver (the future `pe-search`, `hy-search`, `dpns-prefix`) never receives it. Keep it that way.
 - Nothing clears the search box. The notice appears in place, live as the text changes, and the text stays so the user can fix it. The form and the palette's Enter do nothing while it is flagged.
 - A `/search?q=<value>` link loads, then replaces its own history entry with `/search`; the notice is kept in the entry's `state`, not the URL. The box stays empty because the text came from a link, not from the user. By then the original URL has already reached the browser's global history and the edge request log, which the client can't undo.
 
 Known gaps:
-
 - A raw 64-hex or base64 private key can't be told apart from a hash or an ID, so it isn't detected. A 64-hex value is classified `hex64` and searched like any block or transaction hash.
 - Chinese written without spaces is one token and isn't detected as a partial phrase. Segmenting it would be guesswork, so it is left undetected rather than guessed at.
 - A numbered list ("1. abandon 2. ability …") breaks the run at each number, so only the 12-word `secret` rule catches it.
@@ -1637,7 +1515,6 @@ The English wordlist (6 kB gzipped, `features/search/bip39-words.ts`) loads in i
 ### 9.3 Error and empty-state conventions
 
 Every query renders through `QueryView` or `DataTable`'s `state`, so each has the four states. Copy is sentence case and plain:
-
 - **Error** names the source and what still works: "Platform Explorer isn't answering (last good 4 min ago). The rest of this page still works." It offers Retry when the error is retryable.
 - **Not found** says where Radar looked and on which network, and offers the other network when the input's shape fits both: "No block with this hash on mainnet. Search testnet?"
 - **Blocked** (`Empty kind="blocked"`) is for a source that is up but too stale to answer, with its lag: "Hyphen's testnet index stopped at block 1,577,999 on 23 Oct. Address history on testnet will return when it catches up."
@@ -1646,7 +1523,9 @@ Every query renders through `QueryView` or `DataTable`'s `state`, so each has th
 
 No page-level error unless the route itself can't render (bad route param after validation). One failed source never blanks a page.
 
-**The error page** (`app/error-boundary.tsx`, `lib/chunk-recovery.ts`). `RouteError` is the router's `defaultErrorComponent`, the root route's `RootError` (`shell/RootError.tsx`) renders it inside `AppShell` (or alone, if the shell itself fails), and the shell's `ErrorBoundary` renders the same page, so a route that fails shows inside the shell with the dashhq header working, never the router's bare default. It says what happened, offers "Reload" and "Go home" (a full load of `/` on the same network), and for an error that is not about loading code shows `name: message` behind a closed "Technical detail" disclosure. Offline it says so and starts the page over when the connection returns. A page whose code fails to load (a dynamic import, a lazy route component, Vite's `vite:preloadError`) is what a deploy does to a tab left open, because the old build's chunk names are gone: the import is retried once (`retryChunk`, used by `deferred`; the error page retries a route once through `router.invalidate()`), then the page reloads once at the same address, then the error page says Radar was probably updated. The reload is guarded by a timestamp in `sessionStorage['radar.chunk-reload']`: no second reload within `RELOAD_GUARD_MS` (2 min), none offline, none when storage is blocked; it also sets TanStack Router's own `tanstack_router_reload:<message>` key so the router doesn't reload a second time, a reload the router makes by itself counts as the guarded one (`countRouterReloads`, on `pagehide`), and while a reload is recent the router reads its own key as set (`guardRouterReloads`), because it would otherwise reload once more for each further missing file. Vite passes every failed dynamic import through `vite:preloadError`, so only chunk failures there lead to a reload; a module that loaded and then threw goes straight to the error page. Lazy parts of the shell (the command palette, the Decentralized only mark) sit in their own quiet boundaries, so a missing file there never takes the header down. The service worker never serves a stale `index.html` online (navigations are network first, the HTML is `max-age=0, must-revalidate`) and never stores a hashed file the server answered with an error (§9.4). Fixture builds can make the files a page has not loaded yet answer as gone or as broken JavaScript (`__radarFixtures.failNewChunks`, `sessionStorage['radar.fixture.chunks']`); `e2e/tests/error-page.spec.ts` uses it.
+**The error page** (`app/error-boundary.tsx`, `lib/chunk-recovery.ts`). `RouteError` is the router's `defaultErrorComponent`, the root route's `RootError` (`shell/RootError.tsx`) renders it inside `AppShell` (or alone, if the shell itself fails), and the shell's `ErrorBoundary` renders the same page, so a route that fails shows inside the shell with the dashhq header working, never the router's bare default. It says what happened, offers "Reload" and "Go home" (a full load of `/` on the same network, or a new tab with a modifier key), and for an error that is not about loading code shows `name: message` behind a closed "Technical detail" disclosure. Its heading takes focus and the shell's route announcer reads its title. Offline it says so and starts the page over when the connection returns.
+
+A page whose code fails to load is what a deploy does to a tab left open, because the old build's chunk names are gone. Every dynamic import goes through Vite's preload helper, which fires `vite:preloadError` before the router sees the error; `onPreloadError` then sets TanStack Router's `tanstack_router_reload:<message>` key, so the router does not reload by itself, and lets the error through (a cancelled event would make the import resolve with no module). Nothing reloads there, so a failed background preload (a hovered link, the search dialog) never reloads the page. Recovery runs only when something rendered the error: the import is retried once (`retryChunk` in `deferred`; the error page retries a route through `router.invalidate()`), then the page reloads once at the same address, then the error page says Radar was probably updated. The reload is guarded by a timestamp in `sessionStorage['radar.chunk-reload']`: no second reload within `RELOAD_GUARD_MS` (2 min), none offline, none when storage is blocked. The router's keys are cleared when the app starts, so one deploy's key never changes how the next recovers (Safari gives every failed import the same message). Lazy parts of the shell (the header tip, the command palette, the Decentralized only mark, the USD rate) and hover cards sit in their own quiet boundaries, so a missing file there never takes the page down. The service worker never serves a stale `index.html` online (navigations are network first, the HTML is `max-age=0, must-revalidate`) and never stores a hashed file the server answered with an error (§9.4). Fixture builds can make the files a page has not loaded yet answer as gone or as broken JavaScript (`__radarFixtures.failNewChunks`, `sessionStorage['radar.fixture.chunks']`); `e2e/tests/error-page.spec.ts` uses it.
 
 ### 9.4 Offline and updates (`sw/`, `app/sw-register.ts`, `features/you/update/`)
 
@@ -1658,17 +1537,16 @@ No page-level error unless the route itself can't render (bad route param after 
 
 ## 10. Testing
 
-| Layer                | Tool                                                | Where                                 | Runs in                                                                                                                                                  |
-| -------------------- | --------------------------------------------------- | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Unit                 | Vitest + Testing Library                            | `src/**/*.test.ts(x)` beside the code | `pnpm test`                                                                                                                                              |
-| Schema               | Vitest over recorded fixtures                       | `data/<source>/schemas.test.ts`       | `pnpm test`                                                                                                                                              |
-| Story e2e (fixtures) | Playwright, fixture build                           | `e2e/tests/<group>.spec.ts`           | `pnpm e2e:fixtures`                                                                                                                                      |
-| Live smoke           | Playwright, live build                              | same files, tests tagged `@live`      | `pnpm e2e:live`                                                                                                                                          |
-| a11y                 | `@axe-core/playwright` via `expectAccessible(page)` | every story test                      | both                                                                                                                                                     |
-| Decoder              | `node --test` vectors; `cargo test`                 | `packages/core-decode`                | `pnpm test` (wasm, against the committed `dist/`, no Rust); the `core-decode` CI job (`pnpm --filter @radar/core-decode test:rust` and the `dist/` diff) |
+| Layer | Tool | Where | Runs in |
+|---|---|---|---|
+| Unit | Vitest + Testing Library | `src/**/*.test.ts(x)` beside the code | `pnpm test` |
+| Schema | Vitest over recorded fixtures | `data/<source>/schemas.test.ts` | `pnpm test` |
+| Story e2e (fixtures) | Playwright, fixture build | `e2e/tests/<group>.spec.ts` | `pnpm e2e:fixtures` |
+| Live smoke | Playwright, live build | same files, tests tagged `@live` | `pnpm e2e:live` |
+| a11y | `@axe-core/playwright` via `expectAccessible(page)` | every story test | both |
+| Decoder | `node --test` vectors; `cargo test` | `packages/core-decode` | `pnpm test` (wasm, against the committed `dist/`, no Rust); the `core-decode` CI job (`pnpm --filter @radar/core-decode test:rust` and the `dist/` diff) |
 
 **Fixtures.**
-
 - `review/fixtures.mjs` rewrites `review/fixtures/{mainnet,testnet}.json`. Besides the picked entities it adds `entities.signed_message` = `{ id, address, message, signature, altered_message }` from the first vector in `features/tools/verify-message/dashcore-vectors.json` (a signature made by Dash Core's `signmessagewithprivkey` on a throwaway regtest key; `altered_message` is the message plus "!"). It verifies valid in Radar and on Insight for the message and invalid for the altered one; the IN-08 story refers to it as `{signed_message}`. It also keeps `entities.special_txs`, one hand-chosen transaction of each special type (`proregtx`, `proupservtx`, `proupregtx`, `uprevtx`, `qctx`, `assetlock`, `assetunlock`, `cbtx`, and `mnhf` on testnet only, where one exists), which a regeneration copies from the committed file; the HY-07 story names each as `{special_txs.<type>}`.
 - `scripts/record-fixtures.mjs --net mainnet|testnet` reads `review/fixtures/<net>.json` (the picked entities, §5.4 of the plan) and records:
   - HTTP sources as `apps/web/src/test/fixtures/http/<source>/<net>/<slug>.json`: `{ request: { method, url }, recordedAt, status, headers, body }`. MSW handlers in `src/test/msw/handlers/<source>.ts` serve them by URL (query string normalised).
@@ -1691,7 +1569,6 @@ No page-level error unless the route itself can't render (bad route param after 
 **E2E server.** The fixture e2e runs `build:e2e` and serves `apps/web/dist-e2e` through `review/serve.mjs` (the real edge Worker in Miniflare; `--dist` picks the directory), so the production CSP and headers apply. The fixture build has no SDK worker and no wasm, so no asset is near the Workers 25 MiB limit; the production build's wasm is split for the same limit (§12c). The shared `context` fixture fails any test on a `securitypolicyviolation` event. The only exceptions are the two third-party Trusted Types sinks the report-only header still reports: the MSW worker registration (fixture builds only) and echarts' own `innerHTML` writes, each matched by its bundle file and sink. Any other Trusted Types report fails the test.
 
 **Story tags.**
-
 - Every Playwright test title carries its story IDs as tags: `test('block page shows header, cbTx, reward and pool @IN-03 @HY-05', …)`.
 - `pnpm check:stories` (`scripts/check-stories.mjs`, in CI) fails on a tag that names no story in `review/stories.yaml`. Stories with no test are only reported; `--strict` fails on both.
 - Spec files follow the feature areas (§11.5): `net-census`, `net-v24`, `net-masternodes`, `masternode`, `net-map`, `net-changes-api`, `platform-home`, `platform-chain`, `platform-blocks`, `platform-identity`, `platform-data`, `platform-tokens`, `platform-voting`, `tools-platform`, `you`, `search`, `search-secrets`, `search-platform`, `unification`, besides the M0/M1 specs; the whole-app guards are `integration`, `cross-layer`, `phone-pages`, `i18n`, `decentralized-mode` and `app-shell` (each `e2e/tests/<name>.spec.ts`). `pnpm check:stories -- --only <ids>` reports which of the given story ids have no test and exits 1 if any (the default run is unchanged).
@@ -1716,7 +1593,6 @@ No page-level error unless the route itself can't render (bad route param after 
 ### 11.1 WP-0: contract commit (before any fan-out)
 
 The orchestrator (or one Sonnet task, about an hour) commits the contract files verbatim from this document, compiling, with stub bodies that throw `not implemented`:
-
 - `data/envelope.ts`, `data/errors.ts`, `lib/network.ts`, `data/endpoints.ts`, `ui/types.ts`, `data/core/types.ts`, `data/sdk/methods.ts` (the four example entries), `data/query/keys.ts`, `data/query/stale.ts`;
 - `ui/index.ts` exporting every §7 component as a minimal unstyled stub with its final props, so B and later page packages can render before A merges;
 - the ESLint boundary zones (§1.2) and the empty folder skeleton with `index.ts` barrels.
@@ -1725,12 +1601,12 @@ Every package builds against these. Changing a contract file afterwards needs th
 
 ### 11.2 M0 wave 2: four packages in parallel
 
-| WP                      | Tasks                                                                                                                                                  | Owns (writes)                                                                                                                                                                                                                                                         | Reads only                                       |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| **A: design system**    | T-002 shell vendoring and tokens; T-004 UI kit and `/__kit`                                                                                            | `src/ui/**`, `src/styles.css`, `vendor/dashhq/**`, `lib/format.ts`, `lib/units.ts`                                                                                                                                                                                    | contract files                                   |
-| **B: app and search**   | T-016 app shell, every §4.4 route with a designed empty state, network param, phone nav; T-013 classifier and resolver framework                       | `src/app/**`, `src/shell/**` (vendored bar and footer wired in, theme cookie, network switch, phone nav, testnet keyline), `src/routes/**`, `src/features/*/…Page.tsx` placeholders, `src/features/search/**`, `src/features/entity/**`, `lib/{base58,bech32,hex}.ts` | `ui` (WP-0 stubs until A merges), contract files |
-| **C: data**             | T-005 envelope helpers and health registry; T-006 Radar; T-007 PE; T-008 Hyphen; rate; query defaults, batcher and persister; MSW and fixture recorder | `src/data/**` except `dapi-core`, `core`, `sdk`; `src/test/**`; `scripts/record-fixtures.mjs`; `vite.config.ts` (dev proxy `/x/hy`)                                                                                                                                   | contract files                                   |
-| **D: edge and harness** | T-012 edge Worker; T-014 review harness; Playwright projects, `expectAccessible`, `check-stories.mjs`, the `e2e:live` script                           | `workers/edge/**`, `review/**`, `e2e/**` (config and helpers, not story specs)                                                                                                                                                                                        | —                                                |
+| WP | Tasks | Owns (writes) | Reads only |
+|---|---|---|---|
+| **A: design system** | T-002 shell vendoring and tokens; T-004 UI kit and `/__kit` | `src/ui/**`, `src/styles.css`, `vendor/dashhq/**`, `lib/format.ts`, `lib/units.ts` | contract files |
+| **B: app and search** | T-016 app shell, every §4.4 route with a designed empty state, network param, phone nav; T-013 classifier and resolver framework | `src/app/**`, `src/shell/**` (vendored bar and footer wired in, theme cookie, network switch, phone nav, testnet keyline), `src/routes/**`, `src/features/*/…Page.tsx` placeholders, `src/features/search/**`, `src/features/entity/**`, `lib/{base58,bech32,hex}.ts` | `ui` (WP-0 stubs until A merges), contract files |
+| **C: data** | T-005 envelope helpers and health registry; T-006 Radar; T-007 PE; T-008 Hyphen; rate; query defaults, batcher and persister; MSW and fixture recorder | `src/data/**` except `dapi-core`, `core`, `sdk`; `src/test/**`; `scripts/record-fixtures.mjs`; `vite.config.ts` (dev proxy `/x/hy`) | contract files |
+| **D: edge and harness** | T-012 edge Worker; T-014 review harness; Playwright projects, `expectAccessible`, `check-stories.mjs`, the `e2e:live` script | `workers/edge/**`, `review/**`, `e2e/**` (config and helpers, not story specs) | — |
 
 Spikes T-009, T-010 and T-011 are already running, and they write only `docs/spikes.md` and throwaway code outside `apps/web/src`.
 
@@ -1738,12 +1614,12 @@ Spikes T-009, T-010 and T-011 are already running, and they write only `docs/spi
 
 ### 11.3 M1: four packages in parallel
 
-| WP                       | Tasks                                                                                                                                                                                                                 | Owns                                                                                                                                                                                 |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **E: Core and SDK data** | T-009b production DAPI client (nodes, budget, transport, cache, streams, `coreLive`); `data/core` façade with the §4.7 fallback rule; core-decode bindings (T-010 outcome); T-011b SDK worker and client, proof store | `src/data/{dapi-core,core,sdk}/**`, `packages/core-decode/**`, `scripts/seed-nodes.mjs`                                                                                              |
-| **F: Core pages 1**      | T-017 home v0; T-018 block; T-019 tx; T-021 blocks list and by-date                                                                                                                                                   | `src/features/home/**`, `src/features/core/{block,tx,blocks}/**`, `e2e/tests/core-blocks.spec.ts`, `e2e/tests/core-tx.spec.ts`                                                       |
-| **G: Core pages 2**      | T-020 address; T-022 mempool, rich list, charts, network, governance; T-024 verify message and QR                                                                                                                     | `src/features/core/{address,mempool,rich-list,charts,network,governance}/**`, `src/features/tools/{verify-message,qr}/**`, `e2e/tests/core-index.spec.ts`, `e2e/tests/tools.spec.ts` |
-| **H: cross-cutting**     | T-023 status page; T-025 units and fiat preference, settings page; Lingui pipeline and `en` extraction; hover cards for Core kinds                                                                                    | `src/features/core/status/**`, `src/features/you/**`, `src/i18n/**`, `lib/units.ts`, `src/features/entity/cards/{block,tx,address}.tsx`                                              |
+| WP | Tasks | Owns |
+|---|---|---|
+| **E: Core and SDK data** | T-009b production DAPI client (nodes, budget, transport, cache, streams, `coreLive`); `data/core` façade with the §4.7 fallback rule; core-decode bindings (T-010 outcome); T-011b SDK worker and client, proof store | `src/data/{dapi-core,core,sdk}/**`, `packages/core-decode/**`, `scripts/seed-nodes.mjs` |
+| **F: Core pages 1** | T-017 home v0; T-018 block; T-019 tx; T-021 blocks list and by-date | `src/features/home/**`, `src/features/core/{block,tx,blocks}/**`, `e2e/tests/core-blocks.spec.ts`, `e2e/tests/core-tx.spec.ts` |
+| **G: Core pages 2** | T-020 address; T-022 mempool, rich list, charts, network, governance; T-024 verify message and QR | `src/features/core/{address,mempool,rich-list,charts,network,governance}/**`, `src/features/tools/{verify-message,qr}/**`, `e2e/tests/core-index.spec.ts`, `e2e/tests/tools.spec.ts` |
+| **H: cross-cutting** | T-023 status page; T-025 units and fiat preference, settings page; Lingui pipeline and `en` extraction; hover cards for Core kinds | `src/features/core/status/**`, `src/features/you/**`, `src/i18n/**`, `lib/units.ts`, `src/features/entity/cards/{block,tx,address}.tsx` |
 
 - F and G develop against the `CoreClient` interface with `FixtureDapiTransport` and the fixture SDK transport, so they don't wait for E.
 - Search resolvers for Core kinds go into `features/search/resolvers/` as new files: F adds `dapi-block`, `dapi-tx`; G adds `hy-search`, `hy-address`.
@@ -1760,7 +1636,6 @@ The departures listed in `docs/RADAR-DESIGN.md` §15 are accepted for Radar: pho
 Accepted from package A (2026-11-10): `Stat.note` (a second line under the value) and `LiveDot.bare`; extra exports `LiveControl`, `TableTools` and `HoverCardScope`; `Tabs` uses exact active matching; the rate `SourceLine` reads "Price via Platform Explorer" (no provider field on `SourceStamp`); the `/__kit` route file is `src/routes/[_][_]kit.tsx` because `__kit.tsx` is a pathless layout to the router generator.
 
 Accepted from the M0 data and build work:
-
 - **Hyphen lag is measured against Radar's crawled Core height, not the DAPI tip (§2.5 table).** M0 has no DAPI or Core tip in the data layer: `data/dapi-core` holds only the budget, and `CoreClient.tip` is a contract type. `healthQueries.hyphen` takes `chain.blocks` from Radar's `/status` for the network. When that call fails, the hyphen lag is cleared rather than left at its last value, so a stale lag can't stick. Switch the reference to `core.tip(net)` when the Core façade lands.
 - **`down` needs the silence condition as well as the failure kind (§2.5).** The 120 s clause applies to a last call that failed with `network`, `timeout` or `http`, and a source that has never answered counts as silent.
 - **The Hyphen stream is a client method only (§5.5).** `openHyphenStream` and `readNdjson` are no longer exported from `data/hyphen`; features reach the stream as `hyphen.stream`.
@@ -1813,27 +1688,26 @@ M2–M6 were built by fifteen packages in parallel on shared foundations (F0), t
 
 The ids give file names; a catalog's name is the lower-case id. Each area has its own prefetch module, SDK method and impl files, schema files, route-case file and catalog.
 
-| Id         | Scope                                                         | Directories it owns (besides the files named in the later columns)                                                                                                                                                                                        | Route files (`apps/web/src/routes/`)                                                                                                          | View-key prefix                    | Specs (`e2e/tests/`)                          |
-| ---------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- | --------------------------------------------- |
-| `NET-A`    | census and activation                                         | `features/network/{nodes,v24}`, `features/home` (RA-11 and the census headline)                                                                                                                                                                           | `nodes`, `v24`                                                                                                                                | `census-`                          | `net-census`, `net-v24`                       |
-| `NET-B`    | masternode list and DAPI list                                 | `features/network/masternodes`, `data/masternodes`, `data/core/mn-list.ts`, `data/core/decode.ts` (`mnListDiff` only), `packages/core-decode`, `scripts/record-dapi-fixtures.mjs`, `scripts/dapi-fixture-picks.*.json`, `apps/web/src/test/fixtures/dapi` | `masternodes`                                                                                                                                 | `mn-list-`                         | `net-masternodes`                             |
-| `NET-C`    | masternode page                                               | `features/network/mn`                                                                                                                                                                                                                                     | `mn.$protx`                                                                                                                                   | `mn-page-`                         | `masternode`                                  |
-| `NET-D`    | map, changes, API page                                        | `features/network/{map,changes}`, `features/tools/api`, `apps/web/public/map`                                                                                                                                                                             | `map`, `changes`, `api`                                                                                                                       | `map-`, `changes-`                 | `net-map`, `net-changes-api`                  |
-| `P-HOME`   | Platform home and status                                      | `features/platform/home`, `features/core/status`                                                                                                                                                                                                          | `platform.index`                                                                                                                              | `phome-`                           | `platform-home`                               |
-| `P-CHAIN`  | epochs, protocol, quorums, credits, shielded                  | `features/network/{epochs,epoch,protocol}`, `features/platform/{quorums,credits,shielded}`                                                                                                                                                                | `epochs`, `epoch.$n`, `protocol`, `quorums`, `credits`, `shielded`                                                                            | `chain-`                           | `platform-chain`                              |
-| `P-BLOCKS` | Platform blocks and transitions                               | `features/platform/{blocks,block,txs,tx}`, `features/entity/platform/{transition-table,block-table}.tsx`                                                                                                                                                  | `platform.blocks`, `platform.block.$id`, `platform.txs`, `platform.tx.$hash`                                                                  | `pblock-`, `ptx-`                  | `platform-blocks`                             |
-| `P-ID`     | identities                                                    | `features/platform/{identities,identity}`                                                                                                                                                                                                                 | `identities`, `identity.$id`, `identity.lookup`                                                                                               | `identity-`                        | `platform-identity`                           |
-| `P-DATA`   | contracts, documents, groups                                  | `features/platform/{contracts,contract,document,groups,group}`                                                                                                                                                                                            | `contracts`, `contract.$id.index`, `contract.$id.documents.$type`, `document.$contract.$type.$id`, `groups.$contract`, `group.$contract.$pos` | `contract-`, `document-`, `group-` | `platform-data`                               |
-| `P-TOKEN`  | tokens, Platform addresses                                    | `features/platform/{tokens,token,platform-address}`                                                                                                                                                                                                       | `tokens`, `token.$id.index`, `token.$id.holders`, `platform-address.$addr`                                                                    | `token-`, `paddr-`                 | `platform-tokens`                             |
-| `P-VOTE`   | names, contests, votes, polls                                 | `features/platform/{names,name,contests,contest,votes,polls}`                                                                                                                                                                                             | `names`, `name.$label`, `contests`, `contest.$label`, `votes`, `polls`                                                                        | `vote-`, `name-`                   | `platform-voting`                             |
-| `TOOLS`    | query and decoders                                            | `features/tools/{query,decoders,transition,sdk-reference}`, `data/sdk/worker/decode.ts`, `THIRD_PARTY.md` (append)                                                                                                                                        | `query`, `tools.$decoder`, `tools.transition`, `sdk-reference`                                                                                | `tools-`                           | `tools-platform`                              |
-| `YOU`      | saved, settings, about, proof inspector, diagnostics, offline | `features/you`, `app/global-mounts.tsx`, `app/sw-register.ts`, `src/sw`, `data/sdk/{settings.ts,client.ts,proof-store.ts}`, `data/sdk/worker/sdk-factory.ts`, `THIRD_PARTY.md` (append)                                                                   | `saved`, `about`, `settings`                                                                                                                  | `you-`                             | `you`                                         |
-| `UNI-S`    | search                                                        | `features/search`                                                                                                                                                                                                                                         | —                                                                                                                                             | `search-`                          | `search`, `search-secrets`, `search-platform` |
-| `UNI-L`    | hover cards, cross-layer links, keyboard, redirects, OG       | `features/entity` (except the P-BLOCKS files), `shell`, `workers/edge`, `build/redirect-targets.test.ts`, `ui/link-out.tsx`, `lib/linkouts.ts`, `features/core/tx` (the asset-lock link only)                                                             | —                                                                                                                                             | `entity-`                          | `unification`                                 |
-| `INT`      | integration                                                   | what no one owns; the base catalog                                                                                                                                                                                                                        | —                                                                                                                                             | —                                  | `cross-layer`                                 |
+| Id | Scope | Directories it owns (besides the files named in the later columns) | Route files (`apps/web/src/routes/`) | View-key prefix | Specs (`e2e/tests/`) |
+|---|---|---|---|---|---|
+| `NET-A` | census and activation | `features/network/{nodes,v24}`, `features/home` (RA-11 and the census headline) | `nodes`, `v24` | `census-` | `net-census`, `net-v24` |
+| `NET-B` | masternode list and DAPI list | `features/network/masternodes`, `data/masternodes`, `data/core/mn-list.ts`, `data/core/decode.ts` (`mnListDiff` only), `packages/core-decode`, `scripts/record-dapi-fixtures.mjs`, `scripts/dapi-fixture-picks.*.json`, `apps/web/src/test/fixtures/dapi` | `masternodes` | `mn-list-` | `net-masternodes` |
+| `NET-C` | masternode page | `features/network/mn` | `mn.$protx` | `mn-page-` | `masternode` |
+| `NET-D` | map, changes, API page | `features/network/{map,changes}`, `features/tools/api`, `apps/web/public/map` | `map`, `changes`, `api` | `map-`, `changes-` | `net-map`, `net-changes-api` |
+| `P-HOME` | Platform home and status | `features/platform/home`, `features/core/status` | `platform.index` | `phome-` | `platform-home` |
+| `P-CHAIN` | epochs, protocol, quorums, credits, shielded | `features/network/{epochs,epoch,protocol}`, `features/platform/{quorums,credits,shielded}` | `epochs`, `epoch.$n`, `protocol`, `quorums`, `credits`, `shielded` | `chain-` | `platform-chain` |
+| `P-BLOCKS` | Platform blocks and transitions | `features/platform/{blocks,block,txs,tx}`, `features/entity/platform/{transition-table,block-table}.tsx` | `platform.blocks`, `platform.block.$id`, `platform.txs`, `platform.tx.$hash` | `pblock-`, `ptx-` | `platform-blocks` |
+| `P-ID` | identities | `features/platform/{identities,identity}` | `identities`, `identity.$id`, `identity.lookup` | `identity-` | `platform-identity` |
+| `P-DATA` | contracts, documents, groups | `features/platform/{contracts,contract,document,groups,group}` | `contracts`, `contract.$id.index`, `contract.$id.documents.$type`, `document.$contract.$type.$id`, `groups.$contract`, `group.$contract.$pos` | `contract-`, `document-`, `group-` | `platform-data` |
+| `P-TOKEN` | tokens, Platform addresses | `features/platform/{tokens,token,platform-address}` | `tokens`, `token.$id.index`, `token.$id.holders`, `platform-address.$addr` | `token-`, `paddr-` | `platform-tokens` |
+| `P-VOTE` | names, contests, votes, polls | `features/platform/{names,name,contests,contest,votes,polls}` | `names`, `name.$label`, `contests`, `contest.$label`, `votes`, `polls` | `vote-`, `name-` | `platform-voting` |
+| `TOOLS` | query and decoders | `features/tools/{query,decoders,transition,sdk-reference}`, `data/sdk/worker/decode.ts`, `THIRD_PARTY.md` (append) | `query`, `tools.$decoder`, `tools.transition`, `sdk-reference` | `tools-` | `tools-platform` |
+| `YOU` | saved, settings, about, proof inspector, diagnostics, offline | `features/you`, `app/global-mounts.tsx`, `app/sw-register.ts`, `src/sw`, `data/sdk/{settings.ts,client.ts,proof-store.ts}`, `data/sdk/worker/sdk-factory.ts`, `THIRD_PARTY.md` (append) | `saved`, `about`, `settings` | `you-` | `you` |
+| `UNI-S` | search | `features/search` | — | `search-` | `search`, `search-secrets`, `search-platform` |
+| `UNI-L` | hover cards, cross-layer links, keyboard, redirects, OG | `features/entity` (except the P-BLOCKS files), `shell`, `workers/edge`, `build/redirect-targets.test.ts`, `ui/link-out.tsx`, `lib/linkouts.ts`, `features/core/tx` (the asset-lock link only) | — | `entity-` | `unification` |
+| `INT` | integration | what no one owns; the base catalog | — | — | `cross-layer` |
 
 Per area, by name (`<pkg>` is the lower-case id; `net-a`, `p-home`, `tools`, …):
-
 - **Prefetch module** `data/query/prefetch/<pkg>.ts`: one `<route>Prefetch: Prefetch<Params, Search>` per route and the route's `Search` interface. A route with nothing to start early (an idle form, a static page) returns `[]`.
 - **SDK methods** `data/sdk/methods/<pkg>.ts` (`<Pkg>Methods` interface and `<PKG>_CLASSES`, the data class of each method) and `data/sdk/worker/impl/<pkg>.ts` (`<Pkg>Reads`, the part of `EvoSDK` it reads, and `<pkg>Impl`); §3.4 lists them. `NET-C`'s are empty. `NET-A`, `NET-B`, `NET-D`, `P-HOME`, `UNI-S`, `UNI-L` and `YOU` have no method files of their own.
 - **Schemas**: `data/pe/schemas/*.ts` and `data/radar/schemas/*.ts`, split by area (below).
@@ -1864,7 +1738,6 @@ Every route file's `validateSearch` is the contract of its URL (links, redirects
 #### Navigation (C)
 
 All in `features/entity/site-map.ts`.
-
 - `SitePage` gains `group?: 'voting' | 'chain'`, `navHref?` (a concrete URL for a nav entry whose route has params), `railTitle?` (the rail's label when it differs from the title) and `rail?: false` (in the palette, not in the rail). `SITE_GROUPS` maps `voting` (`/contests`, `/votes`, `/polls`) and `chain` (`/quorums`, `/credits`, `/shielded`) to a title and its pages. `railEntries(section)` is what `shell/SectionNav.tsx` draws: one entry per group at the place of its first page, current when any page of the group is open.
 - Rails:
   - Core: unchanged.
@@ -1887,37 +1760,37 @@ All in `features/entity/site-map.ts`.
 - **SDK method map, split by owner.** `data/sdk/methods.ts` (contract file) declares `SdkMethods extends SharedMethods, NetCMethods, PChainMethods, PBlocksMethods, PIdMethods, PDataMethods, PTokenMethods, PVoteMethods, ToolsMethods`. `data/sdk/worker/impl.ts` merges `impl/shared.ts` and `impl/<pkg>.ts`; `SdkReads` is the intersection of each file's `Reads`; `data/sdk/queries.ts` builds `CLASS_OF` from the class tables. `decodeWithWasm` is in `data/sdk/worker/decode.ts`. To add a method, add it to the area's methods interface and class table, implement it in the area's impl file, and give it a row in `METHOD_PAGES` (`features/tools/sdk-reference/method-pages.ts`, the pages that call it); `reference.test.ts` fails for a method without one. The unit-test fake is `fakeReads` (`test/data/sdk/fakes.ts`).
 - **Shared SDK methods** (`data/sdk/methods/shared.ts`, `worker/impl/shared.ts`), each the `*WithProof` variant where one exists, so the answer is proof-checked; a wasm class never crosses the worker. `documents.query` clamps `limit` to 100. A map result has an entry for every key asked, `null` when absent, except `epoch.evonodesProposedBlocksByIds`, `…ByRange` and `protocol.versionUpgradeVoteStatus`, which hold only the proposers or masternodes the node returned (a count, no `null`). For `tokens.statuses` and `tokens.identityTokenInfos`, `null` means no special status: an existing token that is not paused, or an identity's balance that is not frozen, answers `null`, so it does not mean the token is absent (`tokens.contractInfo` does). Every key a method answers by is the form the caller sent: an identity or contract id in base58, a ProTxHash in lower-case hex (64 characters; the worker converts the SDK's base58 keys), a Platform address in its bech32m text. A Platform address is looked up by the SDK's own key (a type byte, `00` P2PKH or `01` P2SH, and the 20-byte hash in hex) and answered under the address as asked.
 
-  | Method                                | Args                                                                                                   | Result (DTO)                                                                                                                                                                                                                                                                                                                                                  |
-  | ------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-  | `identities.fetch`                    | `{ id }`                                                                                               | `IdentityDto \| null` (`id`, `balance`, `revision`, `keys: IdentityKeyDto[]`)                                                                                                                                                                                                                                                                                 |
-  | `identities.balances`                 | `{ ids }`                                                                                              | `Map<id, bigint \| null>`                                                                                                                                                                                                                                                                                                                                     |
-  | `identities.byPublicKeyHash`          | `{ pkh }`                                                                                              | `IdentityDto \| null`                                                                                                                                                                                                                                                                                                                                         |
-  | `contracts.getMany`                   | `{ ids }`                                                                                              | `Map<id, ContractDto \| null>` (`id`, `ownerId`, `version`, `documentSchemas`)                                                                                                                                                                                                                                                                                |
-  | `contracts.fetch`                     | `{ id }`                                                                                               | `ContractFullDto \| null`: `ContractDto` plus `keepsHistory`, `config`, `indices: Record<type, ContractIndexDto[]>`, `tokens: ContractTokenDto[]`, `groups: ContractGroupDto[]`. A contract the SDK reports as not found answers `null` unproved                                                                                                              |
-  | `dpns.usernames`                      | `{ identityId, limit? }`                                                                               | `string[]`                                                                                                                                                                                                                                                                                                                                                    |
-  | `dpns.getUsernameByName`              | `{ name }`                                                                                             | `DpnsUsernameDto \| null` (`username` as asked, `identityId`, `documentId`, both base58). The worker converts the name to its homograph-safe form (o→0, i and l→1) before the lookup, because DPNS keeps only that form; a caller passes the name as typed                                                                                                    |
-  | `documents.query`                     | `{ contractId, type, where?, orderBy?, limit?, startAfter?, startAt? }`                                | `DocumentDto[]` (ids, owner, `type`, `revision`, created/updated/transferred times and heights, `data`)                                                                                                                                                                                                                                                       |
-  | `documents.get`                       | `{ contractId, type, id }`                                                                             | `DocumentDto \| null`                                                                                                                                                                                                                                                                                                                                         |
-  | `tokens.contractInfo`                 | `{ tokenId }`                                                                                          | `TokenContractInfoDto \| null` (`contractId`, `position`)                                                                                                                                                                                                                                                                                                     |
-  | `tokens.totalSupply`                  | `{ tokenId }`                                                                                          | `bigint \| null`                                                                                                                                                                                                                                                                                                                                              |
-  | `tokens.statuses`                     | `{ tokenIds }`                                                                                         | `Map<id, TokenStatusDto \| null>` (`paused`)                                                                                                                                                                                                                                                                                                                  |
-  | `tokens.balances`                     | `{ tokenId, identityIds }`                                                                             | `Map<identityId, bigint \| null>`                                                                                                                                                                                                                                                                                                                             |
-  | `tokens.identityBalances`             | `{ identityId, tokenIds }`                                                                             | `Map<tokenId, bigint \| null>`                                                                                                                                                                                                                                                                                                                                |
-  | `tokens.identityTokenInfos`           | `{ identityId, tokenIds }`                                                                             | `Map<tokenId, IdentityTokenInfoDto \| null>` (`frozen`)                                                                                                                                                                                                                                                                                                       |
-  | `tokens.calculateId`                  | `{ contractId, position }`                                                                             | `string` (computed locally, **unproved**)                                                                                                                                                                                                                                                                                                                     |
-  | `system.status`                       | —                                                                                                      | `PlatformStatusDto` (`chainId`, Drive `version`, `height`, `timeMs`, `catchingUp`, `peers`, `isListening`, `latestBlockHash`, `latestAppHash`, `earliestBlockHeight`, `maxPeerBlockHeight`, `coreChainLockedHeight`, `nodeProTxHash`, `nodeId`, `dapiVersion`, `tenderdashVersion`, `tenderdashProtocol { p2p, block }`, `driveProtocol { latest, current }`) |
-  | `system.totalCredits`                 | —                                                                                                      | `bigint \| null`                                                                                                                                                                                                                                                                                                                                              |
-  | `system.currentQuorumsInfo`           | —                                                                                                      | `CurrentQuorumsDto` (`height`, `quorums: QuorumDto[]`; **unproved**: the SDK has no proof variant)                                                                                                                                                                                                                                                            |
-  | `epoch.current`                       | —                                                                                                      | `EpochDto`                                                                                                                                                                                                                                                                                                                                                    |
-  | `epoch.epochsInfo`                    | `{ startEpoch?, count?, ascending? }`                                                                  | `EpochDto[]`                                                                                                                                                                                                                                                                                                                                                  |
-  | `epoch.finalizedInfos`                | `{ startEpoch, count?, ascending? }`                                                                   | `FinalizedEpochDto[]` (an `EpochDto` plus `totalBlocks`, the fee totals and `blockProposers: Map<proTxHash, bigint>` keyed by hex; the index comes from the map key). Only an epoch whose info is final is in the answer; the current epoch's proposers come from the two `evonodesProposedBlocks…` methods, and a past epoch's from `finalizedInfos`         |
-  | `epoch.evonodesProposedBlocksByIds`   | `{ epoch, proTxHashes }`                                                                               | `Map<proTxHash, bigint>`                                                                                                                                                                                                                                                                                                                                      |
-  | `epoch.evonodesProposedBlocksByRange` | `{ epoch, limit?, startAfter? }`                                                                       | `Map<proTxHash, bigint>`                                                                                                                                                                                                                                                                                                                                      |
-  | `protocol.versionUpgradeState`        | —                                                                                                      | `VersionUpgradeStateDto` (`currentProtocolVersion`, `nextProtocolVersion`, `voteCount`)                                                                                                                                                                                                                                                                       |
-  | `protocol.versionUpgradeVoteStatus`   | `{ startProTxHash?, count }`                                                                           | `Map<proTxHash, number>`                                                                                                                                                                                                                                                                                                                                      |
-  | `voting.votePollsByEndDate`           | `{ startTimeMs?, startTimeIncluded?, endTimeMs?, endTimeIncluded?, limit?, offset?, orderAscending? }` | `VotePollsByEndDateDto[]` (`timestampMs`, `polls: VotePollDto[]`)                                                                                                                                                                                                                                                                                             |
-  | `addresses.get`                       | `{ address }`                                                                                          | `PlatformAddressInfoDto \| null` (`address`, `balance`, `nonce`)                                                                                                                                                                                                                                                                                              |
-  | `addresses.getMany`                   | `{ addresses }`                                                                                        | `Map<address, PlatformAddressInfoDto \| null>`                                                                                                                                                                                                                                                                                                                |
+  | Method | Args | Result (DTO) |
+  |---|---|---|
+  | `identities.fetch` | `{ id }` | `IdentityDto \| null` (`id`, `balance`, `revision`, `keys: IdentityKeyDto[]`) |
+  | `identities.balances` | `{ ids }` | `Map<id, bigint \| null>` |
+  | `identities.byPublicKeyHash` | `{ pkh }` | `IdentityDto \| null` |
+  | `contracts.getMany` | `{ ids }` | `Map<id, ContractDto \| null>` (`id`, `ownerId`, `version`, `documentSchemas`) |
+  | `contracts.fetch` | `{ id }` | `ContractFullDto \| null`: `ContractDto` plus `keepsHistory`, `config`, `indices: Record<type, ContractIndexDto[]>`, `tokens: ContractTokenDto[]`, `groups: ContractGroupDto[]`. A contract the SDK reports as not found answers `null` unproved |
+  | `dpns.usernames` | `{ identityId, limit? }` | `string[]` |
+  | `dpns.getUsernameByName` | `{ name }` | `DpnsUsernameDto \| null` (`username` as asked, `identityId`, `documentId`, both base58). The worker converts the name to its homograph-safe form (o→0, i and l→1) before the lookup, because DPNS keeps only that form; a caller passes the name as typed |
+  | `documents.query` | `{ contractId, type, where?, orderBy?, limit?, startAfter?, startAt? }` | `DocumentDto[]` (ids, owner, `type`, `revision`, created/updated/transferred times and heights, `data`) |
+  | `documents.get` | `{ contractId, type, id }` | `DocumentDto \| null` |
+  | `tokens.contractInfo` | `{ tokenId }` | `TokenContractInfoDto \| null` (`contractId`, `position`) |
+  | `tokens.totalSupply` | `{ tokenId }` | `bigint \| null` |
+  | `tokens.statuses` | `{ tokenIds }` | `Map<id, TokenStatusDto \| null>` (`paused`) |
+  | `tokens.balances` | `{ tokenId, identityIds }` | `Map<identityId, bigint \| null>` |
+  | `tokens.identityBalances` | `{ identityId, tokenIds }` | `Map<tokenId, bigint \| null>` |
+  | `tokens.identityTokenInfos` | `{ identityId, tokenIds }` | `Map<tokenId, IdentityTokenInfoDto \| null>` (`frozen`) |
+  | `tokens.calculateId` | `{ contractId, position }` | `string` (computed locally, **unproved**) |
+  | `system.status` | — | `PlatformStatusDto` (`chainId`, Drive `version`, `height`, `timeMs`, `catchingUp`, `peers`, `isListening`, `latestBlockHash`, `latestAppHash`, `earliestBlockHeight`, `maxPeerBlockHeight`, `coreChainLockedHeight`, `nodeProTxHash`, `nodeId`, `dapiVersion`, `tenderdashVersion`, `tenderdashProtocol { p2p, block }`, `driveProtocol { latest, current }`) |
+  | `system.totalCredits` | — | `bigint \| null` |
+  | `system.currentQuorumsInfo` | — | `CurrentQuorumsDto` (`height`, `quorums: QuorumDto[]`; **unproved**: the SDK has no proof variant) |
+  | `epoch.current` | — | `EpochDto` |
+  | `epoch.epochsInfo` | `{ startEpoch?, count?, ascending? }` | `EpochDto[]` |
+  | `epoch.finalizedInfos` | `{ startEpoch, count?, ascending? }` | `FinalizedEpochDto[]` (an `EpochDto` plus `totalBlocks`, the fee totals and `blockProposers: Map<proTxHash, bigint>` keyed by hex; the index comes from the map key). Only an epoch whose info is final is in the answer; the current epoch's proposers come from the two `evonodesProposedBlocks…` methods, and a past epoch's from `finalizedInfos` |
+  | `epoch.evonodesProposedBlocksByIds` | `{ epoch, proTxHashes }` | `Map<proTxHash, bigint>` |
+  | `epoch.evonodesProposedBlocksByRange` | `{ epoch, limit?, startAfter? }` | `Map<proTxHash, bigint>` |
+  | `protocol.versionUpgradeState` | — | `VersionUpgradeStateDto` (`currentProtocolVersion`, `nextProtocolVersion`, `voteCount`) |
+  | `protocol.versionUpgradeVoteStatus` | `{ startProTxHash?, count }` | `Map<proTxHash, number>` |
+  | `voting.votePollsByEndDate` | `{ startTimeMs?, startTimeIncluded?, endTimeMs?, endTimeIncluded?, limit?, offset?, orderAscending? }` | `VotePollsByEndDateDto[]` (`timestampMs`, `polls: VotePollDto[]`) |
+  | `addresses.get` | `{ address }` | `PlatformAddressInfoDto \| null` (`address`, `balance`, `nonce`) |
+  | `addresses.getMany` | `{ addresses }` | `Map<address, PlatformAddressInfoDto \| null>` |
 
 - **Decoding** (`SdkWorkerApi.decode(kind, bytes, opts?)`, `SdkClient.decode`): `kind` is `'stateTransition' | 'dataContract' | 'document' | 'identity'` (`SdkDecodeKind`); a document needs `opts: { contract: Uint8Array, type: string }`, the contract's serialized bytes and the document type's name. The answer is the SDK's JSON. It is local wasm, with no network.
 - **Connection settings** (`SdkNetworkConfig.settings: SdkConnectionSettings`, `data/sdk/methods.ts`): `timeoutMs` (the worker's limit for one call, default 8000), `connectTimeoutMs` (default 20000), `retries`, `banFailedAddress` and `logs` (the last three go to `EvoSDK` in `data/sdk/worker/sdk-factory.ts`). Each absent field keeps its default. The worker's `api.ts` applies the two timeouts; `data/sdk/client.ts` fills the object from the viewer's settings (§3.3).
@@ -1943,7 +1816,6 @@ All in `features/entity/site-map.ts`.
 #### Shared UI (G)
 
 Exported from `@/ui` (not `@/ui/base`), with a `/__kit` section "Shared tools":
-
 - `JsonView({ value, collapsedDepth = 1, copy = true, maxHeight?, bytes?: 'hex' | 'base64', label? })`: a collapsible tree; `bigint` shows as digits with an `n`, `Uint8Array` as `0x…` or `base64:…`, cut in the middle past 64 bytes; 100 entries at a time; cycles and `Map` handled.
 - `RangeFilter({ label, value?: string, onChange(value | undefined) })` (`min..max`, validated with `zRange`) and `DateRangeFilter({ label, from?, to?, onChange({ from?, to? }) })` in `ui/table-tools.tsx`. The date filter takes the two fields the schemas use (`from`, `to`) rather than one string.
 - `ListModeToggle({ listId })` and `useListMode(listId): { mode: 'pages' | 'scroll'; limit: 10 | 25 | 50 | 75 | 100; setMode; setLimit }`, kept per list in `localStorage` `radar.list.<listId>` (PE-38).
@@ -1960,7 +1832,6 @@ In `review/stories.yaml`, `radar_start` of RA-02…RA-10 and RA-13 is `/nodes` (
 #### Shared files
 
 The files every area touches are guarded by tests rather than by a freeze:
-
 - `features/entity/site-map.ts`: a page without a route case fails `integration.spec.ts`, a page without stories in `site-map-stories.ts` fails the site-map test, and a page that shows a source its `sources` does not list fails the source-line guard (§10).
 - `data/query/keys.ts`: `VIEW_KEY_PREFIXES` must stay disjoint (`keys.test.ts`).
 - `data/sdk/methods.ts` and the per-area method files: every method needs a `METHOD_PAGES` row (above).
@@ -1978,16 +1849,15 @@ Each has a primary design (what §§3–4 assume) and a fallback that keeps the 
 
 What it measures: TLS to evonode IPs, CORS, unary and server streams through connect-web, the over-limit reply's shape and whether `ratelimit-*` headers are readable, latency, and whether a match-all bloom filter is accepted.
 
-| Outcome                                                                                                                                                             | Design                                                                                                                                                                                                                                                                                                                                                          |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Works, unary and streams** (expected: the gateway config already allows any origin, exposes the rate-limit headers and synthesises `grpc-status: 8` for grpc-web) | §4 as written                                                                                                                                                                                                                                                                                                                                                   |
-| **Rate-limit headers unreadable**                                                                                                                                   | Budget relies on the local window only; per-node cap drops to 40/min                                                                                                                                                                                                                                                                                            |
-| **Unary works, streams don't** (buffered or cut)                                                                                                                    | `coreLive.tip` polls `getBestBlockHeight` every 20 s on one node; ChainLock from `getBlock(tip)`'s cbTx best-CL fields; live feed from Hyphen `/stream`; masternode registration fields from RAD's crawl only, labelled "Crawled by Radar" (rule 6 degrades to RAD)                                                                                             |
-| **Match-all filter refused**                                                                                                                                        | The address page reads the address's own history from Hyphen (`fallbackHint`, §4.8); Hyphen's `/stream` sends no `mempool_tx`                                                                                                                                                                                                                                   |
-| **Browsers can't reach evonodes** (cert or CORS failure on most nodes)                                                                                              | `data/core` serves Core facts from Hyphen `/rawblock` and `/rawtx`, decoded locally, stamped `hyphen`. The façade and decode path don't change. No relay on the edge Worker: it would put every visitor behind Cloudflare's egress IPs and the shared per-IP limit. `@dashevo/dapi-client` is not a fallback for this case: it uses the same gRPC-web endpoints |
+| Outcome | Design |
+|---|---|
+| **Works, unary and streams** (expected: the gateway config already allows any origin, exposes the rate-limit headers and synthesises `grpc-status: 8` for grpc-web) | §4 as written |
+| **Rate-limit headers unreadable** | Budget relies on the local window only; per-node cap drops to 40/min |
+| **Unary works, streams don't** (buffered or cut) | `coreLive.tip` polls `getBestBlockHeight` every 20 s on one node; ChainLock from `getBlock(tip)`'s cbTx best-CL fields; live feed from Hyphen `/stream`; masternode registration fields from RAD's crawl only, labelled "Crawled by Radar" (rule 6 degrades to RAD) |
+| **Match-all filter refused** | The address page reads the address's own history from Hyphen (`fallbackHint`, §4.8); Hyphen's `/stream` sends no `mempool_tx` |
+| **Browsers can't reach evonodes** (cert or CORS failure on most nodes) | `data/core` serves Core facts from Hyphen `/rawblock` and `/rawtx`, decoded locally, stamped `hyphen`. The façade and decode path don't change. No relay on the edge Worker: it would put every visitor behind Cloudflare's egress IPs and the shared per-IP limit. `@dashevo/dapi-client` is not a fallback for this case: it uses the same gRPC-web endpoints |
 
 **Outcome (2026-11-10, `docs/spikes/dapi-core.md`): works, unary and streams.** §4 stands as written. What the spike adds:
-
 - 96% of enabled mainnet evonodes and 98% on testnet answered. IP-SAN certificates are publicly trusted, CORS reflects any origin, and `grpc-status` and `ratelimit-*` are readable, so the server's headers drive the budget.
 - Over the limit: HTTP 200, `grpc-status: 8`, `ratelimit-reset` honoured exactly, with no extra penalty seen. The per-node cap stays at 50/min; bench until `ratelimit-reset`.
 - Ports: 443 mainnet, 1443 testnet, for every node that answered (RAD's masternode list doesn't carry the Platform HTTP port).
@@ -2013,14 +1883,13 @@ export interface CoreDecoder {
 
 Headers and ChainLocks are decoded in TS (`lib/core/*`), never in wasm, so the home page never loads the decoder.
 
-| Outcome                                | Design                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Builds, ≤ 600 KB gz, full coverage** | wasm in `decode.worker.ts` (Comlink), loaded on first block, tx or masternode view                                                                                                                                                                                                                                                                                                                                                               |
-| **Works but larger**                   | Same, plus split exports: a base build (block and tx with payloads) and a separate `mnlist` build loaded only on masternode views. The budget check is then per build                                                                                                                                                                                                                                                                            |
-| **Fails, or misses payloads**          | `@dashevo/dashcore-lib` behind the same `CoreDecoder` for structure (inputs, outputs, scripts, addresses, cbTx). Payloads it can't parse come from Hyphen `/tx/{txid}` `payload`, stamped `source: 'hyphen'` ("Indexed by Hyphen"); with Hyphen stale, the raw payload hex shows with a note. Masternode list diff decoding moves to a small TS parser in `lib/core/mnlistdiff.ts`; if that is too much for M2, rule 6 degrades to RAD as in (a) |
+| Outcome | Design |
+|---|---|
+| **Builds, ≤ 600 KB gz, full coverage** | wasm in `decode.worker.ts` (Comlink), loaded on first block, tx or masternode view |
+| **Works but larger** | Same, plus split exports: a base build (block and tx with payloads) and a separate `mnlist` build loaded only on masternode views. The budget check is then per build |
+| **Fails, or misses payloads** | `@dashevo/dashcore-lib` behind the same `CoreDecoder` for structure (inputs, outputs, scripts, addresses, cbTx). Payloads it can't parse come from Hyphen `/tx/{txid}` `payload`, stamped `source: 'hyphen'` ("Indexed by Hyphen"); with Hyphen stale, the raw payload hex shows with a note. Masternode list diff decoding moves to a small TS parser in `lib/core/mnlistdiff.ts`; if that is too much for M2, rule 6 degrades to RAD as in (a) |
 
 **Outcome (2026-11-10, `docs/spikes/core-decode.md`): works; no dashcore-lib fallback.** `packages/core-decode` decodes blocks, transactions and every special payload on the list, checked against Insight's JSON for real mainnet transactions of eight of the nine special types. It is 320 KB gzipped, and a 900 KB block decodes in 15–18 ms. Decisions:
-
 - **`dist/` is committed**, so the app and the main CI job build without Rust; `pnpm test` runs the wasm tests against it. `build:wasm` and `test:rust` rebuild and test it natively; they need binaryen `version_129` and a clang that targets wasm32 (libsecp256k1 is C).
 - **The committed `packages/core-decode/dist` is reproducible.** `packages/core-decode/rust-toolchain.toml` pins the Rust toolchain (1.99.1), `scripts/build-wasm.mjs` remaps the cargo, rustup and checkout paths out of the wasm (`--remap-path-prefix`), wasm-bindgen is 0.2.118, and `scripts/postbuild.mjs` refuses to run without binaryen `version_129` (set `RADAR_SKIP_WASM_OPT=1` for a local build that must not be committed). The `core-decode` CI job installs that binaryen release (sha256-checked), rebuilds, and fails if `git diff` shows any change under `dist/`. A change to the Rust sources, the lockfile, the toolchain pin or binaryen therefore needs a rebuilt and committed `dist/` in the same commit.
 - **Pinned to rust-dashcore `dev` at 568d5866**, because that is where the special-transaction types live.
@@ -2032,16 +1901,15 @@ Headers and ChainLocks are decoded in TS (`lib/core/*`), never in wasm, so the h
 
 What it measures: wasm init and trusted-context prefetch inside a module worker, cold-start time on a mid-range phone, whether `*WithProofInfo` results map cleanly to DTOs, whether the transfer of proof bytes works, and how plain calls behave with `trusted: true`.
 
-| Outcome                                                                            | Design                                                                                                                                                                                                                         |
-| ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Works**                                                                          | §3 as written                                                                                                                                                                                                                  |
-| **Works with a missing global** (`window`, `localStorage`, DOM-only fetch options) | A shim at the top of `sdk.worker.ts`, limited to what the SDK touches, each line commented with the symbol it satisfies                                                                                                        |
-| **Doesn't work in a worker**                                                       | `InlineTransport`: same `impl.ts` on the main thread, loaded with dynamic `import()` from the same chunk boundary, warmed only when idle. Cold-start jank is accepted for Platform views; Core and network pages never load it |
-| **Cold start > 6 s on the test phone**                                             | No design change; the `sdk-cold` fallback (§3.3) carries the first view, and warm-up also starts on first idle on every route, not only Platform ones                                                                          |
-| **Some `*WithProofInfo` variant returns data that won't map**                      | That method uses its plain variant, `proved: false`, listed in `docs/spikes.md`; an upstream issue goes on the plan's §7.2 list                                                                                                |
+| Outcome | Design |
+|---|---|
+| **Works** | §3 as written |
+| **Works with a missing global** (`window`, `localStorage`, DOM-only fetch options) | A shim at the top of `sdk.worker.ts`, limited to what the SDK touches, each line commented with the symbol it satisfies |
+| **Doesn't work in a worker** | `InlineTransport`: same `impl.ts` on the main thread, loaded with dynamic `import()` from the same chunk boundary, warmed only when idle. Cold-start jank is accepted for Platform views; Core and network pages never load it |
+| **Cold start > 6 s on the test phone** | No design change; the `sdk-cold` fallback (§3.3) carries the first view, and warm-up also starts on first idle on every route, not only Platform ones |
+| **Some `*WithProofInfo` variant returns data that won't map** | That method uses its plain variant, `proved: false`, listed in `docs/spikes.md`; an upstream issue goes on the plan's §7.2 list |
 
 **Outcome (2026-11-10, `docs/spikes/sdk-worker.md`): works in a module worker behind Comlink**, mainnet and testnet, with full proof metadata. §3 stands. Decisions taken on the results:
-
 - **Split build.** Load the wasm as a separate asset (5.8 MB brotli, cold start 844 ms on localhost) rather than the package default with the wasm inlined in JS (9.1 MB over the wire, 1317 ms). It needs a Vite alias past the package's `exports` map. Guard it with a unit test that fails if the aliased file is missing, so an SDK bump that moves it fails CI instead of production. The inlined build is the fallback.
 - **Every SDK call gets a worker-side timeout of 8 s and one retry.** The SDK's own timeout did not stop a call to a dead node (it hung 68–132 s). A second timeout is a `SourceError` of kind `timeout`, and health marks the SDK degraded.
 - **Plain calls are proof-verified too.** Keep calling the `WithProof` variants anyway, for the metadata the proof inspector shows.
