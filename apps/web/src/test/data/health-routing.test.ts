@@ -1,10 +1,11 @@
 import { QueryClient } from '@tanstack/react-query'
 import { http, HttpResponse } from 'msw'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { fixture } from '@/test/fixtures/load'
 import { server } from '@/test/server'
 import { setActiveNetwork } from '@/data/active-network'
 import { healthRegistry } from '@/data/health'
-import { healthQueries } from '@/data/health-queries'
+import { CRAWL_TIP_MAX_AGE_MS, healthQueries } from '@/data/health-queries'
 import { PROBE_FRAGMENT } from '@/data/http'
 import { radar } from '@/data/radar/client'
 import { rate } from '@/data/rate/client'
@@ -30,8 +31,53 @@ describe('global calls report to the active network', () => {
   })
 })
 
+interface CrawlChain {
+  blocks: number
+  synced: boolean
+  updated: number
+  error: string | null
+}
+interface RecordedStatus {
+  networks: Record<'mainnet' | 'testnet', { chain: CrawlChain }>
+}
+
 describe('hyphen probe lag', () => {
   const client = () => new QueryClient({ defaultOptions: { queries: { retry: false } } })
+  let recorded: RecordedStatus
+  beforeEach(async () => {
+    recorded = (await fixture('radar', 'global', 'status')).body as RecordedStatus
+    // The crawl's reading of the chain is a minute old, as it is when the crawler is keeping up.
+    vi.useFakeTimers({
+      toFake: ['Date'],
+      now: recorded.networks.testnet.chain.updated * 1000 + 60_000,
+    })
+  })
+  afterEach(() => {
+    vi.useRealTimers()
+    server.resetHandlers()
+  })
+
+  const crawlSays = (chain: Partial<CrawlChain>) => {
+    const body = structuredClone(recorded)
+    Object.assign(body.networks.testnet.chain, chain)
+    server.use(http.get('https://radar.dashhq.org/api/v1/status', () => HttpResponse.json(body)))
+  }
+
+  it.each<[string, (now: number) => Partial<CrawlChain>]>([
+    ['its node is not synced', () => ({ synced: false })],
+    ['it reports an error', () => ({ error: 'dashd: connection refused' })],
+    [
+      'its reading of the chain is too old',
+      (now) => ({ updated: (now - CRAWL_TIP_MAX_AGE_MS - 1_000) / 1000 }),
+    ],
+  ])('takes no reference from the crawl when %s', async (_, chain) => {
+    const c = client()
+    await c.fetchQuery(healthQueries.hyphen('testnet'))
+    expect(healthRegistry.get('testnet', 'hyphen').lag?.blocks).toBeGreaterThan(0)
+    crawlSays(chain(Date.now()))
+    await c.fetchQuery({ ...healthQueries.hyphen('testnet'), staleTime: 0 })
+    expect(healthRegistry.get('testnet', 'hyphen').lag).toBeUndefined()
+  })
 
   it('is measured against radar, and its claim is cleared (its state kept) when radar cannot be read', async () => {
     const c = client()

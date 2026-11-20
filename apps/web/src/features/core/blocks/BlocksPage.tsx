@@ -3,11 +3,13 @@ import { useQuery } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
-import { coreQueries } from '@/data/core/queries'
+import { coreQueries, LATEST_BLOCK_ROWS } from '@/data/core/queries'
+import { earlyAnswers } from '@/data/early'
 import type { BlockRow } from '@/data/core/types'
 import { stampOf, type SourceStamp } from '@/data/envelope'
 import { insQueries } from '@/data/insight/queries'
 import { useIndexHealth } from '@/data/index-health'
+import { useHyphenFit } from '@/data/hyphen/fit'
 import {
   Entity,
   PageLink,
@@ -20,6 +22,7 @@ import { isDevnet } from '@/lib/network'
 import { Card, DataTable, Empty, Hash, LockMark, SegFilter, SourceLine, Time } from '@/ui'
 import { CoreBand, RecordHeader, Section } from '../block/frame'
 import { BlocksClaim } from '../claims'
+import { useAskAgainOnceCurrent } from '../indexed-first'
 import {
   BLOCKS_PER_PAGE,
   DAY_MS,
@@ -204,6 +207,41 @@ function useInsightRows(window: Window | null, enabled: boolean): PageRows {
   }
 }
 
+/**
+ * Indexed first (§4.7): the latest page from Hyphen's list, in one request and without waiting for DAPI's tip, shown
+ * as "checking with DAPI" until DAPI's rows have all landed, and only while the probe finds Hyphen's index current.
+ * Once DAPI's rows have settled on a network they own the page for the rest of the mount: a new block starts a new
+ * DAPI read, and Hyphen's older rows must not come back while it runs. Undefined when it is not shown.
+ */
+function useIndexedLatestRows(
+  latest: boolean,
+  dapi: PageRows,
+  broken: boolean,
+): PageRows | undefined {
+  const net = useNetwork()
+  const fit = useHyphenFit(net)
+  const [dapiOwns, setDapiOwns] = useState<ReadonlySet<string>>(() => new Set())
+  if (latest && dapi.settled && !dapiOwns.has(net)) setDapiOwns(new Set(dapiOwns).add(net))
+  const on =
+    latest && earlyAnswers() && !dapiOwns.has(net) && !dapi.settled && !dapi.failed && !broken
+  const query = useQuery({
+    ...coreQueries.indexedLatestRows(net, LATEST_BLOCK_ROWS),
+    enabled: on,
+  })
+  useAskAgainOnceCurrent(on, fit, query.data, query.refetch)
+  const data = query.data
+  if (!on || !fit || !data || data.data.length === 0) return undefined
+  return {
+    rows: data.data,
+    settled: false,
+    pending: 0,
+    stamp: stampOf(data),
+    error: null,
+    failed: false,
+    refetch: () => void query.refetch(),
+  }
+}
+
 function useFreshRows(rows: BlockRow[], live: boolean): Set<string> {
   const [seen, setSeen] = useState<Set<string> | null>(null)
   const [fresh, setFresh] = useState<Set<string>>(() => new Set())
@@ -363,7 +401,10 @@ export function BlocksPage({
   const dapiRows = useDapiRows(window, pageSource.source === 'dapi')
   const hyphenRows = useHyphenRows(window, pageSource.source === 'hyphen')
   const insightRows = useInsightRows(window, pageSource.source === 'insight')
-  const page = { dapi: dapiRows, hyphen: hyphenRows, insight: insightRows }[pageSource.source]
+  const latest = !date && from === undefined && pageSource.source === 'dapi'
+  const indexedRows = useIndexedLatestRows(latest, dapiRows, range.state === 'error')
+  const page =
+    indexedRows ?? { dapi: dapiRows, hyphen: hyphenRows, insight: insightRows }[pageSource.source]
   const dayStart = date ? dayStartMs(date) : 0
   // Until the day's first block is known, a row is shown only if its own time puts it in the day.
   const rows = useMemo(
@@ -436,7 +477,7 @@ export function BlocksPage({
         ? 'ready'
         : 'loading'
   const dateLabel = date ? formatDate(dayStartMs(date), { utc: true, time: false }) : undefined
-  const tipTime = range.tip.data?.data.time
+  const tipTime = range.tip.data?.data.time ?? (indexedRows ? rows[0]?.time : undefined)
   const canNextDay =
     date !== undefined && tipTime !== undefined && dayStartMs(date) + DAY_MS <= tipTime
 
@@ -582,7 +623,7 @@ export function BlocksPage({
                 rowLink={(r) => ({ to: '/block/$id', params: { id: String(r.height) } })}
                 live={{ newRowIds: fresh }}
                 paging={
-                  window
+                  window && !indexedRows
                     ? {
                         kind: 'cursor',
                         prev: window.newer ? (link(window.newer) as never) : undefined,

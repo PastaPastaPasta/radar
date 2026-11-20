@@ -1,7 +1,15 @@
 import { t } from '@lingui/core/macro'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { formatDate, formatInt, formatRelative } from '@/lib/format'
-import { activateLocale, AVAILABLE_LOCALES, detectLocale, i18n, matchLocale } from './index'
+import {
+  activateLocale,
+  AVAILABLE_LOCALES,
+  detectLocale,
+  i18n,
+  matchLocale,
+  startLocale,
+  type LocaleCode,
+} from './index'
 import { LOCALE_CODES } from './locales'
 
 const SHIPPED = ['en', 'de', 'fr', 'es', 'pt', 'ja', 'zh', 'ru', 'tr', 'uk']
@@ -36,6 +44,49 @@ describe('locales', () => {
   it('falls back to English for a browser language Radar does not ship @IN-13', () => {
     vi.stubGlobal('navigator', { languages: ['sv-SE'] })
     expect(detectLocale()).toBe('en')
+  })
+})
+
+describe('starting offline', () => {
+  const offline = (cached: LocaleCode[], hang: LocaleCode[] = []) => {
+    const asked: LocaleCode[] = []
+    const activate = (code: LocaleCode) => {
+      asked.push(code)
+      if (hang.includes(code)) return new Promise<void>(() => undefined)
+      return cached.includes(code)
+        ? activateLocale(code)
+        : Promise.reject(new Error(`Failed to fetch the ${code} catalog`))
+    }
+    return { asked, activate }
+  }
+
+  it("falls back to the browser's catalog when the saved locale's is not cached", async () => {
+    vi.stubGlobal('navigator', { languages: ['de-AT'] })
+    localStorage.setItem('radar.locale', 'ja')
+    const { asked, activate } = offline(['de'])
+    await startLocale(activate)
+    expect(asked).toEqual(['ja', 'de'])
+    expect(i18n.locale).toBe('de')
+  })
+
+  it('moves on from a catalog that never arrives', async () => {
+    vi.stubGlobal('navigator', { languages: ['en'] })
+    localStorage.setItem('radar.locale', 'ja')
+    const { asked, activate } = offline(['en'], ['ja'])
+    await startLocale(activate, 2_000)
+    expect(asked).toEqual(['ja', 'en'])
+    expect(i18n.locale).toBe('en')
+  })
+
+  it('still settles with a locale active when no catalog can be loaded', async () => {
+    vi.stubGlobal('navigator', { languages: ['fr'] })
+    localStorage.setItem('radar.locale', 'ja')
+    ;(i18n as unknown as { _locale: string })._locale = ''
+    const { asked, activate } = offline([])
+    await startLocale(activate, 50)
+    expect(asked).toEqual(['ja', 'fr', 'en'])
+    expect(i18n.locale).toBe('en')
+    expect(() => i18n._('x')).not.toThrow()
   })
 })
 

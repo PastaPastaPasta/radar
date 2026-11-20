@@ -1,7 +1,9 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
+import { earlyAnswers } from '@/data/early'
 import { stampOf } from '@/data/envelope'
 import { useDecentralizedOnly } from '@/data/health'
+import { peQueries, peTipOf } from '@/data/pe/queries'
 import { radarQueries } from '@/data/radar/queries'
 import { platformTipQuery } from '@/data/sdk/queries'
 import { PageLink, useNetwork } from '@/features/entity'
@@ -24,7 +26,25 @@ import { useSectionSource } from '@/ui/section-source'
 export function useEpochNow() {
   const net = useNetwork()
   const ready = useAfterIdle()
-  const tip = useQuery({ ...platformTipQuery(net), enabled: ready })
+  const sdk = useQuery({ ...platformTipQuery(net), enabled: ready })
+  // Until the SDK's proof-checked answer lands, Platform Explorer's stands in, labelled as such (§3.3).
+  const sdkOnly = useDecentralizedOnly() || isDevnet(net) || !earlyAnswers()
+  const explorer = useQuery({
+    ...peQueries.status(net),
+    enabled: !sdkOnly && !sdk.data,
+    select: peTipOf,
+  })
+  const tip =
+    sdk.data || sdkOnly || !explorer.data
+      ? sdk
+      : ({
+          ...sdk,
+          data: {
+            ...explorer.data,
+            fallback: sdk.isError ? ('sdk-down' as const) : ('sdk-cold' as const),
+          },
+          isError: false,
+        } as unknown as typeof sdk)
   const epoch = tip.data?.data.epoch
   const length = epochLengthMs(net)
   const endsAt = epoch === undefined || length === undefined ? undefined : epoch.startedAt + length

@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { INDEX_FRESH_BLOCKS, INDEX_STALE_BLOCKS, nextIndexState } from './index-state'
+import {
+  INDEX_FRESH_BLOCKS,
+  INDEX_STALE_BLOCKS,
+  measureAgainst,
+  nextIndexState,
+} from './index-state'
 
 describe('nextIndexState', () => {
   it('is stale past six blocks and fresh at two or fewer', () => {
@@ -24,5 +29,34 @@ describe('nextIndexState', () => {
     const seen = [6, 5, 4, 3, 4, 6, 3].map((behind) => (state = nextIndexState(state, behind)))
     expect(seen).toEqual(Array(7).fill('stale'))
     expect(nextIndexState(state, 2)).toBe('fresh')
+  })
+})
+
+describe('measureAgainst', () => {
+  it('measures a plain height once, and no height as none', async () => {
+    const seen: (number | undefined)[] = []
+    await measureAgainst(100, (h) => seen.push(h))
+    await measureAgainst(undefined, (h) => seen.push(h))
+    expect(seen).toEqual([100, undefined])
+  })
+
+  it('measures with the first outside tip, then again when the final one differs', async () => {
+    const seen: (number | undefined)[] = []
+    let finish!: (h: number) => void
+    const final = new Promise<number | undefined>((r) => (finish = r))
+    await measureAgainst({ first: Promise.resolve(100), final }, (h) => seen.push(h))
+    expect(seen).toEqual([100])
+    finish(104)
+    await final
+    await Promise.resolve()
+    expect(seen).toEqual([100, 104])
+  })
+
+  it('does not measure again when the final tip is the first one', async () => {
+    const seen: (number | undefined)[] = []
+    const tip = Promise.resolve(100)
+    await measureAgainst({ first: tip, final: tip }, (h) => seen.push(h))
+    await Promise.resolve()
+    expect(seen).toEqual([100])
   })
 })

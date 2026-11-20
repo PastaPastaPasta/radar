@@ -1,5 +1,6 @@
 import { withSecurityHeaders } from './headers'
 import { genericOg, isLinkPreviewAgent, matchOgRoute, resolveOg, rewriteHead } from './og'
+import { preloadFiles, preloadTable, withPreloads } from './preload'
 import { handleProxy, isProxyPath } from './proxy'
 import { redirectFor } from './redirects'
 
@@ -25,6 +26,12 @@ function asServiceWorker(res: Response): Response {
   out.headers.set('content-type', 'text/javascript; charset=utf-8')
   out.headers.set('cache-control', 'no-cache')
   return out
+}
+
+async function preloaded(res: Response, request: Request, env: Env, url: URL): Promise<Response> {
+  const table = await preloadTable(env.ASSETS, url.origin)
+  if (!table) return res
+  return withPreloads(res, preloadFiles(table, url, request.headers.get('accept-language')))
 }
 
 async function handle(request: Request, env: Env): Promise<Response> {
@@ -57,11 +64,13 @@ async function handle(request: Request, env: Env): Promise<Response> {
     })
   }
 
-  const res = await serveAssets(request, env, url)
-  if (url.pathname === SERVICE_WORKER_PATH && res.ok) return asServiceWorker(res)
+  const served = await serveAssets(request, env, url)
+  if (url.pathname === SERVICE_WORKER_PATH && served.ok) return asServiceWorker(served)
+
+  const isHtml = served.headers.get('content-type')?.startsWith('text/html') === true
+  const res = isHtml && served.status === 200 ? await preloaded(served, request, env, url) : served
 
   const og = matchOgRoute(url)
-  const isHtml = res.headers.get('content-type')?.startsWith('text/html') === true
   if (og && res.ok && isHtml && request.method === 'GET') {
     const out = new Response(res.body, res)
     out.headers.append('vary', 'user-agent')

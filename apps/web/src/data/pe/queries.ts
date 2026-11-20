@@ -1,9 +1,12 @@
 import { queryOptions } from '@tanstack/react-query'
 import type { NetworkId } from '@/lib/network'
+import { mapSourced, type Sourced } from '../envelope'
+import type { PlatformTip } from '../sdk/queries'
 import { peKeys } from '../query/keys'
 import { dataClass, POLL_MS } from '../query/stale'
 import { pe } from './client'
 import type { PeQuery, PeTimeframe } from './params'
+import type { PeStatus } from './schemas'
 
 const params = (q: PeQuery): Record<string, string | number | boolean | undefined> => {
   const out: Record<string, string | number | boolean | undefined> = {}
@@ -268,3 +271,14 @@ export const peQueries = {
       ...dataClass('index'),
     }),
 }
+
+/** Platform Explorer's status as the Platform tip and epoch, for pages to show until the SDK's proof-checked one lands. */
+export const peTipOf = (s: Sourced<PeStatus>): Sourced<PlatformTip> =>
+  mapSourced(s, (d) => ({
+    height: d.tenderdash.block.height,
+    epoch: {
+      number: d.epoch.number,
+      firstBlockHeight: d.epoch.firstBlockHeight,
+      startedAt: d.epoch.startTime,
+    },
+  }))

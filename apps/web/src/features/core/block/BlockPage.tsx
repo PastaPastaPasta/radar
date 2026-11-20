@@ -37,6 +37,8 @@ import { useIndexHealth } from '@/data/index-health'
 import { StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { insQueries } from '@/data/insight/queries'
 import { parseBlockRef } from '@/lib/core/block-ref'
+import { IndexDiffered } from '../IndexDiffered'
+import { useIndexedFirst } from '../indexed-first'
 
 export const TXS_PER_PAGE = 100
 
@@ -44,7 +46,15 @@ export function BlockPage({ id, page = 1 }: { id: string; page?: number }) {
   const { t } = useLingui()
   const net = useNetwork()
   const ref = parseBlockRef(id)
-  const block = useQuery({ ...coreQueries.block(net, ref ?? { height: 0 }), enabled: ref !== null })
+  const dapiBlock = useQuery({
+    ...coreQueries.block(net, ref ?? { height: 0 }),
+    enabled: ref !== null,
+  })
+  const { query: block, differed } = useIndexedFirst(
+    dapiBlock,
+    coreQueries.indexedBlock(net, ref ?? { height: 0 }),
+    { enabled: ref !== null, net, same: (a, b) => a.hash === b.hash && a.height === b.height },
+  )
   const height = ref && 'height' in ref ? ref.height : block.data?.data?.height
   useDocumentTitle(height === undefined ? t`Block` : t`Block ${formatInt(height)}`)
   const tipHeight = useFollowTip(net, {
@@ -87,6 +97,7 @@ export function BlockPage({ id, page = 1 }: { id: string; page?: number }) {
       stamp={stampOf(block.data)}
       tipHeight={tipHeight}
       page={page}
+      differed={differed}
     />
   )
 }
@@ -103,11 +114,13 @@ function BlockView({
   stamp,
   tipHeight,
   page,
+  differed,
 }: {
   block: DecodedBlock
   stamp: SourceStamp
   tipHeight: number | undefined
   page: number
+  differed: boolean
 }) {
   const { t } = useLingui()
   const net = useNetwork()
@@ -252,6 +265,7 @@ function BlockView({
                   </span>
                 )}
                 <SourceLine stamp={stamp} />
+                {differed ? <IndexDiffered /> : null}
               </div>
             </>
           }

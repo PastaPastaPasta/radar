@@ -12,13 +12,17 @@ const FIXTURES = path.join(
   'apps/web/src/test/fixtures/http',
 )
 
+interface Status {
+  networks: Record<string, { chain: { updated: number } }>
+}
+
 async function fetchInPage(page: Page, url: string) {
   await page.goto('/status')
   await page.getByRole('heading', { level: 1 }).waitFor()
   return page.evaluate(async (u) => {
     try {
       const res = await fetch(u)
-      return { status: res.status, body: await res.text() }
+      return { status: res.status, body: await res.text(), now: Date.now() }
     } catch (err) {
       return { error: String(err) }
     }
@@ -29,10 +33,24 @@ test.describe('fixture mode', () => {
   test('answers from the recording, not the network', async ({ page }) => {
     const recorded = JSON.parse(
       readFileSync(path.join(FIXTURES, 'radar/global/status.json'), 'utf8'),
-    ) as { status: number; body: unknown }
+    ) as { status: number; recordedAt: string; body: Status }
     const got = await fetchInPage(page, 'https://radar.dashhq.org/api/v1/status')
     expect(got).toHaveProperty('status', recorded.status)
-    expect(JSON.parse((got as { body: string }).body)).toEqual(recorded.body)
+    const { body, now } = got as { body: string; now: number }
+    const served = JSON.parse(body) as Status
+    // The fixture server replays only each chain reading's time, at the age it had when recorded (`withChainAge` in
+    // apps/web/src/test/msw/handlers/fixtures.ts), so the reference-tip check sees the crawler keeping up. That age
+    // must match the recording; every other field must be the recording's, byte for byte.
+    const ageAt = (updated: number, at: number) => at / 1000 - updated
+    const expected = structuredClone(recorded.body)
+    for (const [net, n] of Object.entries(expected.networks)) {
+      const replayed = served.networks[net]!.chain.updated
+      expect(
+        Math.abs(ageAt(replayed, now) - ageAt(n.chain.updated, Date.parse(recorded.recordedAt))),
+      ).toBeLessThan(5)
+      n.chain.updated = replayed
+    }
+    expect(served).toEqual(expected)
   })
 
   test('pins the page clock to the newest recording', async ({ page }) => {

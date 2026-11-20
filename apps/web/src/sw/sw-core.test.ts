@@ -35,6 +35,8 @@ const HTML = `<!doctype html><html><head>
 <link rel="stylesheet" href="/assets/index-CCC.css">
 <link rel="icon" href="/favicon.svg">
 <script src="https://cdn.example/x.js"></script>
+<link rel="modulepreload" crossorigin data-locale href="/assets/de-EEE.js">
+<link rel="modulepreload" crossorigin data-route href="/assets/tx-DDD.js">
 </head><body></body></html>`
 
 function setup(
@@ -90,22 +92,24 @@ const navigation = (path: string) => {
 }
 
 describe('assetUrls', () => {
-  it('lists only the build’s hashed files on this origin', () => {
+  it('lists only the build’s hashed files on this origin, with the edge’s catalog but not its preloads for one route', () => {
     expect(assetUrls(HTML, ORIGIN)).toEqual([
       '/assets/index-AAA.js',
       '/assets/vendor-BBB.js',
       '/assets/index-CCC.css',
+      '/assets/de-EEE.js',
     ])
   })
 })
 
 describe('precache', () => {
-  it('stores the shell and every file it names', async () => {
+  it('stores the shell and every file it names, with the catalog the edge named', async () => {
     const { env, storage } = setup()
     await precache(env)
     const cache = storage.stores.get(cacheName('v1'))!
     expect([...cache.entries.keys()].sort()).toEqual([
       '/',
+      '/assets/de-EEE.js',
       '/assets/index-AAA.js',
       '/assets/index-CCC.css',
       '/assets/vendor-BBB.js',

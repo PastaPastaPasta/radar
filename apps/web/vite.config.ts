@@ -8,6 +8,7 @@ import { loadEnv } from 'vite'
 import { defineConfig } from 'vitest/config'
 import { dashhqAssets } from './build/dashhq-assets'
 import { fixtureWorker } from './build/fixture-worker'
+import { routePreload } from './build/route-preload'
 import { sdkSplit } from './build/sdk-split'
 import { securityHeaders } from './build/security-headers'
 import { serviceWorker } from './build/service-worker'
@@ -37,6 +38,7 @@ export default defineConfig(({ mode }) => {
       fixtureWorker(fixtures),
       sdkSplit({ fixtures }),
       serviceWorker(),
+      routePreload(),
     ],
     resolve: {
       alias: [

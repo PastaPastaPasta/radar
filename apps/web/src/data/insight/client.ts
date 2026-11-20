@@ -1,6 +1,7 @@
 import type { z } from 'zod'
 import type { NetworkId } from '@/lib/network'
 import type { Sourced } from '../envelope'
+import { measureAgainst, type Reference } from '../index-state'
 import { healthRegistry } from '../health'
 import { indexedLagDetail } from '../health-lag'
 import { fetchSourced, requireEndpoint } from '../http'
@@ -56,7 +57,7 @@ export const insight = {
   async status(
     net: NetworkId,
     signal?: AbortSignal,
-    referenceHeight?: number,
+    referenceHeight?: Reference,
     opts: { probe?: boolean } = {},
   ): Promise<Sourced<InsStatus>> {
     const out = await get(net, '/status', InsStatusSchema, {
@@ -64,13 +65,14 @@ export const insight = {
       probe: opts.probe,
       height: (b) => b.info.blocks,
     })
-    if (referenceHeight !== undefined) {
-      const behind = Math.max(0, referenceHeight - out.data.info.blocks)
+    await measureAgainst(referenceHeight, (height) => {
+      if (height === undefined) return
+      const behind = Math.max(0, height - out.data.info.blocks)
       healthRegistry.setLag(net, 'insight', {
         blocks: behind,
         detail: indexedLagDetail(out.data.info.blocks, behind),
       })
-    }
+    })
     return out
   },
 

@@ -160,6 +160,50 @@ describe('static assets and SPA fallback', () => {
   })
 })
 
+describe('route preloads', () => {
+  const preloads = async (p, headers) => {
+    const html = await (await get(p, headers ? { headers } : undefined)).text()
+    return [...html.matchAll(/<link rel="(modulepreload|preload)"[^>]*href="([^"]+)"/g)].map(
+      (m) => m[2],
+    )
+  }
+
+  it("preloads the route's chunks and the catalog, and leaves the DAPI pool to load after first paint", async () => {
+    assert.deepEqual(await preloads('/tx/abc'), [
+      '/assets/en.js',
+      '/assets/tx.js',
+      '/assets/queries.js',
+    ])
+  })
+
+  it('picks the literal route over a parameter, and preloads its stylesheet as a style', async () => {
+    const html = await (await get('/identity/lookup')).text()
+    assert.match(
+      html,
+      /<link rel="modulepreload" crossorigin data-route href="\/assets\/lookup.js">/,
+    )
+    assert.match(
+      html,
+      /<link rel="preload" as="style" crossorigin data-route href="\/assets\/changes.css">/,
+    )
+    assert.doesNotMatch(html, /identity\.js/)
+  })
+
+  it("follows the visitor's language, marks the catalog apart from the route's chunks, and varies by language", async () => {
+    const files = await preloads('/?network=testnet', { 'accept-language': 'de-AT,de;q=0.9' })
+    assert.deepEqual(files, ['/assets/de.js', '/assets/home.js'])
+    const res = await get('/', { headers: { 'accept-language': 'de' } })
+    assert.match(res.headers.get('vary') ?? '', /accept-language/i)
+    const html = await res.text()
+    assert.match(html, /<link rel="modulepreload" crossorigin data-locale href="\/assets\/de.js">/)
+    assert.match(html, /<link rel="modulepreload" crossorigin data-route href="\/assets\/home.js">/)
+  })
+
+  it('still preloads the catalog on a path no route claims', async () => {
+    assert.deepEqual(await preloads('/no/such/page'), ['/assets/en.js'])
+  })
+})
+
 describe('hyphen pass-through', () => {
   it('maps mainnet and testnet to their upstreams, keeping path and query', async () => {
     reset(() => Response.json({ value: [] }))
@@ -200,6 +244,20 @@ describe('hyphen pass-through', () => {
     assert.equal(res.headers.get('content-type'), 'application/json')
     assert.equal(res.headers.get('cache-control'), 'public, max-age=15')
     assert.deepEqual(await res.json(), { ok: true })
+  })
+
+  it('lets browsers and the edge keep raw bytes named by their hash, and nothing else', async () => {
+    const hash = 'ab'.repeat(32)
+    for (const [p, cache] of [
+      [`/x/hy/mainnet/rawtx/${hash}`, 'public, max-age=86400, immutable'],
+      [`/x/hy/mainnet/rawblock/${hash}`, 'public, max-age=86400, immutable'],
+      [`/x/hy/mainnet/tx/${hash}`, 'public, max-age=15'],
+      ['/x/hy/mainnet/rawblock/2574433', 'public, max-age=15'],
+    ]) {
+      reset(() => Response.json({}))
+      const res = await get(p)
+      assert.equal(res.headers.get('cache-control'), cache, p)
+    }
   })
 
   it('is GET and HEAD only', async () => {
