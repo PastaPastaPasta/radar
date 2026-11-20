@@ -178,8 +178,14 @@ describe('route preloads', () => {
 
   it('picks the literal route over a parameter, and preloads its stylesheet as a style', async () => {
     const html = await (await get('/identity/lookup')).text()
-    assert.match(html, /<link rel="modulepreload" crossorigin href="\/assets\/lookup.js">/)
-    assert.match(html, /<link rel="preload" as="style" crossorigin href="\/assets\/changes.css">/)
+    assert.match(
+      html,
+      /<link rel="modulepreload" crossorigin data-route href="\/assets\/lookup.js">/,
+    )
+    assert.match(
+      html,
+      /<link rel="preload" as="style" crossorigin data-route href="\/assets\/changes.css">/,
+    )
     assert.doesNotMatch(html, /identity\.js/)
   })
 

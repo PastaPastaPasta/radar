@@ -92,8 +92,8 @@ export function preloadFiles(
 
 const linkTag = (file: string) =>
   file.endsWith('.css')
-    ? `<link rel="preload" as="style" crossorigin href="/${file}">`
-    : `<link rel="modulepreload" crossorigin href="/${file}">`
+    ? `<link rel="preload" as="style" crossorigin data-route href="/${file}">`
+    : `<link rel="modulepreload" crossorigin data-route href="/${file}">`
 
 /** Adds the preload links to the page's head; the browser fetches them beside the entry instead of after it. */
 export function withPreloads(res: Response, files: readonly string[]): Response {

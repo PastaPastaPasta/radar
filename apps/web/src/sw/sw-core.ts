@@ -19,17 +19,27 @@ export const cacheName = (version: string): string => `${CACHE_PREFIX}${version}
 const isAsset = (url: URL, origin: string): boolean =>
   url.origin === origin && url.pathname.startsWith('/assets/')
 
-/** The hashed files a build's HTML names: its scripts, preloaded chunks and styles, and nothing from another origin. */
+/** The attribute on the edge's per-route preload links (`workers/edge/src/preload.ts`): one page's files, not the shell's. */
+const ROUTE_PRELOAD = /\sdata-route(?=[\s=>/])/i
+
+/**
+ * The hashed files a build's HTML names: its scripts, preloaded chunks and styles, and nothing from another origin.
+ * The edge's route preloads are left out: the shell is the same for every page, and fetching one route's chunks again
+ * while that page loads would only compete with it.
+ */
 export function assetUrls(html: string, origin: string): string[] {
   const found = new Set<string>()
-  for (const m of html.matchAll(/(?:src|href)\s*=\s*["']([^"']+)["']/gi)) {
-    let url: URL
-    try {
-      url = new URL(m[1] ?? '', origin)
-    } catch {
-      continue
+  for (const [tag] of html.matchAll(/<[a-z]+\b[^>]*>/gi)) {
+    if (ROUTE_PRELOAD.test(tag)) continue
+    for (const m of tag.matchAll(/(?:src|href)\s*=\s*["']([^"']+)["']/gi)) {
+      let url: URL
+      try {
+        url = new URL(m[1] ?? '', origin)
+      } catch {
+        continue
+      }
+      if (isAsset(url, origin)) found.add(url.pathname)
     }
-    if (isAsset(url, origin)) found.add(url.pathname)
   }
   return [...found]
 }

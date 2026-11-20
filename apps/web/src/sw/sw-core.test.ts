@@ -35,6 +35,7 @@ const HTML = `<!doctype html><html><head>
 <link rel="stylesheet" href="/assets/index-CCC.css">
 <link rel="icon" href="/favicon.svg">
 <script src="https://cdn.example/x.js"></script>
+<link rel="modulepreload" crossorigin data-route href="/assets/tx-DDD.js">
 </head><body></body></html>`
 
 function setup(
@@ -90,7 +91,7 @@ const navigation = (path: string) => {
 }
 
 describe('assetUrls', () => {
-  it('lists only the build’s hashed files on this origin', () => {
+  it('lists only the build’s hashed files on this origin, and not the edge’s preloads for one route', () => {
     expect(assetUrls(HTML, ORIGIN)).toEqual([
       '/assets/index-AAA.js',
       '/assets/vendor-BBB.js',
