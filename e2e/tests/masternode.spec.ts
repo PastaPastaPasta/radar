@@ -162,7 +162,10 @@ test.describe('masternode page', () => {
     for (const label of ['User agent', 'Protocol', 'Services', 'Height it reported', 'Latency']) {
       await expect(check).toContainText(label)
     }
-    await expect(sourceLineOf(check).locator('[data-source="radar"]')).toBeVisible()
+    // The port check is the crawl's; the speed test beside it on this tab is Radar's own benchmark.
+    await expect(
+      sourceLineOf(check).locator('[data-source="radar"][data-radar-time="crawl"]'),
+    ).toBeVisible()
 
     const location = page.locator('#location')
     await expect(location.locator('[data-show-on-map]')).toHaveAttribute(
@@ -339,7 +342,10 @@ test.describe('masternode page', () => {
     await expect(rewards).toBeVisible()
     await expect(rewards.locator('[data-reward-tiles]')).toBeVisible()
     await expect(rewards.locator('[data-rank-strip]')).toBeVisible()
-    await expect(sourceLineOf(rewards).locator('[data-source="radar"]')).toBeVisible()
+    // The rewards come from the masternode's crawl record, the rank from Radar's own Platform check.
+    const line = sourceLineOf(rewards)
+    await expect(line.locator('[data-source="radar"][data-radar-time="crawl"]')).toBeVisible()
+    await expect(line.locator('[data-source="radar"][data-radar-time="reading"]')).toBeVisible()
     await expect(rewards.getByRole('table').first()).toBeAttached()
   })
 

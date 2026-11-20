@@ -72,7 +72,7 @@ interface Crawl {
   checkedAt: number
 }
 
-/** Radar crawls about every five minutes; a crawl time older than this is asked for again. */
+/** A crawl starts every 15 minutes (dash-nodes' `CRAWL_INTERVAL`); a crawl time not confirmed for this long is asked for again. */
 const CRAWL_RECHECK_MS = 5 * 60_000
 
 /** How many finished crawls per network keep their finish time, so a document of a recent crawl is dated by it. */
@@ -137,9 +137,9 @@ async function crawlOf(net: NetworkId, force = false): Promise<Crawl | undefined
 async function crawlTime(
   net: NetworkId,
   id: number | null | undefined,
+  known: Crawl | undefined,
 ): Promise<{ asOf: number; radarTime: 'crawl' | 'earlier-crawl' } | undefined> {
-  let latest = await crawlOf(net)
-  if (id != null && latest?.id != null && id > latest.id) latest = await crawlOf(net, true)
+  const latest = id != null && known?.id != null && id > known.id ? await crawlOf(net, true) : known
   if (!latest) return undefined
   if (id == null || latest.id === null || id === latest.id) {
     return { asOf: latest.finished, radarTime: 'crawl' }
@@ -153,16 +153,17 @@ async function crawlTime(
 
 /**
  * Stamps a document built from the crawl with the crawl's finish time rather than with the time it was fetched. A
- * document that names its crawl (`id`) takes that crawl's time.
+ * document that names its crawl (`id`) takes that crawl's time. Radar's status is asked alongside the document, not
+ * after it, so a cold page waits for one round trip; it is asked again only when the document names a newer crawl.
  */
 async function stampedByCrawl<T>(
   net: NetworkId,
   read: Promise<Sourced<T>>,
   crawlId?: (data: T) => number | null | undefined,
 ): Promise<Sourced<T>> {
-  const out = await read
+  const [out, known] = await Promise.all([read, crawlOf(net)])
   const id = crawlId?.(out.data)
-  const time = await crawlTime(net, id)
+  const time = await crawlTime(net, id, known)
   if (!time) {
     const latest = crawls.get(net)
     const earlier = id != null && latest?.id != null && id < latest.id

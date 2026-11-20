@@ -174,6 +174,36 @@ describe('radar client', () => {
     }
   })
 
+  it('asks Radar’s status alongside a crawl document, not after it', async () => {
+    forgetCrawls()
+    const order: string[] = []
+    const body = await fixtureBody<Record<string, unknown>>('radar', 'mainnet', 'geo')
+    let release: () => void = () => undefined
+    const held = new Promise<void>((done) => {
+      release = done
+    })
+    server.use(
+      http.get(`${BASE}/mainnet/geo`, async () => {
+        order.push('geo asked')
+        await held
+        order.push('geo answered')
+        return HttpResponse.json(body)
+      }),
+    )
+    const listener = ({ request }: { request: Request }) => {
+      if (request.url.endsWith('/status')) order.push('status asked')
+    }
+    server.events.on('request:start', listener)
+    const geo = radar.geo('mainnet')
+    await vi.waitFor(() => {
+      expect(order).toContain('status asked')
+    })
+    release()
+    expect((await geo).radarTime).toBe('crawl')
+    server.events.removeListener('request:start', listener)
+    expect(order.indexOf('status asked')).toBeLessThan(order.indexOf('geo answered'))
+  })
+
   it('names Radar’s own checks apart from the crawl, with their own time', async () => {
     const platform = await radar.platform('mainnet')
     expect(platform.radarTime).toBe('reading')

@@ -42,6 +42,8 @@ const QUIET_AGE_MS: Record<SourceId, number> = {
 
 /** The age past which a reading from `source` shows as out of date: the source's quiet age or the stamp's own limit. */
 export function staleAgeMs(source: SourceId, staleAfterMs = 0): number {
+  // Radar's crawl has one threshold everywhere, whatever the query's class says.
+  if (source === 'radar') return CRAWL_STALE_MS
   return Math.max(staleAfterMs, QUIET_AGE_MS[source])
 }
 

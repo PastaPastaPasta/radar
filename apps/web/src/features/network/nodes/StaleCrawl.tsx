@@ -2,7 +2,7 @@ import { useLingui } from '@lingui/react/macro'
 import type { UseQueryResult } from '@tanstack/react-query'
 import type { Sourced } from '@/data/envelope'
 import type { RadarStatus, RadarSummary } from '@/data/radar/schemas'
-import { CRAWL_STALE_MS } from '@/lib/crawl'
+import { isCrawlStale } from '@/lib/crawl'
 import type { NetworkId } from '@/lib/network'
 import { Time, useNow } from '@/ui'
 import { Notice } from './parts'
@@ -33,7 +33,7 @@ export function StaleCrawl({
   const { t } = useLingui()
   const now = useNow()
   const finished = lastCrawlMs(net, status.data, summary.data)
-  if (finished === undefined || now - finished <= CRAWL_STALE_MS) return null
+  if (finished === undefined || !isCrawlStale(now - finished)) return null
   return (
     <Notice tone="warn" data-stale-crawl>
       <b>{t`The crawl is stale.`}</b> {t`Radar's last crawl finished`}{' '}
