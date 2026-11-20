@@ -58,12 +58,12 @@ describe('Home page', () => {
     renderAt('/')
     const claim = await waitFor(() => {
       const el = document.querySelector<HTMLElement>('h1 [data-census-claim]')
-      expect(el).toHaveTextContent('2,581 Dash nodes answered the last crawl')
+      expect(el).toHaveTextContent('2,190 masternodes answered the last crawl')
       return el!
     })
     expect(claim.closest('h1')).toHaveTextContent(/^Radar:/)
     expect(document.querySelector('[data-census-lede]')).toHaveTextContent(
-      /Among them [\d,]+ of the [\d,]+ enabled masternodes, 1 node fewer than a day ago\./,
+      'That is 99.2% of the 2,207 enabled masternodes, each counted once. That’s 32 fewer than a day ago. In all 2,581 addresses answered; a node reachable on several networks counts at each.',
     )
     expect(document.querySelectorAll('h1')).toHaveLength(1)
   })
@@ -321,7 +321,7 @@ describe('Home page', () => {
     expect(keys[0]!.querySelector('i.d--all')).toBeNull()
     expect(keys[1]!.querySelector('i.d.d--all')).not.toBeNull()
     expect(keys[0]).toHaveTextContent(/masternodes in/)
-    expect(keys[1]).toHaveTextContent('Other reachable nodes')
+    expect(keys[1]).toHaveTextContent('Other reachable addresses')
     expect(legend.querySelector('.rx-maplegend__sum')).toHaveTextContent(/masternodes in/)
   })
 

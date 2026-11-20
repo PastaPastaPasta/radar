@@ -32,6 +32,10 @@ msgstr "{0, plural, one {# blok} other {# blok}}, {2} evonode içinde {1}. sıra
 msgid "{0, plural, one {# epoch paid} other {# epochs paid}}"
 msgstr "{0, plural, one {# epoch ödendi} other {# epoch ödendi}}"
 
+#. placeholder {0}: summary.count
+msgid "{0, plural, one {# payment, {total} in total; indexed blocks {from} to {to}} other {# payments, {total} in total; indexed blocks {from} to {to}}}"
+msgstr "{0, plural, one {# ödeme, toplam {total}; dizine alınan bloklar {from} ile {to} arası} other {# ödeme, toplam {total}; dizine alınan bloklar {from} ile {to} arası}}"
+
 #. placeholder {0}: history.length
 msgid "{0, plural, one {# special transaction in Hyphen’s record} other {# special transactions in Hyphen’s record}}"
 msgstr "{0, plural, one {Hyphen’in kaydında # özel işlem} other {Hyphen’in kaydında # özel işlem}}"
@@ -110,13 +114,6 @@ msgstr "100 üzerinden {0}"
 #. placeholder {0}: formatInt(d.payments_summary.count)
 msgid "{0} payments indexed in total"
 msgstr "Toplam {0} ödeme dizinlendi"
-
-#. placeholder {0}: formatInt(summary.count)
-#. placeholder {1}: formatInt(Number(summary.total_duffs / 100_000_000n))
-#. placeholder {2}: formatInt(summary.indexed.from)
-#. placeholder {3}: formatInt(summary.indexed.to)
-msgid "{0} payments, {1} DASH in total; indexed blocks {2} to {3}"
-msgstr "{0} ödeme, toplam {1} DASH; dizinlenen bloklar {2} ile {3} arası"
 
 #. placeholder {0}: v < 10 ? v.toFixed(1) : formatInt(Math.round(v))
 msgid "{0} s"
@@ -212,6 +209,9 @@ msgstr "Yanıt veriyor"
 #. placeholder {0}: d.asn
 msgid "AS{0}"
 msgstr "AS{0}"
+
+msgid "At block"
+msgstr "Blok"
 
 #. placeholder {0}: formatInt(p.monthly_basis_days)
 msgid "at its pace of the last {0} days"
@@ -351,6 +351,9 @@ msgstr "Günlük sağlık durumu"
 
 msgid "DAPI’s list doesn’t include it. It may be new, removed, or mistyped."
 msgstr "DAPI’nin listesinde yok. Yeni, kaldırılmış ya da yanlış yazılmış olabilir."
+
+msgid "DAPI’s list hasn’t answered, so that isn’t confirmed: it may still be listed."
+msgstr "DAPI’nin listesi yanıt vermedi, bu yüzden bu doğrulanmadı: hâlâ listede olabilir."
 
 msgid "DAPI’s list wins where Radar’s last crawl differs."
 msgstr "Radar’ın son taramasıyla farklı olduğunda DAPI’nin listesi geçerlidir."
@@ -590,6 +593,10 @@ msgstr "Son port kontrolü"
 msgid "Left the list"
 msgstr "Listeden çıktı"
 
+#. placeholder {0}: formatInt(left.height)
+msgid "Left the list at block {0}"
+msgstr "{0} numaralı blokta listeden çıktı"
+
 msgid "Listed by DAPI"
 msgstr "DAPI tarafından listelendi"
 
@@ -737,6 +744,9 @@ msgstr "Henüz kaydedilmiş sürüm yok."
 msgid "No vote seen"
 msgstr "Oy görülmedi"
 
+msgid "No, it left the list"
+msgstr "Hayır, listeden çıktı"
+
 msgid "none"
 msgstr "yok"
 
@@ -760,6 +770,9 @@ msgstr "Henüz kontrol edilmedi"
 
 msgid "not compared: Radar’s record is not in use"
 msgstr "karşılaştırılmadı: Radar’ın kaydı kullanımda değil"
+
+msgid "Not confirmed"
+msgstr "Doğrulanmadı"
 
 msgid "Not in a validator set"
 msgstr "Bir doğrulayıcı kümesinde değil"
@@ -1056,6 +1069,23 @@ msgstr "Radar’ın epoch sayıları"
 msgid "Radar’s last crawl differs"
 msgstr "Radar’ın son taraması farklı"
 
+msgid "Radar’s last record says it left at block"
+msgstr "Radar’ın son kaydına göre çıktığı blok:"
+
+#. placeholder {0}: formatInt(left.height)
+msgid "Radar’s last record says it left at block {0}"
+msgstr "Radar’ın son kaydına göre {0} numaralı blokta çıktı"
+
+msgid "Radar’s last record says it left the list"
+msgstr "Radar’ın son kaydına göre listeden çıktı"
+
+#. placeholder {0}: formatInt(left.height)
+msgid "Radar’s last record says this masternode left the list at block {0}."
+msgstr "Radar’ın son kaydına göre bu masternode {0} numaralı blokta listeden çıktı."
+
+msgid "Radar’s last record says this masternode left the list."
+msgstr "Radar’ın son kaydına göre bu masternode listeden çıktı."
+
 msgid "Radar’s node hasn’t said yet."
 msgstr "Radar’ın düğümü henüz bir şey söylemedi."
 
@@ -1268,8 +1298,14 @@ msgstr "Bu epoch, bloklar"
 msgid "This evonode"
 msgstr "Bu evonode"
 
+msgid "This masternode is no longer on the masternode list, so it isn’t paid and can’t vote."
+msgstr "Bu masternode artık masternode listesinde değil, bu yüzden ödeme almaz ve oy veremez."
+
 msgid "This masternode is on {otherName}."
 msgstr "Bu masternode {otherName} üzerinde."
+
+msgid "This masternode left the masternode list on <0/>, so it isn’t paid and can’t vote."
+msgstr "Bu masternode <0/> tarihinde masternode listesinden çıktı, bu yüzden ödeme almaz ve oy veremez."
 
 msgid "Time (UTC)"
 msgstr "Zaman (UTC)"
@@ -1364,6 +1400,12 @@ msgstr "Oylama adresi"
 
 msgid "week"
 msgstr "hafta"
+
+msgid "What follows is Radar’s last record of it, at {service}."
+msgstr "Aşağıdakiler Radar’ın {service} adresindeki son kaydıdır."
+
+msgid "What follows is Radar’s last record of it."
+msgstr "Aşağıdakiler Radar’ın son kaydıdır."
 
 msgid "What the node announced, newest first"
 msgstr "Düğümün duyurduğu, en yeniden eskiye"

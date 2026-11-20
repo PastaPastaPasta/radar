@@ -32,6 +32,10 @@ msgstr "{0, plural, one {# bloco} other {# blocos}}, {1} de {2} evonodes"
 msgid "{0, plural, one {# epoch paid} other {# epochs paid}}"
 msgstr "{0, plural, one {# época paga} other {# épocas pagas}}"
 
+#. placeholder {0}: summary.count
+msgid "{0, plural, one {# payment, {total} in total; indexed blocks {from} to {to}} other {# payments, {total} in total; indexed blocks {from} to {to}}}"
+msgstr "{0, plural, one {# pagamento, {total} no total; blocos indexados de {from} a {to}} other {# pagamentos, {total} no total; blocos indexados de {from} a {to}}}"
+
 #. placeholder {0}: history.length
 msgid "{0, plural, one {# special transaction in Hyphen’s record} other {# special transactions in Hyphen’s record}}"
 msgstr "{0, plural, one {# transação especial no registo do Hyphen} other {# transações especiais no registo do Hyphen}}"
@@ -110,13 +114,6 @@ msgstr "{0} em 100"
 #. placeholder {0}: formatInt(d.payments_summary.count)
 msgid "{0} payments indexed in total"
 msgstr "{0} pagamentos indexados no total"
-
-#. placeholder {0}: formatInt(summary.count)
-#. placeholder {1}: formatInt(Number(summary.total_duffs / 100_000_000n))
-#. placeholder {2}: formatInt(summary.indexed.from)
-#. placeholder {3}: formatInt(summary.indexed.to)
-msgid "{0} payments, {1} DASH in total; indexed blocks {2} to {3}"
-msgstr "{0} pagamentos, {1} DASH no total; blocos indexados de {2} a {3}"
 
 #. placeholder {0}: v < 10 ? v.toFixed(1) : formatInt(Math.round(v))
 msgid "{0} s"
@@ -212,6 +209,9 @@ msgstr "Responde"
 #. placeholder {0}: d.asn
 msgid "AS{0}"
 msgstr "AS{0}"
+
+msgid "At block"
+msgstr "No bloco"
 
 #. placeholder {0}: formatInt(p.monthly_basis_days)
 msgid "at its pace of the last {0} days"
@@ -351,6 +351,9 @@ msgstr "Saúde diária"
 
 msgid "DAPI’s list doesn’t include it. It may be new, removed, or mistyped."
 msgstr "A lista do DAPI não o inclui. Pode ser novo, ter sido removido ou estar escrito incorretamente."
+
+msgid "DAPI’s list hasn’t answered, so that isn’t confirmed: it may still be listed."
+msgstr "A lista do DAPI não respondeu, então isso não está confirmado: pode ainda estar listado."
 
 msgid "DAPI’s list wins where Radar’s last crawl differs."
 msgstr "A lista do DAPI prevalece onde o último rastreio do Radar difere."
@@ -590,6 +593,10 @@ msgstr "Última verificação de porta"
 msgid "Left the list"
 msgstr "Saiu da lista"
 
+#. placeholder {0}: formatInt(left.height)
+msgid "Left the list at block {0}"
+msgstr "Saiu da lista no bloco {0}"
+
 msgid "Listed by DAPI"
 msgstr "Listado pelo DAPI"
 
@@ -737,6 +744,9 @@ msgstr "Ainda não há versões registadas."
 msgid "No vote seen"
 msgstr "Nenhum voto visto"
 
+msgid "No, it left the list"
+msgstr "Não, saiu da lista"
+
 msgid "none"
 msgstr "nenhum"
 
@@ -760,6 +770,9 @@ msgstr "Ainda não verificado"
 
 msgid "not compared: Radar’s record is not in use"
 msgstr "não comparado: o registo do Radar não está em uso"
+
+msgid "Not confirmed"
+msgstr "Não confirmado"
 
 msgid "Not in a validator set"
 msgstr "Fora de um conjunto de validadores"
@@ -1056,6 +1069,23 @@ msgstr "Números de época do Radar"
 msgid "Radar’s last crawl differs"
 msgstr "O último rastreio do Radar difere"
 
+msgid "Radar’s last record says it left at block"
+msgstr "Segundo o último registro do Radar, saiu no bloco"
+
+#. placeholder {0}: formatInt(left.height)
+msgid "Radar’s last record says it left at block {0}"
+msgstr "Segundo o último registro do Radar, saiu no bloco {0}"
+
+msgid "Radar’s last record says it left the list"
+msgstr "Segundo o último registro do Radar, saiu da lista"
+
+#. placeholder {0}: formatInt(left.height)
+msgid "Radar’s last record says this masternode left the list at block {0}."
+msgstr "Segundo o último registro do Radar, este masternode saiu da lista no bloco {0}."
+
+msgid "Radar’s last record says this masternode left the list."
+msgstr "Segundo o último registro do Radar, este masternode saiu da lista."
+
 msgid "Radar’s node hasn’t said yet."
 msgstr "O nó do Radar ainda não se pronunciou."
 
@@ -1268,8 +1298,14 @@ msgstr "Esta época, blocos"
 msgid "This evonode"
 msgstr "Este evonode"
 
+msgid "This masternode is no longer on the masternode list, so it isn’t paid and can’t vote."
+msgstr "Este masternode não está mais na lista de masternodes, então não é pago e não pode votar."
+
 msgid "This masternode is on {otherName}."
 msgstr "Este masternode está na {otherName}."
+
+msgid "This masternode left the masternode list on <0/>, so it isn’t paid and can’t vote."
+msgstr "Este masternode saiu da lista de masternodes em <0/>, então não é pago e não pode votar."
 
 msgid "Time (UTC)"
 msgstr "Hora (UTC)"
@@ -1364,6 +1400,12 @@ msgstr "Endereço de voto"
 
 msgid "week"
 msgstr "semana"
+
+msgid "What follows is Radar’s last record of it, at {service}."
+msgstr "O que segue é o último registro do Radar sobre ele, em {service}."
+
+msgid "What follows is Radar’s last record of it."
+msgstr "O que segue é o último registro do Radar sobre ele."
 
 msgid "What the node announced, newest first"
 msgstr "O que o nó anunciou, do mais recente ao mais antigo"

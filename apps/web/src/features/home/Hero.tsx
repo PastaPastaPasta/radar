@@ -225,24 +225,24 @@ export function Hero() {
   const all = summary.data?.data.dists.all
   const share = crawl && crawl.mn_total > 0 ? crawl.mn_reachable / crawl.mn_total : undefined
   const silent = crawl ? crawl.mn_total - crawl.mn_reachable : 0
-  const diff = crawl && dayAgo ? crawl.reachable - dayAgo.reachable : undefined
+  const diff = crawl && dayAgo ? crawl.mn_reachable - dayAgo.mn_reachable : undefined
   const change =
     diff === undefined
       ? undefined
       : diff === 0
-        ? t`the same as a day ago`
+        ? t`As many as a day ago.`
         : diff > 0
           ? plural(diff, {
-              one: '# node more than a day ago',
-              other: '# nodes more than a day ago',
+              one: 'That’s # more than a day ago.',
+              other: 'That’s # more than a day ago.',
             })
           : plural(-diff, {
-              one: '# node fewer than a day ago',
-              other: '# nodes fewer than a day ago',
+              one: 'That’s # fewer than a day ago.',
+              other: 'That’s # fewer than a day ago.',
             })
-  const count = crawl ? formatInt(crawl.reachable) : <Skeleton shape="line" width="4ch" />
-  const answering = crawl ? formatInt(crawl.mn_reachable) : ''
+  const count = crawl ? formatInt(crawl.mn_reachable) : <Skeleton shape="line" width="4ch" />
   const enabled = crawl ? formatInt(crawl.mn_total) : ''
+  const addresses = crawl ? formatInt(crawl.reachable) : ''
   const v24 = v24Pending(activation.data?.data, now)
   const sources = [crawled, geo.data ? stampOf(geo.data) : undefined, core.source, platform.source]
   const crawlStale =
@@ -259,7 +259,7 @@ export function Hero() {
             {crawl || counting ? (
               <span data-census-claim>
                 <Trans>
-                  <span className="rx-hero__n">{count}</span> Dash nodes answered the last crawl
+                  <span className="rx-hero__n">{count}</span> masternodes answered the last crawl
                 </Trans>
               </span>
             ) : (
@@ -268,11 +268,13 @@ export function Hero() {
           </h1>
           <p className="rx-hero__lede" data-census-lede={crawl ? '' : undefined}>
             {crawl ? (
-              change === undefined ? (
-                t`Among them ${answering} of the ${enabled} enabled masternodes.`
-              ) : (
-                t`Among them ${answering} of the ${enabled} enabled masternodes, ${change}.`
-              )
+              <>
+                {share === undefined
+                  ? t`Each masternode is counted once.`
+                  : t`That is ${formatPercent(share, 1)} of the ${enabled} enabled masternodes, each counted once.`}{' '}
+                {change === undefined ? null : <>{change} </>}
+                {t`In all ${addresses} addresses answered; a node reachable on several networks counts at each.`}
+              </>
             ) : counting ? (
               <Skeleton shape="line" count={2} />
             ) : (

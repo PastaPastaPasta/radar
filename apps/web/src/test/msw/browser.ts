@@ -56,6 +56,20 @@ export const FIXTURE_UNMINED_KEY = 'radar.fixture.unmined'
  */
 export const FIXTURE_DOWN_KEY = 'radar.fixture.down'
 
+/**
+ * `sessionStorage` key a spec sets before the page loads: a JSON array of ProTx hashes DAPI's masternode list leaves
+ * out, as for a masternode that left the list after the recording was made.
+ */
+export const FIXTURE_LEFT_KEY = 'radar.fixture.mn-left'
+
+function leftFromSession(): string[] {
+  try {
+    return JSON.parse(sessionStorage.getItem(FIXTURE_LEFT_KEY) ?? '[]') as string[]
+  } catch {
+    return []
+  }
+}
+
 type DownSource = keyof typeof HTTP_SOURCE_PATTERNS | 'rate' | 'sdk' | 'dapi'
 
 /** The live tip the shell keeps open on every page; a refusal of it says nothing about the page. */
@@ -125,6 +139,16 @@ export async function startFixtureWorker(): Promise<void> {
   setSdkTransport(() =>
     Promise.resolve(down.has('sdk') ? unreachableSdk : new FixtureSdkTransport()),
   )
+  const left = leftFromSession()
+  if (left.length > 0) {
+    const list = core.masternodeList.bind(core)
+    core.masternodeList = async (net, signal) => {
+      const answer = await list(net, signal)
+      const kept = new Map(answer.data)
+      for (const protx of left) kept.delete(protx)
+      return { ...answer, data: kept }
+    }
+  }
   // The Core façade, so a spec can call it without a page that renders its answers.
   ;(window as unknown as { __radarCore: typeof core }).__radarCore = core
   ;(window as unknown as { __radarSdk: typeof sdk }).__radarSdk = sdk

@@ -1,3 +1,4 @@
+import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useNavigate } from '@tanstack/react-router'
@@ -8,11 +9,29 @@ import { radarQueries } from '@/data/radar/queries'
 import type { RadarMasternodeDetail, RadarPayment } from '@/data/radar/schemas'
 import { Entity } from '@/features/entity'
 import { formatInt } from '@/lib/format'
-import { Amount, Card, DataTable, Empty, Hash, Time } from '@/ui'
+import { formatAmountText } from '@/lib/units'
+import { Amount, Card, DataTable, Empty, Hash, Time, useUnits, type UnitsValue } from '@/ui'
 import type { MnContext } from './mn-context'
 import { RadarOnly } from './RadarOnly'
 
 const PAYMENTS_PAGE = 25
+
+type PaymentsSummary = NonNullable<RadarMasternodeDetail['payments_summary']>
+
+/** How many payments Radar has indexed and what they add up to, to the duff. */
+export function paymentsSummary(summary: PaymentsSummary, units: UnitsValue): string {
+  const total = formatAmountText(summary.total_duffs, 'duffs', {
+    unit: units.unit === 'DASH' ? undefined : units.unit,
+    testnet: units.testnet,
+    density: 'table',
+  })
+  const from = formatInt(summary.indexed.from)
+  const to = formatInt(summary.indexed.to)
+  return plural(summary.count, {
+    one: `# payment, ${total} in total; indexed blocks ${from} to ${to}`,
+    other: `# payments, ${total} in total; indexed blocks ${from} to ${to}`,
+  })
+}
 
 /** The payments of one masternode: the newest page comes with its record, older ones page back by block height. */
 export function PaymentsTab({ ctx, before }: { ctx: MnContext; before: number | undefined }) {
@@ -94,6 +113,7 @@ function Payments({
   )
 
   const summary = d.payments_summary
+  const units = useUnits()
   return (
     <Card
       title={t`Payments`}
@@ -102,7 +122,7 @@ function Payments({
       id="payments"
       subtitle={
         summary
-          ? t`${formatInt(summary.count)} payments, ${formatInt(Number(summary.total_duffs / 100_000_000n))} DASH in total; indexed blocks ${formatInt(summary.indexed.from)} to ${formatInt(summary.indexed.to)}`
+          ? paymentsSummary(summary, units)
           : t`Radar’s payment index has not started for this node`
       }
     >

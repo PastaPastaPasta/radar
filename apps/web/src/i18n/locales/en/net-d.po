@@ -51,8 +51,8 @@ msgstr "{claimTotal, plural, one {# evonode} other {# evonodes}}"
 msgid "{claimTotal, plural, one {# masternode} other {# masternodes}}"
 msgstr "{claimTotal, plural, one {# masternode} other {# masternodes}}"
 
-msgid "{claimTotal, plural, one {# reachable node} other {# reachable nodes}}"
-msgstr "{claimTotal, plural, one {# reachable node} other {# reachable nodes}}"
+msgid "{claimTotal, plural, one {# reachable address} other {# reachable addresses}}"
+msgstr "{claimTotal, plural, one {# reachable address} other {# reachable addresses}}"
 
 msgid "{j, plural, one {Half run with # hosting provider.} other {Half run with # hosting providers.}}"
 msgstr "{j, plural, one {Half run with # hosting provider.} other {Half run with # hosting providers.}}"
@@ -77,14 +77,17 @@ msgstr "{n, plural, one {# evonode} other {# evonodes}}"
 msgid "{n, plural, one {# masternode} other {# masternodes}}"
 msgstr "{n, plural, one {# masternode} other {# masternodes}}"
 
-msgid "{n, plural, one {# reachable node} other {# reachable nodes}}"
-msgstr "{n, plural, one {# reachable node} other {# reachable nodes}}"
+msgid "{n, plural, one {# reachable address} other {# reachable addresses}}"
+msgstr "{n, plural, one {# reachable address} other {# reachable addresses}}"
 
 msgid "{others, plural, one {# other} other {# others}}"
 msgstr "{others, plural, one {# other} other {# others}}"
 
 msgid "{others, plural, one {It shares {city} with # other counted masternode: {part} of the total run there.} other {It shares {city} with # other counted masternodes: {part} of the total run there.}}"
 msgstr "{others, plural, one {It shares {city} with # other counted masternode: {part} of the total run there.} other {It shares {city} with # other counted masternodes: {part} of the total run there.}}"
+
+msgid "{pct} of the {tot} are in one city, {where}"
+msgstr "{pct} of the {tot} are in one city, {where}"
 
 msgid "{pct} of the {tot} run in one city, {where}"
 msgstr "{pct} of the {tot} run in one city, {where}"
@@ -95,8 +98,8 @@ msgstr "{pct} of these {tot} run in one city, {where}"
 msgid "{unplaced, plural, one {# has no location the crawl could find; the shares count it as unknown.} other {# have no location the crawl could find; the shares count them as unknown.}}"
 msgstr "{unplaced, plural, one {# has no location the crawl could find; the shares count it as unknown.} other {# have no location the crawl could find; the shares count them as unknown.}}"
 
-msgid "{unplaced, plural, one {# reachable node has no place, most likely on Tor or I2P; the shares count it as unknown.} other {# reachable nodes have no place, most of them on Tor or I2P; the shares count them as unknown.}}"
-msgstr "{unplaced, plural, one {# reachable node has no place, most likely on Tor or I2P; the shares count it as unknown.} other {# reachable nodes have no place, most of them on Tor or I2P; the shares count them as unknown.}}"
+msgid "{unplaced, plural, one {# reachable address has no place, most likely on Tor or I2P; the shares count it as unknown.} other {# reachable addresses have no place, most of them on Tor or I2P; the shares count them as unknown.}}"
+msgstr "{unplaced, plural, one {# reachable address has no place, most likely on Tor or I2P; the shares count it as unknown.} other {# reachable addresses have no place, most of them on Tor or I2P; the shares count them as unknown.}}"
 
 msgid "<0.1%"
 msgstr "<0.1%"
@@ -104,11 +107,14 @@ msgstr "<0.1%"
 msgid "200 while every network's data is fresh and saved, 503 with what is wrong otherwise. For uptime checks."
 msgstr "200 while every network's data is fresh and saved, 503 with what is wrong otherwise. For uptime checks."
 
+msgid "A node reachable on both IPv4 and IPv6 counts at each address."
+msgstr "A node reachable on both IPv4 and IPv6 counts at each address."
+
 msgid "A summary of the speed tests from each vantage point."
 msgstr "A summary of the speed tests from each vantage point."
 
-msgid "A time series of one distribution. days is 1, 7, 14, 30, 90 or 365; top is 1 to 20; dim=totals returns the node counts instead."
-msgstr "A time series of one distribution. days is 1, 7, 14, 30, 90 or 365; top is 1 to 20; dim=totals returns the node counts instead."
+msgid "A time series of one distribution. days is 1, 7, 14, 30, 90 or 365; top is 1 to 20; dim=totals returns reachable addresses, enabled masternodes and reachable masternodes instead; addresses are not nodes, since one node can answer on several networks."
+msgstr "A time series of one distribution. days is 1, 7, 14, 30, 90 or 365; top is 1 to 20; dim=totals returns reachable addresses, enabled masternodes and reachable masternodes instead; addresses are not nodes, since one node can answer on several networks."
 
 msgid "Address"
 msgstr "Address"
@@ -119,8 +125,8 @@ msgstr "Address changes"
 msgid "Addresses of nodes that aren't masternodes are never published, only counted."
 msgstr "Addresses of nodes that aren't masternodes are never published, only counted."
 
-msgid "All reachable nodes"
-msgstr "All reachable nodes"
+msgid "All reachable addresses"
+msgstr "All reachable addresses"
 
 msgid "Americas"
 msgstr "Americas"
@@ -241,6 +247,9 @@ msgstr "Europe"
 msgid "Every 15 minutes the crawler opens a P2P connection to every registered masternode's address, to every node that answered in the past week and to new addresses it learns from our Dash node and from other nodes. It completes the version handshake and disconnects. It doesn't relay transactions and keeps only what the node announces."
 msgstr "Every 15 minutes the crawler opens a P2P connection to every registered masternode's address, to every node that answered in the past week and to new addresses it learns from our Dash node and from other nodes. It completes the version handshake and disconnects. It doesn't relay transactions and keeps only what the node announces."
 
+msgid "Every reachable address the latest crawl found, counted per city without the addresses themselves, and how many have no location (Tor and I2P among them)."
+msgstr "Every reachable address the latest crawl found, counted per city without the addresses themselves, and how many have no location (Tor and I2P among them)."
+
 msgid "Every registered masternode with its latest port check, user agent, location, hosting, uptime and DKG readiness. The map is drawn from this."
 msgstr "Every registered masternode with its latest port check, user agent, location, hosting, uptime and DKG readiness. The map is drawn from this."
 
@@ -268,6 +277,9 @@ msgstr "Filter masternodes"
 msgid "Filters"
 msgstr "Filters"
 
+msgid "Half of the {tot} are in {cities}"
+msgstr "Half of the {tot} are in {cities}"
+
 msgid "Half of the {tot} run in {cities}"
 msgstr "Half of the {tot} run in {cities}"
 
@@ -277,8 +289,8 @@ msgstr "Half of the evonodes run in the cities above."
 msgid "Half of the masternodes run in the cities above."
 msgstr "Half of the masternodes run in the cities above."
 
-msgid "Half of the reachable nodes run in the cities above."
-msgstr "Half of the reachable nodes run in the cities above."
+msgid "Half of the reachable addresses are in the cities above."
+msgstr "Half of the reachable addresses are in the cities above."
 
 msgid "Half of these {tot} run in {cities}"
 msgstr "Half of these {tot} run in {cities}"
@@ -360,8 +372,8 @@ msgid "Masternode"
 msgstr "Masternode"
 
 #. placeholder {0}: chips .map((c) => c.label) .join('; ')
-msgid "Masternode filters are off while every reachable node is counted: {0}."
-msgstr "Masternode filters are off while every reachable node is counted: {0}."
+msgid "Masternode filters are off while every reachable address is counted: {0}."
+msgstr "Masternode filters are off while every reachable address is counted: {0}."
 
 msgid "Masternode list changes come from Radar's crawl of mainnet and testnet."
 msgstr "Masternode list changes come from Radar's crawl of mainnet and testnet."
@@ -492,9 +504,6 @@ msgstr "Radar's last crawl finished"
 msgid "Reachable"
 msgstr "Reachable"
 
-msgid "Reachable nodes counted per city, never by address, and how many have no location."
-msgstr "Reachable nodes counted per city, never by address, and how many have no location."
-
 msgid "Region"
 msgstr "Region"
 
@@ -562,8 +571,8 @@ msgstr "The filters leave it out, so it is not counted here. The ring marks wher
 msgid "The latest changes to masternode registrations, newest first: new and removed masternodes, PoSe bans and revivals, changed addresses and keys."
 msgstr "The latest changes to masternode registrations, newest first: new and removed masternodes, PoSe bans and revivals, changed addresses and keys."
 
-msgid "The latest crawl placed no reachable node."
-msgstr "The latest crawl placed no reachable node."
+msgid "The latest crawl placed no reachable address."
+msgstr "The latest crawl placed no reachable address."
 
 msgid "The latest finished crawl, the one a day before it and every distribution (dists[scope][dim]), with yields, Platform health and DKG readiness."
 msgstr "The latest finished crawl, the one a day before it and every distribution (dists[scope][dim]), with yields, Platform health and DKG readiness."
@@ -586,14 +595,14 @@ msgstr "The only evonode counted runs in {where}"
 msgid "The only masternode counted runs in {where}"
 msgstr "The only masternode counted runs in {where}"
 
-msgid "The only reachable node runs in {where}"
-msgstr "The only reachable node runs in {where}"
+msgid "The only reachable address is in {where}"
+msgstr "The only reachable address is in {where}"
 
 msgid "The site and the API are served from documents the crawler publishes after each crawl, so they stay up when the crawler doesn't."
 msgstr "The site and the API are served from documents the crawler publishes after each crawl, so they stay up when the crawler doesn't."
 
-msgid "The tick marks half of every reachable node."
-msgstr "The tick marks half of every reachable node."
+msgid "The tick marks half of every reachable address."
+msgstr "The tick marks half of every reachable address."
 
 msgid "The tick marks half. Pick a country or a provider to see where its masternodes are."
 msgstr "The tick marks half. Pick a country or a provider to see where its masternodes are."

@@ -51,8 +51,8 @@ msgstr "{claimTotal, plural, other {# 个 Evonode}}"
 msgid "{claimTotal, plural, one {# masternode} other {# masternodes}}"
 msgstr "{claimTotal, plural, other {# 个主节点}}"
 
-msgid "{claimTotal, plural, one {# reachable node} other {# reachable nodes}}"
-msgstr "{claimTotal, plural, other {# 个可达节点}}"
+msgid "{claimTotal, plural, one {# reachable address} other {# reachable addresses}}"
+msgstr "{claimTotal, plural, other {# 个可达地址}}"
 
 msgid "{j, plural, one {Half run with # hosting provider.} other {Half run with # hosting providers.}}"
 msgstr "{j, plural, other {其中一半由 # 家托管提供商承载。}}"
@@ -77,14 +77,17 @@ msgstr "{n, plural, other {# 个 Evonode}}"
 msgid "{n, plural, one {# masternode} other {# masternodes}}"
 msgstr "{n, plural, other {# 个主节点}}"
 
-msgid "{n, plural, one {# reachable node} other {# reachable nodes}}"
-msgstr "{n, plural, other {# 个可达节点}}"
+msgid "{n, plural, one {# reachable address} other {# reachable addresses}}"
+msgstr "{n, plural, other {# 个可达地址}}"
 
 msgid "{others, plural, one {# other} other {# others}}"
 msgstr "{others, plural, other {其他 # 个}}"
 
 msgid "{others, plural, one {It shares {city} with # other counted masternode: {part} of the total run there.} other {It shares {city} with # other counted masternodes: {part} of the total run there.}}"
 msgstr "{others, plural, other {{city} 还有 # 个计入的主节点：总数的 {part} 运行在那里。}}"
+
+msgid "{pct} of the {tot} are in one city, {where}"
+msgstr "{tot}中有 {pct} 位于一个城市：{where}"
 
 msgid "{pct} of the {tot} run in one city, {where}"
 msgstr "{tot}中有 {pct} 运行在同一个城市：{where}"
@@ -95,8 +98,8 @@ msgstr "这{tot}中有 {pct} 运行在同一个城市：{where}"
 msgid "{unplaced, plural, one {# has no location the crawl could find; the shares count it as unknown.} other {# have no location the crawl could find; the shares count them as unknown.}}"
 msgstr "{unplaced, plural, other {有 # 个节点抓取未能找到位置；在占比中计为未知。}}"
 
-msgid "{unplaced, plural, one {# reachable node has no place, most likely on Tor or I2P; the shares count it as unknown.} other {# reachable nodes have no place, most of them on Tor or I2P; the shares count them as unknown.}}"
-msgstr "{unplaced, plural, other {# 个可达节点没有位置，多数位于 Tor 或 I2P；在占比中计为未知。}}"
+msgid "{unplaced, plural, one {# reachable address has no place, most likely on Tor or I2P; the shares count it as unknown.} other {# reachable addresses have no place, most of them on Tor or I2P; the shares count them as unknown.}}"
+msgstr "{unplaced, plural, other {# 个可达地址没有位置，多数在 Tor 或 I2P 上；份额将其计为未知。}}"
 
 msgid "<0.1%"
 msgstr "<0.1%"
@@ -104,11 +107,14 @@ msgstr "<0.1%"
 msgid "200 while every network's data is fresh and saved, 503 with what is wrong otherwise. For uptime checks."
 msgstr "所有网络的数据都是最新且已保存时返回 200，否则返回 503 并说明问题。用于可用性检查。"
 
+msgid "A node reachable on both IPv4 and IPv6 counts at each address."
+msgstr "同时通过 IPv4 和 IPv6 可达的节点在每个地址各计一次。"
+
 msgid "A summary of the speed tests from each vantage point."
 msgstr "各观测点速度测试的汇总。"
 
-msgid "A time series of one distribution. days is 1, 7, 14, 30, 90 or 365; top is 1 to 20; dim=totals returns the node counts instead."
-msgstr "某个分布的时间序列。days 可取 1、7、14、30、90 或 365；top 为 1 到 20；dim=totals 则返回节点数量。"
+msgid "A time series of one distribution. days is 1, 7, 14, 30, 90 or 365; top is 1 to 20; dim=totals returns reachable addresses, enabled masternodes and reachable masternodes instead; addresses are not nodes, since one node can answer on several networks."
+msgstr "一个分布的时间序列。days 为 1、7、14、30、90 或 365；top 为 1 到 20；dim=totals 改为返回可达地址、已启用主节点和可达主节点；地址不是节点，因为一个节点可以在多个网络上应答。"
 
 msgid "Address"
 msgstr "地址"
@@ -119,8 +125,8 @@ msgstr "地址变更"
 msgid "Addresses of nodes that aren't masternodes are never published, only counted."
 msgstr "非主节点的地址从不公开，只计数。"
 
-msgid "All reachable nodes"
-msgstr "所有可达节点"
+msgid "All reachable addresses"
+msgstr "所有可达地址"
 
 msgid "Americas"
 msgstr "美洲"
@@ -241,6 +247,9 @@ msgstr "欧洲"
 msgid "Every 15 minutes the crawler opens a P2P connection to every registered masternode's address, to every node that answered in the past week and to new addresses it learns from our Dash node and from other nodes. It completes the version handshake and disconnects. It doesn't relay transactions and keeps only what the node announces."
 msgstr "爬虫每 15 分钟向每个已注册主节点的地址、过去一周内有应答的每个节点，以及从我们的 Dash 节点和其他节点获知的新地址发起 P2P 连接，完成版本握手后断开。它不转发交易，只保留节点自己公布的信息。"
 
+msgid "Every reachable address the latest crawl found, counted per city without the addresses themselves, and how many have no location (Tor and I2P among them)."
+msgstr "最近一次抓取发现的每个可达地址，按城市计数但不含地址本身，以及有多少没有位置（其中包括 Tor 和 I2P）。"
+
 msgid "Every registered masternode with its latest port check, user agent, location, hosting, uptime and DKG readiness. The map is drawn from this."
 msgstr "每个已注册主节点的最新端口检查、用户代理、位置、托管、在线率和 DKG 就绪状态。地图由此绘制。"
 
@@ -268,6 +277,9 @@ msgstr "筛选主节点"
 msgid "Filters"
 msgstr "筛选"
 
+msgid "Half of the {tot} are in {cities}"
+msgstr "{tot}中有一半位于 {cities}"
+
 msgid "Half of the {tot} run in {cities}"
 msgstr "{tot}中有一半运行在{cities}"
 
@@ -277,8 +289,8 @@ msgstr "一半的 Evonode 运行在以上城市。"
 msgid "Half of the masternodes run in the cities above."
 msgstr "一半的主节点运行在以上城市。"
 
-msgid "Half of the reachable nodes run in the cities above."
-msgstr "一半的可达节点运行在以上城市。"
+msgid "Half of the reachable addresses are in the cities above."
+msgstr "一半的可达地址位于上面的城市。"
 
 msgid "Half of these {tot} run in {cities}"
 msgstr "这{tot}中有一半运行在{cities}"
@@ -360,8 +372,8 @@ msgid "Masternode"
 msgstr "主节点"
 
 #. placeholder {0}: chips .map((c) => c.label) .join('; ')
-msgid "Masternode filters are off while every reachable node is counted: {0}."
-msgstr "统计所有可达节点时，主节点筛选不生效：{0}。"
+msgid "Masternode filters are off while every reachable address is counted: {0}."
+msgstr "在计入每个可达地址时，主节点筛选条件处于关闭状态：{0}。"
 
 msgid "Masternode list changes come from Radar's crawl of mainnet and testnet."
 msgstr "主节点列表的变更来自 Radar 对主网和测试网的爬取。"
@@ -492,9 +504,6 @@ msgstr "Radar 上次抓取完成于"
 msgid "Reachable"
 msgstr "可达"
 
-msgid "Reachable nodes counted per city, never by address, and how many have no location."
-msgstr "按城市统计可达节点（绝不按地址），以及有多少节点没有位置信息。"
-
 msgid "Region"
 msgstr "地区"
 
@@ -562,8 +571,8 @@ msgstr "筛选条件将其排除，因此此处不计入。圆环标出它的位
 msgid "The latest changes to masternode registrations, newest first: new and removed masternodes, PoSe bans and revivals, changed addresses and keys."
 msgstr "主节点注册的最新变更，最新的在前：新增和移除的主节点、PoSe 封禁与恢复、变更的地址和密钥。"
 
-msgid "The latest crawl placed no reachable node."
-msgstr "最新一次抓取未定位到任何可达节点。"
+msgid "The latest crawl placed no reachable address."
+msgstr "最近一次抓取未定位到任何可达地址。"
 
 msgid "The latest finished crawl, the one a day before it and every distribution (dists[scope][dim]), with yields, Platform health and DKG readiness."
 msgstr "最近一次完成的爬取、其一天前的爬取以及每个分布（dists[scope][dim]），包含收益、Platform 健康状况和 DKG 就绪状态。"
@@ -586,14 +595,14 @@ msgstr "唯一计入的 Evonode 运行在 {where}"
 msgid "The only masternode counted runs in {where}"
 msgstr "唯一计入的主节点运行在 {where}"
 
-msgid "The only reachable node runs in {where}"
-msgstr "唯一的可达节点运行在 {where}"
+msgid "The only reachable address is in {where}"
+msgstr "唯一的可达地址位于 {where}"
 
 msgid "The site and the API are served from documents the crawler publishes after each crawl, so they stay up when the crawler doesn't."
 msgstr "网站和 API 由爬虫在每次爬取后发布的文档提供，因此即使爬虫停止，它们也能继续运行。"
 
-msgid "The tick marks half of every reachable node."
-msgstr "刻度标示所有可达节点的一半。"
+msgid "The tick marks half of every reachable address."
+msgstr "刻度标示所有可达地址的一半。"
 
 msgid "The tick marks half. Pick a country or a provider to see where its masternodes are."
 msgstr "刻度标示一半。选择一个国家/地区或提供商，查看其主节点所在位置。"

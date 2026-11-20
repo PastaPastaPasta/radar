@@ -30,10 +30,10 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
   const crawl = data?.crawl
   const lede =
     scope === 'other'
-      ? t`${formatInt(total(dist.version ?? []))} other full nodes accept connections. Nodes that only connect out can't be seen from outside, so the real number is higher.`
+      ? t`Other full nodes accept connections at ${formatInt(total(dist.version ?? []))} addresses. A node reachable on several networks counts at each, and nodes that only connect out can't be seen from outside.`
       : scope === 'all'
         ? crawl
-          ? t`${formatInt(crawl.reachable)} nodes answered out of ${formatInt(crawl.tried)} addresses tried. Counted are nodes that answered at least once this week, plus every enabled masternode.`
+          ? t`${formatInt(crawl.reachable)} addresses answered out of ${formatInt(crawl.tried)} tried. Counted are addresses that answered at least once this week, plus every enabled masternode’s.`
           : undefined
         : reach.yes + reach.no > 0
           ? t`${share(reach.yes, reach.yes + reach.no)} of enabled ${noun} answered our handshake on their registered address; ${formatInt(reach.no)} didn't.`
@@ -127,7 +127,7 @@ function SizeChart({ census }: { census: Census }) {
   const [cursor, setCursor] = useState<number>()
   const doc = census.size.data?.data
   const labels: Record<string, string> = {
-    reachable_nodes: t`Reachable nodes`,
+    reachable_nodes: t`Reachable addresses`,
     masternodes: t`Enabled masternodes`,
     masternodes_reachable: t`Masternodes reachable`,
   }
@@ -188,6 +188,9 @@ function SizeChart({ census }: { census: Census }) {
       />
       <p className="min-h-5 text-sm text-[var(--dh-ink-2)]" aria-live="polite" data-size-readout>
         {readout}
+      </p>
+      <p className="text-sm text-[var(--dh-ink-2)]" data-size-note>
+        {t`Reachable addresses are addresses, not nodes: a node doesn’t tell peers its addresses on other networks, so one reachable on IPv4 and Tor counts twice. Masternodes are counted by their registration, so each counts once.`}
       </p>
     </div>
   )

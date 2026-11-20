@@ -8,6 +8,7 @@ import { Entity, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { Card, KeyValue, Unavailable } from '@/ui'
 import { loadState, nameLabel, type IdentityTabProps } from './common'
+import { nonceValue } from './nonce'
 
 export const NAMES_LIMIT = 100
 
@@ -46,11 +47,13 @@ export function OverviewTab({ id }: IdentityTabProps) {
         items={[
           {
             label: t`Nonce`,
-            value: nonce.isPending
-              ? t`Loading…`
-              : nonce.data
-                ? formatInt(nonce.data.data ?? 0n)
-                : '—',
+            value: nonce.isPending ? (
+              t`Loading…`
+            ) : nonce.data ? (
+              <span data-field="nonce">{formatInt(nonceValue(nonce.data.data ?? 0n))}</span>
+            ) : (
+              '—'
+            ),
             source: nonce.data ? stampOf(nonce.data) : undefined,
           },
           {

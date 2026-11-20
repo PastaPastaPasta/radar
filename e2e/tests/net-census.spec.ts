@@ -56,11 +56,11 @@ test.describe('Network census', () => {
     await openNodes(page)
     const headline = card(page, 'now')
     await expect(census(page).locator('h1 [data-census-answered]')).toHaveText(
-      '2,581 Dash nodes answered the last crawl',
+      '2,190 masternodes answered the last crawl',
     )
     await expect(headline).not.toContainText('answered the last crawl')
     await expect(headline.locator('[data-census-delta]')).toContainText(
-      '1 node fewer than a day ago',
+      '32 fewer masternodes answering than a day ago',
     )
     await expect(
       page.locator('[data-header-tip]'),
@@ -77,11 +77,19 @@ test.describe('Network census', () => {
 
     await page.goto('/')
     await expect(page.locator('h1 [data-census-claim]')).toContainText(
-      '2,581 Dash nodes answered the last crawl',
+      '2,190 masternodes answered the last crawl',
     )
     const lede = page.locator('[data-census-lede]')
-    await expect(lede).toContainText('2,190 of the 2,207 enabled masternodes')
-    await expect(lede).toContainText('1 node fewer than a day ago')
+    await expect(lede).toContainText(
+      'That is 99.2% of the 2,207 enabled masternodes, each counted once.',
+    )
+    await expect(lede).toContainText('That’s 32 fewer than a day ago.')
+    await expect(lede).toContainText(
+      'In all 2,581 addresses answered; a node reachable on several networks counts at each.',
+    )
+    await expect(lede, 'addresses are never called nodes').not.toContainText(
+      /\d nodes? (answered|fewer|more)/,
+    )
     await expect(
       page.locator('.rx-hero [data-section-sources] [data-source="radar"]'),
     ).toContainText(/Crawled by Radar\s*3 min(utes)? ago/)
@@ -298,7 +306,8 @@ test.describe('Network census', () => {
     await expect(size.getByRole('img', { name: 'Network size over time' })).toBeVisible()
     const readout = size.locator('[data-size-readout]')
     await size.getByRole('slider').focus()
-    await expect(readout).toContainText('Reachable nodes')
+    await expect(readout).toContainText('Reachable addresses')
+    await expect(size.locator('[data-size-note]')).toContainText('addresses, not nodes')
     const last = await readout.innerText()
     await page.keyboard.press('ArrowLeft')
     await expect(readout).not.toHaveText(last)
@@ -387,7 +396,9 @@ test.describe('Network census', () => {
   }) => {
     await pinAfterCrawl(page, 20 * DAY, 'testnet')
     await page.goto('/?network=testnet')
-    await expect(page.locator('[data-census-lede]')).toContainText('of the ')
+    await expect(page.locator('[data-census-lede]')).toContainText(
+      'enabled masternodes, each counted once',
+    )
     await settled(page)
     await expect(page.locator('.rx-hero [data-v24-link]')).toHaveCount(0)
   })

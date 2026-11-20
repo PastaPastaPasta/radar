@@ -1,0 +1,50 @@
+{
+  "method": "stateTransitions.decode",
+  "args": {
+    "data": "AgENlP1eWhbrtLmEvLygrn3IZw/eGr3I1m/e6O/rh/qfsAEBAgAAogDGl7sAyh4wdZhmA3bGq83PluW8nyNh7sIyhwohP3TlNJPa6ubffPQ6PL3McMsxhKfM76boJ6jT/yfHQhufpCoiAP0AAAAXSHboAL5tBTo11gVbh3kL3I3BV1KkBMvfPjDdZL+EJzqrpohUAAAAAANBHxWJPHROzOkPVPsKjNTy/Zchn18RMEUC9wcGdUvF4lS1BXa8GnPDG+/YZlPS38sjHCfwsDosvtPkZavj0H9hXjc="
+  },
+  "recordedAt": "2026-11-19T16:17:46.847Z",
+  "result": {
+    "ok": true,
+    "data": {
+      "actionType": "DocumentsBatch([TokenTransfer])",
+      "typeNumber": 1,
+      "ownerId": "v24uWwdXJ1fJx7YccBmVB48zXPVT5uRYv7vKr5LS5B5",
+      "identityContractNonce": {
+        "$bigint": "162"
+      },
+      "userFeeIncrease": 0,
+      "signaturePublicKeyId": 3,
+      "signature": {
+        "$u8": "HxWJPHROzOkPVPsKjNTy/Zchn18RMEUC9wcGdUvF4lS1BXa8GnPDG+/YZlPS38sjHCfwsDosvtPkZavj0H9hXjc="
+      },
+      "hash": "4bc115829d7804c4b99a02af79b8c62f41b49a1e731a077c011a5c18e03da2e0",
+      "body": {
+        "$formatVersion": "1",
+        "ownerId": "v24uWwdXJ1fJx7YccBmVB48zXPVT5uRYv7vKr5LS5B5",
+        "transitions": [
+          {
+            "$transition": "token",
+            "$action": "transfer",
+            "$formatVersion": "0",
+            "$baseFormatVersion": "0",
+            "$identity-contract-nonce": 162,
+            "$tokenContractPosition": 0,
+            "$dataContractId": "ENDv6HL8MrkAhotcM5vBDaTy4ameZzyHN4MWB7mp13TR",
+            "$tokenId": "AxAYWyXV6mrm8Sq7vc7wEM18wtL8a8rgj64SM3SDmzsB",
+            "$amount": 100000000000,
+            "recipientId": "DpLt5xyRoACYkXjbVa95nzzG7ZtpiEcTGWR5W6es4xmh",
+            "publicNote": null,
+            "sharedEncryptedNote": null,
+            "privateEncryptedNote": null
+          }
+        ],
+        "userFeeIncrease": 0,
+        "signaturePublicKeyId": 3,
+        "signature": "HxWJPHROzOkPVPsKjNTy/Zchn18RMEUC9wcGdUvF4lS1BXa8GnPDG+/YZlPS38sjHCfwsDosvtPkZavj0H9hXjc="
+      }
+    },
+    "proved": false,
+    "tookMs": 7.023654000000079
+  }
+}

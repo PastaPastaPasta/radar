@@ -30,12 +30,21 @@ msgid "(empty)"
 msgstr "（空）"
 
 #. placeholder {0}: -diff
-msgid "{0, plural, one {# node fewer than a day ago} other {# nodes fewer than a day ago}}"
-msgstr "{0, plural, other {比一天前少 # 个节点}}"
+msgid "{0, plural, one {# fewer masternode answering than a day ago} other {# fewer masternodes answering than a day ago}}"
+msgstr "{0, plural, other {应答的主节点比一天前少 # 个}}"
+
+#. placeholder {0}: -diff
+msgid "{0, plural, one {That’s # fewer than a day ago.} other {That’s # fewer than a day ago.}}"
+msgstr "{0, plural, other {比一天前少 # 个。}}"
 
 #. placeholder {0}: formatPercent(v, 1)
 msgid "{0} a year"
 msgstr "每年 {0}"
+
+#. placeholder {0}: formatInt(crawl.reachable)
+#. placeholder {1}: formatInt(crawl.tried)
+msgid "{0} addresses answered out of {1} tried. Counted are addresses that answered at least once this week, plus every enabled masternode’s."
+msgstr "在尝试的 {1} 个地址中有 {0} 个应答。计入本周至少应答过一次的地址，以及每个已启用主节点的地址。"
 
 #. placeholder {0}: countryName(c0[0])
 #. placeholder {1}: share(c0[1], sumCountries)
@@ -81,11 +90,6 @@ msgstr "另有 {0} 个版本"
 #. placeholder {0}: formatInt(threshold)
 msgid "{0} must sign"
 msgstr "需 {0} 个签名"
-
-#. placeholder {0}: formatInt(crawl.reachable)
-#. placeholder {1}: formatInt(crawl.tried)
-msgid "{0} nodes answered out of {1} addresses tried. Counted are nodes that answered at least once this week, plus every enabled masternode."
-msgstr "在尝试的 {1} 个地址中，有 {0} 个节点做出响应。统计的是本周至少响应过一次的节点，加上所有已启用的主节点。"
 
 #. placeholder {0}: formatInt(p.healthy)
 #. placeholder {0}: formatInt(q.valid)
@@ -143,10 +147,6 @@ msgstr "其中 {0} 个为 evonode"
 msgid "{0} other clients"
 msgstr "另有 {0} 个其他客户端"
 
-#. placeholder {0}: formatInt(total(dist.version ?? []))
-msgid "{0} other full nodes accept connections. Nodes that only connect out can't be seen from outside, so the real number is higher."
-msgstr "另有 {0} 个其他全节点接受连接。仅向外连接的节点无法从外部看到，因此实际数量更高。"
-
 #. placeholder {0}: formatInt(r.folded)
 msgid "{0} other releases"
 msgstr "另有 {0} 个其他发布版本"
@@ -179,11 +179,14 @@ msgstr "本周期已测试 {0} 个。中位数 {1} 个区块头/秒，ping {2} m
 msgid "{0}, {1}{2}"
 msgstr "{0}，{1}{2}"
 
-msgid "{answered, plural, one {# Dash node answered the last crawl} other {# Dash nodes answered the last crawl}}"
-msgstr "{answered, plural, other {上次抓取中有 # 个 Dash 节点响应}}"
+msgid "{answered, plural, one {# masternode answered the last crawl} other {# masternodes answered the last crawl}}"
+msgstr "{answered, plural, other {# 个主节点在上次抓取中响应}}"
 
-msgid "{diff, plural, one {# node more than a day ago} other {# nodes more than a day ago}}"
-msgstr "{diff, plural, other {比一天前多 # 个节点}}"
+msgid "{diff, plural, one {# more masternode answering than a day ago} other {# more masternodes answering than a day ago}}"
+msgstr "{diff, plural, other {应答的主节点比一天前多 # 个}}"
+
+msgid "{diff, plural, one {That’s # more than a day ago.} other {That’s # more than a day ago.}}"
+msgstr "{diff, plural, other {比一天前多 # 个。}}"
 
 msgid "{silent, plural, one {# didn't answer} other {# didn't answer}}"
 msgstr "{silent, plural, other {# 个未响应}}"
@@ -191,8 +194,8 @@ msgstr "{silent, plural, other {# 个未响应}}"
 msgid "<0.1%"
 msgstr "<0.1%"
 
-msgid "<0>{count}</0> Dash nodes answered the last crawl"
-msgstr "上次抓取中有 <0>{count}</0> 个 Dash 节点响应"
+msgid "<0>{count}</0> masternodes answered the last crawl"
+msgstr "<0>{count}</0> 个主节点在上次抓取中响应"
 
 msgid "0 ready"
 msgstr "0 个就绪"
@@ -266,17 +269,17 @@ msgstr "所有节点"
 msgid "All Platform blocks"
 msgstr "所有 Platform 区块"
 
-msgid "Among them {answering} of the {enabled} enabled masternodes, {change}."
-msgstr "其中包括 {enabled} 个已启用主节点中的 {answering} 个，{change}。"
-
-msgid "Among them {answering} of the {enabled} enabled masternodes."
-msgstr "其中包括 {enabled} 个已启用主节点中的 {answering} 个。"
-
 msgid "Announce 24"
 msgstr "Announce 24"
 
 msgid "Answered"
 msgstr "有应答"
+
+msgid "As many as a day ago."
+msgstr "与一天前数量相同。"
+
+msgid "as many masternodes answering as a day ago"
+msgstr "应答的主节点数量与一天前相同"
 
 msgid "at the earliest"
 msgstr "最早"
@@ -466,6 +469,9 @@ msgstr "Drive 版本"
 msgid "Each {0}-block window, blocks that set bit {1} (with the top version bits 001) count as signalling. A window with as many as its threshold locks Core 24 in. In the last {2} blocks, {3} signalled."
 msgstr "在每个 {0} 个区块的窗口中，设置了第 {1} 位（高位版本位为 001）的区块计为发出信号。达到阈值数量的窗口会将 Core 24 锁定。最近 {2} 个区块中，有 {3} 个发出了信号。"
 
+msgid "Each masternode is counted once."
+msgstr "每个主节点只计一次。"
+
 msgid "Each Platform block is locked to a Core block."
 msgstr "每个 Platform 区块都与一个 Core 区块绑定。"
 
@@ -570,6 +576,9 @@ msgstr "仍在检查 Hyphen 的索引。"
 
 msgid "I2P"
 msgstr "I2P"
+
+msgid "In all {addresses} addresses answered; a node reachable on several networks counts at each."
+msgstr "共有 {addresses} 个地址应答；在多个网络上可达的节点在每个网络中各计一次。"
 
 msgid "IPv4"
 msgstr "IPv4"
@@ -762,9 +771,6 @@ msgstr "内存池中目前没有交易"
 msgid "No window to show yet."
 msgstr "暂无可显示的窗口。"
 
-msgid "nodes"
-msgstr "节点"
-
 msgid "Nodes"
 msgstr "节点"
 
@@ -825,20 +831,24 @@ msgstr "打开地图"
 msgid "Other"
 msgstr "其他"
 
+msgid "Other addresses"
+msgstr "其他地址"
+
 msgid "Other clients"
 msgstr "其他客户端"
-
-msgid "other full nodes"
-msgstr "其他全节点"
 
 msgid "Other full nodes"
 msgstr "其他全节点"
 
-msgid "Other nodes"
-msgstr "其他节点"
+#. placeholder {0}: formatInt(total(dist.version ?? []))
+msgid "Other full nodes accept connections at {0} addresses. A node reachable on several networks counts at each, and nodes that only connect out can't be seen from outside."
+msgstr "其他全节点在 {0} 个地址上接受连接。在多个网络上可达的节点在每个网络中各计一次，只向外连接的节点从外部看不到。"
 
-msgid "Other reachable nodes"
-msgstr "其他可达节点"
+msgid "other full nodes’ addresses"
+msgstr "其他全节点的地址"
+
+msgid "Other reachable addresses"
+msgstr "其他可达地址"
 
 #. placeholder {0}: dayMonthYear(history.t[0]!)
 msgid "Our history starts {0}, so this range shows less than it asks for."
@@ -937,11 +947,17 @@ msgstr "可达性"
 msgid "Reachable"
 msgstr "可达"
 
+msgid "reachable addresses"
+msgstr "可达地址"
+
+msgid "Reachable addresses"
+msgstr "可达地址"
+
+msgid "Reachable addresses are addresses, not nodes: a node doesn’t tell peers its addresses on other networks, so one reachable on IPv4 and Tor counts twice. Masternodes are counted by their registration, so each counts once."
+msgstr "可达地址是地址而不是节点：节点不会告诉对等节点它在其他网络上的地址，因此一个通过 IPv4 和 Tor 都可达的节点会被计两次。主节点按注册计数，因此每个只计一次。"
+
 msgid "Reachable masternodes"
 msgstr "可达的主节点"
-
-msgid "Reachable nodes"
-msgstr "可达节点"
 
 msgid "Reachable now"
 msgstr "当前可达"
@@ -1073,6 +1089,10 @@ msgstr "Tenderdash P2P 已开放"
 msgid "Tenderdash versions"
 msgstr "Tenderdash 版本"
 
+#. placeholder {0}: formatPercent(share, 1)
+msgid "That is {0} of the {enabled} enabled masternodes, each counted once."
+msgstr "这占 {enabled} 个已启用主节点的 {0}，每个只计一次。"
+
 msgid "The activation tracker needs Radar's crawl"
 msgstr "激活跟踪器需要 Radar 的抓取"
 
@@ -1121,9 +1141,6 @@ msgstr "节点地图"
 
 msgid "The Platform SDK isn't answering"
 msgstr "Platform SDK 没有响应"
-
-msgid "the same as a day ago"
-msgstr "与一天前相同"
 
 msgid "The share of all masternodes on Core 24 is on the node census."
 msgstr "所有主节点中使用 Core 24 的占比见节点普查。"

@@ -29,6 +29,11 @@ export function bigintOf(v: unknown): bigint | undefined {
   return undefined
 }
 
+/** The token base units one batch action moves: Platform names the field per action (transfer, mint, burn, purchase). */
+export function tokenUnitsOf(entry: Json): unknown {
+  return entry.$amount ?? entry.amount ?? entry.burnAmount ?? entry.tokenCount
+}
+
 /** A Platform address as the SDK writes it (a type byte, 0 for P2PKH and 1 for P2SH, then the 20-byte hash) in its bech32m text. */
 export function platformAddressOf(hex: string, net: NetworkId): string | undefined {
   if (!/^[0-9a-f]{42}$/i.test(hex)) return undefined

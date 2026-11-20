@@ -30,12 +30,21 @@ msgid "(empty)"
 msgstr "(boş)"
 
 #. placeholder {0}: -diff
-msgid "{0, plural, one {# node fewer than a day ago} other {# nodes fewer than a day ago}}"
-msgstr "{0, plural, one {Bir gün öncekinden # düğüm az} other {Bir gün öncekinden # düğüm az}}"
+msgid "{0, plural, one {# fewer masternode answering than a day ago} other {# fewer masternodes answering than a day ago}}"
+msgstr "{0, plural, one {yanıt veren masternode sayısı bir gün öncekinden # eksik} other {yanıt veren masternode sayısı bir gün öncekinden # eksik}}"
+
+#. placeholder {0}: -diff
+msgid "{0, plural, one {That’s # fewer than a day ago.} other {That’s # fewer than a day ago.}}"
+msgstr "{0, plural, one {Bir gün öncekinden # eksik.} other {Bir gün öncekinden # eksik.}}"
 
 #. placeholder {0}: formatPercent(v, 1)
 msgid "{0} a year"
 msgstr "yılda {0}"
+
+#. placeholder {0}: formatInt(crawl.reachable)
+#. placeholder {1}: formatInt(crawl.tried)
+msgid "{0} addresses answered out of {1} tried. Counted are addresses that answered at least once this week, plus every enabled masternode’s."
+msgstr "Denenen {1} adresten {0} tanesi yanıt verdi. Bu hafta en az bir kez yanıt veren adresler ile her etkin masternode’un adresi sayılır."
 
 #. placeholder {0}: countryName(c0[0])
 #. placeholder {1}: share(c0[1], sumCountries)
@@ -81,11 +90,6 @@ msgstr "{0} sürüm daha"
 #. placeholder {0}: formatInt(threshold)
 msgid "{0} must sign"
 msgstr "{0} imzalamalı"
-
-#. placeholder {0}: formatInt(crawl.reachable)
-#. placeholder {1}: formatInt(crawl.tried)
-msgid "{0} nodes answered out of {1} addresses tried. Counted are nodes that answered at least once this week, plus every enabled masternode."
-msgstr "Denenen {1} adresten {0} düğüm yanıt verdi. Bu hafta en az bir kez yanıt veren düğümler ve etkin tüm masternode’lar sayılır."
 
 #. placeholder {0}: formatInt(p.healthy)
 #. placeholder {0}: formatInt(q.valid)
@@ -143,10 +147,6 @@ msgstr "bunların {0} tanesi evonode"
 msgid "{0} other clients"
 msgstr "{0} diğer istemci"
 
-#. placeholder {0}: formatInt(total(dist.version ?? []))
-msgid "{0} other full nodes accept connections. Nodes that only connect out can't be seen from outside, so the real number is higher."
-msgstr "{0} diğer tam düğüm bağlantı kabul ediyor. Yalnızca dışarıya bağlanan düğümler dışarıdan görülemez, bu yüzden gerçek sayı daha yüksektir."
-
 #. placeholder {0}: formatInt(r.folded)
 msgid "{0} other releases"
 msgstr "{0} diğer sürüm"
@@ -179,11 +179,14 @@ msgstr "Bu turda {0} test edildi. Ortanca {1} başlık/sn, ping {2} ms."
 msgid "{0}, {1}{2}"
 msgstr "{0}, {1}{2}"
 
-msgid "{answered, plural, one {# Dash node answered the last crawl} other {# Dash nodes answered the last crawl}}"
-msgstr "{answered, plural, one {Son taramaya # Dash düğümü yanıt verdi} other {Son taramaya # Dash düğümü yanıt verdi}}"
+msgid "{answered, plural, one {# masternode answered the last crawl} other {# masternodes answered the last crawl}}"
+msgstr "{answered, plural, one {# masternode son taramaya yanıt verdi} other {# masternode son taramaya yanıt verdi}}"
 
-msgid "{diff, plural, one {# node more than a day ago} other {# nodes more than a day ago}}"
-msgstr "{diff, plural, one {Bir gün öncekinden # düğüm fazla} other {Bir gün öncekinden # düğüm fazla}}"
+msgid "{diff, plural, one {# more masternode answering than a day ago} other {# more masternodes answering than a day ago}}"
+msgstr "{diff, plural, one {yanıt veren masternode sayısı bir gün öncekinden # fazla} other {yanıt veren masternode sayısı bir gün öncekinden # fazla}}"
+
+msgid "{diff, plural, one {That’s # more than a day ago.} other {That’s # more than a day ago.}}"
+msgstr "{diff, plural, one {Bir gün öncekinden # fazla.} other {Bir gün öncekinden # fazla.}}"
 
 msgid "{silent, plural, one {# didn't answer} other {# didn't answer}}"
 msgstr "{silent, plural, one {# yanıt vermedi} other {# yanıt vermedi}}"
@@ -191,8 +194,8 @@ msgstr "{silent, plural, one {# yanıt vermedi} other {# yanıt vermedi}}"
 msgid "<0.1%"
 msgstr "<%0,1"
 
-msgid "<0>{count}</0> Dash nodes answered the last crawl"
-msgstr "Son taramaya <0>{count}</0> Dash düğümü yanıt verdi"
+msgid "<0>{count}</0> masternodes answered the last crawl"
+msgstr "<0>{count}</0> masternode son taramaya yanıt verdi"
 
 msgid "0 ready"
 msgstr "0 hazır"
@@ -266,17 +269,17 @@ msgstr "Tüm düğümler"
 msgid "All Platform blocks"
 msgstr "Tüm Platform blokları"
 
-msgid "Among them {answering} of the {enabled} enabled masternodes, {change}."
-msgstr "Bunların arasında {enabled} etkin masternode’un {answering} tanesi var. {change}."
-
-msgid "Among them {answering} of the {enabled} enabled masternodes."
-msgstr "Bunların arasında {enabled} etkin masternode’un {answering} tanesi var."
-
 msgid "Announce 24"
 msgstr "Announce 24"
 
 msgid "Answered"
 msgstr "Yanıt verdi"
+
+msgid "As many as a day ago."
+msgstr "Bir gün öncekiyle aynı sayıda."
+
+msgid "as many masternodes answering as a day ago"
+msgstr "yanıt veren masternode sayısı bir gün öncekiyle aynı"
 
 msgid "at the earliest"
 msgstr "en erken"
@@ -466,6 +469,9 @@ msgstr "Drive sürümleri"
 msgid "Each {0}-block window, blocks that set bit {1} (with the top version bits 001) count as signalling. A window with as many as its threshold locks Core 24 in. In the last {2} blocks, {3} signalled."
 msgstr "Her {0} bloklu pencerede, bit {1}’i ayarlayan bloklar (üst sürüm bitleri 001 ile) sinyal vermiş sayılır. Eşiği kadar sinyal alan bir pencere Core 24’ü kilitler. Son {2} blokta {3} tanesi sinyal verdi."
 
+msgid "Each masternode is counted once."
+msgstr "Her masternode bir kez sayılır."
+
 msgid "Each Platform block is locked to a Core block."
 msgstr "Her Platform bloğu bir Core bloğuna bağlıdır."
 
@@ -570,6 +576,9 @@ msgstr "Hyphen’in dizini hâlâ denetleniyor."
 
 msgid "I2P"
 msgstr "I2P"
+
+msgid "In all {addresses} addresses answered; a node reachable on several networks counts at each."
+msgstr "Toplamda {addresses} adres yanıt verdi; birkaç ağda erişilebilen bir düğüm her birinde sayılır."
 
 msgid "IPv4"
 msgstr "IPv4"
@@ -762,9 +771,6 @@ msgstr "Şu anda mempool’da işlem yok"
 msgid "No window to show yet."
 msgstr "Henüz gösterilecek pencere yok."
 
-msgid "nodes"
-msgstr "düğümler"
-
 msgid "Nodes"
 msgstr "Düğümler"
 
@@ -825,20 +831,24 @@ msgstr "Haritayı aç"
 msgid "Other"
 msgstr "Diğer"
 
+msgid "Other addresses"
+msgstr "Diğer adresler"
+
 msgid "Other clients"
 msgstr "Diğer istemciler"
-
-msgid "other full nodes"
-msgstr "diğer tam düğümler"
 
 msgid "Other full nodes"
 msgstr "Diğer tam düğümler"
 
-msgid "Other nodes"
-msgstr "Diğer düğümler"
+#. placeholder {0}: formatInt(total(dist.version ?? []))
+msgid "Other full nodes accept connections at {0} addresses. A node reachable on several networks counts at each, and nodes that only connect out can't be seen from outside."
+msgstr "Diğer tam düğümler {0} adreste bağlantı kabul ediyor. Birkaç ağda erişilebilen bir düğüm her birinde sayılır; yalnızca dışarı bağlanan düğümler dışarıdan görülemez."
 
-msgid "Other reachable nodes"
-msgstr "Erişilebilen diğer düğümler"
+msgid "other full nodes’ addresses"
+msgstr "diğer tam düğümlerin adresleri"
+
+msgid "Other reachable addresses"
+msgstr "Diğer erişilebilir adresler"
 
 #. placeholder {0}: dayMonthYear(history.t[0]!)
 msgid "Our history starts {0}, so this range shows less than it asks for."
@@ -937,11 +947,17 @@ msgstr "Erişilebilirlik"
 msgid "Reachable"
 msgstr "Erişilebilir"
 
+msgid "reachable addresses"
+msgstr "erişilebilir adresler"
+
+msgid "Reachable addresses"
+msgstr "Erişilebilir adresler"
+
+msgid "Reachable addresses are addresses, not nodes: a node doesn’t tell peers its addresses on other networks, so one reachable on IPv4 and Tor counts twice. Masternodes are counted by their registration, so each counts once."
+msgstr "Erişilebilir adresler düğüm değil adrestir: bir düğüm diğer ağlardaki adreslerini eşlerine bildirmez, bu yüzden IPv4 ve Tor üzerinden erişilebilen bir düğüm iki kez sayılır. Masternode’lar kayıtlarına göre sayılır, yani her biri bir kez."
+
 msgid "Reachable masternodes"
 msgstr "Erişilebilir masternode’lar"
-
-msgid "Reachable nodes"
-msgstr "Erişilebilir düğümler"
 
 msgid "Reachable now"
 msgstr "Şu anda erişilebilir"
@@ -1073,6 +1089,10 @@ msgstr "Tenderdash P2P açık"
 msgid "Tenderdash versions"
 msgstr "Tenderdash sürümleri"
 
+#. placeholder {0}: formatPercent(share, 1)
+msgid "That is {0} of the {enabled} enabled masternodes, each counted once."
+msgstr "Bu, {enabled} etkin masternode’un {0} kadarı; her biri bir kez sayıldı."
+
 msgid "The activation tracker needs Radar's crawl"
 msgstr "Etkinleştirme izleyicisi için Radar’ın taraması gerekir"
 
@@ -1121,9 +1141,6 @@ msgstr "Düğüm haritası"
 
 msgid "The Platform SDK isn't answering"
 msgstr "Platform SDK yanıt vermiyor"
-
-msgid "the same as a day ago"
-msgstr "bir gün öncekiyle aynı"
 
 msgid "The share of all masternodes on Core 24 is on the node census."
 msgstr "Tüm masternode’ların ne kadarının Core 24’te olduğu düğüm sayımında."

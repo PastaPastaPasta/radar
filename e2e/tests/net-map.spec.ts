@@ -106,10 +106,14 @@ test.describe('The map', () => {
     await page.getByRole('button', { name: 'Evonodes', exact: true }).click()
     await expect(page).toHaveURL(/type=evo/)
     await expect(h1(page)).toHaveText(/of the 12 evonodes run in/)
-    await page.getByRole('button', { name: 'All reachable nodes' }).click()
+    await page.getByRole('button', { name: 'All reachable addresses' }).click()
     await expect(page).toHaveURL(/layer=nodes/)
-    await expect(h1(page)).toHaveText(/reachable nodes run in/)
+    await expect(h1(page)).toHaveText(/reachable addresses are in/)
     await expect(page.locator('[data-left-out]')).toContainText('on Tor or I2P')
+    await expect(page.locator('[data-left-out]')).toContainText(
+      'A node reachable on both IPv4 and IPv6 counts at each address.',
+    )
+    await expect(page.locator('main')).not.toContainText(/reachable nodes?\b/)
     await expect(page.getByRole('searchbox')).toHaveCount(0)
   })
 

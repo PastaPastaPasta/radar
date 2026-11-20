@@ -32,6 +32,10 @@ msgstr "{0, plural, other {# 个区块}}，在 {2} 个 evonode 中排第 {1}"
 msgid "{0, plural, one {# epoch paid} other {# epochs paid}}"
 msgstr "已支付 {0, plural, other {# 个纪元}}"
 
+#. placeholder {0}: summary.count
+msgid "{0, plural, one {# payment, {total} in total; indexed blocks {from} to {to}} other {# payments, {total} in total; indexed blocks {from} to {to}}}"
+msgstr "{0, plural, other {# 笔付款，共计 {total}；已索引区块 {from} 至 {to}}}"
+
 #. placeholder {0}: history.length
 msgid "{0, plural, one {# special transaction in Hyphen’s record} other {# special transactions in Hyphen’s record}}"
 msgstr "Hyphen 记录中有 {0, plural, other {# 笔特殊交易}}"
@@ -110,13 +114,6 @@ msgstr "{0} / 100"
 #. placeholder {0}: formatInt(d.payments_summary.count)
 msgid "{0} payments indexed in total"
 msgstr "共索引 {0} 笔付款"
-
-#. placeholder {0}: formatInt(summary.count)
-#. placeholder {1}: formatInt(Number(summary.total_duffs / 100_000_000n))
-#. placeholder {2}: formatInt(summary.indexed.from)
-#. placeholder {3}: formatInt(summary.indexed.to)
-msgid "{0} payments, {1} DASH in total; indexed blocks {2} to {3}"
-msgstr "共 {0} 笔付款，合计 {1} DASH；已索引区块 {2} 至 {3}"
 
 #. placeholder {0}: v < 10 ? v.toFixed(1) : formatInt(Math.round(v))
 msgid "{0} s"
@@ -212,6 +209,9 @@ msgstr "有应答"
 #. placeholder {0}: d.asn
 msgid "AS{0}"
 msgstr "AS{0}"
+
+msgid "At block"
+msgstr "于区块"
 
 #. placeholder {0}: formatInt(p.monthly_basis_days)
 msgid "at its pace of the last {0} days"
@@ -351,6 +351,9 @@ msgstr "每日健康状况"
 
 msgid "DAPI’s list doesn’t include it. It may be new, removed, or mistyped."
 msgstr "DAPI 的列表中没有它。它可能是新节点、已被移除，或输入有误。"
+
+msgid "DAPI’s list hasn’t answered, so that isn’t confirmed: it may still be listed."
+msgstr "DAPI 的列表尚未应答，因此这一点未经确认：它可能仍在列表中。"
 
 msgid "DAPI’s list wins where Radar’s last crawl differs."
 msgstr "Radar 上次抓取的结果与之不同时，以 DAPI 的列表为准。"
@@ -590,6 +593,10 @@ msgstr "最近一次端口检查"
 msgid "Left the list"
 msgstr "已离开列表"
 
+#. placeholder {0}: formatInt(left.height)
+msgid "Left the list at block {0}"
+msgstr "在区块 {0} 离开列表"
+
 msgid "Listed by DAPI"
 msgstr "DAPI 已列出"
 
@@ -737,6 +744,9 @@ msgstr "尚未记录任何版本。"
 msgid "No vote seen"
 msgstr "未见投票"
 
+msgid "No, it left the list"
+msgstr "否，已离开列表"
+
 msgid "none"
 msgstr "无"
 
@@ -760,6 +770,9 @@ msgstr "尚未检查"
 
 msgid "not compared: Radar’s record is not in use"
 msgstr "未比较：未使用 Radar 的记录"
+
+msgid "Not confirmed"
+msgstr "未确认"
 
 msgid "Not in a validator set"
 msgstr "不在验证者集合中"
@@ -1056,6 +1069,23 @@ msgstr "Radar 的纪元数据"
 msgid "Radar’s last crawl differs"
 msgstr "Radar 上次抓取的结果不同"
 
+msgid "Radar’s last record says it left at block"
+msgstr "Radar 的最后记录显示其离开于区块"
+
+#. placeholder {0}: formatInt(left.height)
+msgid "Radar’s last record says it left at block {0}"
+msgstr "Radar 的最后记录显示其在区块 {0} 离开"
+
+msgid "Radar’s last record says it left the list"
+msgstr "Radar 的最后记录显示其已离开列表"
+
+#. placeholder {0}: formatInt(left.height)
+msgid "Radar’s last record says this masternode left the list at block {0}."
+msgstr "Radar 的最后记录显示，此主节点在区块 {0} 离开了列表。"
+
+msgid "Radar’s last record says this masternode left the list."
+msgstr "Radar 的最后记录显示，此主节点已离开列表。"
+
 msgid "Radar’s node hasn’t said yet."
 msgstr "Radar 的节点尚未给出结果。"
 
@@ -1268,8 +1298,14 @@ msgstr "本纪元，区块"
 msgid "This evonode"
 msgstr "此 evonode"
 
+msgid "This masternode is no longer on the masternode list, so it isn’t paid and can’t vote."
+msgstr "此主节点已不在主节点列表中，因此不会获得付款，也不能投票。"
+
 msgid "This masternode is on {otherName}."
 msgstr "此主节点位于 {otherName}。"
+
+msgid "This masternode left the masternode list on <0/>, so it isn’t paid and can’t vote."
+msgstr "此主节点已于 <0/> 离开主节点列表，因此不会获得付款，也不能投票。"
 
 msgid "Time (UTC)"
 msgstr "时间（UTC）"
@@ -1364,6 +1400,12 @@ msgstr "投票地址"
 
 msgid "week"
 msgstr "周"
+
+msgid "What follows is Radar’s last record of it, at {service}."
+msgstr "以下是 Radar 对它的最后记录，地址为 {service}。"
+
+msgid "What follows is Radar’s last record of it."
+msgstr "以下是 Radar 对它的最后记录。"
 
 msgid "What the node announced, newest first"
 msgstr "节点公布的内容，最新的在前"

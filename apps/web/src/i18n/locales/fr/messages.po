@@ -265,6 +265,20 @@ msgstr "Une adresse Dash compte 34 caractères et commence par X ou 7 sur le mai
 msgid "A proof didn't verify"
 msgstr "Une preuve n’a pas été vérifiée"
 
+#. placeholder {0}: formatInt(votes)
+#. placeholder {1}: formatInt(weighted)
+#. placeholder {2}: formatInt(regular)
+#. placeholder {3}: formatInt(evonodes)
+msgid "A proposal passes when its yes votes less its no votes reach {0}, the network’s minimum: a tenth of the {1} votes of the valid masternodes on DAPI’s list ({2} masternodes and {3} evonodes that count four times each) is less."
+msgstr "Une proposition passe quand ses votes pour moins ses votes contre atteignent {0}, le minimum du réseau : un dixième des {1} votes des masternodes valides de la liste de DAPI ({2} masternodes et {3} evonodes qui comptent chacun quatre fois) est moins."
+
+#. placeholder {0}: formatInt(votes)
+#. placeholder {1}: formatInt(weighted)
+#. placeholder {2}: formatInt(regular)
+#. placeholder {3}: formatInt(evonodes)
+msgid "A proposal passes when its yes votes less its no votes reach {0}: a tenth of the {1} votes of the valid masternodes on DAPI’s list, {2} masternodes and {3} evonodes that count four times each."
+msgstr "Une proposition passe quand ses votes pour moins ses votes contre atteignent {0} : un dixième des {1} votes des masternodes valides de la liste de DAPI, {2} masternodes et {3} evonodes qui comptent chacun quatre fois."
+
 msgid "About sources"
 msgstr "À propos des sources"
 
@@ -387,6 +401,9 @@ msgstr "Aperçu de la caméra"
 
 msgid "Cancel"
 msgstr "Annuler"
+
+msgid "Carries data"
+msgstr "Contient des données"
 
 msgid "Chain size"
 msgstr "Taille de la chaîne"
@@ -526,6 +543,9 @@ msgstr "Retrait de crédits"
 
 msgid "DAPI addresses"
 msgstr "Adresses DAPI"
+
+msgid "Data"
+msgstr "Données"
 
 msgid "Data contract"
 msgstr "Contrat de données"
@@ -710,6 +730,9 @@ msgstr "fonction"
 msgid "Funded"
 msgstr "Financé"
 
+msgid "Funded is worked out by Radar the way Dash Core builds the next superblock: the proposals that pass and whose payment window covers it, most net yes votes first, each while what is left of its {amount} budget covers it."
+msgstr "Radar établit Financée comme Dash Core construit le prochain superbloc : les propositions qui passent et dont la fenêtre de paiement le couvre, les plus de votes nets pour d’abord, chacune tant que le reste de son budget de {amount} la couvre."
+
 msgid "Funding threshold"
 msgstr "Seuil de financement"
 
@@ -839,12 +862,6 @@ msgstr "Insight n’a pas pu renvoyer les plus anciennes transactions de cette a
 
 msgid "Insight could not return this address’s transactions."
 msgstr "Insight n’a pas pu renvoyer les transactions de cette adresse."
-
-msgid "Insight doesn’t report funding, and the time of the next superblock isn’t known, so no proposal is shown as Funded. Passing is worked out by Radar from Insight’s vote counts."
-msgstr "Insight ne signale pas le financement et l’heure du prochain superbloc n’est pas connue, donc aucune proposition n’est affichée comme financée. Radar calcule « Passe » à partir des nombres de votes d’Insight."
-
-msgid "Insight doesn’t report funding. Funded and Passing are worked out by Radar from Insight’s vote counts and the time of the next superblock."
-msgstr "Insight ne signale pas le financement. Radar calcule « Financé » et « Passe » à partir des nombres de votes d’Insight et de l’heure du prochain superbloc."
 
 msgid "Insight’s {name} index is behind too: {lag}."
 msgstr "L’index {name} d’Insight est lui aussi en retard : {lag}."
@@ -1490,6 +1507,9 @@ msgstr "L’offre en circulation n’est pas à jour : les parts sont donc calcu
 msgid "The end time is an estimate."
 msgstr "L’heure de fin est une estimation."
 
+msgid "The exact funding threshold isn’t known until DAPI’s masternode list answers. Until then, Passing is Dash Core’s own flag as Hyphen reports it."
+msgstr "Le seuil de financement exact n’est pas connu tant que la liste des masternodes de DAPI n’a pas répondu. D’ici là, Passe est l’indicateur propre de Dash Core, tel que Hyphen le rapporte."
+
 msgid "The full mempool and its totals need that index, so this page shows what DAPI's live feed has delivered since you opened it."
 msgstr "Le mempool complet et ses totaux nécessitent cet index ; cette page affiche donc ce que le flux en direct de DAPI a transmis depuis son ouverture."
 
@@ -1516,6 +1536,9 @@ msgstr "Le minimum est supérieur au maximum."
 
 msgid "The newest {shown} of {total} seen since you opened this page"
 msgstr "Les {shown} plus récentes sur {total} vues depuis l’ouverture de cette page"
+
+msgid "The next superblock’s budget or time isn’t known, so no proposal is shown as Funded."
+msgstr "Le budget ou l’heure du prochain superbloc ne sont pas connus, aucune proposition n’est donc indiquée comme Financée."
 
 msgid "The next transactions could not be loaded."
 msgstr "Les transactions suivantes n’ont pas pu être chargées."

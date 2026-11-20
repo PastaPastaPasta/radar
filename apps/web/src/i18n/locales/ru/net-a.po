@@ -30,12 +30,21 @@ msgid "(empty)"
 msgstr "(пусто)"
 
 #. placeholder {0}: -diff
-msgid "{0, plural, one {# node fewer than a day ago} other {# nodes fewer than a day ago}}"
-msgstr "{0, plural, one {на # узел меньше, чем сутки назад} few {на # узла меньше, чем сутки назад} many {на # узлов меньше, чем сутки назад} other {на # узла меньше, чем сутки назад}}"
+msgid "{0, plural, one {# fewer masternode answering than a day ago} other {# fewer masternodes answering than a day ago}}"
+msgstr "{0, plural, one {отвечает на # мастерноду меньше, чем сутки назад} few {отвечает на # мастерноды меньше, чем сутки назад} many {отвечает на # мастернод меньше, чем сутки назад} other {отвечает на # мастерноды меньше, чем сутки назад}}"
+
+#. placeholder {0}: -diff
+msgid "{0, plural, one {That’s # fewer than a day ago.} other {That’s # fewer than a day ago.}}"
+msgstr "{0, plural, one {Это на # меньше, чем сутки назад.} few {Это на # меньше, чем сутки назад.} many {Это на # меньше, чем сутки назад.} other {Это на # меньше, чем сутки назад.}}"
 
 #. placeholder {0}: formatPercent(v, 1)
 msgid "{0} a year"
 msgstr "{0} в год"
+
+#. placeholder {0}: formatInt(crawl.reachable)
+#. placeholder {1}: formatInt(crawl.tried)
+msgid "{0} addresses answered out of {1} tried. Counted are addresses that answered at least once this week, plus every enabled masternode’s."
+msgstr "Ответили {0} адресов из {1} опрошенных. Учтены адреса, ответившие хотя бы раз за эту неделю, и адреса всех включённых мастернод."
 
 #. placeholder {0}: countryName(c0[0])
 #. placeholder {1}: share(c0[1], sumCountries)
@@ -81,11 +90,6 @@ msgstr "Ещё версий: {0}"
 #. placeholder {0}: formatInt(threshold)
 msgid "{0} must sign"
 msgstr "Должны подписать: {0}"
-
-#. placeholder {0}: formatInt(crawl.reachable)
-#. placeholder {1}: formatInt(crawl.tried)
-msgid "{0} nodes answered out of {1} addresses tried. Counted are nodes that answered at least once this week, plus every enabled masternode."
-msgstr "Ответили узлов: {0} из {1} опрошенных адресов. Учитываются узлы, ответившие хотя бы раз за неделю, и все включённые мастерноды."
 
 #. placeholder {0}: formatInt(p.healthy)
 #. placeholder {0}: formatInt(q.valid)
@@ -143,10 +147,6 @@ msgstr "из них эвонод: {0}"
 msgid "{0} other clients"
 msgstr "Других клиентов: {0}"
 
-#. placeholder {0}: formatInt(total(dist.version ?? []))
-msgid "{0} other full nodes accept connections. Nodes that only connect out can't be seen from outside, so the real number is higher."
-msgstr "Других полных узлов, принимающих подключения: {0}. Узлы, которые только подключаются сами, снаружи не видны, поэтому реальное число выше."
-
 #. placeholder {0}: formatInt(r.folded)
 msgid "{0} other releases"
 msgstr "Других релизов: {0}"
@@ -179,11 +179,14 @@ msgstr "Проверено в этом цикле: {0}. Медиана: {1} за
 msgid "{0}, {1}{2}"
 msgstr "{0}, {1}{2}"
 
-msgid "{answered, plural, one {# Dash node answered the last crawl} other {# Dash nodes answered the last crawl}}"
-msgstr "{answered, plural, one {# узел Dash ответил при последнем обходе} few {# узла Dash ответили при последнем обходе} many {# узлов Dash ответили при последнем обходе} other {# узла Dash ответили при последнем обходе}}"
+msgid "{answered, plural, one {# masternode answered the last crawl} other {# masternodes answered the last crawl}}"
+msgstr "{answered, plural, one {# мастернода ответила при последнем обходе} few {# мастерноды ответили при последнем обходе} many {# мастернод ответили при последнем обходе} other {# мастерноды ответили при последнем обходе}}"
 
-msgid "{diff, plural, one {# node more than a day ago} other {# nodes more than a day ago}}"
-msgstr "{diff, plural, one {на # узел больше, чем сутки назад} few {на # узла больше, чем сутки назад} many {на # узлов больше, чем сутки назад} other {на # узла больше, чем сутки назад}}"
+msgid "{diff, plural, one {# more masternode answering than a day ago} other {# more masternodes answering than a day ago}}"
+msgstr "{diff, plural, one {отвечает на # мастерноду больше, чем сутки назад} few {отвечает на # мастерноды больше, чем сутки назад} many {отвечает на # мастернод больше, чем сутки назад} other {отвечает на # мастерноды больше, чем сутки назад}}"
+
+msgid "{diff, plural, one {That’s # more than a day ago.} other {That’s # more than a day ago.}}"
+msgstr "{diff, plural, one {Это на # больше, чем сутки назад.} few {Это на # больше, чем сутки назад.} many {Это на # больше, чем сутки назад.} other {Это на # больше, чем сутки назад.}}"
 
 msgid "{silent, plural, one {# didn't answer} other {# didn't answer}}"
 msgstr "{silent, plural, one {# не ответил} few {# не ответили} many {# не ответили} other {# не ответили}}"
@@ -191,8 +194,8 @@ msgstr "{silent, plural, one {# не ответил} few {# не ответил�
 msgid "<0.1%"
 msgstr "<0.1%"
 
-msgid "<0>{count}</0> Dash nodes answered the last crawl"
-msgstr "<0>{count}</0> узлов Dash ответили при последнем обходе"
+msgid "<0>{count}</0> masternodes answered the last crawl"
+msgstr "<0>{count}</0> мастернод ответили при последнем обходе"
 
 msgid "0 ready"
 msgstr "0 готовы"
@@ -266,17 +269,17 @@ msgstr "Все узлы"
 msgid "All Platform blocks"
 msgstr "Все блоки Platform"
 
-msgid "Among them {answering} of the {enabled} enabled masternodes, {change}."
-msgstr "Среди них {answering} из {enabled} включённых мастернод, {change}."
-
-msgid "Among them {answering} of the {enabled} enabled masternodes."
-msgstr "Среди них {answering} из {enabled} включённых мастернод."
-
 msgid "Announce 24"
 msgstr "Объявляют 24"
 
 msgid "Answered"
 msgstr "Ответил"
+
+msgid "As many as a day ago."
+msgstr "Столько же, сколько сутки назад."
+
+msgid "as many masternodes answering as a day ago"
+msgstr "отвечает столько же мастернод, сколько сутки назад"
 
 msgid "at the earliest"
 msgstr "не раньше"
@@ -466,6 +469,9 @@ msgstr "Версии Drive"
 msgid "Each {0}-block window, blocks that set bit {1} (with the top version bits 001) count as signalling. A window with as many as its threshold locks Core 24 in. In the last {2} blocks, {3} signalled."
 msgstr "В каждом окне из {0} блоков блоки, выставившие бит {1} (со старшими битами версии 001), считаются сигналящими. Окно, в котором их не меньше порога, фиксирует Core 24. Из последних {2} блоков сигнал подали {3}."
 
+msgid "Each masternode is counted once."
+msgstr "Каждая мастернода учитывается один раз."
+
 msgid "Each Platform block is locked to a Core block."
 msgstr "Каждый блок Platform привязан к блоку Core."
 
@@ -570,6 +576,9 @@ msgstr "Индекс Hyphen ещё проверяется."
 
 msgid "I2P"
 msgstr "I2P"
+
+msgid "In all {addresses} addresses answered; a node reachable on several networks counts at each."
+msgstr "Всего ответили {addresses} адресов; узел, доступный в нескольких сетях, учитывается в каждой."
 
 msgid "IPv4"
 msgstr "IPv4"
@@ -762,9 +771,6 @@ msgstr "Сейчас в мемпуле нет транзакций"
 msgid "No window to show yet."
 msgstr "Пока нет окна для показа."
 
-msgid "nodes"
-msgstr "узлы"
-
 msgid "Nodes"
 msgstr "Узлы"
 
@@ -825,20 +831,24 @@ msgstr "Открыть карту"
 msgid "Other"
 msgstr "Другое"
 
+msgid "Other addresses"
+msgstr "Другие адреса"
+
 msgid "Other clients"
 msgstr "Другие клиенты"
-
-msgid "other full nodes"
-msgstr "другие полные узлы"
 
 msgid "Other full nodes"
 msgstr "Другие полные узлы"
 
-msgid "Other nodes"
-msgstr "Другие узлы"
+#. placeholder {0}: formatInt(total(dist.version ?? []))
+msgid "Other full nodes accept connections at {0} addresses. A node reachable on several networks counts at each, and nodes that only connect out can't be seen from outside."
+msgstr "Другие полные узлы принимают подключения на {0} адресах. Узел, доступный в нескольких сетях, учитывается в каждой, а узлы, которые только подключаются сами, снаружи не видны."
 
-msgid "Other reachable nodes"
-msgstr "Другие доступные узлы"
+msgid "other full nodes’ addresses"
+msgstr "адресов других полных узлов"
+
+msgid "Other reachable addresses"
+msgstr "Другие доступные адреса"
 
 #. placeholder {0}: dayMonthYear(history.t[0]!)
 msgid "Our history starts {0}, so this range shows less than it asks for."
@@ -937,11 +947,17 @@ msgstr "Доступность по сети"
 msgid "Reachable"
 msgstr "Доступна"
 
+msgid "reachable addresses"
+msgstr "доступных адресов"
+
+msgid "Reachable addresses"
+msgstr "Доступные адреса"
+
+msgid "Reachable addresses are addresses, not nodes: a node doesn’t tell peers its addresses on other networks, so one reachable on IPv4 and Tor counts twice. Masternodes are counted by their registration, so each counts once."
+msgstr "Доступные адреса — это адреса, а не узлы: узел не сообщает пирам свои адреса в других сетях, поэтому узел, доступный по IPv4 и через Tor, учитывается дважды. Мастерноды считаются по регистрации, поэтому каждая учитывается один раз."
+
 msgid "Reachable masternodes"
 msgstr "Доступные мастерноды"
-
-msgid "Reachable nodes"
-msgstr "Доступные узлы"
 
 msgid "Reachable now"
 msgstr "Доступны сейчас"
@@ -1073,6 +1089,10 @@ msgstr "Tenderdash P2P открыт"
 msgid "Tenderdash versions"
 msgstr "Версии Tenderdash"
 
+#. placeholder {0}: formatPercent(share, 1)
+msgid "That is {0} of the {enabled} enabled masternodes, each counted once."
+msgstr "Это {0} из {enabled} включённых мастернод, каждая учтена один раз."
+
 msgid "The activation tracker needs Radar's crawl"
 msgstr "Трекеру активации нужен обход Radar"
 
@@ -1121,9 +1141,6 @@ msgstr "Карта узлов"
 
 msgid "The Platform SDK isn't answering"
 msgstr "Platform SDK не отвечает"
-
-msgid "the same as a day ago"
-msgstr "столько же, сколько сутки назад"
 
 msgid "The share of all masternodes on Core 24 is on the node census."
 msgstr "Доля всех мастернод на Core 24 есть в переписи узлов."

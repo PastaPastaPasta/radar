@@ -6,7 +6,8 @@ import { useMemo, type ReactNode } from 'react'
 import { Entity } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import type { NetworkId } from '@/lib/network'
-import { Amount, Badge, DataTable, Hash, JsonView, KeyValue } from '@/ui'
+import { Amount, Badge, DataTable, Hash, JsonView, KeyValue, Skeleton } from '@/ui'
+import { tokenAmountKind, useToken } from '../token/use-token'
 import {
   bigintOf,
   fundingOf,
@@ -31,6 +32,46 @@ export function Facts({ items }: { items: Fact[] }) {
 export const Credits = ({ value }: { value: unknown }) => {
   const v = bigintOf(value)
   return v === undefined ? <>—</> : <Amount value={v} kind="credits" />
+}
+
+/** A token amount in whole tokens, once the token's decimals are known; until then, or without them, its base units. */
+export function TokenUnits({ tokenId, value }: { tokenId: string; value: unknown }) {
+  const { t } = useLingui()
+  const token = useToken(tokenId)
+  const kind = tokenAmountKind(token)
+  const v = bigintOf(value)
+  if (v === undefined) return <>—</>
+  if (kind) return <Amount value={v} kind={kind} />
+  const looking =
+    token.valid &&
+    (token.info.isPending || (token.origin !== undefined && token.contract.isPending))
+  if (looking) return <Skeleton shape="line" width="8ch" />
+  return <span className="rx-num">{t`${formatInt(v)} base units`}</span>
+}
+
+/**
+ * A token's direct-purchase price as Platform writes it (`TokenPricingSchedule`): one price in credits, or prices by
+ * the amount bought; none turns direct purchase off.
+ */
+export function TokenPrice({ tokenId, value }: { tokenId: string; value: unknown }) {
+  const { t } = useLingui()
+  if (value === null) return <>{t`None: direct purchase is turned off`}</>
+  const schedule = isRecord(value) ? value : undefined
+  const single = schedule?.$type === 'singlePrice' ? schedule.price : schedule?.SinglePrice
+  if (single !== undefined) return <Credits value={single} />
+  const tiers = schedule?.$type === 'setPrices' ? schedule.prices : schedule?.SetPrices
+  if (isRecord(tiers)) {
+    return (
+      <ul className="m-0 list-none p-0" data-price-tiers>
+        {Object.entries(tiers).map(([amount, credits]) => (
+          <li key={amount}>
+            {t`From`} <TokenUnits tokenId={tokenId} value={amount} />: <Credits value={credits} />
+          </li>
+        ))}
+      </ul>
+    )
+  }
+  return <JsonView value={value} />
 }
 
 export const Who = ({ id }: { id: unknown }) => {

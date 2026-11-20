@@ -20,7 +20,7 @@ const proposal = (over: Partial<HyProposal>): HyProposal => ({
 })
 
 describe('proposal status', () => {
-  it('reads funded, passing, failing, ended and invalid from the flags', () => {
+  it('reads funded (in Radar’s working of the budget), passing, failing, ended and invalid', () => {
     expect(proposalStatus(proposal({ funded: true, meetsFundingThreshold: true }), NOW)).toBe(
       'funded',
     )

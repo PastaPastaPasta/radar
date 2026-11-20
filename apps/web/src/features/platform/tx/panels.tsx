@@ -5,7 +5,17 @@ import { Entity } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import type { NetworkId } from '@/lib/network'
 import { Badge, Hash } from '@/ui'
-import { humanize, isRecord, list, num, proTxHashHex, records, str, type Json } from './decoded'
+import {
+  humanize,
+  isRecord,
+  list,
+  num,
+  proTxHashHex,
+  records,
+  str,
+  tokenUnitsOf,
+  type Json,
+} from './decoded'
 import {
   Address,
   AddressTable,
@@ -17,6 +27,8 @@ import {
   Funding,
   KeysTable,
   Script,
+  TokenPrice,
+  TokenUnits,
   Who,
   type Fact,
 } from './panel-parts'
@@ -324,8 +336,8 @@ function BatchEntry({ entry, index }: { entry: Json; index: number }) {
   const type = str(entry.$type)
   const id = str(entry.$id)
   const token = str(entry.$tokenId)
-  const amount = entry.amount ?? entry.$amount
-  const price = entry.$price ?? entry.price
+  const amount = token ? tokenUnitsOf(entry) : (entry.amount ?? entry.$amount)
+  const price = token ? entry.totalAgreedPrice : (entry.$price ?? entry.price)
   const recipient = entry.recipientOwnerId ?? entry.recipientId ?? entry.issuedToIdentityId
   const facts: Fact[] = []
   if (token) facts.push({ label: t`Token`, value: <Entity kind="token" id={token} /> })
@@ -338,8 +350,14 @@ function BatchEntry({ entry, index }: { entry: Json; index: number }) {
   if (type) facts.push({ label: t`Document type`, value: type })
   if (entry.$revision !== undefined)
     facts.push({ label: t`Revision`, value: num(entry.$revision) ?? '—' })
-  if (amount !== undefined) facts.push({ label: t`Amount`, value: formatInt(num(amount) ?? 0) })
+  if (amount !== undefined)
+    facts.push({
+      label: t`Amount`,
+      value: token ? <TokenUnits tokenId={token} value={amount} /> : formatInt(num(amount) ?? 0),
+    })
   if (price !== undefined) facts.push({ label: t`Price`, value: <Credits value={price} /> })
+  if (token && 'price' in entry)
+    facts.push({ label: t`Price`, value: <TokenPrice tokenId={token} value={entry.price} /> })
   if (recipient != null) facts.push({ label: t`Recipient`, value: <Who id={recipient} /> })
   if (str(entry.publicNote)) facts.push({ label: t`Note`, value: str(entry.publicNote) })
   return (

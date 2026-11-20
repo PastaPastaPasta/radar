@@ -79,15 +79,35 @@ describe('adaptPendingTx', () => {
 
 describe('insightTxType', () => {
   it('names special transactions the way Hyphen does, and a coinbase input as a coinbase', () => {
-    expect(insightTxType({ type: 8, vin: [] })).toBe('asset_lock')
-    expect(insightTxType({ type: 9, vin: [] })).toBe('asset_unlock')
-    expect(insightTxType({ type: 5, vin: [] })).toBe('coinbase')
-    expect(insightTxType({ type: 6, vin: [] })).toBe('quorum_commitment')
-    expect(insightTxType({ type: 7, vin: [] })).toBe('mnhf_signal')
-    expect(insightTxType({ type: 1, vin: [] })).toBe('provider_register')
-    expect(insightTxType({ vin: [{ coinbase: '03' }] })).toBe('coinbase')
-    expect(insightTxType({ type: 0, vin: [{ addr: A }] })).toBe('normal')
-    expect(insightTxType({ type: 99, vin: [] })).toBe('normal')
+    expect(insightTxType({ type: 8, vin: [], vout: [] })).toBe('asset_lock')
+    expect(insightTxType({ type: 9, vin: [], vout: [] })).toBe('asset_unlock')
+    expect(insightTxType({ type: 5, vin: [], vout: [] })).toBe('coinbase')
+    expect(insightTxType({ type: 6, vin: [], vout: [] })).toBe('quorum_commitment')
+    expect(insightTxType({ type: 7, vin: [], vout: [] })).toBe('mnhf_signal')
+    expect(insightTxType({ type: 1, vin: [], vout: [] })).toBe('provider_register')
+    expect(insightTxType({ vin: [{ coinbase: '03' }], vout: [] })).toBe('coinbase')
+    expect(insightTxType({ type: 0, vin: [{ addr: A }], vout: [] })).toBe('normal')
+    expect(insightTxType({ type: 99, vin: [], vout: [] })).toBe('normal')
+  })
+
+  it('calls a transaction with any OP_RETURN output data, in Hyphen’s sense of the word', () => {
+    const out = (hex: string) => ({ n: 0, value: 0n, scriptPubKey: { hex } })
+    expect(insightTxType({ type: 0, vin: [{ addr: A }], vout: [out('6a')] })).toBe('data')
+    expect(insightTxType({ type: 0, vin: [{ addr: A }], vout: [out('6a0401020304')] })).toBe('data')
+    expect(
+      insightTxType({
+        type: 0,
+        vin: [{ addr: A }],
+        vout: [out('6a'), out('76a914' + '00'.repeat(20) + '88ac')],
+      }),
+    ).toBe('data')
+    expect(
+      insightTxType({
+        type: 0,
+        vin: [{ addr: A }],
+        vout: [out('76a914' + '00'.repeat(20) + '88ac')],
+      }),
+    ).toBe('normal')
   })
 })
 
@@ -121,7 +141,8 @@ describe('adaptProposals', () => {
         end_epoch: over.end ?? 5_000,
       },
       AbsoluteYesCount: over.AbsoluteYesCount ?? 0,
-      YesCount: 0,
+      // Insight's absolute count is the yes count less the no count.
+      YesCount: over.AbsoluteYesCount ?? 0,
       NoCount: 0,
       AbstainCount: 0,
     }) satisfies InsProposal
@@ -141,7 +162,7 @@ describe('adaptProposals', () => {
       ['p3', false, true],
       ['p4', false, false],
     ])
-    expect(out[0]).toMatchObject({ fundingThreshold: 10, votes: { yes: 0, no: 0, abstain: 0 } })
+    expect(out[0]).toMatchObject({ fundingThreshold: 10, votes: { yes: 50, no: 0, abstain: 0 } })
   })
 
   it('never funds a proposal whose voting window has ended, or has not begun, at the superblock', () => {

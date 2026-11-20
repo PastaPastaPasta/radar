@@ -51,8 +51,8 @@ msgstr "{claimTotal, plural, one {# Evonode} other {# Evonode}}"
 msgid "{claimTotal, plural, one {# masternode} other {# masternodes}}"
 msgstr "{claimTotal, plural, one {# masternode} other {# masternode}}"
 
-msgid "{claimTotal, plural, one {# reachable node} other {# reachable nodes}}"
-msgstr "{claimTotal, plural, one {# erişilebilir düğüm} other {# erişilebilir düğüm}}"
+msgid "{claimTotal, plural, one {# reachable address} other {# reachable addresses}}"
+msgstr "{claimTotal, plural, one {# erişilebilir adres} other {# erişilebilir adres}}"
 
 msgid "{j, plural, one {Half run with # hosting provider.} other {Half run with # hosting providers.}}"
 msgstr "{j, plural, one {Yarısı # barındırma sağlayıcısında çalışıyor.} other {Yarısı # barındırma sağlayıcısında çalışıyor.}}"
@@ -77,14 +77,17 @@ msgstr "{n, plural, one {# Evonode} other {# Evonode}}"
 msgid "{n, plural, one {# masternode} other {# masternodes}}"
 msgstr "{n, plural, one {# masternode} other {# masternode}}"
 
-msgid "{n, plural, one {# reachable node} other {# reachable nodes}}"
-msgstr "{n, plural, one {# erişilebilir düğüm} other {# erişilebilir düğüm}}"
+msgid "{n, plural, one {# reachable address} other {# reachable addresses}}"
+msgstr "{n, plural, one {# erişilebilir adres} other {# erişilebilir adres}}"
 
 msgid "{others, plural, one {# other} other {# others}}"
 msgstr "{others, plural, one {# diğer} other {# diğer}}"
 
 msgid "{others, plural, one {It shares {city} with # other counted masternode: {part} of the total run there.} other {It shares {city} with # other counted masternodes: {part} of the total run there.}}"
 msgstr "{others, plural, one {{city} şehrini # sayılan masternode ile paylaşıyor: toplamın {part} kadarı orada çalışıyor.} other {{city} şehrini # sayılan masternode ile paylaşıyor: toplamın {part} kadarı orada çalışıyor.}}"
+
+msgid "{pct} of the {tot} are in one city, {where}"
+msgstr "{tot} içinden {pct} tek bir şehirde: {where}"
 
 msgid "{pct} of the {tot} run in one city, {where}"
 msgstr "{tot} içinden {pct} tek bir şehirde çalışıyor: {where}"
@@ -95,8 +98,8 @@ msgstr "Bu {tot} içinden {pct} tek bir şehirde çalışıyor: {where}"
 msgid "{unplaced, plural, one {# has no location the crawl could find; the shares count it as unknown.} other {# have no location the crawl could find; the shares count them as unknown.}}"
 msgstr "{unplaced, plural, one {Taramanın konum bulamadığı # düğüm var; paylarda bilinmeyen olarak sayılıyor.} other {Taramanın konum bulamadığı # düğüm var; paylarda bilinmeyen olarak sayılıyorlar.}}"
 
-msgid "{unplaced, plural, one {# reachable node has no place, most likely on Tor or I2P; the shares count it as unknown.} other {# reachable nodes have no place, most of them on Tor or I2P; the shares count them as unknown.}}"
-msgstr "{unplaced, plural, one {# erişilebilir düğümün konumu yok, büyük olasılıkla Tor veya I2P üzerinde; paylarda bilinmeyen olarak sayılıyor.} other {# erişilebilir düğümün konumu yok, çoğu Tor veya I2P üzerinde; paylarda bilinmeyen olarak sayılıyorlar.}}"
+msgid "{unplaced, plural, one {# reachable address has no place, most likely on Tor or I2P; the shares count it as unknown.} other {# reachable addresses have no place, most of them on Tor or I2P; the shares count them as unknown.}}"
+msgstr "{unplaced, plural, one {# erişilebilir adresin yeri yok, büyük olasılıkla Tor veya I2P üzerinde; paylar onu bilinmiyor olarak sayar.} other {# erişilebilir adresin yeri yok, çoğu Tor veya I2P üzerinde; paylar bunları bilinmiyor olarak sayar.}}"
 
 msgid "<0.1%"
 msgstr "<%0,1"
@@ -104,11 +107,14 @@ msgstr "<%0,1"
 msgid "200 while every network's data is fresh and saved, 503 with what is wrong otherwise. For uptime checks."
 msgstr "Her ağın verisi güncel ve kayıtlıyken 200, aksi halde sorunu belirten 503 döner. Çalışma süresi kontrolleri için."
 
+msgid "A node reachable on both IPv4 and IPv6 counts at each address."
+msgstr "Hem IPv4 hem IPv6 üzerinden erişilebilen bir düğüm her adreste sayılır."
+
 msgid "A summary of the speed tests from each vantage point."
 msgstr "Her gözlem noktasından yapılan hız testlerinin özeti."
 
-msgid "A time series of one distribution. days is 1, 7, 14, 30, 90 or 365; top is 1 to 20; dim=totals returns the node counts instead."
-msgstr "Bir dağılımın zaman serisi. days 1, 7, 14, 30, 90 veya 365; top 1 ile 20 arasıdır; dim=totals bunun yerine düğüm sayılarını döndürür."
+msgid "A time series of one distribution. days is 1, 7, 14, 30, 90 or 365; top is 1 to 20; dim=totals returns reachable addresses, enabled masternodes and reachable masternodes instead; addresses are not nodes, since one node can answer on several networks."
+msgstr "Tek bir dağılımın zaman serisi. days 1, 7, 14, 30, 90 veya 365; top 1 ile 20 arası; dim=totals bunun yerine erişilebilir adresleri, etkin masternode’ları ve erişilebilir masternode’ları döndürür; bir düğüm birkaç ağda yanıt verebildiği için adresler düğüm değildir."
 
 msgid "Address"
 msgstr "Adres"
@@ -119,8 +125,8 @@ msgstr "Adres değişiklikleri"
 msgid "Addresses of nodes that aren't masternodes are never published, only counted."
 msgstr "Masternode olmayan düğümlerin adresleri hiçbir zaman yayımlanmaz, yalnızca sayılır."
 
-msgid "All reachable nodes"
-msgstr "Tüm erişilebilir düğümler"
+msgid "All reachable addresses"
+msgstr "Tüm erişilebilir adresler"
 
 msgid "Americas"
 msgstr "Amerika"
@@ -241,6 +247,9 @@ msgstr "Avrupa"
 msgid "Every 15 minutes the crawler opens a P2P connection to every registered masternode's address, to every node that answered in the past week and to new addresses it learns from our Dash node and from other nodes. It completes the version handshake and disconnects. It doesn't relay transactions and keeps only what the node announces."
 msgstr "Tarayıcı her 15 dakikada bir, kayıtlı her masternode’un adresine, geçen hafta yanıt veren her düğüme ve Dash düğümümüzden ve diğer düğümlerden öğrendiği yeni adreslere bir P2P bağlantısı açar. Sürüm el sıkışmasını tamamlar ve bağlantıyı keser. İşlemleri aktarmaz ve yalnızca düğümün duyurduğu bilgiyi saklar."
 
+msgid "Every reachable address the latest crawl found, counted per city without the addresses themselves, and how many have no location (Tor and I2P among them)."
+msgstr "Son taramanın bulduğu her erişilebilir adres, adreslerin kendisi olmadan şehir başına sayılır; konumu olmayanların sayısı da verilir (Tor ve I2P bunların arasında)."
+
 msgid "Every registered masternode with its latest port check, user agent, location, hosting, uptime and DKG readiness. The map is drawn from this."
 msgstr "Kayıtlı her masternode; son bağlantı noktası kontrolü, kullanıcı aracısı, konum, barındırma, çalışma süresi ve DKG hazırlığıyla. Harita bundan çizilir."
 
@@ -268,6 +277,9 @@ msgstr "Masternode’ları filtrele"
 msgid "Filters"
 msgstr "Filtreler"
 
+msgid "Half of the {tot} are in {cities}"
+msgstr "{tot} içinden yarısı {cities} içinde"
+
 msgid "Half of the {tot} run in {cities}"
 msgstr "{tot} içinden yarısı {cities} çalışıyor"
 
@@ -277,8 +289,8 @@ msgstr "Evonode’ların yarısı yukarıdaki şehirlerde çalışıyor."
 msgid "Half of the masternodes run in the cities above."
 msgstr "Masternode’ların yarısı yukarıdaki şehirlerde çalışıyor."
 
-msgid "Half of the reachable nodes run in the cities above."
-msgstr "Erişilebilir düğümlerin yarısı yukarıdaki şehirlerde çalışıyor."
+msgid "Half of the reachable addresses are in the cities above."
+msgstr "Erişilebilir adreslerin yarısı yukarıdaki şehirlerde."
 
 msgid "Half of these {tot} run in {cities}"
 msgstr "Bu {tot} içinden yarısı {cities} çalışıyor"
@@ -360,8 +372,8 @@ msgid "Masternode"
 msgstr "Masternode"
 
 #. placeholder {0}: chips .map((c) => c.label) .join('; ')
-msgid "Masternode filters are off while every reachable node is counted: {0}."
-msgstr "Tüm erişilebilir düğümler sayılırken masternode filtreleri kapalıdır: {0}."
+msgid "Masternode filters are off while every reachable address is counted: {0}."
+msgstr "Her erişilebilir adres sayılırken masternode filtreleri kapalıdır: {0}."
 
 msgid "Masternode list changes come from Radar's crawl of mainnet and testnet."
 msgstr "Masternode listesi değişiklikleri, Radar’ın mainnet ve testnet taramasından gelir."
@@ -492,9 +504,6 @@ msgstr "Radar’ın son taraması tamamlandı"
 msgid "Reachable"
 msgstr "Erişilebilir"
 
-msgid "Reachable nodes counted per city, never by address, and how many have no location."
-msgstr "Erişilebilir düğümler şehir başına sayılır, asla adrese göre değil; ayrıca kaç tanesinin konumu olmadığı."
-
 msgid "Region"
 msgstr "Bölge"
 
@@ -562,8 +571,8 @@ msgstr "Filtreler onu dışarıda bırakıyor, bu yüzden burada sayılmıyor. H
 msgid "The latest changes to masternode registrations, newest first: new and removed masternodes, PoSe bans and revivals, changed addresses and keys."
 msgstr "Masternode kayıtlarındaki son değişiklikler, en yeniden eskiye: yeni ve kaldırılan masternode’lar, PoSe yasakları ve geri dönüşler, değişen adresler ve anahtarlar."
 
-msgid "The latest crawl placed no reachable node."
-msgstr "Son tarama hiçbir erişilebilir düğümü konumlandırmadı."
+msgid "The latest crawl placed no reachable address."
+msgstr "Son tarama erişilebilir hiçbir adresin yerini bulamadı."
 
 msgid "The latest finished crawl, the one a day before it and every distribution (dists[scope][dim]), with yields, Platform health and DKG readiness."
 msgstr "Son tamamlanan tarama, bir gün öncekisi ve her dağılım (dists[scope][dim]); getiriler, Platform sağlığı ve DKG hazırlığıyla birlikte."
@@ -586,14 +595,14 @@ msgstr "Sayılan tek Evonode {where} içinde çalışıyor"
 msgid "The only masternode counted runs in {where}"
 msgstr "Sayılan tek masternode {where} içinde çalışıyor"
 
-msgid "The only reachable node runs in {where}"
-msgstr "Tek erişilebilir düğüm {where} içinde çalışıyor"
+msgid "The only reachable address is in {where}"
+msgstr "Tek erişilebilir adres {where} içinde"
 
 msgid "The site and the API are served from documents the crawler publishes after each crawl, so they stay up when the crawler doesn't."
 msgstr "Site ve API, tarayıcının her taramadan sonra yayımladığı belgelerden sunulur; bu yüzden tarayıcı çalışmasa bile erişilebilir kalır."
 
-msgid "The tick marks half of every reachable node."
-msgstr "Çizgi, tüm erişilebilir düğümlerin yarısını gösterir."
+msgid "The tick marks half of every reachable address."
+msgstr "Çizgi, tüm erişilebilir adreslerin yarısını gösterir."
 
 msgid "The tick marks half. Pick a country or a provider to see where its masternodes are."
 msgstr "Çizgi yarıyı gösterir. Masternode’larının nerede olduğunu görmek için bir ülke veya sağlayıcı seçin."

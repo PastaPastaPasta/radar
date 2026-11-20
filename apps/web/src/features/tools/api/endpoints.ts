@@ -47,13 +47,13 @@ export const NETWORK_ENDPOINTS: ApiEndpoint[] = [
     method: 'GET',
     path: '/api/v1/{net}/history',
     query: '?scope=mn&dim=version&days=30&top=8',
-    summary: msg`A time series of one distribution. days is 1, 7, 14, 30, 90 or 365; top is 1 to 20; dim=totals returns the node counts instead.`,
+    summary: msg`A time series of one distribution. days is 1, 7, 14, 30, 90 or 365; top is 1 to 20; dim=totals returns reachable addresses, enabled masternodes and reachable masternodes instead; addresses are not nodes, since one node can answer on several networks.`,
   },
   {
     id: 'geo',
     method: 'GET',
     path: '/api/v1/{net}/geo',
-    summary: msg`Reachable nodes counted per city, never by address, and how many have no location.`,
+    summary: msg`Every reachable address the latest crawl found, counted per city without the addresses themselves, and how many have no location (Tor and I2P among them).`,
   },
   {
     id: 'masternodes',

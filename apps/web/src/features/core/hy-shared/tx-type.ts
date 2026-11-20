@@ -13,8 +13,13 @@ const KNOWN: Record<string, CoreTxType> = {
   asset_unlock: 'asset-unlock',
 }
 
-/** Hyphen's `txType` name as the kit's tx badge type, or undefined when the palette has no entry for it. */
-export function coreTxType(hyphenType: string): CoreTxType | undefined {
+/**
+ * Hyphen's `txType` name as the kit's tx badge type, or undefined when the palette has no entry for it. Hyphen says
+ * `data` when any output is OP_RETURN (`public_tx_type`), Radar only when every output is, so Hyphen's `data` is
+ * Radar's only for a transaction with a single output; otherwise it may be a payment that carries data.
+ */
+export function coreTxType(hyphenType: string, outputCount?: number): CoreTxType | undefined {
+  if (hyphenType === 'data') return outputCount === 1 ? 'data' : undefined
   return KNOWN[hyphenType]
 }
 

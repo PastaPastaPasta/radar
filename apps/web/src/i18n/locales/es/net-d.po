@@ -51,8 +51,8 @@ msgstr "{claimTotal, plural, one {# evonode} other {# evonodes}}"
 msgid "{claimTotal, plural, one {# masternode} other {# masternodes}}"
 msgstr "{claimTotal, plural, one {# masternode} other {# masternodes}}"
 
-msgid "{claimTotal, plural, one {# reachable node} other {# reachable nodes}}"
-msgstr "{claimTotal, plural, one {# nodo accesible} other {# nodos accesibles}}"
+msgid "{claimTotal, plural, one {# reachable address} other {# reachable addresses}}"
+msgstr "{claimTotal, plural, one {# dirección accesible} other {# direcciones accesibles}}"
 
 msgid "{j, plural, one {Half run with # hosting provider.} other {Half run with # hosting providers.}}"
 msgstr "{j, plural, one {La mitad funciona con # proveedor de alojamiento.} other {La mitad funciona con # proveedores de alojamiento.}}"
@@ -77,14 +77,17 @@ msgstr "{n, plural, one {# evonode} other {# evonodes}}"
 msgid "{n, plural, one {# masternode} other {# masternodes}}"
 msgstr "{n, plural, one {# masternode} other {# masternodes}}"
 
-msgid "{n, plural, one {# reachable node} other {# reachable nodes}}"
-msgstr "{n, plural, one {# nodo accesible} other {# nodos accesibles}}"
+msgid "{n, plural, one {# reachable address} other {# reachable addresses}}"
+msgstr "{n, plural, one {# dirección accesible} other {# direcciones accesibles}}"
 
 msgid "{others, plural, one {# other} other {# others}}"
 msgstr "{others, plural, one {# más} other {# más}}"
 
 msgid "{others, plural, one {It shares {city} with # other counted masternode: {part} of the total run there.} other {It shares {city} with # other counted masternodes: {part} of the total run there.}}"
 msgstr "{others, plural, one {Comparte {city} con # masternode contado más: allí funciona el {part} del total.} other {Comparte {city} con # masternodes contados más: allí funciona el {part} del total.}}"
+
+msgid "{pct} of the {tot} are in one city, {where}"
+msgstr "El {pct} de las {tot} están en una ciudad, {where}"
 
 msgid "{pct} of the {tot} run in one city, {where}"
 msgstr "El {pct} de los {tot} funciona en una sola ciudad: {where}"
@@ -95,8 +98,8 @@ msgstr "El {pct} de estos {tot} funciona en una sola ciudad: {where}"
 msgid "{unplaced, plural, one {# has no location the crawl could find; the shares count it as unknown.} other {# have no location the crawl could find; the shares count them as unknown.}}"
 msgstr "{unplaced, plural, one {# no tiene una ubicación que el rastreo pudiera encontrar; las cuotas lo cuentan como desconocido.} other {# no tienen una ubicación que el rastreo pudiera encontrar; las cuotas los cuentan como desconocidos.}}"
 
-msgid "{unplaced, plural, one {# reachable node has no place, most likely on Tor or I2P; the shares count it as unknown.} other {# reachable nodes have no place, most of them on Tor or I2P; the shares count them as unknown.}}"
-msgstr "{unplaced, plural, one {# nodo accesible no tiene lugar, probablemente en Tor o I2P; las cuotas lo cuentan como desconocido.} other {# nodos accesibles no tienen lugar, la mayoría en Tor o I2P; las cuotas los cuentan como desconocidos.}}"
+msgid "{unplaced, plural, one {# reachable address has no place, most likely on Tor or I2P; the shares count it as unknown.} other {# reachable addresses have no place, most of them on Tor or I2P; the shares count them as unknown.}}"
+msgstr "{unplaced, plural, one {# dirección accesible no tiene lugar, probablemente en Tor o I2P; las cuotas la cuentan como desconocida.} other {# direcciones accesibles no tienen lugar, la mayoría en Tor o I2P; las cuotas las cuentan como desconocidas.}}"
 
 msgid "<0.1%"
 msgstr "<0.1%"
@@ -104,11 +107,14 @@ msgstr "<0.1%"
 msgid "200 while every network's data is fresh and saved, 503 with what is wrong otherwise. For uptime checks."
 msgstr "200 mientras los datos de cada red estén al día y guardados; si no, 503 con lo que falla. Para comprobaciones de disponibilidad."
 
+msgid "A node reachable on both IPv4 and IPv6 counts at each address."
+msgstr "Un nodo accesible por IPv4 e IPv6 cuenta en cada dirección."
+
 msgid "A summary of the speed tests from each vantage point."
 msgstr "Un resumen de las pruebas de velocidad desde cada punto de medición."
 
-msgid "A time series of one distribution. days is 1, 7, 14, 30, 90 or 365; top is 1 to 20; dim=totals returns the node counts instead."
-msgstr "Una serie temporal de una distribución. days es 1, 7, 14, 30, 90 o 365; top va de 1 a 20; dim=totals devuelve en su lugar el número de nodos."
+msgid "A time series of one distribution. days is 1, 7, 14, 30, 90 or 365; top is 1 to 20; dim=totals returns reachable addresses, enabled masternodes and reachable masternodes instead; addresses are not nodes, since one node can answer on several networks."
+msgstr "Una serie temporal de una distribución. days es 1, 7, 14, 30, 90 o 365; top es de 1 a 20; dim=totals devuelve en su lugar direcciones accesibles, masternodes habilitados y masternodes accesibles; las direcciones no son nodos, ya que un nodo puede responder en varias redes."
 
 msgid "Address"
 msgstr "Dirección"
@@ -119,8 +125,8 @@ msgstr "Cambios de dirección"
 msgid "Addresses of nodes that aren't masternodes are never published, only counted."
 msgstr "Las direcciones de los nodos que no son masternodes nunca se publican, solo se cuentan."
 
-msgid "All reachable nodes"
-msgstr "Todos los nodos accesibles"
+msgid "All reachable addresses"
+msgstr "Todas las direcciones accesibles"
 
 msgid "Americas"
 msgstr "América"
@@ -241,6 +247,9 @@ msgstr "Europa"
 msgid "Every 15 minutes the crawler opens a P2P connection to every registered masternode's address, to every node that answered in the past week and to new addresses it learns from our Dash node and from other nodes. It completes the version handshake and disconnects. It doesn't relay transactions and keeps only what the node announces."
 msgstr "Cada 15 minutos el rastreador abre una conexión P2P con la dirección de cada masternode registrado, con cada nodo que respondió la semana pasada y con las direcciones nuevas que conoce por nuestro nodo Dash y por otros nodos. Completa el handshake de versión y se desconecta. No retransmite transacciones y solo conserva lo que el nodo anuncia."
 
+msgid "Every reachable address the latest crawl found, counted per city without the addresses themselves, and how many have no location (Tor and I2P among them)."
+msgstr "Cada dirección accesible que encontró el último rastreo, contada por ciudad sin las propias direcciones, y cuántas no tienen ubicación (entre ellas Tor e I2P)."
+
 msgid "Every registered masternode with its latest port check, user agent, location, hosting, uptime and DKG readiness. The map is drawn from this."
 msgstr "Cada masternode registrado con su última comprobación de puerto, user agent, ubicación, alojamiento, disponibilidad y preparación DKG. El mapa se dibuja a partir de esto."
 
@@ -268,6 +277,9 @@ msgstr "Filtrar masternodes"
 msgid "Filters"
 msgstr "Filtros"
 
+msgid "Half of the {tot} are in {cities}"
+msgstr "La mitad de las {tot} están en {cities}"
+
 msgid "Half of the {tot} run in {cities}"
 msgstr "La mitad de los {tot} funciona en {cities}"
 
@@ -277,8 +289,8 @@ msgstr "La mitad de los evonodes funciona en las ciudades de arriba."
 msgid "Half of the masternodes run in the cities above."
 msgstr "La mitad de los masternodes funciona en las ciudades de arriba."
 
-msgid "Half of the reachable nodes run in the cities above."
-msgstr "La mitad de los nodos accesibles funciona en las ciudades de arriba."
+msgid "Half of the reachable addresses are in the cities above."
+msgstr "La mitad de las direcciones accesibles están en las ciudades de arriba."
 
 msgid "Half of these {tot} run in {cities}"
 msgstr "La mitad de estos {tot} funciona en {cities}"
@@ -360,8 +372,8 @@ msgid "Masternode"
 msgstr "Masternode"
 
 #. placeholder {0}: chips .map((c) => c.label) .join('; ')
-msgid "Masternode filters are off while every reachable node is counted: {0}."
-msgstr "Los filtros de masternodes no se aplican mientras se cuentan todos los nodos accesibles: {0}."
+msgid "Masternode filters are off while every reachable address is counted: {0}."
+msgstr "Los filtros de masternodes están desactivados mientras se cuenta cada dirección accesible: {0}."
 
 msgid "Masternode list changes come from Radar's crawl of mainnet and testnet."
 msgstr "Los cambios de la lista de masternodes proceden del rastreo de Radar de mainnet y testnet."
@@ -492,9 +504,6 @@ msgstr "El último rastreo de Radar terminó"
 msgid "Reachable"
 msgstr "Accesible"
 
-msgid "Reachable nodes counted per city, never by address, and how many have no location."
-msgstr "Nodos accesibles contados por ciudad, nunca por dirección, y cuántos no tienen ubicación."
-
 msgid "Region"
 msgstr "Región"
 
@@ -562,8 +571,8 @@ msgstr "Los filtros lo excluyen, así que no se cuenta aquí. El anillo marca d�
 msgid "The latest changes to masternode registrations, newest first: new and removed masternodes, PoSe bans and revivals, changed addresses and keys."
 msgstr "Los últimos cambios en los registros de masternodes, los más recientes primero: masternodes nuevos y eliminados, vetos y reactivaciones de PoSe, direcciones y claves modificadas."
 
-msgid "The latest crawl placed no reachable node."
-msgstr "El último rastreo no ubicó ningún nodo accesible."
+msgid "The latest crawl placed no reachable address."
+msgstr "El último rastreo no ubicó ninguna dirección accesible."
 
 msgid "The latest finished crawl, the one a day before it and every distribution (dists[scope][dim]), with yields, Platform health and DKG readiness."
 msgstr "El último rastreo terminado, el de un día antes y cada distribución (dists[scope][dim]), con rendimientos, estado de Platform y preparación DKG."
@@ -586,14 +595,14 @@ msgstr "El único evonode contado funciona en {where}"
 msgid "The only masternode counted runs in {where}"
 msgstr "El único masternode contado funciona en {where}"
 
-msgid "The only reachable node runs in {where}"
-msgstr "El único nodo accesible funciona en {where}"
+msgid "The only reachable address is in {where}"
+msgstr "La única dirección accesible está en {where}"
 
 msgid "The site and the API are served from documents the crawler publishes after each crawl, so they stay up when the crawler doesn't."
 msgstr "El sitio y la API se sirven desde documentos que el rastreador publica tras cada rastreo, así que siguen disponibles aunque el rastreador no lo esté."
 
-msgid "The tick marks half of every reachable node."
-msgstr "La marca señala la mitad de todos los nodos accesibles."
+msgid "The tick marks half of every reachable address."
+msgstr "La marca señala la mitad de todas las direcciones accesibles."
 
 msgid "The tick marks half. Pick a country or a provider to see where its masternodes are."
 msgstr "La marca señala la mitad. Elige un país o un proveedor para ver dónde están sus masternodes."

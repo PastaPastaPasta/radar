@@ -1,3 +1,4 @@
+import { withBudget } from '../governance-budget'
 import type { HyAddress, HyAddressTx, HyProposal, HyUtxo } from '../hyphen/schemas'
 import type { BlockRow } from '../core/types'
 import type {
@@ -22,9 +23,13 @@ const TX_TYPES: Record<number, string> = {
   9: 'asset_unlock',
 }
 
-export function insightTxType(tx: Pick<InsTx, 'type' | 'vin'>): string {
+export function insightTxType(tx: Pick<InsTx, 'type' | 'vin' | 'vout'>): string {
   if (tx.vin.some((i) => i.coinbase != null)) return 'coinbase'
-  return TX_TYPES[tx.type ?? 0] ?? 'normal'
+  const special = TX_TYPES[tx.type ?? 0]
+  if (special) return special
+  // Hyphen's meaning: `data` when any output is OP_RETURN (`coreTxType` in `hy-shared/tx-type.ts` reads it).
+  const carriesData = tx.vout.some((o) => o.scriptPubKey.hex.toLowerCase().startsWith('6a'))
+  return carriesData ? 'data' : 'normal'
 }
 
 /** The chain tip an answer about a confirmed transaction was read at: its height plus its confirmations, less one. */
@@ -98,24 +103,7 @@ export function adaptProposals(
   info: InsGovernanceInfo,
   superblockAt: number | undefined,
 ): HyProposal[] {
-  const funded = new Set<string>()
-  if (superblockAt !== undefined) {
-    const passing = list
-      .filter(
-        (p) =>
-          p.AbsoluteYesCount >= info.fundingthreshold &&
-          p.DataObject.start_epoch <= superblockAt &&
-          p.DataObject.end_epoch >= superblockAt,
-      )
-      .sort((a, b) => b.AbsoluteYesCount - a.AbsoluteYesCount || (a.Hash < b.Hash ? 1 : -1))
-    let left = info.governancebudget
-    for (const p of passing) {
-      if (p.DataObject.payment_amount > left) continue
-      left -= p.DataObject.payment_amount
-      funded.add(p.Hash)
-    }
-  }
-  return list.map((p) => ({
+  const rows = list.map((p): HyProposal => ({
     hash: p.Hash,
     name: p.DataObject.name,
     url: p.DataObject.url,
@@ -126,8 +114,11 @@ export function adaptProposals(
     votes: { yes: p.YesCount, no: p.NoCount, abstain: p.AbstainCount },
     fundingThreshold: info.fundingthreshold,
     meetsFundingThreshold: p.AbsoluteYesCount >= info.fundingthreshold,
-    funded: superblockAt === undefined ? undefined : funded.has(p.Hash),
   }))
+  return withBudget(
+    rows,
+    superblockAt === undefined ? undefined : { budget: info.governancebudget, superblockAt },
+  )
 }
 
 /**

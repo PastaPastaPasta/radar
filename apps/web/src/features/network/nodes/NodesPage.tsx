@@ -26,7 +26,7 @@ export function NodesPage() {
   const census = useCensus(net, scope, days, versions === 'time')
   const v24 = useV24Pending(net)
   const props = { net, scope, versions, days, summary: census.summary }
-  const answered = available ? census.summary.data?.data.crawl?.reachable : undefined
+  const answered = available ? census.summary.data?.data.crawl?.mn_reachable : undefined
   return (
     <PageFrame
       path="/nodes"

@@ -195,6 +195,104 @@ describe('Masternode page', () => {
     expect(kpis).not.toHaveTextContent('Uptime for 13 days')
   })
 
+  const leftRecord = async () => {
+    const body = await fixtureBody<Record<string, unknown>>(
+      'radar',
+      'mainnet',
+      `masternodes__${MAINNET.regular}`,
+    )
+    server.use(
+      http.get(`*/masternodes/${MAINNET.regular}`, () =>
+        HttpResponse.json({
+          ...body,
+          reachable: null,
+          removed: 1_795_024_928,
+          changes: [
+            {
+              field: 'removed',
+              height: 2_574_457,
+              ts: 1_795_024_928,
+              old: '85.209.241.228:9999',
+              new: null,
+            },
+          ],
+        }),
+      ),
+    )
+  }
+  const leftChip = () =>
+    waitFor(() => {
+      const el = document.querySelector<HTMLElement>('[data-left-list]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+
+  it('reads as removed everywhere once DAPI’s list has answered without it, with no vote link', async () => {
+    await leftRecord()
+    vi.spyOn(core, 'masternodeList').mockResolvedValue({
+      data: new Map(),
+      source: 'dapi',
+      asOf: Date.now(),
+      fetchedAt: Date.now(),
+      proved: false,
+    } as unknown as Awaited<ReturnType<typeof core.masternodeList>>)
+    renderAt(`/mn/${MAINNET.regular}`)
+    const status = await leftChip()
+    await waitFor(() => expect(status).toHaveAttribute('data-left-list', 'confirmed'))
+    expect(status).toHaveTextContent('Left the list at block 2,574,457')
+    const header = document.querySelector<HTMLElement>('[data-masternode-header]')!
+    expect(header).not.toHaveTextContent('Enabled')
+    expect(header).not.toHaveTextContent('Not checked yet')
+    expect(screen.queryByRole('link', { name: /Vote in Governance/ })).toBeNull()
+    expect(document.querySelector('[data-left-notice]')).toHaveTextContent(
+      /left the masternode list on .+, so it isn’t paid and can’t vote\. What follows is Radar’s last record of it, at 85\.209\.241\.228:9999\./,
+    )
+    expect(document.getElementById('registration')).toHaveTextContent('No, it left the list')
+  })
+
+  it.each([
+    [
+      'fails',
+      () =>
+        vi
+          .spyOn(core, 'masternodeList')
+          .mockRejectedValue(
+            new SourceError({ source: 'dapi', kind: 'network', message: 'No node answered' }),
+          ),
+    ],
+    [
+      'has not answered yet',
+      () => vi.spyOn(core, 'masternodeList').mockReturnValue(new Promise(() => undefined)),
+    ],
+  ])(
+    'keeps a departure Radar’s claim, with the vote link, while DAPI’s list %s',
+    async (_case, dapi) => {
+      await leftRecord()
+      dapi()
+      renderAt(`/mn/${MAINNET.regular}`)
+      const status = await leftChip()
+      expect(status).toHaveAttribute('data-left-list', 'unconfirmed')
+      expect(status).toHaveTextContent('Radar’s last record says it left at block 2,574,457')
+      expect(document.querySelector('[data-left-notice]')).toHaveTextContent(
+        'DAPI’s list hasn’t answered, so that isn’t confirmed: it may still be listed.',
+      )
+      expect(await screen.findByRole('link', { name: /Vote in Governance/ })).toBeInTheDocument()
+      expect(document.getElementById('registration')).toHaveTextContent('Not confirmed')
+      expect(document.getElementById('registration')).not.toHaveTextContent('No, it left the list')
+    },
+  )
+
+  it('shows the operator reward as the percentage the operator takes @RA-31', async () => {
+    renderAt(`/mn/${TESTNET.regular}?network=testnet`)
+    const card = await waitFor(() => {
+      const el = document.querySelector<HTMLElement>('#registration')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    expect(card).toHaveTextContent('Operator reward10%')
+    expect(card).not.toHaveTextContent('0.10%')
+  })
+
   it('names Hyphen’s special transactions as the kit does, not by their raw ids @HY-11', async () => {
     renderAt(`/mn/${MAINNET.listed}?tab=history`)
     const special = await waitFor(() => {

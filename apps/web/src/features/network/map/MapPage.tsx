@@ -181,25 +181,27 @@ function useClaim(b: Board): string | undefined {
   if (claimTotal === 1) {
     const where = placeText(b.places[0]!)
     if (noun === 'evo') return t`The only evonode counted runs in ${where}`
-    if (noun === 'nodes') return t`The only reachable node runs in ${where}`
+    if (noun === 'nodes') return t`The only reachable address is in ${where}`
     return t`The only masternode counted runs in ${where}`
   }
   const tot =
     noun === 'evo'
       ? plural(claimTotal, { one: '# evonode', other: '# evonodes' })
       : noun === 'nodes'
-        ? plural(claimTotal, { one: '# reachable node', other: '# reachable nodes' })
+        ? plural(claimTotal, { one: '# reachable address', other: '# reachable addresses' })
         : plural(claimTotal, { one: '# masternode', other: '# masternodes' })
   if (form.kind === 'one') {
     const top = b.places.find((p) => p.id === form.share.key)!
     const pct = formatPercent(shownFraction(form.share.n, form.total, 0), 0)
     const where = placeText(top)
+    if (noun === 'nodes') return t`${pct} of the ${tot} are in one city, ${where}`
     return b.narrowed
       ? t`${pct} of these ${tot} run in one city, ${where}`
       : t`${pct} of the ${tot} run in one city, ${where}`
   }
   const claimCities = form.k
   const cities = plural(claimCities, { one: '# city', other: '# cities' })
+  if (noun === 'nodes') return t`Half of the ${tot} are in ${cities}`
   return b.narrowed
     ? t`Half of these ${tot} run in ${cities}`
     : t`Half of the ${tot} run in ${cities}`
@@ -310,7 +312,7 @@ function MapBoard({ board: b, controls }: { board: Board; controls: MapSearchCon
   const noun = nounOf(b)
   const count = (n: number): string =>
     noun === 'nodes'
-      ? plural(n, { one: '# reachable node', other: '# reachable nodes' })
+      ? plural(n, { one: '# reachable address', other: '# reachable addresses' })
       : noun === 'evo'
         ? plural(n, { one: '# evonode', other: '# evonodes' })
         : plural(n, { one: '# masternode', other: '# masternodes' })
@@ -356,7 +358,7 @@ function MapBoard({ board: b, controls }: { board: Board; controls: MapSearchCon
 
   const halfLine =
     noun === 'nodes'
-      ? t`Half of the reachable nodes run in the cities above.`
+      ? t`Half of the reachable addresses are in the cities above.`
       : noun === 'evo'
         ? b.narrowed
           ? t`Half of these evonodes run in the cities above.`
@@ -472,7 +474,7 @@ function NoneCounted({ board: b, onClear }: { board: Board; onClear: () => void 
   const { t } = useLingui()
   const noun = nounOf(b)
   if (noun === 'nodes')
-    return <Empty kind="none-yet" title={t`The latest crawl placed no reachable node.`} />
+    return <Empty kind="none-yet" title={t`The latest crawl placed no reachable address.`} />
   if (!b.narrowed)
     return (
       <Empty
@@ -531,7 +533,7 @@ function Toolbar({ board: b, controls }: { board: Board; controls: MapSearchCont
         options={[
           { id: 'mn', label: t`Masternodes` },
           { id: 'evo', label: t`Evonodes` },
-          { id: 'nodes', label: t`All reachable nodes` },
+          { id: 'nodes', label: t`All reachable addresses` },
         ]}
         value={b.scope}
         onChange={(id) => {
@@ -651,7 +653,7 @@ function Notes({ board: b, controls }: { board: Board; controls: MapSearchContro
       ) : null}
       {chips.length > 0 && b.scope === 'nodes' ? (
         <p className="rx-mapnote" data-filters-off>
-          {t`Masternode filters are off while every reachable node is counted: ${chips
+          {t`Masternode filters are off while every reachable address is counted: ${chips
             .map((c) => c.label)
             .join('; ')}.`}{' '}
           <button
@@ -696,8 +698,11 @@ function Notes({ board: b, controls }: { board: Board; controls: MapSearchContro
           ) : null}
         </ul>
       ) : null}
-      {!b.loading && (b.bannedOut > 0 || unplaced > 0) ? (
+      {!b.loading && (b.bannedOut > 0 || unplaced > 0 || b.scope === 'nodes') ? (
         <p className="rx-mapnote" data-left-out>
+          {b.scope === 'nodes' ? (
+            <>{t`A node reachable on both IPv4 and IPv6 counts at each address.`} </>
+          ) : null}
           {b.bannedOut > 0 ? (
             <>
               {nounOf(b) === 'evo'
@@ -725,9 +730,9 @@ function Notes({ board: b, controls }: { board: Board; controls: MapSearchContro
           {unplaced > 0
             ? b.scope === 'nodes'
               ? plural(unplaced, {
-                  one: '# reachable node has no place, most likely on Tor or I2P; the shares count it as unknown.',
+                  one: '# reachable address has no place, most likely on Tor or I2P; the shares count it as unknown.',
                   other:
-                    '# reachable nodes have no place, most of them on Tor or I2P; the shares count them as unknown.',
+                    '# reachable addresses have no place, most of them on Tor or I2P; the shares count them as unknown.',
                 })
               : plural(unplaced, {
                   one: '# has no location the crawl could find; the shares count it as unknown.',
@@ -931,7 +936,7 @@ function Bars({ board: b, controls }: { board: Board; controls: MapSearchControl
       </h2>
       <p className="rx-mapbars__lede">
         {nodes
-          ? t`The tick marks half of every reachable node.`
+          ? t`The tick marks half of every reachable address.`
           : t`The tick marks half. Pick a country or a provider to see where its masternodes are.`}
       </p>
     </>

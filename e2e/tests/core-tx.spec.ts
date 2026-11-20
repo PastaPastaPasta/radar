@@ -65,6 +65,8 @@ const NEVER_LOCKED = '188e7232b8f73723bb3d893a9ffd84cbdce20f859f4d42c312fad559a9
 const REVOCATION = '9f827f91edb38bffff9f4a324cde6f6c071f25d500e343401e99d028e8cb17d4'
 const COINBASE = 'ff1ebb495704b3ef38bc23c85076b3282af81bcc564c8aea492b0413ab290328'
 const PROREG = 'af68cf8494b8064085187efbb933c3a58b189ec9ef770510db7d791ea8d45251'
+/** Block 2,574,458: one input and one bare OP_RETURN output of 0 DASH. Hyphen's txType is "data". */
+const DATA_ONLY = '05ae6f4ccbb3faa242da965f1dc33ee73f63527ef9c9c896184dc2c22829b1cc'
 const TESTNET_TRANSFER = '92fe2c05fde07f7cb7d1e2189b352e2003f76b536e6b81d78458ac096c1e9cf6'
 
 test.describe('Transaction page', () => {
@@ -78,6 +80,16 @@ test.describe('Transaction page', () => {
     await expect(page.locator('#out-0')).toBeVisible()
     await expect(page.locator('[data-source="dapi"]').first()).toBeVisible()
     await expectAccessible(page)
+  })
+
+  test('calls a transaction that only carries OP_RETURN data “Data”, not a payment @IN-05', async ({
+    page,
+  }) => {
+    await page.goto(`/tx/${DATA_ONLY}`)
+    const badge = page.locator('.rx-rec__kicker .rx-type').first()
+    await expect(badge).toHaveAttribute('data-type', 'data')
+    await expect(badge).toHaveText('Data')
+    await expect(page.locator('#out-0')).toBeVisible()
   })
 
   test('opens at an output named in the link @IN-05', async ({ page }) => {
