@@ -3,7 +3,12 @@ import type { SourceStamp } from '@/data/envelope'
 
 /** Two stamps say the same thing about where a figure came from when only their times differ. */
 export function sourceKey(stamp: SourceStamp): string {
-  return [stamp.source, stamp.fallback ?? '', stamp.proved ? 'proved' : ''].join('|')
+  return [
+    stamp.source,
+    stamp.fallback ?? '',
+    stamp.proved ? 'proved' : '',
+    stamp.radarTime === 'crawl' ? '' : (stamp.radarTime ?? ''),
+  ].join('|')
 }
 
 /** One stamp per distinct source: the oldest of each, so the age shown never flatters the group. */

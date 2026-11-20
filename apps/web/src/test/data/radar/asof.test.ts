@@ -169,14 +169,14 @@ describe('radar asOf from the crawl the document was built from', () => {
 })
 
 describe('radar status', () => {
-  it('is stamped with the requested network, not the newest of both', async () => {
+  it('is stamped with the requested network’s crawl finish, not the newest of both', async () => {
     const body = await fixtureBody<{
-      networks: Record<'mainnet' | 'testnet', { chain: { updated: number } }>
+      networks: Record<'mainnet' | 'testnet', { crawl: { last_finished: number } }>
     }>('radar', 'global', 'status')
     const main = await radar.status(undefined, 'mainnet')
     const test = await radar.status(undefined, 'testnet')
-    expect(main.asOf).toBe(body.networks.mainnet.chain.updated * 1000)
-    expect(test.asOf).toBe(body.networks.testnet.chain.updated * 1000)
+    expect(main.asOf).toBe(body.networks.mainnet.crawl.last_finished * 1000)
+    expect(test.asOf).toBe(body.networks.testnet.crawl.last_finished * 1000)
     expect(main.asOf).not.toBe(test.asOf)
   })
 

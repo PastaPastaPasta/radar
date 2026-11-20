@@ -1,9 +1,15 @@
 import { queryOptions } from '@tanstack/react-query'
+import { CRAWL_CATCH_UP_MS, CRAWL_REFRESH_MS } from '@/lib/crawl'
 import type { NetworkId } from '@/lib/network'
+import type { SourceStamp } from '../envelope'
 import { radarKeys } from '../query/keys'
 import { dataClass, POLL_MS } from '../query/stale'
 import { radar } from './client'
 import type { RadarHistoryQuery } from './schemas'
+
+/** Once a crawl, or soon after when the document trailed Radar's latest crawl, which Radar publishes a little later. */
+const crawlRefresh = (query: { state: { data?: Pick<SourceStamp, 'radarTime'> } }) =>
+  query.state.data?.radarTime === 'earlier-crawl' ? CRAWL_CATCH_UP_MS : CRAWL_REFRESH_MS
 
 export const radarQueries = {
   status: (net: NetworkId = 'mainnet') =>
@@ -30,6 +36,7 @@ export const radarQueries = {
       queryKey: radarKeys(net, 'summary'),
       queryFn: ({ signal }) => radar.summary(net, signal),
       ...dataClass('crawl'),
+      refetchInterval: crawlRefresh,
     }),
   history: (net: NetworkId, q: RadarHistoryQuery) =>
     queryOptions({
@@ -41,18 +48,21 @@ export const radarQueries = {
       }),
       queryFn: ({ signal }) => radar.history(net, q, signal),
       ...dataClass('crawl'),
+      refetchInterval: crawlRefresh,
     }),
   geo: (net: NetworkId) =>
     queryOptions({
       queryKey: radarKeys(net, 'geo'),
       queryFn: ({ signal }) => radar.geo(net, signal),
       ...dataClass('crawl'),
+      refetchInterval: crawlRefresh,
     }),
   masternodes: (net: NetworkId) =>
     queryOptions({
       queryKey: radarKeys(net, 'masternodes'),
       queryFn: ({ signal }) => radar.masternodes(net, signal),
       ...dataClass('crawl'),
+      refetchInterval: crawlRefresh,
     }),
   masternode: (net: NetworkId, protx: string) =>
     queryOptions({
@@ -100,6 +110,7 @@ export const radarQueries = {
       queryKey: radarKeys(net, 'changes'),
       queryFn: ({ signal }) => radar.changes(net, signal),
       ...dataClass('crawl'),
+      refetchInterval: crawlRefresh,
     }),
   /** A live handshake with one masternode (a reachability probe, not a write). The caller fetches it on a click. */
   check: (net: NetworkId, protx: string) =>

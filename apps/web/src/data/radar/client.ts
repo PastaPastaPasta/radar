@@ -75,17 +75,31 @@ interface Crawl {
 /** Radar crawls about every five minutes; a crawl time older than this is asked for again. */
 const CRAWL_RECHECK_MS = 5 * 60_000
 
+/** How many finished crawls per network keep their finish time, so a document of a recent crawl is dated by it. */
+const KNOWN_CRAWLS = 16
+
 /** The newest crawl each network's documents have named: every crawl-derived stamp carries its finish time. */
 const crawls = new Map<NetworkId, Crawl>()
+/** The finish time of each recent crawl, by id. */
+const finishedById = new Map<NetworkId, Map<number, number>>()
 const crawlReads = new Map<NetworkId, Promise<void>>()
 
 /** Forgets every crawl time, so the next document asks Radar's status again. */
 export function forgetCrawls(): void {
   crawls.clear()
+  finishedById.clear()
 }
 
 function noteCrawl(net: NetworkId, id: number | null | undefined, finished: number | null): void {
   if (finished === null) return
+  if (id != null) {
+    const known = finishedById.get(net) ?? new Map<number, number>()
+    known.set(id, finished)
+    for (const old of [...known.keys()].sort((a, b) => a - b).slice(0, -KNOWN_CRAWLS)) {
+      known.delete(old)
+    }
+    finishedById.set(net, known)
+  }
   const had = crawls.get(net)
   const checkedAt = Date.now()
   if (!had || finished >= had.finished) crawls.set(net, { id: id ?? null, finished, checkedAt })
@@ -93,13 +107,13 @@ function noteCrawl(net: NetworkId, id: number | null | undefined, finished: numb
 }
 
 /**
- * The finish time of `net`'s latest crawl. Radar's status says it when no document has, or none has for a while; one
- * read serves them all.
+ * The finish time of `net`'s latest crawl. Radar's status says it when no document has, none has for a while, or a
+ * document names a crawl newer than the latest one known; one read serves them all.
  * The read is not tied to a caller's signal: one query unmounting must not cancel the time the others are waiting on.
  */
-async function crawlOf(net: NetworkId): Promise<Crawl | undefined> {
+async function crawlOf(net: NetworkId, force = false): Promise<Crawl | undefined> {
   const had = crawls.get(net)
-  if (!had || Date.now() - had.checkedAt > CRAWL_RECHECK_MS) {
+  if (force || !had || Date.now() - had.checkedAt > CRAWL_RECHECK_MS) {
     let read = crawlReads.get(net)
     if (!read) {
       read = radar.status(undefined, net).then(
@@ -115,21 +129,52 @@ async function crawlOf(net: NetworkId): Promise<Crawl | undefined> {
 }
 
 /**
+ * Where a crawl-derived document's time comes from, so every "Crawled by Radar" age on every page counts from the same
+ * moment: the finish of the crawl the document names, or of the latest crawl when it names none. A document of an
+ * earlier crawl than the latest says so (`radarTime: 'earlier-crawl'`); when Radar no longer says when that crawl
+ * finished, the document keeps its own time.
+ */
+async function crawlTime(
+  net: NetworkId,
+  id: number | null | undefined,
+): Promise<{ asOf: number; radarTime: 'crawl' | 'earlier-crawl' } | undefined> {
+  let latest = await crawlOf(net)
+  if (id != null && latest?.id != null && id > latest.id) latest = await crawlOf(net, true)
+  if (!latest) return undefined
+  if (id == null || latest.id === null || id === latest.id) {
+    return { asOf: latest.finished, radarTime: 'crawl' }
+  }
+  const finished = finishedById.get(net)?.get(id)
+  if (finished !== undefined) {
+    return { asOf: finished, radarTime: id < latest.id ? 'earlier-crawl' : 'crawl' }
+  }
+  return undefined
+}
+
+/**
  * Stamps a document built from the crawl with the crawl's finish time rather than with the time it was fetched. A
- * document that names its crawl (`id`) only takes the time of that crawl; a newer one keeps its own stamp.
+ * document that names its crawl (`id`) takes that crawl's time.
  */
 async function stampedByCrawl<T>(
   net: NetworkId,
   read: Promise<Sourced<T>>,
   crawlId?: (data: T) => number | null | undefined,
 ): Promise<Sourced<T>> {
-  const [out, crawl] = await Promise.all([read, crawlOf(net)])
+  const out = await read
   const id = crawlId?.(out.data)
-  if (!crawl || (id != null && crawl.id !== null && id !== crawl.id)) return out
+  const time = await crawlTime(net, id)
+  if (!time) {
+    const latest = crawls.get(net)
+    const earlier = id != null && latest?.id != null && id < latest.id
+    return { ...out, radarTime: earlier ? 'earlier-crawl' : 'crawl' }
+  }
   const { asOfFetched, ...rest } = out
   void asOfFetched
-  return { ...rest, asOf: crawl.finished }
+  return { ...rest, ...time }
 }
+
+/** Radar's own readings outside the crawl (its Platform checks, the activation count, benchmarks) keep their own time. */
+const reading = <T>(out: Sourced<T>): Sourced<T> => ({ ...out, radarTime: 'reading' })
 
 function newest(times: Iterable<number | null | undefined>): number | undefined {
   let max: number | undefined
@@ -166,14 +211,18 @@ export const radar = {
       schema: RadarStatusSchema,
       signal,
       probe: opts.probe,
-      asOf: (b) => b.networks[net === 'testnet' ? 'testnet' : 'mainnet'].chain.updated,
+      asOf: (b) => {
+        const { crawl, chain } = b.networks[net === 'testnet' ? 'testnet' : 'mainnet']
+        return crawl.last_finished ?? chain.updated
+      },
     })
     reportCrawlLag(out.data)
     for (const n of ['mainnet', 'testnet'] as const) {
       const crawl = out.data.networks[n].crawl
       noteCrawl(n, crawl.last_id, crawl.last_finished)
     }
-    return out
+    const crawled = out.data.networks[net === 'testnet' ? 'testnet' : 'mainnet'].crawl.last_finished
+    return { ...out, radarTime: crawled === null ? 'reading' : 'crawl' }
   },
 
   /** Global. Reported to the active network's health record. */
@@ -210,7 +259,9 @@ export const radar = {
       height: (b) => b.crawl.tip_height,
     })
     noteCrawl(net, out.data.crawl.id, out.data.crawl.finished)
-    return out
+    const latest = crawls.get(net)
+    const earlier = latest?.id != null && out.data.crawl.id < latest.id
+    return { ...out, radarTime: earlier ? 'earlier-crawl' : 'crawl' }
   },
 
   history(
@@ -316,7 +367,7 @@ export const radar = {
       signal,
       asOf: (b, res) =>
         b.vantages.reduce((m, v) => Math.max(m, v.updated), 0) || lastModifiedMs(res),
-    })
+    }).then(reading)
   },
 
   mnBench(
@@ -332,7 +383,7 @@ export const radar = {
       notFound: 'null',
       signal,
       asOf: modified,
-    })
+    }).then(reading)
   },
 
   platform(net: NetworkId, signal?: AbortSignal): Promise<Sourced<RadarPlatform>> {
@@ -345,7 +396,7 @@ export const radar = {
       asOf: (b) => b.now.updated,
       height: (b) => b.now.height,
       heightChain: 'platform',
-    })
+    }).then(reading)
   },
 
   activation(net: NetworkId, signal?: AbortSignal): Promise<Sourced<RadarActivation>> {
@@ -357,7 +408,7 @@ export const radar = {
       signal,
       asOf: (b) => b.updated,
       height: (b) => b.tip.height,
-    })
+    }).then(reading)
   },
 
   changes(net: NetworkId, signal?: AbortSignal): Promise<Sourced<RadarChanges>> {
@@ -385,6 +436,6 @@ export const radar = {
       signal,
       timeoutMs: 20_000,
       asOf: (b) => b.checked ?? undefined,
-    })
+    }).then(reading)
   },
 }
