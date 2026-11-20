@@ -6,7 +6,7 @@ import { useDecentralizedOnly } from '@/data/health'
 import { joinMnRows, mnRowsQuery, type MnRow } from '@/data/masternodes/rows'
 import { radarQueries } from '@/data/radar/queries'
 import { PageFrame, useNetwork } from '@/features/entity'
-import type { NetworkId } from '@/lib/network'
+import { isDevnet, type NetworkId } from '@/lib/network'
 import { Empty, ErrorState, SegFilter, Skeleton, Unavailable } from '@/ui'
 import { masternodesClaim } from './claim'
 import { ListActions, ListView, useMnMatches } from './ListView'
@@ -22,7 +22,7 @@ export function MasternodesPage() {
   const list = useQuery(mnRowsQuery(net))
   const early = useCrawlFirst(
     net,
-    earlyAnswers() && list.data === undefined && !list.isError && !mode,
+    earlyAnswers() && !isDevnet(net) && list.data === undefined && !list.isError && !mode,
   )
   const data = (list.data ?? early)?.data
   const crawl = data?.radar != null && data.rows.some((r) => r.crawl)

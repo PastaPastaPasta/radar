@@ -278,7 +278,7 @@ export const peTipOf = (s: Sourced<PeStatus>): Sourced<PlatformTip> =>
     height: d.tenderdash.block.height,
     epoch: {
       number: d.epoch.number,
-      firstBlockHeight: Number(d.epoch.firstBlockHeight),
+      firstBlockHeight: d.epoch.firstBlockHeight,
       startedAt: d.epoch.startTime,
     },
   }))
