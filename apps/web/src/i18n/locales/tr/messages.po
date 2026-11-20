@@ -29,9 +29,17 @@ msgstr "(bu site isteği şuraya iletir: {0})"
 msgid "[circular]"
 msgstr "[döngüsel]"
 
+#. placeholder {0}: Math.max(0, c.nextSuperblock - c.tip.height)
+msgid "{0, plural, one {# block to go, at 2.5 minutes a block} other {# blocks to go, at 2.5 minutes a block}}"
+msgstr "{0, plural, one {# blok kaldı, blok başına 2,5 dakikayla} other {# blok kaldı, blok başına 2,5 dakikayla}}"
+
 #. placeholder {0}: Math.floor(ms / 60_000)
 msgid "{0, plural, one {last block header # minute ago} other {last block header # minutes ago}}"
 msgstr "{0, plural, one {son blok başlığı # dakika önce} other {son blok başlığı # dakika önce}}"
+
+#. placeholder {0}: c.cycleBlocks
+msgid "{0, plural, one {One superblock every # block} other {One superblock every # blocks}}"
+msgstr "{0, plural, one {Her # blokta bir süperblok} other {Her # blokta bir süperblok}}"
 
 #. placeholder {0}: formatInt(first.total)
 msgid "{0} addresses ranked"
@@ -147,6 +155,9 @@ msgstr "{d} g"
 msgid "{d} d {h} h"
 msgstr "{d} g {h} sa"
 
+msgid "{d} d {h} h {m} min"
+msgstr "{d} g {h} sa {m} dk"
+
 msgid "{days, plural, one {# day} other {# days}}"
 msgstr "{days, plural, one {# gün} other {# gün}}"
 
@@ -155,6 +166,9 @@ msgstr "{h} sa"
 
 msgid "{h} h {m} min"
 msgstr "{h} sa {m} dk"
+
+msgid "{h} h {m} min {s} s"
+msgstr "{h} sa {m} dk {s} sn"
 
 msgid "{hours, plural, one {# hour} other {# hours}}"
 msgstr "{hours, plural, one {# saat} other {# saat}}"
@@ -173,6 +187,9 @@ msgstr "{label} bitişi"
 
 msgid "{m} min"
 msgstr "{m} dk"
+
+msgid "{min} min {s} s"
+msgstr "{min} dk {s} sn"
 
 msgid "{minutes, plural, one {# minute} other {# minutes}}"
 msgstr "{minutes, plural, one {# dakika} other {# dakika}}"
@@ -348,6 +365,15 @@ msgstr "Varlık kilidi"
 msgid "Asset unlock"
 msgstr "Varlık kilidi açma"
 
+#. placeholder {0}: formatInt(deadline.height)
+#. placeholder {1}: formatDate(deadline.at)
+msgid "At block #{0}, about {1}"
+msgstr "#{0} blokta, yaklaşık {1}"
+
+#. placeholder {0}: formatInt(deadline.height)
+msgid "At block #{0}: the superblock’s payments are being settled"
+msgstr "#{0} blokta: süperblokun ödemeleri belirleniyor"
+
 msgid "Back to Mainnet"
 msgstr "Mainnet’e dön"
 
@@ -392,6 +418,9 @@ msgstr "Bütçe teklifleri"
 
 msgid "Budget proposals and where their votes stand. Voting happens in Governance."
 msgstr "Bütçe teklifleri ve oylarının durumu. Oylama Governance’ta yapılır."
+
+msgid "Budget this cycle"
+msgstr "Bu döngünün bütçesi"
 
 msgid "Camera"
 msgstr "Kamera"
@@ -449,6 +478,9 @@ msgstr "kapat"
 
 msgid "Coinbase"
 msgstr "Coinbase"
+
+msgid "CoinJoin"
+msgstr "CoinJoin"
 
 msgid "Collapse all"
 msgstr "Tümünü daralt"
@@ -508,6 +540,12 @@ msgstr "Core adresi"
 msgid "Core block"
 msgstr "Core bloğu"
 
+msgid "Core gave no maturity window"
+msgstr "Core olgunlaşma penceresi vermedi"
+
+msgid "Core gave no next superblock"
+msgstr "Core sonraki süperbloku vermedi"
+
 msgid "Core transaction"
 msgstr "Core işlemi"
 
@@ -544,6 +582,9 @@ msgstr "Kredi çekimi"
 msgid "DAPI addresses"
 msgstr "DAPI adresleri"
 
+msgid "DAPI’s tip couldn’t be read, so its time isn’t estimated."
+msgstr "DAPI’nin ucu okunamadı, bu yüzden zamanı tahmin edilmiyor."
+
 msgid "Data"
 msgstr "Veri"
 
@@ -552,6 +593,12 @@ msgstr "Veri sözleşmesi"
 
 msgid "Data sources"
 msgstr "Veri kaynakları"
+
+msgid "Date"
+msgstr "Tarih"
+
+msgid "Deadline passed"
+msgstr "Süre doldu"
 
 msgid "Decentralized"
 msgstr "Merkeziyetsiz"
@@ -607,6 +654,10 @@ msgstr "Belge aktarımı"
 
 msgid "Down"
 msgstr "Çalışmıyor"
+
+#. placeholder {0}: formatDate(eta)
+msgid "Due about {0}"
+msgstr "Yaklaşık {0}"
 
 msgid "Earlier proposals below are from Hyphen’s index, as of that block, not live."
 msgstr "Aşağıdaki eski teklifler Hyphen’in indeksinden, o blok itibarıyla alınmıştır; canlı değildir."
@@ -738,6 +789,9 @@ msgstr "Finansman eşiği"
 
 msgid "Governance"
 msgstr "Yönetişim"
+
+msgid "Governance cycle"
+msgstr "Yönetişim döngüsü"
 
 msgid "Governance proposal"
 msgstr "Yönetişim teklifi"
@@ -905,6 +959,15 @@ msgstr "son tarama {0} önce tamamlandı"
 msgid "last good {0}"
 msgstr "son başarılı {0}"
 
+msgid "Last superblocks"
+msgstr "Son süperbloklar"
+
+msgid "Last superblocks: height, date and what each paid"
+msgstr "Son süperbloklar: yükseklik, tarih ve her birinin ödediği"
+
+msgid "Left unallocated"
+msgstr "Dağıtılmamış"
+
 msgid "Link copied"
 msgstr "Bağlantı kopyalandı"
 
@@ -998,6 +1061,9 @@ msgstr "Yeniler"
 
 msgid "Next"
 msgstr "Sonraki"
+
+msgid "Next superblock"
+msgstr "Sonraki süperblok"
 
 msgid "No"
 msgstr "Hayır"
@@ -1102,11 +1168,23 @@ msgstr "Sayfalar"
 msgid "Pagination"
 msgstr "Sayfalama"
 
+msgid "Paid is the superblock’s coinbase less the coinbase of the block before it, to the nearest 0.01 DASH."
+msgstr "Ödenen, süperblokun coinbase’i eksi önceki bloğun coinbase’idir; 0,01 DASH’e yuvarlanır."
+
 msgid "Paid to"
 msgstr "Ödenen"
 
+msgid "Paid to proposals"
+msgstr "Tekliflere ödenen"
+
 msgid "Passing"
 msgstr "Geçiyor"
+
+msgid "Passing proposals ask for"
+msgstr "Geçen tekliflerin istediği"
+
+msgid "Passing proposals ask for more than the budget; the ones with fewer net votes that don’t fit wait for a later superblock."
+msgstr "Geçen teklifler bütçeden fazlasını istiyor; daha az net oyu olan ve sığmayanlar sonraki bir süperbloku bekler."
 
 msgid "Passing, not yet funded"
 msgstr "Geçiyor, henüz finanse edilmedi"
@@ -1418,6 +1496,9 @@ msgstr "Boyut"
 msgid "Slow"
 msgstr "Yavaş"
 
+msgid "Some superblocks couldn’t be read from Hyphen; their figures show —."
+msgstr "Bazı süperbloklar Hyphen’dan okunamadı; değerleri — gösterir."
+
 msgid "Something went wrong"
 msgstr "Bir şeyler ters gitti"
 
@@ -1464,6 +1545,12 @@ msgstr "{since} tarihinden beri durdu"
 
 msgid "Summary"
 msgstr "Özet"
+
+msgid "Superblock"
+msgstr "Süperblok"
+
+msgid "Superblock in"
+msgstr "Süperbloka kalan"
 
 msgid "Supply concentration"
 msgstr "Arz yoğunlaşması"
@@ -1537,6 +1624,9 @@ msgstr "Minimum, maksimumdan büyük."
 msgid "The newest {shown} of {total} seen since you opened this page"
 msgstr "Bu sayfayı açtığınızdan beri görülen {total} işlemin en yeni {shown} tanesi"
 
+msgid "The next superblock, when its voting closes, and what its budget covers"
+msgstr "Sonraki süperblok, oylamasının ne zaman kapandığı ve bütçesinin neyi karşıladığı"
+
 msgid "The next superblock’s budget or time isn’t known, so no proposal is shown as Funded."
 msgstr "Bir sonraki süper bloğun bütçesi veya zamanı bilinmediğinden hiçbir öneri Finanse edildi olarak gösterilmiyor."
 
@@ -1575,6 +1665,9 @@ msgstr "Kaynak, Radar’ın okuyamadığı bir yanıt gönderdi"
 
 msgid "The start date is after the end date."
 msgstr "Başlangıç tarihi bitiş tarihinden sonra."
+
+msgid "The superblock would pay"
+msgstr "Süperblokun ödeyeceği"
 
 #. placeholder {0}: formatInt(basis.height)
 #. placeholder {1}: formatInt(height)
@@ -1802,6 +1895,9 @@ msgstr "Governance’ta oy ver"
 msgid "Votes"
 msgstr "Oylar"
 
+msgid "Voting closes"
+msgstr "Oylama kapanışı"
+
 msgid "Voting window"
 msgstr "Oylama penceresi"
 
@@ -1828,6 +1924,9 @@ msgstr "Hangi evonode’ların var olduğu, yaklaşık saatte bir okunur (okunam
 
 msgid "Which sources Radar may use"
 msgstr "Radar’ın hangi kaynakları kullanabileceği"
+
+msgid "Worked out by Radar from the proposals below and Core’s budget, as Funded is."
+msgstr "Finanse edildi gibi, Radar tarafından aşağıdaki teklifler ve Core’un bütçesinden hesaplandı."
 
 msgid "Yes"
 msgstr "Evet"

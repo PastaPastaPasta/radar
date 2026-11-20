@@ -30,6 +30,7 @@ import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
 import { governanceQueries, insightGovernanceQueries } from './queries'
 import { budgetSplit, netVotes, proposalStatus, type ProposalStatus } from './status'
 import { ThresholdNote } from './ThresholdNote'
+import { CycleCard } from './CycleCard'
 import {
   fundingView,
   useFundingThreshold,
@@ -169,6 +170,7 @@ function GovernanceContent() {
             : undefined
         }
       />
+      <CycleCard net={net} split={data ? split : undefined} />
       <Card
         title={t`Budget`}
         subtitle={t`Open proposals by what their payment would be`}

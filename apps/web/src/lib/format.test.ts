@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import {
   formatBytes,
   formatDate,
+  formatCountdown,
   formatDuration,
   digitsFor,
   formatInt,
@@ -105,5 +106,17 @@ describe('value and unit spacing @IN-05 @HY-13', () => {
   it('writes every digit of a difficulty for a title', () => {
     expect(formatFull(111_221_977.4375)).toBe('111,221,977.4375')
     expect(formatFull(0.004010969129951115)).toBe('0.004010969129951115')
+  })
+})
+
+describe('formatCountdown', () => {
+  it('shows three units, by the second below a day, and never goes below zero', () => {
+    const ms = (d: number, h: number, m: number, s: number) =>
+      ((d * 24 + h) * 60 + m) * 60_000 + s * 1000
+    expect(formatCountdown(ms(2, 14, 5, 9))).toBe('2 d 14 h 05 min')
+    expect(formatCountdown(ms(0, 3, 5, 9))).toBe('3 h 05 min 09 s')
+    expect(formatCountdown(ms(0, 0, 5, 9))).toBe('5 min 09 s')
+    expect(formatCountdown(ms(0, 0, 0, 9) + 999)).toBe('0 min 09 s')
+    expect(formatCountdown(-5000)).toBe('0 min 00 s')
   })
 })

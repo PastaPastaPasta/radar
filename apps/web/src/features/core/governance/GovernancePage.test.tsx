@@ -403,6 +403,129 @@ describe('Governance page while Hyphen’s index is stale @IN-16 @HY-19', () => 
   })
 })
 
+describe('Governance cycle', () => {
+  const tipAt = (height: number, time: number) =>
+    vi.spyOn(core, 'tip').mockResolvedValue({
+      source: 'dapi',
+      asOf: time,
+      fetchedAt: time,
+      proved: false,
+      data: { height, hash: '00', time },
+    })
+  const cycle = () =>
+    waitFor(() => {
+      const el = document.querySelector<HTMLElement>('#cycle [data-cycle]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+
+  it('shows the next superblock, a live countdown, the voting deadline and the budget, from Core and DAPI', async () => {
+    // Core's answer: next superblock 2,575,480, maturity window 1,662, budget 6,828.2637816 DASH.
+    tipAt(2_573_000, Date.now())
+    renderAt('/governance')
+    const card = await cycle()
+    await waitFor(() =>
+      expect(card.querySelector('[data-next-superblock]')).toHaveTextContent('#2,575,480'),
+    )
+    // 2,480 blocks at 2.5 minutes is 4 d 7 h 20 min.
+    await waitFor(() =>
+      expect(card.querySelector('[data-superblock-eta] [data-countdown]')).toHaveTextContent(
+        /^4 d 7 h (19|20) min$/,
+      ),
+    )
+    expect(card.querySelector('[data-superblock-eta]')).toHaveTextContent('2,480 blocks')
+    // Voting closes at 2,575,480 − 1,662 = 2,573,818, 818 blocks on: 1 d 10 h 05 min.
+    const deadline = card.querySelector('[data-voting-deadline]')!
+    expect(deadline).toHaveAttribute('data-voting-deadline', '2573818')
+    expect(deadline.querySelector('[data-countdown]')).toHaveTextContent(/^1 d 10 h (04|05) min$/)
+    expect(card.querySelector('[data-cycle-budget]')).toHaveTextContent('6,828.26')
+    expect(card.querySelector('[data-cycle-budget]')).toHaveTextContent('16,616 blocks')
+    expect(card.querySelector('[data-superblock-eta] [data-source="dapi"]')).not.toBeNull()
+    expect(card.querySelector('[data-next-superblock] [data-source="insight"]')).not.toBeNull()
+  })
+
+  it('ticks the countdown every second', async () => {
+    tipAt(2_575_470, Date.now())
+    renderAt('/governance')
+    const card = await cycle()
+    const clock = () => card.querySelector('[data-superblock-eta] [data-countdown]')?.textContent
+    await waitFor(() => expect(clock()).toMatch(/^2\d min \d\d s$/))
+    const first = clock()
+    await waitFor(() => expect(clock()).not.toBe(first), { timeout: 2500 })
+  })
+
+  it('says voting has closed once the tip is inside the maturity window', async () => {
+    tipAt(2_574_000, Date.now())
+    renderAt('/governance')
+    const card = await cycle()
+    await waitFor(() =>
+      expect(card.querySelector('[data-voting-deadline]')).toHaveTextContent('Deadline passed'),
+    )
+    expect(card.querySelector('[data-voting-deadline]')).toHaveTextContent(
+      'the superblock’s payments are being settled',
+    )
+  })
+
+  it('weighs this cycle’s budget against the passing proposals', async () => {
+    tipAt(2_573_000, Date.now())
+    renderAt('/governance')
+    const card = await cycle()
+    const use = await waitFor(() => {
+      const el = card.querySelector<HTMLElement>('[data-cycle-use]')
+      expect(el).not.toBeNull()
+      return el!
+    })
+    const duffs = (sel: string) =>
+      BigInt(use.querySelector(sel)?.getAttribute('data-duffs') ?? '-1')
+    await waitFor(() => expect(duffs('[data-cycle-funded]')).toBeGreaterThanOrEqual(0n))
+    expect(duffs('[data-cycle-left]')).toBe(682_826_378_160n - duffs('[data-cycle-funded]'))
+    expect(duffs('[data-cycle-passing]')).toBeGreaterThanOrEqual(duffs('[data-cycle-funded]'))
+  })
+
+  it('lists the last three superblocks with their dates and what each paid, from Hyphen', async () => {
+    tipAt(2_573_000, Date.now())
+    renderAt('/governance')
+    const card = await cycle()
+    const rows = await waitFor(() => {
+      const all = card.querySelectorAll<HTMLElement>('[data-past-superblocks] tr[data-superblock]')
+      expect(all).toHaveLength(3)
+      return [...all]
+    })
+    expect(rows.map((r) => r.dataset.superblock)).toEqual(['2558864', '2542248', '2525632'])
+    await waitFor(() => expect(rows[0]!.querySelector('[data-paid]')).toHaveTextContent('5,393'))
+    expect(rows[1]!.querySelector('[data-paid]')).toHaveTextContent('6,810')
+    expect(rows[2]!.querySelector('[data-paid]')).toHaveTextContent('6,817')
+    expect(rows[0]).toHaveTextContent('21 Oct 2026')
+    expect(card.querySelector('[data-past-superblocks] [data-source="hyphen"]')).not.toBeNull()
+  })
+
+  it('says so when DAPI’s tip can’t be read, and still shows Core’s heights and budget', async () => {
+    vi.spyOn(core, 'tip').mockRejectedValue(new Error('no DAPI'))
+    renderAt('/governance')
+    const card = await cycle()
+    await waitFor(() =>
+      expect(card.querySelector('[data-next-superblock]')).toHaveTextContent(
+        'DAPI’s tip couldn’t be read',
+      ),
+    )
+    expect(card.querySelector('[data-superblock-eta] [data-countdown]')).toBeNull()
+    expect(card.querySelector('[data-voting-deadline]')).toHaveTextContent('#2,573,818')
+    expect(card.querySelector('[data-cycle-budget]')).toHaveTextContent('6,828.26')
+  })
+
+  it('says Insight is not answering when Core’s cycle can’t be read', async () => {
+    server.use(http.get('*/insight-api/gobject/info', () => HttpResponse.json({}, { status: 503 })))
+    renderAt('/governance')
+    await waitFor(
+      () =>
+        expect(
+          document.querySelector('#cycle [role="alert"][data-source="insight"]'),
+        ).not.toBeNull(),
+      { timeout: 10_000 },
+    )
+  })
+})
+
 describe('Proposal page', () => {
   it('shows the votes, details, vote history and the link to vote @HY-13 @X-11', async () => {
     renderAt(`/governance/${HASH}`)

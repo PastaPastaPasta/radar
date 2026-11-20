@@ -1,6 +1,7 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query'
 import type { NetworkId } from '@/lib/network'
-import { mapSourced } from '../envelope'
+import { mapSourced, stampOf, type SourceStamp, type Sourced } from '../envelope'
+import { heightAt, superblockEta, type CycleTip, type GovernanceCycle } from '../governance-cycle'
 import type { HyPage, HyProposal } from '../hyphen/schemas'
 import { insKeys } from '../query/keys'
 import { dataClass } from '../query/stale'
@@ -12,24 +13,63 @@ import type { InsGovernanceInfo } from './schemas'
 
 const lower = (s: string) => s.toLowerCase()
 
-const BLOCK_MS = 150_000
-
 /**
- * When the next superblock is due, from the chain's own tip (DAPI's, never an index's stand-in) and the 2.5 minute block
- * target, or undefined when either is missing. The browser's clock is no reference for a payment window.
+ * The chain's tip from DAPI (never an index's stand-in), which superblock times are counted from, or undefined when it
+ * can't be read. The browser's clock is no reference for a payment window.
  */
+async function chainTip(
+  net: NetworkId,
+  signal: AbortSignal,
+): Promise<{ tip: CycleTip; stamp: SourceStamp } | undefined> {
+  const tip = await import('../core/client')
+    .then((m) => m.core.tip(net, signal))
+    .catch(() => undefined)
+  if (!tip || tip.fallback) return undefined
+  return { tip: { height: tip.data.height, time: tip.data.time }, stamp: stampOf(tip) }
+}
+
+/** When the next superblock is due, from DAPI's tip at the block target, or undefined when either is missing. */
 async function superblockTime(
   net: NetworkId,
   info: InsGovernanceInfo,
   signal: AbortSignal,
 ): Promise<number | undefined> {
   if (info.nextsuperblock == null) return undefined
-  const tip = await import('../core/client')
-    .then((m) => m.core.tip(net, signal))
-    .catch(() => undefined)
-  if (!tip || tip.fallback) return undefined
-  return tip.data.time + (info.nextsuperblock - tip.data.height) * BLOCK_MS
+  const tip = await chainTip(net, signal)
+  return tip ? heightAt(tip.tip, info.nextsuperblock) : undefined
 }
+
+/** A governance cycle and the DAPI tip its times were counted from (its stamp, when there was one). */
+export type SourcedCycle = Sourced<GovernanceCycle> & { tipStamp?: SourceStamp }
+
+const toBudget = (s: SourcedCycle): Sourced<SuperblockBudget | null> =>
+  mapSourced(s, (c) => {
+    const at = superblockEta(c)
+    return at === undefined ? null : { budget: c.budget, superblockAt: at }
+  })
+
+/** Dash Core's governance cycle through Insight (`getgovernanceinfo`), with DAPI's tip to time it. */
+const governanceCycle = (net: NetworkId) =>
+  queryOptions({
+    queryKey: insKeys(net, 'governance-cycle'),
+    queryFn: async ({ signal }): Promise<SourcedCycle> => {
+      const info = await insight.governanceInfo(net, signal)
+      const tip = info.data.nextsuperblock == null ? undefined : await chainTip(net, signal)
+      const i = info.data
+      return {
+        ...mapSourced(info, (): GovernanceCycle => ({
+          budget: i.governancebudget,
+          nextSuperblock: i.nextsuperblock ?? null,
+          lastSuperblock: i.lastsuperblock ?? null,
+          cycleBlocks: i.superblockcycle ?? null,
+          maturityBlocks: i.superblockmaturitywindow ?? null,
+          tip: tip?.tip,
+        })),
+        ...(tip ? { tipStamp: tip.stamp } : {}),
+      }
+    },
+    ...dataClass('index'),
+  })
 
 /** Insight is a shared public service: its reads are cached like Hyphen's and never polled faster. */
 export const insQueries = {
@@ -94,18 +134,9 @@ export const insQueries = {
    * What the next superblock can pay and when, from Dash Core's `getgovernanceinfo` through Insight; `null` when its
    * time can't be worked out. Hyphen has no budget, so its proposals are funded against this too.
    */
-  superblockBudget: (net: NetworkId) =>
-    queryOptions({
-      queryKey: insKeys(net, 'superblock-budget'),
-      queryFn: async ({ signal }) => {
-        const info = await insight.governanceInfo(net, signal)
-        const at = await superblockTime(net, info.data, signal)
-        return mapSourced(info, (i): SuperblockBudget | null =>
-          at === undefined ? null : { budget: i.governancebudget, superblockAt: at },
-        )
-      },
-      ...dataClass('index'),
-    }),
+  superblockBudget: (net: NetworkId) => queryOptions({ ...governanceCycle(net), select: toBudget }),
+  /** Dash Core's governance cycle through Insight (`getgovernanceinfo`), with DAPI's tip to time it. */
+  governanceCycle,
   /** Every proposal in Hyphen's shape, with funding worked out from the vote counts and the budget (`adaptProposals`). */
   proposalPage: (net: NetworkId) =>
     queryOptions({
