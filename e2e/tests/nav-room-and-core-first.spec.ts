@@ -134,7 +134,7 @@ test.describe('Core figures first on the home page', () => {
     await page.goto('/')
     await settled(page)
     const headline = page.locator('#core [data-headline]')
-    await expect(headline.locator('.rx-fig')).toHaveCount(3)
+    await expect(headline.locator('.rx-fig')).toHaveCount(4)
     const [h, head, lists, hero] = await Promise.all([
       headline.boundingBox(),
       page.locator('#core .rx-sec__head').boundingBox(),
@@ -146,7 +146,7 @@ test.describe('Core figures first on the home page', () => {
       head!.y + head!.height + 80,
     )
     expect(h!.y + h!.height).toBeLessThanOrEqual(lists!.y)
-    for (const label of ['Difficulty', 'Circulating supply', 'Blockchain size']) {
+    for (const label of ['Difficulty', 'Hash rate', 'Circulating supply', 'Blockchain size']) {
       await expect(headline).toContainText(label)
     }
     await expect(page.locator('#core .rx-home__lists > .rx-card')).toHaveCount(2)

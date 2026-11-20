@@ -1,7 +1,10 @@
 import type { EChartsOption } from 'echarts'
 import type { HyMetrics } from '@/data/hyphen/schemas'
 import { digitsFor, formatInt, formatNumber, formatSignificant } from '@/lib/format'
+import { formatHashrate } from '@/lib/hashrate'
 import { formatAmountText, unitLabel, type DisplayUnit } from '@/lib/units'
+
+export { formatHashrate }
 
 export type MetricId =
   'hashrate' | 'transactions' | 'difficulty' | 'supply' | 'utxos' | 'credit-pool'
@@ -24,27 +27,8 @@ export interface ChartUnits {
   testnet: boolean
 }
 
-const HASH_UNITS: [number, string][] = [
-  [1e18, 'EH/s'],
-  [1e15, 'PH/s'],
-  [1e12, 'TH/s'],
-  [1e9, 'GH/s'],
-  [1e6, 'MH/s'],
-  [1e3, 'kH/s'],
-]
-
 /** Past this many fraction digits on a scaled figure, the whole number reads better than "13.17501M". */
 const MAX_SCALED_DIGITS = 2
-
-export function formatHashrate(hps: number, resolve?: number): string {
-  const [scale, unit] = HASH_UNITS.find(([s]) => hps >= s) ?? [1, 'H/s']
-  const digits = resolve === undefined ? 2 : Math.max(2, digitsFor(resolve / scale))
-  const shown =
-    resolve === undefined
-      ? formatNumber(hps / scale, { maximumFractionDigits: 2 })
-      : formatNumber(hps / scale, { minimumFractionDigits: digits, maximumFractionDigits: digits })
-  return `${shown} ${unit}`
-}
 
 function formatCompact(n: number, resolve?: number): string {
   const magnitude = Math.abs(n)

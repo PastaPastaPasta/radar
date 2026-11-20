@@ -90,6 +90,26 @@ describe('Core figures on the home page @HY-01', () => {
     expect(reads).toHaveBeenCalledTimes(2)
   })
 
+  it('shows the hash rate the difficulty implies, labelled an estimate and sourced to DAPI', async () => {
+    vi.spyOn(core, 'status').mockResolvedValue(status(2_571_277, 119_993_196.86789824))
+    vi.spyOn(core, 'tip').mockResolvedValue(tip(2_571_277))
+    await renderFigures(new QueryClient())
+    const fig = () => document.querySelector<HTMLElement>('[data-hashrate]')!
+    // Hyphen's own figure for this difficulty is 3,435,779,041,934,084 H/s.
+    await waitFor(() => expect(fig()).toHaveTextContent('3.44 PH/s'))
+    expect(fig()).toHaveTextContent('Estimated from the difficulty')
+    expect(fig().querySelector('.rx-fig__src [data-source="dapi"]')).not.toBeNull()
+  })
+
+  it('shows no hash rate while the difficulty is unknown', async () => {
+    vi.spyOn(core, 'status').mockResolvedValue(status(2_571_277, 0))
+    vi.spyOn(core, 'tip').mockResolvedValue(tip(2_571_277))
+    await renderFigures(new QueryClient())
+    await waitFor(() =>
+      expect(document.querySelector('[data-hashrate] .rx-fig__value')).toHaveTextContent('—'),
+    )
+  })
+
   it('keeps the section line current for a figure read at the shown height when the tip is republished later @HY-01', async () => {
     vi.spyOn(core, 'status').mockResolvedValue(
       status(2_571_277, 116_445_795.87, Date.now() - 20 * 60_000),

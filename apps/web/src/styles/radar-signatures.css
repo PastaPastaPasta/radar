@@ -312,6 +312,13 @@
   max-width: 760px;
   margin-top: 22px;
 }
+/* the Core row holds four figures: difficulty, hash rate, supply and size */
+@media (min-width: 1024px) {
+  #core-figures .rx-figs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    max-width: 1000px;
+  }
+}
 .rx-home__sec .rx-note,
 .rx-home__sec > .rx-unavail,
 .rx-home__sec > .rx-empty {
