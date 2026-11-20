@@ -10,7 +10,9 @@ export const ROUTE_PRELOAD_FILE = 'route-preload.json'
 /**
  * What the edge tells the browser to fetch beside the entry. Indices point into `files`.
  * - `routes`: each route's pattern (`/tx/$txid`) and the static graph of its page chunk and its loader's prefetch module;
- * - `locales`: each locale's message catalog.
+ * - `locales`: each locale's message catalog;
+ * - `sdk`: the listed files that hold Platform SDK code, by their chunks' modules, for the bundle budget's check that
+ *   Core routes never reach it (`scripts/size.mjs`).
  * The DAPI pool and the live tip, which every page loads after its first paint, are left out: on a phone their bytes
  * would compete with the page's own code and data.
  */
@@ -18,8 +20,10 @@ export interface RoutePreload {
   files: string[]
   routes: [pattern: string, files: number[]][]
   locales: Record<string, number[]>
+  sdk: number[]
 }
 
+const SDK_MODULE = '/node_modules/@dashevo/'
 const CATALOG = /\/src\/i18n\/locales\/([a-z-]+)\/index\.ts$/
 const ROUTE_PAGE = /\/src\/routes\/(.+)\.tsx\?tsr-split=component$/
 const ROUTE_PREFETCH_PACKAGE = /routePrefetch\(\s*'([a-z-]+)'/
@@ -99,13 +103,13 @@ export function buildRoutePreload(
     })
     .sort(([a], [b]) => a.localeCompare(b))
 
-  return {
-    files,
-    routes,
-    locales: Object.fromEntries(
-      facadeMatching(CATALOG).map(([code, c]) => [code, graph([c.fileName])] as const),
-    ),
-  }
+  const locales = Object.fromEntries(
+    facadeMatching(CATALOG).map(([code, c]) => [code, graph([c.fileName])] as const),
+  )
+  const sdk = files.flatMap((f, i) =>
+    byFile.get(f)?.moduleIds.some((id) => id.includes(SDK_MODULE)) ? [i] : [],
+  )
+  return { files, routes, locales, sdk }
 }
 
 /** Emits `route-preload.json` beside `index.html`. Worker bundles have no HTML entry and are skipped. */

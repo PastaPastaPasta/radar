@@ -63,7 +63,6 @@ const CORE_ROUTES = [
   '/rich-list',
   '/status',
 ]
-const SDK_MODULE = /node_modules\/@dashevo\//
 
 let table
 try {
@@ -84,11 +83,13 @@ if (missing.length > 0) {
   console.error(`route-preload.json names files the build does not have: ${missing.join(', ')}`)
   process.exit(1)
 }
-const sdkFiles = new Set(
-  Object.entries(manifest)
-    .filter(([key]) => SDK_MODULE.test(key))
-    .map(([, chunk]) => chunk.file),
-)
+if (!Array.isArray(table.sdk)) {
+  console.error('route-preload.json does not say which files hold the Platform SDK')
+  process.exit(1)
+}
+// Which files hold SDK code, from each chunk's own modules: a chunk named after the app module that wraps the SDK
+// would hide it from a check on file names or manifest keys.
+const sdkFiles = new Set(table.sdk.map((i) => table.files[i]))
 const gz = new Map()
 const gzOf = (file) => {
   if (!gz.has(file)) gz.set(file, gzipSync(readFileSync(join(distDir, file)), { level: 9 }).length)
