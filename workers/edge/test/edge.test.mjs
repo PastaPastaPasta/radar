@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
 import { after, before, describe, it } from 'node:test'
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs'
+import { mkdtempSync, readFileSync, realpathSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
+import { createRequire } from 'node:module'
 import { Miniflare } from 'miniflare'
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)))
@@ -22,6 +23,7 @@ const routerConfig = {
   },
 }
 
+const BUDGET_MS = 8000
 let mf
 let upstreamCalls = []
 let upstream = () => new Response('not mocked', { status: 599 })
@@ -52,6 +54,8 @@ before(async () => {
       },
     ],
     compatibilityDate: '2026-08-01',
+    // The production budget (300 ms) is shorter than one Miniflare round trip on a loaded machine.
+    bindings: { FIRST_DATA_BUDGET_MS: String(BUDGET_MS) },
     assets: {
       directory: path.join(root, 'test/site'),
       binding: 'ASSETS',
@@ -201,6 +205,239 @@ describe('route preloads', () => {
 
   it('still preloads the catalog on a path no route claims', async () => {
     assert.deepEqual(await preloads('/no/such/page'), ['/assets/en.js'])
+  })
+})
+
+describe('first data for immutable pages', () => {
+  // The edge cache outlives a test, so every test names its own tx and block.
+  let n = 0
+  const ids = () => {
+    n += 1
+    return { txid: n.toString(16).padStart(64, 'a'), hash: n.toString(16).padStart(64, 'c') }
+  }
+  const TIP = 2_000_000
+  const status = { syncStatus: 'synced', blockHeight: TIP, indices: {} }
+  // A slow answer is held until the next test starts, so it never holds up that test's reads.
+  let release = () => {}
+  const hyphen = (routes, { delayMs = {} } = {}) => {
+    release()
+    const held = new Promise((r) => (release = r))
+    reset(async (req) => {
+      const path = new URL(req.url).pathname.replace(/^\/api\/v1\//, '')
+      const wait = delayMs[path.split('/')[0]] ?? delayMs['*'] ?? 0
+      if (wait) await Promise.race([held, new Promise((r) => setTimeout(r, wait).unref())])
+      const body = routes[path]
+      return body === undefined
+        ? Response.json({ error: 'nf' }, { status: 404 })
+        : Response.json(body)
+    })
+  }
+  after(() => release())
+  const NAVIGATE = { 'sec-fetch-mode': 'navigate', 'sec-fetch-dest': 'document' }
+  const payload = async (p, headers = NAVIGATE) => {
+    const html = await (await get(p, { headers })).text()
+    const m = /<script type="application\/json" id="radar-first-data">([^<]*)<\/script>/.exec(html)
+    return m ? JSON.parse(m[1]) : null
+  }
+  /** The inlined bodies by path, after checking each says when the edge read it. */
+  const inlined = async (p, init) => {
+    const data = await payload(p, { ...NAVIGATE, ...init?.headers })
+    if (!data) return null
+    assert.ok(Math.abs(Date.now() - data.at) < 60_000)
+    for (const read of Object.values(data.reads)) assert.ok(read.fetchedAt <= data.at)
+    return Object.fromEntries(Object.entries(data.reads).map(([k, v]) => [k, v.body]))
+  }
+  const settle = () => new Promise((r) => setTimeout(r, 300))
+  /** The first visit only warms the edge cache; a later one gets the answers. */
+  const warmed = async (p) => {
+    for (let i = 0; i < 20; i++) {
+      const reads = await inlined(p)
+      if (reads) return reads
+      await new Promise((r) => setTimeout(r, 100))
+    }
+    return null
+  }
+  const minedTx = (txid, height, asOf = TIP) => ({
+    status,
+    [`rawtx/${txid}`]: { rawtx: '00' },
+    [`tx/${txid}`]: { txHash: txid, blockHeight: height, asOfHeight: asOf },
+    [`block/${height}`]: { blockHeight: height, blockTime: '2026-11-18T16:55:45Z' },
+  })
+  const block = (hash, height, extra = {}) => ({
+    blockHeight: height,
+    blockHash: hash,
+    asOfHeight: TIP,
+    orphanedAt: null,
+    ...extra,
+  })
+
+  it('sends the shell at once on a first visit and inlines the reads on the next, keyed by their pass-through paths', async () => {
+    const { txid } = ids()
+    const height = TIP - 100 - n
+    hyphen(minedTx(txid, height))
+    assert.equal(await inlined(`/tx/${txid}`), null)
+    assert.ok(upstreamCalls.every((r) => r.url.startsWith('https://hy.kw.vg/api/v1/')))
+    // The block's time is a read that needs the tx, so it is warmed by the visit that first finds the tx.
+    await warmed(`/tx/${txid.toUpperCase()}`)
+    const reads = await warmed(`/tx/${txid}`).then(async (r) =>
+      r?.[`/x/hy/mainnet/block/${height}`] ? r : warmed(`/tx/${txid}`),
+    )
+    assert.deepEqual(Object.keys(reads).sort(), [
+      `/x/hy/mainnet/block/${height}`,
+      `/x/hy/mainnet/rawtx/${txid}`,
+      '/x/hy/mainnet/status',
+      `/x/hy/mainnet/tx/${txid}`,
+    ])
+    assert.equal(reads[`/x/hy/mainnet/tx/${txid}`].blockHeight, height)
+  })
+
+  it('answers from the edge cache without asking Hyphen again', async () => {
+    const { txid } = ids()
+    hyphen(minedTx(txid, TIP - 100))
+    assert.ok(await warmed(`/tx/${txid}`))
+    reset()
+    assert.ok((await inlined(`/tx/${txid}`))?.[`/x/hy/mainnet/rawtx/${txid}`])
+    assert.deepEqual(
+      upstreamCalls.filter((r) => /\/(rawtx|tx)\//.test(r.url)),
+      [],
+    )
+  })
+
+  it('inlines a block by height or by hash, on the network the link names', async () => {
+    const { hash } = ids()
+    const h = TIP - 6 - n
+    hyphen({ status, [`rawblock/${h}`]: { rawblock: '00' }, [`block/${h}`]: block(hash, h) })
+    const byHeight = await warmed(`/block/${h}?network=testnet`)
+    assert.ok(byHeight[`/x/hy/testnet/rawblock/${h}`])
+    assert.ok(byHeight[`/x/hy/testnet/block/${h}`])
+    assert.ok(upstreamCalls.every((r) => r.url.startsWith('https://ts.kw.vg/api/v1/')))
+    hyphen({
+      status,
+      [`rawblock/${hash}`]: { rawblock: '00' },
+      [`block/${hash}`]: block(hash, TIP - 50),
+    })
+    assert.ok((await warmed(`/block/${hash}`))[`/x/hy/mainnet/rawblock/${hash}`])
+  })
+
+  it('never inlines when a read misses', async () => {
+    const { txid } = ids()
+    const routes = minedTx(txid, TIP - 100)
+    delete routes[`rawtx/${txid}`]
+    hyphen(routes)
+    assert.equal(await warmed(`/tx/${txid}`), null)
+  })
+
+  it('reads Hyphen ahead only for a navigation, and keeps its "not found" for a while', async () => {
+    const { txid } = ids()
+    const routes = minedTx(txid, TIP - 100)
+    delete routes[`rawtx/${txid}`]
+    hyphen(routes)
+    await get(`/tx/${txid}`)
+    await get(`/tx/${txid}`, { headers: { 'sec-fetch-mode': 'cors' } })
+    await settle()
+    assert.equal(upstreamCalls.length, 0)
+    const rawReads = () => upstreamCalls.filter((r) => r.url.includes(`/rawtx/${txid}`)).length
+    await payload(`/tx/${txid}`)
+    for (let i = 0; i < 50 && rawReads() === 0; i++) await settle()
+    await new Promise((r) => setTimeout(r, 2000))
+    const before = rawReads()
+    for (let i = 0; i < 3; i++) assert.equal(await inlined(`/tx/${txid}`), null)
+    await settle()
+    assert.equal(rawReads(), before)
+  })
+
+  it('reads no first data for search crawlers', async () => {
+    const { txid } = ids()
+    hyphen(minedTx(txid, TIP - 100))
+    for (const ua of [
+      'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+      'Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)',
+      'Mozilla/5.0 (compatible; Yahoo! Slurp; http://help.yahoo.com/help/us/ysearch/slurp)',
+    ])
+      assert.equal(await payload(`/tx/${txid}`, { ...NAVIGATE, 'user-agent': ua }), null, ua)
+    await settle()
+    // Googlebot and bingbot are link-preview agents, so each gets the one title read (`tx/{id}`) a preview gets;
+    // none of the page's first data (raw bytes, status, block) is read for any of them.
+    const reads = upstreamCalls.map((r) => new URL(r.url).pathname)
+    assert.deepEqual(reads, [`/api/v1/tx/${txid}`, `/api/v1/tx/${txid}`])
+  })
+
+  it("drops the shell's validators from a page it added data to", async () => {
+    const { txid } = ids()
+    hyphen(minedTx(txid, TIP - 100))
+    assert.ok(await warmed(`/tx/${txid}`))
+    const res = await get(`/tx/${txid}`, { headers: NAVIGATE })
+    assert.match(await res.text(), /radar-first-data/)
+    assert.equal(res.headers.get('etag'), null)
+    assert.equal(res.headers.get('last-modified'), null)
+  })
+
+  it('never inlines an unconfirmed tx', async () => {
+    const { txid } = ids()
+    hyphen({
+      status,
+      [`rawtx/${txid}`]: { rawtx: '00' },
+      [`tx/${txid}`]: { txHash: txid, blockHeight: null, asOfHeight: TIP },
+    })
+    assert.equal(await warmed(`/tx/${txid}`), null)
+  })
+
+  it('never inlines a block, or a tx in a block, within six blocks of the tip', async () => {
+    const a = ids()
+    hyphen(minedTx(a.txid, TIP - 5))
+    assert.equal(await warmed(`/tx/${a.txid}`), null)
+    hyphen({
+      status,
+      [`rawblock/${a.hash}`]: { rawblock: '00' },
+      [`block/${a.hash}`]: block(a.hash, TIP - 5),
+    })
+    assert.equal(await warmed(`/block/${a.hash}`), null)
+    const b = ids()
+    hyphen({
+      status,
+      [`rawblock/${b.hash}`]: { rawblock: '00' },
+      [`block/${b.hash}`]: block(b.hash, TIP - 100, { orphanedAt: '2026-11-18T00:00:00Z' }),
+    })
+    assert.equal(await warmed(`/block/${b.hash}`), null)
+  })
+
+  it('reads nothing for a bad id, a devnet, a Decentralized only link or a link preview', async () => {
+    const { txid } = ids()
+    hyphen(minedTx(txid, TIP - 100))
+    for (const p of [
+      '/tx/abc',
+      `/tx/${txid}x`,
+      '/tx/123',
+      '/block/-1',
+      '/block/1234567890',
+      `/tx/${txid}?network=devnet-x`,
+      `/tx/${txid}?network=constructor`,
+      `/tx/${txid}?sources=decentralized`,
+    ])
+      assert.equal(await inlined(p), null, p)
+    await new Promise((r) => setTimeout(r, 200))
+    assert.equal(upstreamCalls.length, 0)
+    // A preview reads its own one backend answer for the title, never the page's first data.
+    const preview = await inlined(`/tx/${txid}`, {
+      headers: { 'user-agent': 'Slackbot-LinkExpanding 1.0' },
+    })
+    assert.equal(preview, null)
+    assert.ok(upstreamCalls.length <= 1)
+  })
+
+  it('cannot close its own script element', async () => {
+    const { txid } = ids()
+    const routes = minedTx(txid, TIP - 100)
+    routes[`tx/${txid}`] = { ...routes[`tx/${txid}`], note: '</script><script>x()' }
+    hyphen(routes)
+    assert.ok(await warmed(`/tx/${txid}`))
+    const html = await (await get(`/tx/${txid}`)).text()
+    assert.doesNotMatch(html, /<\/script><script>x\(\)/)
+    const m = /id="radar-first-data">([^<]*)<\/script>/.exec(html)
+    assert.equal(
+      JSON.parse(m[1]).reads[`/x/hy/mainnet/tx/${txid}`].body.note,
+      '</script><script>x()',
+    )
   })
 })
 
@@ -1022,6 +1259,48 @@ describe('per-entity title and OG', () => {
       assert.equal(upstreamCalls.length, 1, agent)
       assert.match(upstreamCalls[0].headers.get('user-agent'), /^Radar\//, agent)
       assert.match(html, /<title>Evonode eeeeeeee…eeeeee · Radar<\/title>/, agent)
+    }
+  })
+})
+
+describe('fetchFirstData', () => {
+  it('answers while Hyphen and its own deadline are both still pending', async () => {
+    const { build } = createRequire(
+      realpathSync(path.join(root, 'node_modules/wrangler/package.json')),
+    )('esbuild')
+    const out = await build({
+      entryPoints: [path.join(root, 'src/first-data.ts')],
+      bundle: true,
+      format: 'esm',
+      platform: 'neutral',
+      write: false,
+    })
+    const { fetchFirstData } = await import(
+      `data:text/javascript;base64,${Buffer.from(out.outputFiles[0].text).toString('base64')}`
+    )
+    const saved = { fetch: globalThis.fetch, caches: globalThis.caches }
+    let asked = 0
+    globalThis.fetch = () => {
+      asked += 1
+      return new Promise(() => {})
+    }
+    globalThis.caches = { default: { match: async () => undefined, put: async () => {} } }
+    const later = []
+    try {
+      const data = await fetchFirstData(
+        'https://radar.test',
+        { net: 'mainnet', kind: 'tx', id: 'ab'.repeat(32) },
+        { waitUntil: (p) => later.push(p) },
+        { budgetMs: 3_600_000, warm: true },
+      )
+      assert.equal(data, null)
+      assert.ok(asked > 0)
+      const pending = Symbol('pending')
+      for (const p of later)
+        assert.equal(await Promise.race([p, Promise.resolve(pending)]), pending)
+    } finally {
+      globalThis.fetch = saved.fetch
+      globalThis.caches = saved.caches
     }
   })
 })

@@ -4,6 +4,7 @@ import { getActiveNetwork } from './active-network'
 import { endpoint, sourceOff, type EndpointSource } from './endpoints'
 import type { HeightChain, SourceId, Sourced } from './envelope'
 import { SourceError, disabledByMode, type SourceErrorKind } from './errors'
+import { firstDataAnswer, type FirstDataAnswer } from './first-data'
 import { healthRegistry } from './health'
 import { queryLog } from './query-log'
 import type { NetworkId } from '@/lib/network'
@@ -195,8 +196,11 @@ async function readSourced<S extends z.ZodType, N extends 'throw' | 'null' = 'th
   // network I/O, and without a health report, because a source that is off is not a source that failed.
   if (sourceOff(req.source)) throw disabledByMode(req.source)
   const net = req.net ?? getActiveNetwork()
-  const report = (r: Parameters<typeof healthRegistry.report>[2]) =>
-    healthRegistry.report(net, source, r)
+  // An answer the edge inlined is no round trip to the source, so it says nothing about the source's health.
+  let inlined: FirstDataAnswer | undefined
+  const report = (r: Parameters<typeof healthRegistry.report>[2]) => {
+    if (!inlined) healthRegistry.report(net, source, r)
+  }
   const { source } = req
   const url = typeof req.url === 'function' ? req.url() : req.url
   const started = performance.now()
@@ -253,15 +257,22 @@ async function readSourced<S extends z.ZodType, N extends 'throw' | 'null' = 'th
   try {
     let res: Response
     try {
-      res = await fetch(`${resolveUrl(url)}${req.probe ? PROBE_FRAGMENT : ''}`, {
-        method: req.method ?? 'GET',
-        headers: {
-          accept: 'application/json',
-          ...(req.body === undefined ? {} : { 'content-type': 'application/json' }),
-        },
-        body: req.body === undefined ? undefined : JSON.stringify(req.body),
-        signal: controller.signal,
-      })
+      // A probe measures the source itself, so it always goes out.
+      inlined =
+        (req.method ?? 'GET') === 'GET' && req.body === undefined && !req.probe
+          ? firstDataAnswer(resolveUrl(url))
+          : undefined
+      res =
+        inlined?.response ??
+        (await fetch(`${resolveUrl(url)}${req.probe ? PROBE_FRAGMENT : ''}`, {
+          method: req.method ?? 'GET',
+          headers: {
+            accept: 'application/json',
+            ...(req.body === undefined ? {} : { 'content-type': 'application/json' }),
+          },
+          body: req.body === undefined ? undefined : JSON.stringify(req.body),
+          signal: controller.signal,
+        }))
     } catch (cause) {
       throw interrupted(cause) ?? fail({ kind: 'network', cause })
     }
@@ -319,7 +330,7 @@ async function readSourced<S extends z.ZodType, N extends 'throw' | 'null' = 'th
     if (rejected) throw fail({ ...rejected, status: res.status })
 
     report({ ok: true, latencyMs: performance.now() - started })
-    const fetchedAt = Date.now()
+    const fetchedAt = inlined?.fetchedAt ?? Date.now()
     const sourceTime = req.asOf?.(body, res, fetchedAt)
     const out: Sourced<Out> = {
       source,
@@ -329,6 +340,7 @@ async function readSourced<S extends z.ZodType, N extends 'throw' | 'null' = 'th
       data: body as Out,
     }
     if (sourceTime === undefined) out.asOfFetched = true
+    if (inlined) out.inlined = true
     const height = req.height?.(body)
     if (height !== undefined) out.height = height
     if (height !== undefined && req.heightChain) out.heightChain = req.heightChain

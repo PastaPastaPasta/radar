@@ -54,6 +54,10 @@ export default defineConfig(({ mode }) => {
     preview: { proxy: fixtures ? undefined : hyphenProxy() },
     build: {
       manifest: true,
+      // Folds chunks under 4 kB into their neighbours: a Core page's start-up drops from ~57 requests to ~37. Larger
+      // thresholds fold shared code into the entry and break its budget (scripts/size.mjs). Not in the e2e fixture
+      // build, whose thousands of recorded answers make Rollup's folding take minutes.
+      rollupOptions: fixtures ? undefined : { output: { experimentalMinChunkSize: 4000 } },
     },
     test: {
       environment: 'jsdom',

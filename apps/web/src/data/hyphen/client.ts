@@ -142,7 +142,10 @@ export const hyphen = {
         return heights.length > 0 ? Math.min(...heights) : undefined
       },
     })
-    await measureAgainst(referenceHeight, (height) => reportHyphenLag(net, out.data, height))
+    // An inlined status is up to 15 s old and no round trip: it must not overwrite the lag a live read measured.
+    if (!out.inlined) {
+      await measureAgainst(referenceHeight, (height) => reportHyphenLag(net, out.data, height))
+    }
     return out
   },
 
