@@ -1,4 +1,5 @@
 import { t } from '@lingui/core/macro'
+import { CRAWL_STALE_MS } from '@/lib/crawl'
 import type { SourceId, SourceStamp } from '@/data/envelope'
 import type { HealthState, SourceHealth } from '@/data/health'
 import { clampSkew, formatRelative, formatIsoUtc } from '@/lib/format'
@@ -29,7 +30,7 @@ const MIN = 60_000
  * staleTime × 4) applies where it is longer. Radar's is three missed crawls.
  */
 const QUIET_AGE_MS: Record<SourceId, number> = {
-  radar: 30 * MIN,
+  radar: CRAWL_STALE_MS,
   pe: 10 * MIN,
   hyphen: 10 * MIN,
   insight: 10 * MIN,
@@ -41,6 +42,8 @@ const QUIET_AGE_MS: Record<SourceId, number> = {
 
 /** The age past which a reading from `source` shows as out of date: the source's quiet age or the stamp's own limit. */
 export function staleAgeMs(source: SourceId, staleAfterMs = 0): number {
+  // Radar's crawl has one threshold everywhere, whatever the query's class says.
+  if (source === 'radar') return CRAWL_STALE_MS
   return Math.max(staleAfterMs, QUIET_AGE_MS[source])
 }
 
@@ -110,6 +113,16 @@ function base(stamp: SourceStamp): { label: string; icon: IconName; showAge: boo
       return { label: t`Served by DAPI`, icon: ICON.dapi, showAge: true }
     case 'radar':
       // A document that gave no crawl time has only the time it was fetched, which is not the data's age.
+      if (stamp.radarTime === 'reading') {
+        return { label: t`Checked by Radar`, icon: ICON.radar, showAge: !stamp.asOfFetched }
+      }
+      if (stamp.radarTime === 'earlier-crawl') {
+        return {
+          label: t`Crawled by Radar · an earlier crawl`,
+          icon: ICON.radar,
+          showAge: !stamp.asOfFetched,
+        }
+      }
       return { label: t`Crawled by Radar`, icon: ICON.radar, showAge: !stamp.asOfFetched }
     case 'pe':
       return { label: t`Indexed by Platform Explorer`, icon: ICON.pe, showAge: true }

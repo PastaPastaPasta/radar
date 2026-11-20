@@ -1,5 +1,6 @@
 import type { QueryClient } from '@tanstack/react-query'
 import { createRouter, type RouterHistory } from '@tanstack/react-router'
+import { RouteError } from './app/error-boundary'
 import { markFirstLoadResolved } from './app/first-load'
 import { parseSearch, stringifySearch } from './app/search'
 import { routeTree } from './routeTree.gen'
@@ -17,6 +18,7 @@ export function createAppRouter(queryClient: QueryClient, history?: RouterHistor
     stringifySearch,
     defaultPreload: 'intent',
     scrollRestoration: true,
+    defaultErrorComponent: RouteError,
   })
   router.subscribe('onResolved', markFirstLoadResolved)
   return router

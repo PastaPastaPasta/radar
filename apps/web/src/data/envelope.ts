@@ -47,6 +47,12 @@ export interface SourceStamp {
   fallback?: FallbackReason
   /** The live stream pushed this figure (a tip or a ChainLock); once updates stop, its age counts from the last one. */
   pushed?: true
+  /**
+   * Radar only: what `asOf` is. `crawl` is the finish of Radar's latest crawl, `earlier-crawl` the finish of an older
+   * crawl than the latest (or its start, when Radar no longer says when it finished), `reading` the time of Radar's own
+   * check outside the crawl (its Platform checks, the Core 24 count, benchmarks). Absent counts as `crawl`.
+   */
+  radarTime?: 'crawl' | 'earlier-crawl' | 'reading'
   /** Age in ms past which SourceLine turns orange: the query's data class staleTime × 4, set by the query client. */
   staleAfterMs?: number
 }

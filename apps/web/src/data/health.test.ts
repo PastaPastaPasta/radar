@@ -142,9 +142,9 @@ describe('health registry states', () => {
     expect(reg.get('mainnet', 'pe').state).toBe('stale')
 
     reg.report('mainnet', 'radar', ok())
-    reg.setLag('mainnet', 'radar', { ms: 45 * 60_000, detail: 'x' })
+    reg.setLag('mainnet', 'radar', { ms: 30 * 60_000, detail: 'x' })
     expect(reg.get('mainnet', 'radar').state).toBe('ok')
-    reg.setLag('mainnet', 'radar', { ms: 45 * 60_000 + 1, detail: 'x' })
+    reg.setLag('mainnet', 'radar', { ms: 30 * 60_000 + 1, detail: 'x' })
     expect(reg.get('mainnet', 'radar').state).toBe('stale')
     reg.setLag('mainnet', 'radar', undefined)
     expect(reg.get('mainnet', 'radar').state).toBe('ok')

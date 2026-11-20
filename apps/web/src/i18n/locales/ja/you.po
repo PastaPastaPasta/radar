@@ -346,6 +346,9 @@ msgstr "Platform SDK が返したすべての回答を、ここおよびこの�
 msgid "Give it a name."
 msgstr "名前を付けてください。"
 
+msgid "Go home"
+msgstr "ホームへ"
+
 msgid "Governance"
 msgstr "ガバナンス"
 
@@ -376,6 +379,9 @@ msgstr "リンクをコピーしました"
 
 msgid "Lists come from indexes: Platform Explorer and Radar’s own crawler. Radar reads the rows from the index and then checks each row’s facts with proofs where it can; the checked value wins over the index’s. Without an index, you can still open anything whose ID you know. Decentralized only mode switches the indexes off to show exactly that: only what DAPI nodes and the Platform SDK can answer."
 msgstr "一覧はインデックス(Platform Explorer と Radar 独自のクローラー)から取得します。Radar はインデックスから行を読み取り、可能な限り各行の事実を証明で検証します。検証済みの値がインデックスの値より優先されます。インデックスがなくても、ID がわかるものはすべて開けます。「分散型のみ」モードはインデックスをオフにして、まさにそれを示します。DAPI ノードと Platform SDK が答えられるものだけです。"
+
+msgid "Loading the current version of Radar…"
+msgstr "Radar の最新版を読み込んでいます…"
 
 msgid "Log copied"
 msgstr "ログをコピーしました"
@@ -566,6 +572,9 @@ msgstr "GitHub の Radar"
 msgid "Radar only reads. To top up an identity, register a name, or work with a token, a contract or a Platform address, use Bridge. To vote on a proposal or as a masternode, use Governance. Each link opens in a new tab and carries the network you were looking at."
 msgstr "Radar は読み取り専用です。アイデンティティへのチャージ、名前の登録、トークン・コントラクト・Platform アドレスの操作は Bridge を使ってください。提案への投票やマスターノードとしての投票は Governance を使ってください。各リンクは新しいタブで開き、表示中のネットワークを引き継ぎます。"
 
+msgid "Radar was probably updated while this tab was open, so part of the page it asked for no longer exists. Reload to get the current version."
+msgstr "このタブを開いている間に Radar が更新されたため、要求したページの一部がもう存在しません。再読み込みして最新版を取得してください。"
+
 msgid "Radar’s code is open source under the MIT licence. Where it adapts code or data from another project, that project is listed here and in the file it lives in. Libraries installed through npm and cargo keep their own licences."
 msgstr "Radar のコードは MIT ライセンスのオープンソースです。他のプロジェクトのコードやデータを流用している場合、そのプロジェクトをここと、該当ファイルに記載しています。npm と cargo でインストールするライブラリは、それぞれ独自のライセンスのままです。"
 
@@ -676,8 +685,8 @@ msgstr "DASH の金額の横に USD 換算額を表示"
 msgid "Show times in UTC"
 msgstr "時刻を UTC で表示"
 
-msgid "Something in the page broke. The rest of Radar still works."
-msgstr "ページで問題が発生しました。Radar のほかの部分は引き続き使えます。"
+msgid "Something in this page broke. The rest of Radar still works: reload to try again, or start from the home page."
+msgstr "このページで問題が発生しました。Radar のほかの部分は動作しています。再読み込みしてもう一度試すか、ホームページから始めてください。"
 
 msgid "Source"
 msgstr "ソース"
@@ -688,14 +697,14 @@ msgstr "ソース"
 msgid "Sources and licences"
 msgstr "ソースとライセンス"
 
+msgid "Technical detail"
+msgstr "技術的な詳細"
+
 msgid "Test coins have no value, so Testnet and devnets never show USD."
 msgstr "テストコインに価値はないため、テストネットと devnet では USD は表示されません。"
 
 msgid "Text that isn’t translated yet appears in English. Hashes, IDs and amounts are never translated."
 msgstr "まだ翻訳されていないテキストは英語で表示されます。ハッシュ、ID、金額は翻訳されません。"
-
-msgid "The connection dropped while it loaded. Try again."
-msgstr "読み込み中に接続が切れました。再試行してください。"
 
 msgid "The current epoch"
 msgstr "現在のエポック"
@@ -788,9 +797,6 @@ msgstr "Radar が何を問い合わせ、何が返ってきたかを確認する
 
 msgid "Total credits on Platform"
 msgstr "Platform 上のクレジット合計"
-
-msgid "Try again"
-msgstr "再試行"
 
 msgid "Unit for amounts"
 msgstr "金額の単位"

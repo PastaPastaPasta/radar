@@ -1,7 +1,7 @@
 import { t } from '@lingui/core/macro'
 import { Outlet, useRouterState } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
-import { ErrorBoundary } from '@/app/error-boundary'
+import { useEffect, useState, type ReactNode } from 'react'
+import { ErrorBoundary, ROUTE_TITLE_EVENT } from '@/app/error-boundary'
 import { GlobalMounts } from '@/app/global-mounts'
 import { NetworkGate } from '@/app/network-context'
 import { useLiveTip } from '@/app/live-tip'
@@ -24,6 +24,11 @@ function RouteAnnouncer() {
     const id = setTimeout(() => setMessage(document.title), 100)
     return () => clearTimeout(id)
   }, [pathname])
+  useEffect(() => {
+    const read = () => setMessage(document.title)
+    window.addEventListener(ROUTE_TITLE_EVENT, read)
+    return () => window.removeEventListener(ROUTE_TITLE_EVENT, read)
+  }, [])
   return (
     <p id="route-announcer" aria-live="polite" className="sr-only">
       {message}
@@ -31,7 +36,8 @@ function RouteAnnouncer() {
   )
 }
 
-export function AppShell() {
+/** The frame of every page. `children` stands in for the route's page, as for an error the root route caught. */
+export function AppShell({ children }: { children?: ReactNode }) {
   const { locale } = useLocale()
   useSpaLinks()
   useRenderedNetworkSync()
@@ -54,13 +60,13 @@ export function AppShell() {
             <main key={locale} id="main" tabIndex={-1} className="dh-container min-h-[60vh] py-6">
               <SectionNav />
               <ErrorBoundary>
-                <NetworkGate>
-                  <Outlet />
-                </NetworkGate>
+                <NetworkGate>{children ?? <Outlet />}</NetworkGate>
               </ErrorBoundary>
             </main>
             <ShellFooter />
-            <CommandPalette />
+            <ErrorBoundary fallback={() => null}>
+              <CommandPalette />
+            </ErrorBoundary>
             <GlobalMounts />
           </ShortcutsProvider>
         </CommandPaletteProvider>

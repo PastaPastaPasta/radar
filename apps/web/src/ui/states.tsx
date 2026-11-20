@@ -46,6 +46,7 @@ function SourceMark({
     'data-source': stamp.source,
     'data-proved': String(stamp.proved),
     'data-fallback': stamp.fallback,
+    'data-radar-time': stamp.source === 'radar' ? (stamp.radarTime ?? 'crawl') : undefined,
     'data-state': v.variant,
     title: v.title,
   }

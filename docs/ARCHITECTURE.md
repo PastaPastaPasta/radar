@@ -167,6 +167,8 @@ export interface SourceStamp {
   /** Chain height the answer refers to (Core for dapi/hyphen, Platform for sdk/pe). */
   height?: number
   fallback?: FallbackReason
+  /** Radar only: `crawl` (the latest crawl's finish; absent means this), `earlier-crawl` (an older crawl's), `reading` (Radar's own check outside the crawl). */
+  radarTime?: 'crawl' | 'earlier-crawl' | 'reading'
 }
 
 export interface Sourced<T> extends SourceStamp {
@@ -370,7 +372,7 @@ Freshness probes are TanStack queries under `[net, 'health', source]`, refetched
 
 | Source | Probe | Stale when |
 |---|---|---|
-| radar | `GET /api/v1/status` | network's last crawl > 45 min (Radar's own rule) |
+| radar | `GET /api/v1/status` | network's last crawl > 30 min (`CRAWL_STALE_MS`, §5.2) |
 | pe | `GET /status` | indexer height behind Tenderdash height by > 10 blocks, or the PE status reports itself unhealthy (503) |
 | hyphen | `GET /status` | min `indices.*.indexedHeight` behind the DAPI best height by more than 6 blocks, fresh again at 2 or fewer (one rule for the health state and for page routing, §4.7a), or, when DAPI has no height (or only a `fallback` one), behind Radar's crawled Core height (`chain.blocks` from Radar's `/status`) (testnet today: weeks). See §4.7a and §11.4 |
 | insight | `GET /insight-api/status` (mainnet `insight.dash.org`, testnet `insight.testnet.networks.dash.org`; none on devnets) | tip behind the DAPI best height by more than 6 blocks, fresh again at 2 or fewer (the same rule as Hyphen's, §4.7a) |
@@ -976,7 +978,7 @@ Nothing else is contacted by the app: no analytics, no third-party font, script 
 
 ### 4.13 Network census and the Core 24 tracker (Radar's crawl)
 
-- **`/nodes`** (`features/network/nodes/`). `NodesPage` composes cards over Radar's crawl, read through `useCensus(net, scope, range, overTime)` (`census-data.ts`): `summary`, `status`, `releases`, `bench` and two `history` queries (versions over time, read only when that view is chosen, and network size). Every one is enabled only while `useCrawlAvailable(net)` says the crawl can be read (not Decentralized only mode, not a devnet). The arithmetic is in `census-math.ts` (ported from dash-nodes), chart options in `census-charts.ts`, colours from the theme (`census-colors.ts`). Scope, version view and range live in the route search (`scope`, `versions`, `days`). Census figures link to `/masternodes` with the matching `reach`, `status`, `host`, `country`, `type` or `dkg` filter. A crawl older than 45 minutes shows a stale notice (`StaleCrawl`), and a pending Core 24 activation a link to `/v24`. In the mode the page is one `Unavailable` and DAPI's own list (`DapiMasternodes`, `mnRowsQuery`); on a devnet an `Empty` and the same list.
+- **`/nodes`** (`features/network/nodes/`). `NodesPage` composes cards over Radar's crawl, read through `useCensus(net, scope, range, overTime)` (`census-data.ts`): `summary`, `status`, `releases`, `bench` and two `history` queries (versions over time, read only when that view is chosen, and network size). Every one is enabled only while `useCrawlAvailable(net)` says the crawl can be read (not Decentralized only mode, not a devnet). The arithmetic is in `census-math.ts` (ported from dash-nodes), chart options in `census-charts.ts`, colours from the theme (`census-colors.ts`). Scope, version view and range live in the route search (`scope`, `versions`, `days`). Census figures link to `/masternodes` with the matching `reach`, `status`, `host`, `country`, `type` or `dkg` filter. A crawl older than 30 minutes (`isCrawlStale`) shows a stale notice (`StaleCrawl`), and a pending Core 24 activation a link to `/v24`. In the mode the page is one `Unavailable` and DAPI's own list (`DapiMasternodes`, `mnRowsQuery`); on a devnet an `Empty` and the same list.
 - **`/v24`** (`features/network/v24/`). `V24Page` reads `radarQueries.activation(net)`, read again every minute (`POLL_MS.radarActivation`); in the mode, or on a devnet, it reads nothing and shows `Unavailable`; window, threshold and milestone arithmetic is in `v24-math.ts`. A reading older than 10 minutes shows a stale notice. `v24Pending(doc, now)` lives in `data/radar/schemas/activation.ts`, so the home and `/nodes` share it without a feature-to-feature import.
 
 ### 4.14 The masternode list (`/masternodes`, `features/network/masternodes/`)
@@ -1032,6 +1034,7 @@ export function dataClass(c: DataClass): Pick<QueryOptions, 'staleTime' | 'gcTim
 - Polling uses `refetchInterval` with `refetchIntervalInBackground: false`, so hidden tabs never poll.
 - `POLL_MS.addressFallback` is 30 s: the address page's own history, read only while DAPI's transaction stream has given up (§4.8).
 - `refetchOnWindowFocus` is off globally, and on for `live` and `index`.
+- **One crawl age** (`data/radar/client.ts`, `lib/crawl.ts`). Every Radar document built from the crawl is stamped with the finish time of the crawl it came from, never its fetch time or the crawl's start: `summary` and `status` carry it, `masternodes` and `geo` name their crawl (`crawl_id`) and take that crawl's finish, and `history`, `changes` and a masternode's detail take the latest crawl's. Radar's status is read alongside each document (one shared read), and again only when a document names a newer crawl than it says. The client keeps the finish of each network's recent crawls by id. Radar publishes its documents one by one after a crawl finishes, so for about a minute `status` can name a newer crawl than `summary` or `masternodes`: such a document is stamped `radarTime: 'earlier-crawl'` and its label says "Crawled by Radar · an earlier crawl". Radar's readings outside the crawl (`platform`, its 15-minute Platform checks; `activation`; `bench`; a masternode's bench and check) are `radarTime: 'reading'`, labelled "Checked by Radar" with their own time. A crawl starts every 15 minutes (dash-nodes' `CRAWL_INTERVAL`). The crawl documents a page shows are read again every `CRAWL_REFRESH_MS` (5 min) while it is visible, and after `CRAWL_CATCH_UP_MS` (1 min), at most `CRAWL_CATCH_UPS` (2) times in a row, while one trails the latest crawl (`crawlRefreshMs`). A crawl turns stale at one age, `CRAWL_STALE_MS` (30 min), everywhere (`isCrawlStale`): the source lines and the hero, `/map` and the `/nodes` notice, and Radar's health on `/status`. The `/v24` reading's own 10-minute notice is about the activation count, which Radar reads every minute, not about the crawl.
 - Retry: `retry: (n, e) => n < 2 && retryable(e)`, `retryDelay: (n, e) => e.retryAfterMs ?? 1000 * 2 ** n` (§2.3).
 
 ### 5.3 Persistence
@@ -1311,6 +1314,8 @@ linkOutUrl(target): string | null
 | `sdk`, `fallback: 'sdk-cold'` on a PE value | Indexed by Platform Explorer · checking… | spinner |
 | `dapi` | Served by DAPI | node on hover |
 | `radar` | Crawled by Radar · 6 min ago | — |
+| `radar`, `radarTime: 'earlier-crawl'` | Crawled by Radar · an earlier crawl · 11 min ago | — |
+| `radar`, `radarTime: 'reading'` | Checked by Radar · 12 min ago | — |
 | `radar`, `asOfFetched` | Fetched from Radar · 6 s ago | — |
 | `pe` | Indexed by Platform Explorer · 12 s ago | — |
 | `hyphen` | Indexed by Hyphen · 30 s ago | — |
@@ -1525,6 +1530,10 @@ Every query renders through `QueryView` or `DataTable`'s `state`, so each has th
 - **None yet** is for lists that are legitimately empty ("No transactions in the mempool right now").
 
 No page-level error unless the route itself can't render (bad route param after validation). One failed source never blanks a page.
+
+**The error page** (`app/error-boundary.tsx`, `lib/chunk-recovery.ts`). `RouteError` is the router's `defaultErrorComponent`, the root route's `RootError` (`shell/RootError.tsx`) renders it inside `AppShell` (or alone, if the shell itself fails), and the shell's `ErrorBoundary` renders the same page, so a route that fails shows inside the shell with the dashhq header working, never the router's bare default. It says what happened, offers "Reload" and "Go home" (a full load of `/` on the same network, or a new tab with a modifier key), and for an error that is not about loading code shows `name: message` behind a closed "Technical detail" disclosure. Its heading takes focus and the shell's route announcer reads its title. Offline it says so and starts the page over when the connection returns.
+
+A page whose code fails to load is what a deploy does to a tab left open, because the old build's chunk names are gone. Every dynamic import goes through Vite's preload helper, which fires `vite:preloadError` before the router sees the error; `onPreloadError` then sets TanStack Router's `tanstack_router_reload:<message>` key, so the router does not reload by itself, and lets the error through (a cancelled event would make the import resolve with no module). Nothing reloads there, so a failed background preload (a hovered link, the search dialog) never reloads the page. Recovery runs only when something rendered the error: the import is retried once (`retryChunk` in `deferred`; the error page retries a route through `router.invalidate()`), then the page reloads once at the same address, then the error page says Radar was probably updated. The reload is guarded by a timestamp in `sessionStorage['radar.chunk-reload']`: no second reload within `RELOAD_GUARD_MS` (2 min), none offline, none when storage is blocked. The router's keys are cleared when the app starts, so one deploy's key never changes how the next recovers (Safari gives every failed import the same message). Lazy parts of the shell (the header tip, the command palette, the Decentralized only mark, the USD rate) and hover cards sit in their own quiet boundaries, so a missing file there never takes the page down. The service worker never serves a stale `index.html` online (navigations are network first, the HTML is `max-age=0, must-revalidate`) and never stores a hashed file the server answered with an error (§9.4). Fixture builds can make the files a page has not loaded yet answer as gone or as broken JavaScript (`__radarFixtures.failNewChunks`, `sessionStorage['radar.fixture.chunks']`); `e2e/tests/error-page.spec.ts` uses it.
 
 ### 9.4 Offline and updates (`sw/`, `app/sw-register.ts`, `features/you/update/`)
 

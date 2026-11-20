@@ -4,7 +4,7 @@ import { fixtureBody } from '@/test/fixtures/load'
 import { server } from '@/test/server'
 import { isSourceError } from '@/data/errors'
 import { healthRegistry } from '@/data/health'
-import { radar } from '@/data/radar/client'
+import { forgetCrawls, radar } from '@/data/radar/client'
 
 const BASE = 'https://radar.dashhq.org/api/v1'
 const EVO = 'd353cdcae53071401345c38ab482935cb62442be2174a1d3210ca356c9017eff'
@@ -13,16 +13,15 @@ const REGULAR = '219edddca6b0973d4b9fd24ae62d9b8a8c4addd0d1c44de577e1ef127f37fb3
 afterEach(() => vi.useRealTimers())
 
 describe('radar client', () => {
-  it('status is global and stamped from the chain update time', async () => {
-    const out = await radar.status()
+  it('status is global and stamped with the finish of the network’s latest crawl', async () => {
+    const out = await radar.status(undefined, 'mainnet')
     expect(out.source).toBe('radar')
     expect(out.data.networks.mainnet.chain.blocks).toBeGreaterThan(2_000_000)
-    expect(out.asOf).toBe(
-      Math.max(out.data.networks.mainnet.chain.updated, out.data.networks.testnet.chain.updated),
-    )
+    expect(out.asOf).toBe(out.data.networks.mainnet.crawl.last_finished)
+    expect(out.radarTime).toBe('crawl')
   })
 
-  it('status sets crawl lag for both networks and turns stale past 45 minutes', async () => {
+  it('status sets crawl lag for both networks and turns stale past 30 minutes', async () => {
     const raw = await fixtureBody<{ networks: { mainnet: { crawl: { last_finished: number } } } }>(
       'radar',
       'global',
@@ -37,7 +36,11 @@ describe('radar client', () => {
       'last crawl finished 10 minutes ago',
     )
 
-    vi.setSystemTime(finished + 50 * 60_000)
+    vi.setSystemTime(finished + 29 * 60_000)
+    await radar.status()
+    expect(healthRegistry.get('mainnet', 'radar').state).toBe('ok')
+
+    vi.setSystemTime(finished + 31 * 60_000)
     await radar.status()
     expect(healthRegistry.get('mainnet', 'radar').state).toBe('stale')
   })
@@ -151,6 +154,87 @@ describe('radar client', () => {
     expect((await radar.changes('mainnet')).data.changes.length).toBeGreaterThan(0)
     expect((await radar.geo('mainnet')).data.points.length).toBeGreaterThan(0)
     expect((await radar.releases()).data.releases[0]?.tag).toMatch(/^v/)
+  })
+
+  it('dates every crawl document on a network by the same crawl finish, at one moment @RA-12', async () => {
+    forgetCrawls()
+    const [summary, status, masternodes, geo, changes, history, detail] = await Promise.all([
+      radar.summary('mainnet'),
+      radar.status(undefined, 'mainnet'),
+      radar.masternodes('mainnet'),
+      radar.geo('mainnet'),
+      radar.changes('mainnet'),
+      radar.history('mainnet', { dim: 'totals', scope: 'all', days: 30 }),
+      radar.masternode('mainnet', REGULAR),
+    ])
+    const finished = summary.data.crawl.finished
+    for (const doc of [summary, status, masternodes, geo, changes, history, detail]) {
+      expect(doc.asOf).toBe(finished)
+      expect(doc.radarTime).toBe('crawl')
+    }
+  })
+
+  it('asks Radar’s status alongside a crawl document, not after it', async () => {
+    forgetCrawls()
+    const order: string[] = []
+    const body = await fixtureBody<Record<string, unknown>>('radar', 'mainnet', 'geo')
+    let release: () => void = () => undefined
+    const held = new Promise<void>((done) => {
+      release = done
+    })
+    server.use(
+      http.get(`${BASE}/mainnet/geo`, async () => {
+        order.push('geo asked')
+        await held
+        order.push('geo answered')
+        return HttpResponse.json(body)
+      }),
+    )
+    const listener = ({ request }: { request: Request }) => {
+      if (request.url.endsWith('/status')) order.push('status asked')
+    }
+    server.events.on('request:start', listener)
+    const geo = radar.geo('mainnet')
+    await vi.waitFor(() => {
+      expect(order).toContain('status asked')
+    })
+    release()
+    expect((await geo).radarTime).toBe('crawl')
+    server.events.removeListener('request:start', listener)
+    expect(order.indexOf('status asked')).toBeLessThan(order.indexOf('geo answered'))
+  })
+
+  it('names Radar’s own checks apart from the crawl, with their own time', async () => {
+    const platform = await radar.platform('mainnet')
+    expect(platform.radarTime).toBe('reading')
+    expect(platform.asOf).toBe(platform.data.now.updated)
+    expect((await radar.activation('mainnet')).radarTime).toBe('reading')
+    expect((await radar.bench('mainnet')).radarTime).toBe('reading')
+  })
+
+  it('says a document comes from an earlier crawl than the latest, dated by that crawl', async () => {
+    forgetCrawls()
+    const summaryBody = await fixtureBody<{ crawl: { id: number; finished: number } }>(
+      'radar',
+      'mainnet',
+      'summary',
+    )
+    const geoBody = await fixtureBody<{ crawl_id: number }>('radar', 'mainnet', 'geo')
+    const older = { id: summaryBody.crawl.id - 1, finished: summaryBody.crawl.finished - 300 }
+    server.use(
+      http.get(
+        `${BASE}/mainnet/summary`,
+        () => HttpResponse.json({ ...summaryBody, crawl: { ...summaryBody.crawl, ...older } }),
+        { once: true },
+      ),
+      http.get(`${BASE}/mainnet/geo`, () => HttpResponse.json({ ...geoBody, crawl_id: older.id })),
+    )
+    await radar.summary('mainnet')
+    const latest = await radar.summary('mainnet')
+    expect(latest.radarTime).toBe('crawl')
+    const geo = await radar.geo('mainnet')
+    expect(geo.radarTime).toBe('earlier-crawl')
+    expect(geo.asOf).toBe(older.finished * 1000)
   })
 
   it('check posts to the masternode and parses the handshake result', async () => {

@@ -4,6 +4,7 @@ import { useLingui } from '@lingui/react/macro'
 import { useNavigate, useRouter, useRouterState } from '@tanstack/react-router'
 import { useEffect, useRef } from 'react'
 import { allDevnets, useDevnets } from '@/app/devnets'
+import { ErrorBoundary } from '@/app/error-boundary'
 import {
   HeaderTip,
   PageLink,
@@ -113,7 +114,9 @@ export function ShellBar() {
       </nav>
       <div slot="actions">
         <SourceModeMark place="bar" />
-        <HeaderTip />
+        <ErrorBoundary fallback={() => null}>
+          <HeaderTip />
+        </ErrorBoundary>
         <SearchTrigger className="rx-hdr-search" />
       </div>
     </DashhqBar>

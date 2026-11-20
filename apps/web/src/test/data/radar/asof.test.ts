@@ -169,16 +169,16 @@ describe('radar asOf from the crawl the document was built from', () => {
 })
 
 describe('radar status', () => {
-  it('is stamped with the requested network, not the newest of both', async () => {
+  it('is stamped with the requested network’s crawl finish, not the newest of both', async () => {
     const body = await fixtureBody<{
-      networks: Record<'mainnet' | 'testnet', { chain: { updated: number } }>
+      networks: Record<'mainnet' | 'testnet', { crawl: { last_finished: number } }>
     }>('radar', 'global', 'status')
     // The recorded times as they are, without the fixture server's replay of the chain reading's age.
     server.use(http.get(`${BASE}/status`, () => HttpResponse.json(body)))
     const main = await radar.status(undefined, 'mainnet')
     const test = await radar.status(undefined, 'testnet')
-    expect(main.asOf).toBe(body.networks.mainnet.chain.updated * 1000)
-    expect(test.asOf).toBe(body.networks.testnet.chain.updated * 1000)
+    expect(main.asOf).toBe(body.networks.mainnet.crawl.last_finished * 1000)
+    expect(test.asOf).toBe(body.networks.testnet.crawl.last_finished * 1000)
     expect(main.asOf).not.toBe(test.asOf)
   })
 
@@ -253,6 +253,23 @@ describe('every document the crawl built carries the crawl’s finish time', () 
     } finally {
       vi.useRealTimers()
     }
+  })
+
+  it('takes a cold page’s summary of an older crawl for an earlier crawl, not the latest', async () => {
+    forgetCrawls()
+    const status = await fixtureBody<{
+      networks: { mainnet: { crawl: { last_id: number; last_finished: number } } }
+    }>('radar', 'global', 'status')
+    const latest = status.networks.mainnet.crawl
+    server.use(http.get(`${BASE}/status`, () => HttpResponse.json(status)))
+    await serve('radar', 'mainnet', 'summary', `${BASE}/mainnet/summary`, {}, (body) => {
+      const crawl = body.crawl as { id: number; finished: number }
+      crawl.id = latest.last_id - 1
+      crawl.finished = latest.last_finished - 900
+    })
+    const out = await radar.summary('mainnet')
+    expect(out.radarTime).toBe('earlier-crawl')
+    expect(out.asOf).toBe(out.data.crawl.finished)
   })
 
   it('keeps its own stamp when the crawl is unknown', async () => {

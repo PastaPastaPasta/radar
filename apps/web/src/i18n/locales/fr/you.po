@@ -346,6 +346,9 @@ msgstr "Oublie chaque réponse donnée par le Platform SDK, ici et dans le stock
 msgid "Give it a name."
 msgstr "Donnez-lui un nom."
 
+msgid "Go home"
+msgstr "Aller à l’accueil"
+
 msgid "Governance"
 msgstr "Governance"
 
@@ -376,6 +379,9 @@ msgstr "Lien copié"
 
 msgid "Lists come from indexes: Platform Explorer and Radar’s own crawler. Radar reads the rows from the index and then checks each row’s facts with proofs where it can; the checked value wins over the index’s. Without an index, you can still open anything whose ID you know. Decentralized only mode switches the indexes off to show exactly that: only what DAPI nodes and the Platform SDK can answer."
 msgstr "Les listes viennent d’index : Platform Explorer et le crawler de Radar. Radar lit les lignes dans l’index, puis vérifie les faits de chaque ligne avec des preuves quand c’est possible ; la valeur vérifiée l’emporte sur celle de l’index. Sans index, vous pouvez toujours ouvrir tout ce dont vous connaissez l’ID. Le mode Décentralisé uniquement désactive les index pour montrer exactement cela : seulement ce que les nœuds DAPI et le Platform SDK peuvent répondre."
+
+msgid "Loading the current version of Radar…"
+msgstr "Chargement de la version actuelle de Radar…"
 
 msgid "Log copied"
 msgstr "Journal copié"
@@ -566,6 +572,9 @@ msgstr "Radar sur GitHub"
 msgid "Radar only reads. To top up an identity, register a name, or work with a token, a contract or a Platform address, use Bridge. To vote on a proposal or as a masternode, use Governance. Each link opens in a new tab and carries the network you were looking at."
 msgstr "Radar ne fait que lire. Pour recharger une identité, enregistrer un nom, ou travailler avec un jeton, un contrat ou une adresse Platform, utilisez Bridge. Pour voter sur une proposition ou en tant que masternode, utilisez Governance. Chaque lien s’ouvre dans un nouvel onglet et emporte le réseau que vous consultiez."
 
+msgid "Radar was probably updated while this tab was open, so part of the page it asked for no longer exists. Reload to get the current version."
+msgstr "Radar a probablement été mis à jour pendant que cet onglet était ouvert : une partie de la page demandée n’existe plus. Rechargez pour obtenir la version actuelle."
+
 msgid "Radar’s code is open source under the MIT licence. Where it adapts code or data from another project, that project is listed here and in the file it lives in. Libraries installed through npm and cargo keep their own licences."
 msgstr "Le code de Radar est open source sous licence MIT. Lorsqu’il adapte du code ou des données d’un autre projet, ce projet est indiqué ici et dans le fichier concerné. Les bibliothèques installées via npm et cargo conservent leurs propres licences."
 
@@ -676,8 +685,8 @@ msgstr "Afficher la valeur en USD à côté des montants en DASH"
 msgid "Show times in UTC"
 msgstr "Afficher les heures en UTC"
 
-msgid "Something in the page broke. The rest of Radar still works."
-msgstr "Un problème est survenu sur la page. Le reste de Radar fonctionne toujours."
+msgid "Something in this page broke. The rest of Radar still works: reload to try again, or start from the home page."
+msgstr "Une partie de cette page a planté. Le reste de Radar fonctionne toujours : rechargez pour réessayer, ou repartez de la page d’accueil."
 
 msgid "Source"
 msgstr "Source"
@@ -688,14 +697,14 @@ msgstr "Sources"
 msgid "Sources and licences"
 msgstr "Sources et licences"
 
+msgid "Technical detail"
+msgstr "Détail technique"
+
 msgid "Test coins have no value, so Testnet and devnets never show USD."
 msgstr "Les pièces de test n’ont aucune valeur : le testnet et les devnets n’affichent donc jamais d’USD."
 
 msgid "Text that isn’t translated yet appears in English. Hashes, IDs and amounts are never translated."
 msgstr "Ce qui n’est pas encore traduit apparaît en anglais. Les hashes, les ID et les montants ne sont jamais traduits."
-
-msgid "The connection dropped while it loaded. Try again."
-msgstr "La connexion a été coupée pendant le chargement. Réessayer."
 
 msgid "The current epoch"
 msgstr "L’époque en cours"
@@ -788,9 +797,6 @@ msgstr "Des outils pour vérifier ce que Radar a demandé et ce qu’on lui a r�
 
 msgid "Total credits on Platform"
 msgstr "Total des crédits sur Platform"
-
-msgid "Try again"
-msgstr "Réessayer"
 
 msgid "Unit for amounts"
 msgstr "Unité des montants"

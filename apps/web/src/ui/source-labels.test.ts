@@ -175,6 +175,33 @@ describe('sourceView data age', () => {
     expect(untimed.label).toBe('Crawled by Radar')
     expect(untimed.age).toBeUndefined()
   })
+
+  it('says when a document comes from an earlier crawl, and names Radar’s own checks apart from the crawl @RA-12', () => {
+    const radarHealth: SourceHealth = { ...health, source: 'radar' }
+    const earlier = sourceView(
+      stamp({ source: 'radar', asOf: NOW - 17 * 60_000, radarTime: 'earlier-crawl' }),
+      radarHealth,
+      NOW,
+    )
+    expect(earlier).toMatchObject({
+      label: 'Crawled by Radar · an earlier crawl',
+      age: '17 min ago',
+    })
+    const checked = sourceView(
+      stamp({ source: 'radar', asOf: NOW - 11 * 60_000, radarTime: 'reading' }),
+      radarHealth,
+      NOW,
+    )
+    expect(checked).toMatchObject({ label: 'Checked by Radar', age: '11 min ago' })
+  })
+
+  it('turns a crawl stale at 30 minutes, the one crawl threshold @RA-12', () => {
+    const radarHealth: SourceHealth = { ...health, source: 'radar' }
+    const at = (min: number) =>
+      sourceView(stamp({ source: 'radar', asOf: NOW - min * 60_000 }), radarHealth, NOW).variant
+    expect(at(29)).not.toBe('stale')
+    expect(at(31)).toBe('stale')
+  })
 })
 
 describe('sourceView fallbacks', () => {

@@ -1,4 +1,5 @@
 export { AppShell } from './AppShell'
 export { NotFoundPage } from './NotFound'
+export { RootError } from './RootError'
 export { useTheme, setThemePreference, currentTheme } from './theme'
 export type { ResolvedTheme } from './theme'

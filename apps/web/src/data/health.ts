@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from 'react'
+import { CRAWL_STALE_MS } from '@/lib/crawl'
 import { getRenderedNetwork, subscribeRenderedNetwork } from './active-network'
 import type { BudgetSnapshot } from './dapi-core/budget'
 import type { SourceErrorKind } from './errors'
@@ -87,7 +88,7 @@ const SLOW_MS: Partial<Record<SourceId, number>> = { sdk: 5_000, dapi: 5_000 }
 const SLOW_DEFAULT_MS = 3_000
 
 const STALE_AFTER: Partial<Record<SourceId, { blocks?: number; ms?: number }>> = {
-  radar: { ms: 45 * MIN },
+  radar: { ms: CRAWL_STALE_MS },
   pe: { blocks: 10 },
   dapi: { ms: 20 * MIN },
   sdk: { ms: 15 * MIN },

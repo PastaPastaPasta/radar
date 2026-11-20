@@ -108,7 +108,7 @@ stories:
     group: 'Radar (RA): compare with radar.dashhq.org'
     shard: S1
     story: As a network watcher I want to know if the data is stale
-    acceptance: Every page shows tip height and crawl age; after 45 min without a crawl a visible stale warning appears
+    acceptance: Every page shows tip height and crawl age; after 30 min without a crawl a visible stale warning appears, and every page shows the same crawl age at one moment
     radar_start: /
     prod:
       - https://radar.dashhq.org/

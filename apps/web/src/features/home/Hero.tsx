@@ -5,11 +5,11 @@ import { Link } from '@tanstack/react-router'
 import { coreQueries } from '@/data/core/queries'
 import { stampOf } from '@/data/envelope'
 import { useDecentralizedOnly } from '@/data/health'
-import { staleAfterMs } from '@/data/query/stale'
 import { radarQueries } from '@/data/radar/queries'
 import { v24Pending } from '@/data/radar/schemas'
 import { networkName, PageLink, useNetwork } from '@/features/entity'
 import { useCommandPalette } from '@/features/search'
+import { isCrawlStale } from '@/lib/crawl'
 import { formatInt, formatPercent } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
 import {
@@ -23,15 +23,11 @@ import {
   useLiveView,
   useNow,
 } from '@/ui'
-import { staleAgeMs } from '@/ui/source-labels'
 import { useCoreRows } from './core-rows'
 import { Figure, Figures } from './Figure'
 import { agedFromRead, pushed } from './freshness'
 import { HomeMap } from './HomeMap'
 import { TIP_POLL_MS, usePlatformTip } from './platform-tip'
-
-/** Nothing pushes a new crawl, so the claim is read again while the page stays open, well inside the age at which it would look out of date. */
-const CENSUS_POLL_MS = 5 * 60_000
 
 const UNKNOWN = 'Unknown'
 
@@ -209,7 +205,7 @@ export function Hero() {
   const off = useDecentralizedOnly()
   const devnet = isDevnet(net)
   const radarOn = !devnet && !off
-  const census = { enabled: radarOn, refetchInterval: CENSUS_POLL_MS }
+  const census = { enabled: radarOn }
   const summary = useQuery({ ...radarQueries.summary(net), ...census })
   const activation = useQuery({ ...radarQueries.activation(net), enabled: radarOn })
   const geo = useQuery({ ...radarQueries.geo(net), ...census })
@@ -245,9 +241,7 @@ export function Hero() {
   const addresses = crawl ? formatInt(crawl.reachable) : ''
   const v24 = v24Pending(activation.data?.data, now)
   const sources = [crawled, geo.data ? stampOf(geo.data) : undefined, core.source, platform.source]
-  const crawlStale =
-    crawled !== undefined &&
-    now - crawled.asOf > staleAgeMs('radar', crawled.staleAfterMs ?? staleAfterMs('crawl'))
+  const crawlStale = crawled !== undefined && isCrawlStale(now - crawled.asOf)
 
   return (
     <section className="rx-hero" aria-labelledby="h-hero" data-census={crawl ? 'ready' : 'none'}>

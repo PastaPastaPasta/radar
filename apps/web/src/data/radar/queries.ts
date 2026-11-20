@@ -1,4 +1,5 @@
 import { queryOptions } from '@tanstack/react-query'
+import { crawlRefreshMs } from '@/lib/crawl'
 import type { NetworkId } from '@/lib/network'
 import { radarKeys } from '../query/keys'
 import { dataClass, POLL_MS } from '../query/stale'
@@ -30,6 +31,7 @@ export const radarQueries = {
       queryKey: radarKeys(net, 'summary'),
       queryFn: ({ signal }) => radar.summary(net, signal),
       ...dataClass('crawl'),
+      refetchInterval: crawlRefreshMs,
     }),
   history: (net: NetworkId, q: RadarHistoryQuery) =>
     queryOptions({
@@ -41,18 +43,21 @@ export const radarQueries = {
       }),
       queryFn: ({ signal }) => radar.history(net, q, signal),
       ...dataClass('crawl'),
+      refetchInterval: crawlRefreshMs,
     }),
   geo: (net: NetworkId) =>
     queryOptions({
       queryKey: radarKeys(net, 'geo'),
       queryFn: ({ signal }) => radar.geo(net, signal),
       ...dataClass('crawl'),
+      refetchInterval: crawlRefreshMs,
     }),
   masternodes: (net: NetworkId) =>
     queryOptions({
       queryKey: radarKeys(net, 'masternodes'),
       queryFn: ({ signal }) => radar.masternodes(net, signal),
       ...dataClass('crawl'),
+      refetchInterval: crawlRefreshMs,
     }),
   masternode: (net: NetworkId, protx: string) =>
     queryOptions({
@@ -100,6 +105,7 @@ export const radarQueries = {
       queryKey: radarKeys(net, 'changes'),
       queryFn: ({ signal }) => radar.changes(net, signal),
       ...dataClass('crawl'),
+      refetchInterval: crawlRefreshMs,
     }),
   /** A live handshake with one masternode (a reachability probe, not a write). The caller fetches it on a click. */
   check: (net: NetworkId, protx: string) =>

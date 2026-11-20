@@ -44,6 +44,8 @@ export interface RadarFixtureHooks {
   advancePlatformTip(n: number, blockMs?: number): void
   /** Every SDK call and DAPI validator-set read fails while `down`, as with no evonode reachable. */
   cutPlatform(down: boolean): void
+  /** Every `/assets/` file not loaded yet (whose path holds `only`, when given) answers as gone (`missing`) or as broken JavaScript, until the `radar.fixture.chunks` key is removed. */
+  failNewChunks(mode: 'missing' | 'broken', only?: string): void
 }
 
 /** `sessionStorage` key a spec sets before the page loads: `{ [txid]: { instantLocked } }`, transactions to answer as unmined. */
@@ -68,6 +70,47 @@ function leftFromSession(): string[] {
   } catch {
     return []
   }
+}
+
+/**
+ * `sessionStorage` key `failNewChunks` sets: `{ mode, known }`. Every `/assets/` file the page had not loaded when it was
+ * set answers as gone (404, as after a deploy) or, for its scripts, as broken JavaScript, across reloads, until the key is removed.
+ */
+export const FIXTURE_CHUNKS_KEY = 'radar.fixture.chunks'
+
+interface ChunkFailure {
+  mode: 'missing' | 'broken'
+  known: string[]
+  /** Only files whose path holds this fail, such as one page's chunks. */
+  only?: string
+}
+
+function chunkFailureFromSession(): ChunkFailure | undefined {
+  try {
+    const raw = sessionStorage.getItem(FIXTURE_CHUNKS_KEY)
+    return raw ? (JSON.parse(raw) as ChunkFailure) : undefined
+  } catch {
+    return undefined
+  }
+}
+
+const failingChunks = http.get('/assets/*', ({ request }) => {
+  const failing = chunkFailureFromSession()
+  const { pathname } = new URL(request.url)
+  if (!failing || failing.known.includes(pathname)) return undefined
+  if (failing.only && !pathname.includes(failing.only)) return undefined
+  if (failing.mode === 'broken' && !pathname.endsWith('.js')) return undefined
+  return failing.mode === 'missing'
+    ? new HttpResponse('Not found', { status: 404 })
+    : new HttpResponse('export default (', { headers: { 'content-type': 'text/javascript' } })
+})
+
+function failNewChunks(mode: ChunkFailure['mode'], only?: string): void {
+  const known = performance
+    .getEntriesByType('resource')
+    .map((e) => new URL(e.name).pathname)
+    .filter((p) => p.startsWith('/assets/'))
+  sessionStorage.setItem(FIXTURE_CHUNKS_KEY, JSON.stringify({ mode, known, only }))
 }
 
 type DownSource = keyof typeof HTTP_SOURCE_PATTERNS | 'rate' | 'sdk' | 'dapi'
@@ -132,6 +175,7 @@ export async function startFixtureWorker(): Promise<void> {
     addPlatformBlocks,
     advancePlatformTip,
     cutPlatform,
+    failNewChunks,
   }
   ;(window as unknown as { __radarFixtures: RadarFixtureHooks }).__radarFixtures = hooks
   const down = downFromSession()
@@ -171,7 +215,7 @@ export async function startFixtureWorker(): Promise<void> {
         ? HTTP_SOURCE_PATTERNS.pe.map((origin) => refuse(source, origin.replace(/\*$/, 'rate')))
         : HTTP_SOURCE_PATTERNS[source].map((pattern) => refuse(source, pattern)),
   )
-  await setupWorker(...refused, ...fixtureHandlers, refuseUnrecorded).start({
+  await setupWorker(failingChunks, ...refused, ...fixtureHandlers, refuseUnrecorded).start({
     quiet: true,
     onUnhandledFrame: 'bypass',
   })

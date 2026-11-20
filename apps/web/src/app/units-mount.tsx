@@ -34,7 +34,11 @@ export function UnitsMount({ children }: { children: ReactNode }) {
         usdPrimary: live !== undefined && prefs.unit === 'USD',
       }}
     >
-      {wantsFiat ? <FiatRate onRate={setRate} /> : null}
+      {wantsFiat ? (
+        <ErrorBoundary fallback={() => null}>
+          <FiatRate onRate={setRate} />
+        </ErrorBoundary>
+      ) : null}
       {children}
       {isDevnet(net) ? (
         <ErrorBoundary fallback={() => null}>

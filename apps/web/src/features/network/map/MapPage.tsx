@@ -9,9 +9,9 @@ import { useDecentralizedOnly } from '@/data/health'
 import { mnHostLabels } from '@/data/masternodes/facets'
 import { filterMnRows, type MnFilter } from '@/data/masternodes/filter'
 import { joinMnRows, type MnRow } from '@/data/masternodes/rows'
-import { staleAfterMs } from '@/data/query/stale'
 import { radarQueries } from '@/data/radar/queries'
 import { PageFrame, useNetwork } from '@/features/entity'
+import { isCrawlStale } from '@/lib/crawl'
 import { formatInt, formatPercent } from '@/lib/format'
 import { isDevnet, type NetworkId } from '@/lib/network'
 import {
@@ -26,7 +26,6 @@ import {
   useNow,
 } from '@/ui'
 import { useSectionSource } from '@/ui/section-source'
-import { staleAgeMs } from '@/ui/source-labels'
 import { projectWorld } from '@/ui/world-map'
 import { useDebouncedQuery } from '../debounced-query'
 import { filterFields } from '../masternodes/filter-fields'
@@ -631,8 +630,7 @@ function Notes({ board: b, controls }: { board: Board; controls: MapSearchContro
   const { search, filter, set } = controls
   const now = useNow()
   const asOf = b.query.data?.asOf
-  const stale =
-    asOf !== undefined && now - asOf > staleAgeMs('radar', staleAfterMs('crawl')) ? asOf : undefined
+  const stale = asOf !== undefined && isCrawlStale(now - asOf) ? asOf : undefined
   const chips = useChips(b, filter)
   const remove = (c: Chip) => {
     set(
