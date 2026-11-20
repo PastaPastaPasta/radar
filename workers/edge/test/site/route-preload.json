@@ -1,0 +1,22 @@
+{
+  "files": [
+    "assets/en.js",
+    "assets/de.js",
+    "assets/tx.js",
+    "assets/queries.js",
+    "assets/identity.js",
+    "assets/lookup.js",
+    "assets/pool.js",
+    "assets/seed.mainnet.js",
+    "assets/seed.testnet.js",
+    "assets/changes.css",
+    "assets/home.js"
+  ],
+  "routes": [
+    ["/", [10]],
+    ["/identity/$id", [4]],
+    ["/identity/lookup", [5, 9]],
+    ["/tx/$txid", [2, 3]]
+  ],
+  "locales": { "de": [1], "en": [0] }
+}

@@ -43,8 +43,11 @@ const MAX_VALUE_LENGTH = 512
 const UNSAFE_PATH = /%2f|%5c|\\|(^|\/)(\.|%2e){1,2}(\/|$)/i
 const PREFIX = /^\/x\/hy\/(mainnet|testnet)\/(.*)$/
 
+/** Raw bytes named by their own hash never change: a transaction or block by hash. */
+const IMMUTABLE_PATHS = /^(?:rawtx|rawblock)\/[0-9a-fA-F]{64}$/
+
 export type HyphenRequest =
-  | { ok: true; network: HyphenNetwork; url: URL; stream: boolean }
+  | { ok: true; network: HyphenNetwork; url: URL; stream: boolean; immutable: boolean }
   | { ok: false; status: 400 | 404; error: string }
 
 function cleanSearch(search: string): string | null {
@@ -82,5 +85,11 @@ export function resolveHyphenRequest(pathname: string, search: string): HyphenRe
   const cleaned = cleanSearch(search)
   if (cleaned === null) return { ok: false, status: 400, error: 'bad_query' }
   target.search = cleaned
-  return { ok: true, network, url: target, stream: apiPath === 'stream' }
+  return {
+    ok: true,
+    network,
+    url: target,
+    stream: apiPath === 'stream',
+    immutable: IMMUTABLE_PATHS.test(apiPath),
+  }
 }
