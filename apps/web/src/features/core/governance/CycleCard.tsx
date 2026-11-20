@@ -294,8 +294,8 @@ function PastSuperblocks({
   return (
     <div className="grid gap-2" data-past-superblocks>
       <h3 className="m-0 text-sm font-semibold">{t`Last superblocks`}</h3>
-      <div className="rx-tablewrap rx-tablewrap--scroll">
-        <div className="rx-tablescroll">
+      <div className="rx-tablewrap">
+        <div className="rx-tablescroll" style={{ overflowX: 'auto' }}>
           <table className="rx-table">
             <caption className="dh-sr">{t`Last superblocks: height, date and what each paid`}</caption>
             <thead>
