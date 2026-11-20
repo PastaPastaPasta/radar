@@ -29,23 +29,38 @@ export interface BudgetSplit {
   funded: bigint
   passing: bigint
   failing: bigint
-  count: { funded: number; passing: number; failing: number }
+  /** Passing on votes, but its payment window doesn't cover the next superblock, so it asks nothing of this budget. */
+  outside: bigint
+  count: { funded: number; passing: number; failing: number; outside: number }
 }
 
-/** Open proposals by what their payment would be: in the budget, passing but not in it, or short of votes. */
-export function budgetSplit(proposals: readonly HyProposal[], now: number): BudgetSplit {
+/**
+ * Open proposals by what their payment would be: in the budget, passing but not in it, or short of votes. With the
+ * next superblock's time, a passing proposal whose payment window doesn't cover it is set apart as `outside`.
+ */
+export function budgetSplit(
+  proposals: readonly HyProposal[],
+  now: number,
+  superblockAt?: number,
+): BudgetSplit {
   const split: BudgetSplit = {
     funded: 0n,
     passing: 0n,
     failing: 0n,
-    count: { funded: 0, passing: 0, failing: 0 },
+    outside: 0n,
+    count: { funded: 0, passing: 0, failing: 0, outside: 0 },
   }
   for (const p of proposals) {
     const status = proposalStatus(p, now)
-    if (status === 'funded' || status === 'passing' || status === 'failing') {
-      split[status] += p.paymentAmount
-      split.count[status]++
-    }
+    if (status !== 'funded' && status !== 'passing' && status !== 'failing') continue
+    const bucket =
+      status === 'passing' &&
+      superblockAt !== undefined &&
+      (p.startTime > superblockAt || p.endTime < superblockAt)
+        ? 'outside'
+        : status
+    split[bucket] += p.paymentAmount
+    split.count[bucket]++
   }
   return split
 }

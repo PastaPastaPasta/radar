@@ -29,9 +29,17 @@ msgstr "(this site passes the request on to {0})"
 msgid "[circular]"
 msgstr "[circular]"
 
-#. placeholder {0}: Math.max(0, c.nextSuperblock - c.tip.height)
-msgid "{0, plural, one {# block to go, at 2.5 minutes a block} other {# blocks to go, at 2.5 minutes a block}}"
-msgstr "{0, plural, one {# block to go, at 2.5 minutes a block} other {# blocks to go, at 2.5 minutes a block}}"
+#. placeholder {0}: c.nextSuperblock - c.tip.height
+msgid "{0, plural, one {# block to go, at {minutes} minutes a block, as the last superblocks ran} other {# blocks to go, at {minutes} minutes a block, as the last superblocks ran}}"
+msgstr "{0, plural, one {# block to go, at {minutes} minutes a block, as the last superblocks ran} other {# blocks to go, at {minutes} minutes a block, as the last superblocks ran}}"
+
+#. placeholder {0}: c.nextSuperblock - c.tip.height
+msgid "{0, plural, one {# block to go, at Dash Core’s 2.62 minutes a block} other {# blocks to go, at Dash Core’s 2.62 minutes a block}}"
+msgstr "{0, plural, one {# block to go, at Dash Core’s 2.62 minutes a block} other {# blocks to go, at Dash Core’s 2.62 minutes a block}}"
+
+#. placeholder {0}: split.count.outside
+msgid "{0, plural, one {# more proposal passes on votes, but its payment window doesn’t cover the next superblock, so it isn’t counted here.} other {# more proposals pass on votes, but their payment windows don’t cover the next superblock, so they aren’t counted here.}}"
+msgstr "{0, plural, one {# more proposal passes on votes, but its payment window doesn’t cover the next superblock, so it isn’t counted here.} other {# more proposals pass on votes, but their payment windows don’t cover the next superblock, so they aren’t counted here.}}"
 
 #. placeholder {0}: Math.floor(ms / 60_000)
 msgid "{0, plural, one {last block header # minute ago} other {last block header # minutes ago}}"
@@ -482,6 +490,9 @@ msgstr "Coinbase"
 msgid "CoinJoin"
 msgstr "CoinJoin"
 
+msgid "CoinJoin, inferred from the transaction’s total and zero fee; its page checks each output"
+msgstr "CoinJoin, inferred from the transaction’s total and zero fee; its page checks each output"
+
 msgid "Collapse all"
 msgstr "Collapse all"
 
@@ -557,6 +568,9 @@ msgstr "Core versions"
 
 msgid "Core’s budget couldn’t be read from Insight"
 msgstr "Core’s budget couldn’t be read from Insight"
+
+msgid "Core’s budget couldn’t be read from Insight, so the split isn’t drawn."
+msgstr "Core’s budget couldn’t be read from Insight, so the split isn’t drawn."
 
 msgid "Core's tip, blocks, transactions, ChainLocks and live feeds. Radar spreads its requests over many nodes and checks each block against its header."
 msgstr "Core's tip, blocks, transactions, ChainLocks and live feeds. Radar spreads its requests over many nodes and checks each block against its header."
@@ -920,6 +934,10 @@ msgstr "Insight could not return this address’s oldest transactions."
 msgid "Insight could not return this address’s transactions."
 msgstr "Insight could not return this address’s transactions."
 
+#. placeholder {0}: formatInt(behind)
+msgid "Insight is behind: DAPI’s tip is already at block #{0}."
+msgstr "Insight is behind: DAPI’s tip is already at block #{0}."
+
 msgid "Insight’s {name} index is behind too: {lag}."
 msgstr "Insight’s {name} index is behind too: {lag}."
 
@@ -1177,8 +1195,8 @@ msgstr "Paid is the superblock’s coinbase less the coinbase of the block befor
 msgid "Paid to"
 msgstr "Paid to"
 
-msgid "Paid to proposals"
-msgstr "Paid to proposals"
+msgid "Paid to proposals, about"
+msgstr "Paid to proposals, about"
 
 msgid "Passing"
 msgstr "Passing"
@@ -1636,6 +1654,9 @@ msgstr "The next superblock’s budget or time isn’t known"
 msgid "The next superblock’s budget or time isn’t known, so no proposal is shown as Funded."
 msgstr "The next superblock’s budget or time isn’t known, so no proposal is shown as Funded."
 
+msgid "The next superblock’s budget or time isn’t known, so the split isn’t drawn."
+msgstr "The next superblock’s budget or time isn’t known, so the split isn’t drawn."
+
 msgid "The next transactions could not be loaded."
 msgstr "The next transactions could not be loaded."
 
@@ -1906,6 +1927,9 @@ msgstr "Votes"
 
 msgid "Voting closes"
 msgstr "Voting closes"
+
+msgid "Voting has closed, but this is still worked out from the votes as they stand now, not from what Core has settled."
+msgstr "Voting has closed, but this is still worked out from the votes as they stand now, not from what Core has settled."
 
 msgid "Voting window"
 msgstr "Voting window"

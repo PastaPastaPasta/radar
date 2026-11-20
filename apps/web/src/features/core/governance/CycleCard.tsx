@@ -1,10 +1,13 @@
 import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { useQueries, useQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
-import { stampOf, type SourceStamp } from '@/data/envelope'
+import { useEffect, useRef, useState } from 'react'
+import { stampOf, type Sourced, type SourceStamp } from '@/data/envelope'
 import {
+  BLOCK_MS,
   cycleBudget,
+  insightBehind,
+  measuredBlockMs,
   pastSuperblocks,
   superblockEta,
   superblockPaid,
@@ -12,7 +15,7 @@ import {
 } from '@/data/governance-cycle'
 import { hyQueries } from '@/data/hyphen/queries'
 import { insQueries } from '@/data/insight/queries'
-import { formatCountdown, formatDate, formatInt, formatIsoUtc } from '@/lib/format'
+import { formatCountdown, formatDate, formatInt, formatIsoUtc, formatNumber } from '@/lib/format'
 import type { NetworkId } from '@/lib/network'
 import { Entity } from '@/features/entity'
 import { Amount, Card, ErrorState, Skeleton, SourceLine, Stat } from '@/ui'
@@ -21,13 +24,22 @@ import type { BudgetSplit } from './status'
 /** How many earlier superblocks the cycle card lists. */
 const PAST = 3
 
-/** A countdown that ticks every second while it is on screen. */
-function Countdown({ to }: { to: number }) {
+/** A countdown that ticks every second while it is on screen, and says once when it reaches zero. */
+function Countdown({ to, onDone }: { to: number; onDone?: () => void }) {
   const [now, setNow] = useState(() => Date.now())
   useEffect(() => {
     const id = window.setInterval(() => setNow(Date.now()), 1000)
     return () => window.clearInterval(id)
   }, [])
+  const done = to - now <= 0
+  const told = useRef(false)
+  useEffect(() => {
+    if (done && !told.current) {
+      told.current = true
+      onDone?.()
+    }
+    if (!done) told.current = false
+  }, [done, onDone])
   return (
     <time dateTime={formatIsoUtc(to)} data-countdown>
       {formatCountdown(to - now)}
@@ -54,10 +66,26 @@ export function CycleCard({
   const c = query.data?.data
   const info = query.data ? stampOf(query.data) : undefined
   const tipStamp = query.data?.tipStamp
-  const eta = c ? superblockEta(c) : undefined
-  const deadline = c ? votingDeadline(c) : undefined
+  const heights = c ? pastSuperblocks(c, PAST) : []
+  const blocks = useQueries({ queries: heights.map((h) => hyQueries.block(net, h)) })
+  const measured = measuredBlockMs(
+    heights.map((height, i) => ({ height, time: blocks[i]?.data?.data?.blockTime })),
+  )
+  // Future blocks count from when DAPI's tip was read, not the tip's own time, so a stalled chain never counts to 0.
+  const pace = { blockMs: measured ?? BLOCK_MS, now: tipStamp?.fetchedAt ?? 0 }
+  const minutes = formatNumber(pace.blockMs / 60_000, { maximumFractionDigits: 2 })
+  const eta = c ? superblockEta(c, pace) : undefined
+  const deadline = c ? votingDeadline(c, pace) : undefined
+  const behind = c?.tip && insightBehind(c) ? c.tip.height : undefined
   const noTip =
-    c && !c.tip ? t`DAPI’s tip couldn’t be read, so its time isn’t estimated.` : undefined
+    c && !c.tip
+      ? t`DAPI’s tip couldn’t be read, so its time isn’t estimated.`
+      : behind !== undefined
+        ? t`Insight is behind: DAPI’s tip is already at block #${formatInt(behind)}.`
+        : undefined
+  const refetch = () => {
+    void query.refetch()
+  }
   const money = c && split ? cycleBudget(c.budget, split.funded, split.passing) : undefined
   const stamps = [info, tipStamp].filter((s): s is SourceStamp => s !== undefined)
 
@@ -100,14 +128,19 @@ export function CycleCard({
             <div data-superblock-eta={String(eta === undefined ? '' : formatIsoUtc(eta))}>
               <Stat
                 label={t`Superblock in`}
-                value={eta === undefined ? '—' : <Countdown to={eta} />}
+                value={eta === undefined ? '—' : <Countdown to={eta} onDone={refetch} />}
                 note={
-                  c?.tip && c.nextSuperblock != null
-                    ? plural(Math.max(0, c.nextSuperblock - c.tip.height), {
-                        one: '# block to go, at 2.5 minutes a block',
-                        other: '# blocks to go, at 2.5 minutes a block',
-                      })
-                    : noTip
+                  eta === undefined || !c?.tip || c.nextSuperblock == null
+                    ? noTip
+                    : measured !== undefined
+                      ? plural(c.nextSuperblock - c.tip.height, {
+                          one: `# block to go, at ${minutes} minutes a block, as the last superblocks ran`,
+                          other: `# blocks to go, at ${minutes} minutes a block, as the last superblocks ran`,
+                        })
+                      : plural(c.nextSuperblock - c.tip.height, {
+                          one: '# block to go, at Dash Core’s 2.62 minutes a block',
+                          other: '# blocks to go, at Dash Core’s 2.62 minutes a block',
+                        })
                 }
                 source={tipStamp}
                 loading={query.isPending}
@@ -124,7 +157,7 @@ export function CycleCard({
                   ) : deadline.at === undefined ? (
                     `#${formatInt(deadline.height)}`
                   ) : (
-                    <Countdown to={deadline.at} />
+                    <Countdown to={deadline.at} onDone={refetch} />
                   )
                 }
                 note={
@@ -162,10 +195,11 @@ export function CycleCard({
           <BudgetUse
             money={money}
             known={eta !== undefined}
+            closed={deadline?.passed === true}
             pending={query.isPending || (!split && !proposalsFailed)}
             failed={proposalsFailed}
           />
-          {c ? <PastSuperblocks net={net} heights={pastSuperblocks(c, PAST)} /> : null}
+          {c ? <PastSuperblocks net={net} heights={heights} blocks={blocks} /> : null}
         </div>
       )}
     </Card>
@@ -176,11 +210,13 @@ export function CycleCard({
 function BudgetUse({
   money,
   known,
+  closed,
   pending,
   failed,
 }: {
   money: ReturnType<typeof cycleBudget> | undefined
   known: boolean
+  closed: boolean
   pending: boolean
   failed: boolean
 }) {
@@ -226,6 +262,12 @@ function BudgetUse({
               : money && money.over > 0n
                 ? t`Passing proposals ask for more than the budget; the ones with fewer net votes that don’t fit wait for a later superblock.`
                 : t`Worked out by Radar from the proposals below and Core’s budget, as Funded is.`}
+          {!failed && known && closed ? (
+            <>
+              {' '}
+              {t`Voting has closed, but this is still worked out from the votes as they stand now, not from what Core has settled.`}
+            </>
+          ) : null}
         </p>
       )}
     </div>
@@ -233,9 +275,16 @@ function BudgetUse({
 }
 
 /** The last superblocks, newest first, each with its date and what it paid, from Hyphen's blocks. */
-function PastSuperblocks({ net, heights }: { net: NetworkId; heights: number[] }) {
+function PastSuperblocks({
+  net,
+  heights,
+  blocks,
+}: {
+  net: NetworkId
+  heights: number[]
+  blocks: readonly { data?: Sourced<{ blockTime: number } | null>; isError: boolean }[]
+}) {
   const { t } = useLingui()
-  const blocks = useQueries({ queries: heights.map((h) => hyQueries.block(net, h)) })
   const coinbases = useQueries({
     queries: heights.flatMap((h) => [
       hyQueries.blockTxs(net, h, { limit: 1 }),
@@ -257,7 +306,7 @@ function PastSuperblocks({ net, heights }: { net: NetworkId; heights: number[] }
               <th scope="col">{t`Superblock`}</th>
               <th scope="col">{t`Date`}</th>
               <th scope="col" className="r">
-                {t`Paid to proposals`}
+                {t`Paid to proposals, about`}
               </th>
             </tr>
           </thead>

@@ -29,9 +29,17 @@ msgstr "（本站会把请求转发给 {0}）"
 msgid "[circular]"
 msgstr "[循环]"
 
-#. placeholder {0}: Math.max(0, c.nextSuperblock - c.tip.height)
-msgid "{0, plural, one {# block to go, at 2.5 minutes a block} other {# blocks to go, at 2.5 minutes a block}}"
-msgstr "{0, plural, other {还有 # 个区块,按每块 2.5 分钟计}}"
+#. placeholder {0}: c.nextSuperblock - c.tip.height
+msgid "{0, plural, one {# block to go, at {minutes} minutes a block, as the last superblocks ran} other {# blocks to go, at {minutes} minutes a block, as the last superblocks ran}}"
+msgstr "{0, plural, other {还有 # 个区块,按最近几个超级区块的实际速度每块 {minutes} 分钟计}}"
+
+#. placeholder {0}: c.nextSuperblock - c.tip.height
+msgid "{0, plural, one {# block to go, at Dash Core’s 2.62 minutes a block} other {# blocks to go, at Dash Core’s 2.62 minutes a block}}"
+msgstr "{0, plural, other {还有 # 个区块,按 Dash Core 的每块 2.62 分钟计}}"
+
+#. placeholder {0}: split.count.outside
+msgid "{0, plural, one {# more proposal passes on votes, but its payment window doesn’t cover the next superblock, so it isn’t counted here.} other {# more proposals pass on votes, but their payment windows don’t cover the next superblock, so they aren’t counted here.}}"
+msgstr "{0, plural, other {另有 # 个提案按票数通过,但其付款期不包含下一个超级区块,因此此处不计入。}}"
 
 #. placeholder {0}: Math.floor(ms / 60_000)
 msgid "{0, plural, one {last block header # minute ago} other {last block header # minutes ago}}"
@@ -482,6 +490,9 @@ msgstr "Coinbase"
 msgid "CoinJoin"
 msgstr "CoinJoin"
 
+msgid "CoinJoin, inferred from the transaction’s total and zero fee; its page checks each output"
+msgstr "CoinJoin,根据交易总额和零手续费推断;其页面会逐一检查输出"
+
 msgid "Collapse all"
 msgstr "全部收起"
 
@@ -557,6 +568,9 @@ msgstr "Core 版本"
 
 msgid "Core’s budget couldn’t be read from Insight"
 msgstr "无法从 Insight 读取 Core 的预算"
+
+msgid "Core’s budget couldn’t be read from Insight, so the split isn’t drawn."
+msgstr "无法从 Insight 读取 Core 的预算,因此不绘制分布。"
 
 msgid "Core's tip, blocks, transactions, ChainLocks and live feeds. Radar spreads its requests over many nodes and checks each block against its header."
 msgstr "Core 链顶、区块、交易、ChainLock 和实时数据流。Radar 把请求分散到许多节点，并对照区块头检查每个区块。"
@@ -920,6 +934,10 @@ msgstr "Insight 无法返回此地址最早的交易。"
 msgid "Insight could not return this address’s transactions."
 msgstr "Insight 无法返回此地址的交易。"
 
+#. placeholder {0}: formatInt(behind)
+msgid "Insight is behind: DAPI’s tip is already at block #{0}."
+msgstr "Insight 落后了:DAPI 的链顶已在区块 #{0}。"
+
 msgid "Insight’s {name} index is behind too: {lag}."
 msgstr "Insight 的 {name} 索引也落后了:{lag}。"
 
@@ -1177,8 +1195,8 @@ msgstr "支付额为超级区块的 coinbase 减去前一个区块的 coinbase,�
 msgid "Paid to"
 msgstr "支付给"
 
-msgid "Paid to proposals"
-msgstr "支付给提案"
+msgid "Paid to proposals, about"
+msgstr "支付给提案(约)"
 
 msgid "Passing"
 msgstr "通过"
@@ -1636,6 +1654,9 @@ msgstr "下一个超级区块的预算或时间未知"
 msgid "The next superblock’s budget or time isn’t known, so no proposal is shown as Funded."
 msgstr "下一个超级区块的预算或时间未知，因此没有提案显示为“已资助”。"
 
+msgid "The next superblock’s budget or time isn’t known, so the split isn’t drawn."
+msgstr "下一个超级区块的预算或时间未知,因此不绘制分布。"
+
 msgid "The next transactions could not be loaded."
 msgstr "无法加载后续交易。"
 
@@ -1906,6 +1927,9 @@ msgstr "票数"
 
 msgid "Voting closes"
 msgstr "投票截止"
+
+msgid "Voting has closed, but this is still worked out from the votes as they stand now, not from what Core has settled."
+msgstr "投票已截止,但此处仍按当前票数计算,而非 Core 已确定的结果。"
 
 msgid "Voting window"
 msgstr "投票窗口"

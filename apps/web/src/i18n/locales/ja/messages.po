@@ -29,9 +29,17 @@ msgstr "（このサイトはリクエストを {0} に転送します）"
 msgid "[circular]"
 msgstr "[循環]"
 
-#. placeholder {0}: Math.max(0, c.nextSuperblock - c.tip.height)
-msgid "{0, plural, one {# block to go, at 2.5 minutes a block} other {# blocks to go, at 2.5 minutes a block}}"
-msgstr "{0, plural, other {残り # ブロック(1 ブロック 2.5 分で計算)}}"
+#. placeholder {0}: c.nextSuperblock - c.tip.height
+msgid "{0, plural, one {# block to go, at {minutes} minutes a block, as the last superblocks ran} other {# blocks to go, at {minutes} minutes a block, as the last superblocks ran}}"
+msgstr "{0, plural, other {残り # ブロック(直近のスーパーブロックの実績どおり 1 ブロック {minutes} 分で計算)}}"
+
+#. placeholder {0}: c.nextSuperblock - c.tip.height
+msgid "{0, plural, one {# block to go, at Dash Core’s 2.62 minutes a block} other {# blocks to go, at Dash Core’s 2.62 minutes a block}}"
+msgstr "{0, plural, other {残り # ブロック(Dash Core の 1 ブロック 2.62 分で計算)}}"
+
+#. placeholder {0}: split.count.outside
+msgid "{0, plural, one {# more proposal passes on votes, but its payment window doesn’t cover the next superblock, so it isn’t counted here.} other {# more proposals pass on votes, but their payment windows don’t cover the next superblock, so they aren’t counted here.}}"
+msgstr "{0, plural, other {ほかに # 件の提案が票数では可決していますが、支払期間が次のスーパーブロックを含まないため、ここでは数えていません。}}"
 
 #. placeholder {0}: Math.floor(ms / 60_000)
 msgid "{0, plural, one {last block header # minute ago} other {last block header # minutes ago}}"
@@ -482,6 +490,9 @@ msgstr "コインベース"
 msgid "CoinJoin"
 msgstr "CoinJoin"
 
+msgid "CoinJoin, inferred from the transaction’s total and zero fee; its page checks each output"
+msgstr "CoinJoin(トランザクションの合計額と手数料ゼロから推定。各出力の確認はトランザクションのページで行います)"
+
 msgid "Collapse all"
 msgstr "すべて折りたたむ"
 
@@ -557,6 +568,9 @@ msgstr "Core のバージョン"
 
 msgid "Core’s budget couldn’t be read from Insight"
 msgstr "Core の予算を Insight から読めませんでした"
+
+msgid "Core’s budget couldn’t be read from Insight, so the split isn’t drawn."
+msgstr "Core の予算を Insight から読めなかったため、内訳は描画していません。"
 
 msgid "Core's tip, blocks, transactions, ChainLocks and live feeds. Radar spreads its requests over many nodes and checks each block against its header."
 msgstr "Core の先頭、ブロック、トランザクション、ChainLock、ライブフィード。Radar は多数のノードにリクエストを分散し、各ブロックをそのブロックヘッダーと照合します。"
@@ -920,6 +934,10 @@ msgstr "Insightはこのアドレスの最も古いトランザクションを�
 msgid "Insight could not return this address’s transactions."
 msgstr "Insight からこのアドレスのトランザクションを取得できませんでした。"
 
+#. placeholder {0}: formatInt(behind)
+msgid "Insight is behind: DAPI’s tip is already at block #{0}."
+msgstr "Insight が遅れています:DAPI のチップはすでにブロック #{0} です。"
+
 msgid "Insight’s {name} index is behind too: {lag}."
 msgstr "Insight の {name} インデックスも遅れています: {lag}。"
 
@@ -1177,8 +1195,8 @@ msgstr "支払額は、スーパーブロックのコインベースから直前
 msgid "Paid to"
 msgstr "支払先"
 
-msgid "Paid to proposals"
-msgstr "提案への支払額"
+msgid "Paid to proposals, about"
+msgstr "提案への支払額(概算)"
 
 msgid "Passing"
 msgstr "可決"
@@ -1636,6 +1654,9 @@ msgstr "次のスーパーブロックの予算または時刻が分かりませ
 msgid "The next superblock’s budget or time isn’t known, so no proposal is shown as Funded."
 msgstr "次のスーパーブロックの予算または時刻が不明なため、「資金確保」と表示される提案はありません。"
 
+msgid "The next superblock’s budget or time isn’t known, so the split isn’t drawn."
+msgstr "次のスーパーブロックの予算または時刻が分からないため、内訳は描画していません。"
+
 msgid "The next transactions could not be loaded."
 msgstr "次のトランザクションを読み込めませんでした。"
 
@@ -1906,6 +1927,9 @@ msgstr "投票数"
 
 msgid "Voting closes"
 msgstr "投票締め切り"
+
+msgid "Voting has closed, but this is still worked out from the votes as they stand now, not from what Core has settled."
+msgstr "投票は締め切られましたが、これは Core が確定した内容ではなく、現在の票数から計算しています。"
 
 msgid "Voting window"
 msgstr "投票期間"

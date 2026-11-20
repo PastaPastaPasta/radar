@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest'
 import {
   BLOCK_MS,
   cycleBudget,
+  insightBehind,
+  measuredBlockMs,
   pastSuperblocks,
   superblockEta,
   superblockPaid,
@@ -21,10 +23,30 @@ const MAINNET: GovernanceCycle = {
   tip: { height: 2_574_480, time: Date.UTC(2026, 10, 20, 8, 0) },
 }
 
+const AT_TIP = { blockMs: BLOCK_MS, now: MAINNET.tip!.time }
+
 describe('the next superblock', () => {
-  it('is due at the block target from the tip', () => {
-    expect(superblockEta(MAINNET)).toBe(MAINNET.tip!.time + 1_000 * BLOCK_MS)
-    expect(BLOCK_MS).toBe(150_000)
+  it('is due at Dash Core’s 2.62 minutes a block from the tip', () => {
+    expect(BLOCK_MS).toBe(157_200)
+    expect(superblockEta(MAINNET, AT_TIP)).toBe(MAINNET.tip!.time + 1_000 * BLOCK_MS)
+  })
+
+  it('counts at the rate it is given', () => {
+    expect(superblockEta(MAINNET, { ...AT_TIP, blockMs: 157_600 })).toBe(
+      MAINNET.tip!.time + 1_000 * 157_600,
+    )
+  })
+
+  it('counts blocks still to come from now when the tip has stalled, so it never reaches 0 early', () => {
+    const now = MAINNET.tip!.time + 6 * 3_600_000
+    expect(superblockEta(MAINNET, { blockMs: BLOCK_MS, now })).toBe(now + 1_000 * BLOCK_MS)
+  })
+
+  it('has no time once DAPI’s tip is at or past it: Insight is behind', () => {
+    const behind = { ...MAINNET, tip: { height: 2_575_480, time: MAINNET.tip!.time } }
+    expect(insightBehind(behind)).toBe(true)
+    expect(superblockEta(behind, AT_TIP)).toBeUndefined()
+    expect(insightBehind(MAINNET)).toBe(false)
   })
 
   it('has no time without a tip or a height', () => {
@@ -35,7 +57,10 @@ describe('the next superblock', () => {
 
 describe('the voting deadline', () => {
   it('is the start of the maturity window, still ahead while the tip is below it', () => {
-    const d = votingDeadline({ ...MAINNET, tip: { height: 2_573_000, time: 0 } })
+    const d = votingDeadline(
+      { ...MAINNET, tip: { height: 2_573_000, time: 0 } },
+      { blockMs: BLOCK_MS, now: 0 },
+    )
     expect(d).toEqual({ height: 2_573_818, at: 818 * BLOCK_MS, passed: false })
   })
 
@@ -50,6 +75,26 @@ describe('the voting deadline', () => {
       passed: undefined,
     })
     expect(votingDeadline({ ...MAINNET, maturityBlocks: null })).toBeUndefined()
+  })
+})
+
+describe('the measured block rate', () => {
+  // Mainnet superblocks 2,525,632, 2,542,248 and 2,558,864, as Hyphen dates them.
+  const past = [
+    { height: 2_558_864, time: Date.parse('2026-10-21T07:14:08Z') },
+    { height: 2_542_248, time: Date.parse('2026-09-21T00:01:39Z') },
+    { height: 2_525_632, time: Date.parse('2026-08-21T16:16:58Z') },
+  ]
+
+  it('is the time between the first and last known superblocks over their blocks', () => {
+    const ms = measuredBlockMs(past)!
+    expect(ms).toBeCloseTo((past[0]!.time - past[2]!.time) / 33_232, 6)
+    expect(ms / 1000).toBeCloseTo(157.6, 1)
+  })
+
+  it('needs two known times', () => {
+    expect(measuredBlockMs([past[0]!, { height: 2_542_248, time: undefined }])).toBeUndefined()
+    expect(measuredBlockMs([])).toBeUndefined()
   })
 })
 

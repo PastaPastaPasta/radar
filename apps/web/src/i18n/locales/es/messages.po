@@ -29,9 +29,17 @@ msgstr "(este sitio reenvía la solicitud a {0})"
 msgid "[circular]"
 msgstr "[circular]"
 
-#. placeholder {0}: Math.max(0, c.nextSuperblock - c.tip.height)
-msgid "{0, plural, one {# block to go, at 2.5 minutes a block} other {# blocks to go, at 2.5 minutes a block}}"
-msgstr "{0, plural, one {Falta # bloque, a 2,5 minutos por bloque} other {Faltan # bloques, a 2,5 minutos por bloque}}"
+#. placeholder {0}: c.nextSuperblock - c.tip.height
+msgid "{0, plural, one {# block to go, at {minutes} minutes a block, as the last superblocks ran} other {# blocks to go, at {minutes} minutes a block, as the last superblocks ran}}"
+msgstr "{0, plural, one {Falta # bloque, a {minutes} minutos por bloque, al ritmo de los últimos superbloques} other {Faltan # bloques, a {minutes} minutos por bloque, al ritmo de los últimos superbloques}}"
+
+#. placeholder {0}: c.nextSuperblock - c.tip.height
+msgid "{0, plural, one {# block to go, at Dash Core’s 2.62 minutes a block} other {# blocks to go, at Dash Core’s 2.62 minutes a block}}"
+msgstr "{0, plural, one {Falta # bloque, a los 2,62 minutos por bloque de Dash Core} other {Faltan # bloques, a los 2,62 minutos por bloque de Dash Core}}"
+
+#. placeholder {0}: split.count.outside
+msgid "{0, plural, one {# more proposal passes on votes, but its payment window doesn’t cover the next superblock, so it isn’t counted here.} other {# more proposals pass on votes, but their payment windows don’t cover the next superblock, so they aren’t counted here.}}"
+msgstr "{0, plural, one {# propuesta más se aprueba por votos, pero su periodo de pago no cubre el próximo superbloque, así que no se cuenta aquí.} other {# propuestas más se aprueban por votos, pero sus periodos de pago no cubren el próximo superbloque, así que no se cuentan aquí.}}"
 
 #. placeholder {0}: Math.floor(ms / 60_000)
 msgid "{0, plural, one {last block header # minute ago} other {last block header # minutes ago}}"
@@ -482,6 +490,9 @@ msgstr "Coinbase"
 msgid "CoinJoin"
 msgstr "CoinJoin"
 
+msgid "CoinJoin, inferred from the transaction’s total and zero fee; its page checks each output"
+msgstr "CoinJoin, deducido del total y la comisión cero de la transacción; su página comprueba cada salida"
+
 msgid "Collapse all"
 msgstr "Contraer todo"
 
@@ -557,6 +568,9 @@ msgstr "Versiones de Core"
 
 msgid "Core’s budget couldn’t be read from Insight"
 msgstr "No se pudo leer el presupuesto de Core desde Insight"
+
+msgid "Core’s budget couldn’t be read from Insight, so the split isn’t drawn."
+msgstr "No se pudo leer el presupuesto de Core desde Insight, así que no se dibuja el reparto."
 
 msgid "Core's tip, blocks, transactions, ChainLocks and live feeds. Radar spreads its requests over many nodes and checks each block against its header."
 msgstr "La punta de Core, bloques, transacciones, ChainLocks y feeds en vivo. Radar reparte sus solicitudes entre muchos nodos y comprueba cada bloque con su encabezado."
@@ -920,6 +934,10 @@ msgstr "Insight no pudo devolver las transacciones más antiguas de esta direcci
 msgid "Insight could not return this address’s transactions."
 msgstr "Insight no pudo devolver las transacciones de esta dirección."
 
+#. placeholder {0}: formatInt(behind)
+msgid "Insight is behind: DAPI’s tip is already at block #{0}."
+msgstr "Insight va atrasado: la punta de DAPI ya está en el bloque #{0}."
+
 msgid "Insight’s {name} index is behind too: {lag}."
 msgstr "El índice de {name} de Insight también va por detrás: {lag}."
 
@@ -1177,8 +1195,8 @@ msgstr "Lo pagado es la coinbase del superbloque menos la coinbase del bloque an
 msgid "Paid to"
 msgstr "Pagado a"
 
-msgid "Paid to proposals"
-msgstr "Pagado a propuestas"
+msgid "Paid to proposals, about"
+msgstr "Pagado a propuestas, aprox."
 
 msgid "Passing"
 msgstr "Aprobada"
@@ -1636,6 +1654,9 @@ msgstr "No se conoce el presupuesto o la hora del próximo superbloque"
 msgid "The next superblock’s budget or time isn’t known, so no proposal is shown as Funded."
 msgstr "No se conoce el presupuesto o la hora del próximo superbloque, así que ninguna propuesta se muestra como Financiada."
 
+msgid "The next superblock’s budget or time isn’t known, so the split isn’t drawn."
+msgstr "No se conoce el presupuesto o la hora del próximo superbloque, así que no se dibuja el reparto."
+
 msgid "The next transactions could not be loaded."
 msgstr "No se pudieron cargar las siguientes transacciones."
 
@@ -1906,6 +1927,9 @@ msgstr "Votos"
 
 msgid "Voting closes"
 msgstr "La votación cierra"
+
+msgid "Voting has closed, but this is still worked out from the votes as they stand now, not from what Core has settled."
+msgstr "La votación ha cerrado, pero esto se sigue calculando con los votos actuales, no con lo que Core ha fijado."
 
 msgid "Voting window"
 msgstr "Ventana de votación"

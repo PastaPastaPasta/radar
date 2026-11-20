@@ -36,6 +36,16 @@ async function olderProposal(): Promise<HyProposalBody> {
   return { ...page.value[0]!, hash: OLD, name: 'Older budget request' }
 }
 
+/** A DAPI tip at the recorded height, so the next superblock's time and so its budget split are known. */
+const tipKnown = () =>
+  vi.spyOn(core, 'tip').mockResolvedValue({
+    source: 'dapi',
+    asOf: Date.now(),
+    fetchedAt: Date.now(),
+    proved: false,
+    data: { height: 2_570_085, hash: '00', time: Date.now() },
+  })
+
 afterEach(() => vi.restoreAllMocks())
 
 describe('Governance page', () => {
@@ -105,6 +115,7 @@ describe('Governance page', () => {
   })
 
   it('shows the budget split and a proposal table with status, votes and amounts @HY-13', async () => {
+    tipKnown()
     renderAt('/governance')
     expect(
       await screen.findByRole('heading', {
@@ -125,6 +136,7 @@ describe('Governance page', () => {
   })
 
   it('draws each status in one colour: the donut, the tile beside it and the row edge @HY-13', async () => {
+    tipKnown()
     renderAt('/governance')
     await screen.findByRole('table', { name: 'Budget proposals' })
     const drawn = await waitFor(() => {
@@ -404,14 +416,18 @@ describe('Governance page while Hyphen’s index is stale @IN-16 @HY-19', () => 
 })
 
 describe('Governance cycle', () => {
-  const tipAt = (height: number, time: number) =>
-    vi.spyOn(core, 'tip').mockResolvedValue({
-      source: 'dapi',
-      asOf: time,
-      fetchedAt: time,
-      proved: false,
-      data: { height, hash: '00', time },
-    })
+  const tipAnswer = (height: number, time: number, fetchedAt = time) => ({
+    source: 'dapi' as const,
+    asOf: time,
+    fetchedAt,
+    proved: false,
+    data: { height, hash: '00', time },
+  })
+  const tipAt = (height: number, time: number, fetchedAt = time) =>
+    vi.spyOn(core, 'tip').mockResolvedValue(tipAnswer(height, time, fetchedAt))
+  /** Mainnet's last three superblocks ran at 157.614 s a block (2,525,632 to 2,558,864 as Hyphen dates them). */
+  const countdown = (card: HTMLElement, which: string) =>
+    card.querySelector(`[${which}] [data-countdown]`)?.textContent ?? ''
   const cycle = () =>
     waitFor(() => {
       const el = document.querySelector<HTMLElement>('#cycle [data-cycle]')
@@ -427,21 +443,71 @@ describe('Governance cycle', () => {
     await waitFor(() =>
       expect(card.querySelector('[data-next-superblock]')).toHaveTextContent('#2,575,480'),
     )
-    // 2,480 blocks at 2.5 minutes is 4 d 7 h 20 min.
+    // 2,480 blocks at the measured 157.614 s is 4 d 12 h 34 min, with no seconds while over a day.
     await waitFor(() =>
-      expect(card.querySelector('[data-superblock-eta] [data-countdown]')).toHaveTextContent(
-        /^4 d 7 h (19|20) min$/,
-      ),
+      expect(countdown(card, 'data-superblock-eta')).toMatch(/^4 d 12 h (33|34) min$/),
     )
-    expect(card.querySelector('[data-superblock-eta]')).toHaveTextContent('2,480 blocks')
-    // Voting closes at 2,575,480 − 1,662 = 2,573,818, 818 blocks on: 1 d 10 h 05 min.
+    expect(card.querySelector('[data-superblock-eta]')).toHaveTextContent(
+      '2,480 blocks to go, at 2.63 minutes a block, as the last superblocks ran',
+    )
+    // Voting closes at 2,575,480 − 1,662 = 2,573,818, 818 blocks on: 1 d 11 h 48 min.
     const deadline = card.querySelector('[data-voting-deadline]')!
     expect(deadline).toHaveAttribute('data-voting-deadline', '2573818')
-    expect(deadline.querySelector('[data-countdown]')).toHaveTextContent(/^1 d 10 h (04|05) min$/)
+    expect(countdown(card, 'data-voting-deadline')).toMatch(/^1 d 11 h (47|48) min$/)
     expect(card.querySelector('[data-cycle-budget]')).toHaveTextContent('6,828.26')
     expect(card.querySelector('[data-cycle-budget]')).toHaveTextContent('16,616 blocks')
     expect(card.querySelector('[data-superblock-eta] [data-source="dapi"]')).not.toBeNull()
     expect(card.querySelector('[data-next-superblock] [data-source="insight"]')).not.toBeNull()
+  })
+
+  it('falls back to Dash Core’s 2.62 minutes a block when the past superblocks can’t be dated', async () => {
+    tipAt(2_573_000, Date.now())
+    server.use(http.get('*/x/hy/mainnet/block/:id', () => HttpResponse.json({}, { status: 503 })))
+    renderAt('/governance')
+    const card = await cycle()
+    await waitFor(() =>
+      expect(card.querySelector('[data-superblock-eta]')).toHaveTextContent(
+        '2,480 blocks to go, at Dash Core’s 2.62 minutes a block',
+      ),
+    )
+    // 2,480 × 157.2 s is 4 d 12 h 17 min.
+    expect(countdown(card, 'data-superblock-eta')).toMatch(/^4 d 12 h (16|17) min$/)
+  })
+
+  it('counts from when the tip was read, so a stalled chain never counts down to 0', async () => {
+    // The tip is ten hours old, as on a stalled testnet; 10 blocks are still to come.
+    tipAt(2_575_470, Date.now() - 36_000_000, Date.now())
+    renderAt('/governance')
+    const card = await cycle()
+    await waitFor(() => expect(countdown(card, 'data-superblock-eta')).toMatch(/^26 min \d\d s$/))
+  })
+
+  it('says Insight is behind, not “0 blocks to go”, once DAPI’s tip has reached its next superblock', async () => {
+    tipAt(2_575_480, Date.now())
+    renderAt('/governance')
+    const card = await cycle()
+    await waitFor(() =>
+      expect(card.querySelector('[data-superblock-eta]')).toHaveTextContent(
+        'Insight is behind: DAPI’s tip is already at block #2,575,480.',
+      ),
+    )
+    expect(card.querySelector('[data-countdown]')).toBeNull()
+    expect(card.querySelector('[data-superblock-eta]')).not.toHaveTextContent('0 blocks')
+  })
+
+  it('reads the tip again when a countdown reaches 0, so the deadline turns to passed', async () => {
+    // One block before the deadline, read just under a block ago: the countdown ends in about a second.
+    const now = Date.now()
+    vi.spyOn(core, 'tip')
+      .mockResolvedValueOnce(tipAnswer(2_573_817, now - 156_000, now - 156_000))
+      .mockResolvedValue(tipAnswer(2_573_818, now + 2_000))
+    renderAt('/governance')
+    const card = await cycle()
+    await waitFor(
+      () =>
+        expect(card.querySelector('[data-voting-deadline]')).toHaveTextContent('Deadline passed'),
+      { timeout: 8_000 },
+    )
   })
 
   it('ticks the countdown every second', async () => {
@@ -574,6 +640,11 @@ describe('Governance cycle', () => {
     )
     expect(funded).toHaveTextContent('—')
     expect(funded).toHaveTextContent('Core’s budget couldn’t be read from Insight')
+    // No pie or table of a split with Funded at 0.
+    expect(document.querySelector('[data-budget-chart="missing"]')).toHaveTextContent(
+      'so the split isn’t drawn',
+    )
+    expect(document.querySelector('[data-drawn]')).toBeNull()
   })
 
   it('says Insight is not answering when Core’s cycle can’t be read', async () => {

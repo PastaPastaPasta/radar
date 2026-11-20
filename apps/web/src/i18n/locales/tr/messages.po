@@ -29,9 +29,17 @@ msgstr "(bu site isteği şuraya iletir: {0})"
 msgid "[circular]"
 msgstr "[döngüsel]"
 
-#. placeholder {0}: Math.max(0, c.nextSuperblock - c.tip.height)
-msgid "{0, plural, one {# block to go, at 2.5 minutes a block} other {# blocks to go, at 2.5 minutes a block}}"
-msgstr "{0, plural, one {# blok kaldı, blok başına 2,5 dakikayla} other {# blok kaldı, blok başına 2,5 dakikayla}}"
+#. placeholder {0}: c.nextSuperblock - c.tip.height
+msgid "{0, plural, one {# block to go, at {minutes} minutes a block, as the last superblocks ran} other {# blocks to go, at {minutes} minutes a block, as the last superblocks ran}}"
+msgstr "{0, plural, one {# blok kaldı, son süperblokların hızıyla blok başına {minutes} dakika} other {# blok kaldı, son süperblokların hızıyla blok başına {minutes} dakika}}"
+
+#. placeholder {0}: c.nextSuperblock - c.tip.height
+msgid "{0, plural, one {# block to go, at Dash Core’s 2.62 minutes a block} other {# blocks to go, at Dash Core’s 2.62 minutes a block}}"
+msgstr "{0, plural, one {# blok kaldı, Dash Core’un blok başına 2,62 dakikasıyla} other {# blok kaldı, Dash Core’un blok başına 2,62 dakikasıyla}}"
+
+#. placeholder {0}: split.count.outside
+msgid "{0, plural, one {# more proposal passes on votes, but its payment window doesn’t cover the next superblock, so it isn’t counted here.} other {# more proposals pass on votes, but their payment windows don’t cover the next superblock, so they aren’t counted here.}}"
+msgstr "{0, plural, one {# teklif daha oylarla geçiyor ama ödeme dönemi sonraki süperbloku kapsamıyor, bu yüzden burada sayılmıyor.} other {# teklif daha oylarla geçiyor ama ödeme dönemleri sonraki süperbloku kapsamıyor, bu yüzden burada sayılmıyor.}}"
 
 #. placeholder {0}: Math.floor(ms / 60_000)
 msgid "{0, plural, one {last block header # minute ago} other {last block header # minutes ago}}"
@@ -482,6 +490,9 @@ msgstr "Coinbase"
 msgid "CoinJoin"
 msgstr "CoinJoin"
 
+msgid "CoinJoin, inferred from the transaction’s total and zero fee; its page checks each output"
+msgstr "CoinJoin, işlemin toplamından ve sıfır ücretinden çıkarıldı; sayfası her çıktıyı denetler"
+
 msgid "Collapse all"
 msgstr "Tümünü daralt"
 
@@ -557,6 +568,9 @@ msgstr "Core sürümleri"
 
 msgid "Core’s budget couldn’t be read from Insight"
 msgstr "Core’un bütçesi Insight’tan okunamadı"
+
+msgid "Core’s budget couldn’t be read from Insight, so the split isn’t drawn."
+msgstr "Core’un bütçesi Insight’tan okunamadı, bu yüzden dağılım çizilmiyor."
 
 msgid "Core's tip, blocks, transactions, ChainLocks and live feeds. Radar spreads its requests over many nodes and checks each block against its header."
 msgstr "Core ucu, bloklar, işlemler, ChainLock’lar ve canlı akışlar. Radar isteklerini çok sayıda düğüme dağıtır ve her bloğu blok başlığıyla karşılaştırarak doğrular."
@@ -920,6 +934,10 @@ msgstr "Insight bu adresin en eski işlemlerini getiremedi."
 msgid "Insight could not return this address’s transactions."
 msgstr "Insight bu adresin işlemlerini döndüremedi."
 
+#. placeholder {0}: formatInt(behind)
+msgid "Insight is behind: DAPI’s tip is already at block #{0}."
+msgstr "Insight geride: DAPI’nin ucu zaten #{0} blokta."
+
 msgid "Insight’s {name} index is behind too: {lag}."
 msgstr "Insight’ın {name} indeksi de geride: {lag}."
 
@@ -1177,8 +1195,8 @@ msgstr "Ödenen, süperblokun coinbase’i eksi önceki bloğun coinbase’idir;
 msgid "Paid to"
 msgstr "Ödenen"
 
-msgid "Paid to proposals"
-msgstr "Tekliflere ödenen"
+msgid "Paid to proposals, about"
+msgstr "Tekliflere ödenen, yaklaşık"
 
 msgid "Passing"
 msgstr "Geçiyor"
@@ -1636,6 +1654,9 @@ msgstr "Sonraki süperblokun bütçesi veya zamanı bilinmiyor"
 msgid "The next superblock’s budget or time isn’t known, so no proposal is shown as Funded."
 msgstr "Bir sonraki süper bloğun bütçesi veya zamanı bilinmediğinden hiçbir öneri Finanse edildi olarak gösterilmiyor."
 
+msgid "The next superblock’s budget or time isn’t known, so the split isn’t drawn."
+msgstr "Sonraki süperblokun bütçesi veya zamanı bilinmiyor, bu yüzden dağılım çizilmiyor."
+
 msgid "The next transactions could not be loaded."
 msgstr "Sonraki işlemler yüklenemedi."
 
@@ -1906,6 +1927,9 @@ msgstr "Oylar"
 
 msgid "Voting closes"
 msgstr "Oylama kapanışı"
+
+msgid "Voting has closed, but this is still worked out from the votes as they stand now, not from what Core has settled."
+msgstr "Oylama kapandı, ama bu hâlâ Core’un belirlediğine göre değil, şu anki oylara göre hesaplanıyor."
 
 msgid "Voting window"
 msgstr "Oylama penceresi"

@@ -1,3 +1,4 @@
+import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
@@ -123,7 +124,10 @@ function GovernanceContent() {
       ),
     )
   }, [insight, hy.data, proposals, rank, threshold])
-  const split = useMemo(() => budgetSplit(proposals, now), [proposals, now])
+  const split = useMemo(
+    () => budgetSplit(proposals, now, budget?.superblockAt),
+    [proposals, now, budget],
+  )
   const { funded, passing, failing } = split.count
   usePageClaim(data ? governanceClaim(funded + passing + failing, funded + passing) : undefined)
   const stamp = data ? stampOf(data) : undefined
@@ -194,24 +198,32 @@ function GovernanceContent() {
           <ErrorState error={query.error} onRetry={() => void query.refetch()} />
         ) : (
           <div className="grid gap-4 md:grid-cols-[minmax(0,320px)_1fr] md:items-center">
-            <Chart
-              option={option}
-              height={220}
-              label={t`Requested payments of open proposals: funded, passing and not passing`}
-              loading={waiting || budgetPending}
-              table={{
-                columns: [t`Status`, t`Proposals`, t`Requested`],
-                rows: (['funded', 'passing', 'failing'] as const).map((s) => [
-                  s === 'funded'
-                    ? t`Funded`
-                    : s === 'passing'
-                      ? t`Passing, not yet funded`
-                      : t`Not passing`,
-                  split.count[s],
-                  `${formatInt(split[s] / DUFFS_PER_DASH)} DASH`,
-                ]),
-              }}
-            />
+            {budgetMissing && !waiting ? (
+              <p className="rx-note m-0" data-budget-chart="missing">
+                {budgetRead.isError
+                  ? t`Core’s budget couldn’t be read from Insight, so the split isn’t drawn.`
+                  : t`The next superblock’s budget or time isn’t known, so the split isn’t drawn.`}
+              </p>
+            ) : (
+              <Chart
+                option={option}
+                height={220}
+                label={t`Requested payments of open proposals: funded, passing and not passing`}
+                loading={waiting || budgetPending}
+                table={{
+                  columns: [t`Status`, t`Proposals`, t`Requested`],
+                  rows: (['funded', 'passing', 'failing'] as const).map((s) => [
+                    s === 'funded'
+                      ? t`Funded`
+                      : s === 'passing'
+                        ? t`Passing, not yet funded`
+                        : t`Not passing`,
+                    split.count[s],
+                    `${formatInt(split[s] / DUFFS_PER_DASH)} DASH`,
+                  ]),
+                }}
+              />
+            )}
             <div className="grid gap-4 sm:grid-cols-3" data-budget>
               <Stat
                 label={t`Funded`}
@@ -234,6 +246,15 @@ function GovernanceContent() {
                 loading={waiting}
                 tone="warn"
               />
+              {!budgetMissing && !waiting && !budgetPending && split.count.outside > 0 ? (
+                <p className="rx-note m-0 sm:col-span-3" data-budget-outside>
+                  {plural(split.count.outside, {
+                    one: '# more proposal passes on votes, but its payment window doesn’t cover the next superblock, so it isn’t counted here.',
+                    other:
+                      '# more proposals pass on votes, but their payment windows don’t cover the next superblock, so they aren’t counted here.',
+                  })}
+                </p>
+              ) : null}
             </div>
           </div>
         )}
