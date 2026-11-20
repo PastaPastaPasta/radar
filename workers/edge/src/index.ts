@@ -1,3 +1,4 @@
+import { fetchFirstData, firstDataPlan, withFirstData } from './first-data'
 import { withSecurityHeaders } from './headers'
 import { genericOg, isLinkPreviewAgent, matchOgRoute, resolveOg, rewriteHead } from './og'
 import { preloadFiles, preloadTable, withPreloads } from './preload'
@@ -6,6 +7,8 @@ import { redirectFor } from './redirects'
 
 export interface Env {
   ASSETS: Fetcher
+  /** How long the HTML may wait for a tx or block page's first data (ms); tests on a slow machine raise it. */
+  FIRST_DATA_BUDGET_MS?: string
 }
 
 const STATIC_FILE =
@@ -34,7 +37,7 @@ async function preloaded(res: Response, request: Request, env: Env, url: URL): P
   return withPreloads(res, preloadFiles(table, url, request.headers.get('accept-language')))
 }
 
-async function handle(request: Request, env: Env): Promise<Response> {
+async function handle(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   const url = new URL(request.url)
 
   if (isProxyPath(url.pathname)) return handleProxy(request, url)
@@ -64,11 +67,22 @@ async function handle(request: Request, env: Env): Promise<Response> {
     })
   }
 
+  const plan =
+    request.method === 'GET' && !isLinkPreviewAgent(request.headers.get('user-agent'))
+      ? firstDataPlan(url)
+      : null
+  // The page's first Hyphen reads start beside the shell's own fetch.
+  const firstData = plan
+    ? fetchFirstData(url.origin, plan, ctx, Number(env.FIRST_DATA_BUDGET_MS) || undefined)
+    : null
+
   const served = await serveAssets(request, env, url)
   if (url.pathname === SERVICE_WORKER_PATH && served.ok) return asServiceWorker(served)
 
   const isHtml = served.headers.get('content-type')?.startsWith('text/html') === true
-  const res = isHtml && served.status === 200 ? await preloaded(served, request, env, url) : served
+  let res = isHtml && served.status === 200 ? await preloaded(served, request, env, url) : served
+  // The shell waits for its first data at most FIRST_DATA_BUDGET_MS, and only on a tx or block page.
+  if (firstData && isHtml && res.status === 200) res = withFirstData(res, await firstData)
 
   const og = matchOgRoute(url)
   if (og && res.ok && isHtml && request.method === 'GET') {
@@ -90,7 +104,7 @@ async function handle(request: Request, env: Env): Promise<Response> {
 }
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
-    return withSecurityHeaders(await handle(request, env))
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+    return withSecurityHeaders(await handle(request, env, ctx))
   },
 } satisfies ExportedHandler<Env>

@@ -22,6 +22,7 @@ const routerConfig = {
   },
 }
 
+const BUDGET_MS = 8000
 let mf
 let upstreamCalls = []
 let upstream = () => new Response('not mocked', { status: 599 })
@@ -52,6 +53,10 @@ before(async () => {
       },
     ],
     compatibilityDate: '2026-08-01',
+    // The production budget (300 ms) is shorter than one Miniflare round trip on a loaded machine.
+    bindings: { FIRST_DATA_BUDGET_MS: String(BUDGET_MS) },
+    // Miniflare's cache takes seconds per call on a loaded machine; the edge cache is checked on the preview Worker.
+    cache: false,
     assets: {
       directory: path.join(root, 'test/site'),
       binding: 'ASSETS',
@@ -201,6 +206,172 @@ describe('route preloads', () => {
 
   it('still preloads the catalog on a path no route claims', async () => {
     assert.deepEqual(await preloads('/no/such/page'), ['/assets/en.js'])
+  })
+})
+
+describe('first data for immutable pages', () => {
+  // The edge cache outlives a test, so every test names its own tx and block.
+  let n = 0
+  const ids = () => {
+    n += 1
+    return { txid: n.toString(16).padStart(64, 'a'), hash: n.toString(16).padStart(64, 'c') }
+  }
+  const TIP = 2_000_000
+  const status = { syncStatus: 'synced', blockHeight: TIP, indices: {} }
+  // A slow answer is held until the next test starts, so it never holds up that test's reads.
+  let release = () => {}
+  const hyphen = (routes, { delayMs = {} } = {}) => {
+    release()
+    const held = new Promise((r) => (release = r))
+    reset(async (req) => {
+      const path = new URL(req.url).pathname.replace(/^\/api\/v1\//, '')
+      const wait = delayMs[path.split('/')[0]] ?? delayMs['*'] ?? 0
+      if (wait) await Promise.race([held, new Promise((r) => setTimeout(r, wait))])
+      const body = routes[path]
+      return body === undefined
+        ? Response.json({ error: 'nf' }, { status: 404 })
+        : Response.json(body)
+    })
+  }
+  after(() => release())
+  const inlined = async (p, init) => {
+    const html = await (await get(p, init)).text()
+    const m = /<script type="application\/json" id="radar-first-data">([^<]*)<\/script>/.exec(html)
+    return m ? JSON.parse(m[1]).reads : null
+  }
+  const minedTx = (txid, height, asOf = TIP) => ({
+    status,
+    [`rawtx/${txid}`]: { rawtx: '00' },
+    [`tx/${txid}`]: { txHash: txid, blockHeight: height, asOfHeight: asOf },
+    [`block/${height}`]: { blockHeight: height, blockTime: '2026-11-18T16:55:45Z' },
+  })
+  const block = (hash, height, extra = {}) => ({
+    blockHeight: height,
+    blockHash: hash,
+    asOfHeight: TIP,
+    orphanedAt: null,
+    ...extra,
+  })
+
+  it('inlines the reads a mined tx page starts with, keyed by their pass-through paths', async () => {
+    const { txid } = ids()
+    hyphen(minedTx(txid, TIP - 100))
+    const reads = await inlined(`/tx/${txid.toUpperCase()}`)
+    assert.deepEqual(Object.keys(reads).sort(), [
+      `/x/hy/mainnet/block/${TIP - 100}`,
+      `/x/hy/mainnet/rawtx/${txid}`,
+      '/x/hy/mainnet/status',
+      `/x/hy/mainnet/tx/${txid}`,
+    ])
+    assert.equal(reads[`/x/hy/mainnet/tx/${txid}`].blockHeight, TIP - 100)
+    assert.ok(upstreamCalls.every((r) => r.url.startsWith('https://hy.kw.vg/api/v1/')))
+  })
+
+  it('inlines a block by height or by hash, on the network the link names', async () => {
+    const { hash } = ids()
+    const h = TIP - 6
+    hyphen({ status, [`rawblock/${h}`]: { rawblock: '00' }, [`block/${h}`]: block(hash, h) })
+    const byHeight = await inlined(`/block/${h}?network=testnet`)
+    assert.deepEqual(Object.keys(byHeight).sort(), [
+      `/x/hy/testnet/block/${h}`,
+      `/x/hy/testnet/rawblock/${h}`,
+      '/x/hy/testnet/status',
+    ])
+    assert.ok(upstreamCalls.every((r) => r.url.startsWith('https://ts.kw.vg/api/v1/')))
+    hyphen({
+      status,
+      [`rawblock/${hash}`]: { rawblock: '00' },
+      [`block/${hash}`]: block(hash, TIP - 50),
+    })
+    assert.ok((await inlined(`/block/${hash}`))[`/x/hy/mainnet/rawblock/${hash}`])
+  })
+
+  it('sends the shell alone when a read misses', async () => {
+    const { txid } = ids()
+    const routes = minedTx(txid, TIP - 100)
+    delete routes[`rawtx/${txid}`]
+    hyphen(routes)
+    assert.equal(await inlined(`/tx/${txid}`), null)
+  })
+
+  it('sends the shell alone, without waiting, when Hyphen is slow', async () => {
+    const { txid } = ids()
+    hyphen(minedTx(txid, TIP - 100), { delayMs: { '*': 4 * BUDGET_MS } })
+    const started = Date.now()
+    assert.equal(await inlined(`/tx/${txid}`), null)
+    assert.ok(Date.now() - started < 3 * BUDGET_MS, `took ${Date.now() - started} ms`)
+  })
+
+  it('inlines what is back in time when only the block time is slow', async () => {
+    const { txid } = ids()
+    hyphen(minedTx(txid, TIP - 77 - n), { delayMs: { block: 4 * BUDGET_MS } })
+    const reads = await inlined(`/tx/${txid}`)
+    assert.ok(reads[`/x/hy/mainnet/rawtx/${txid}`])
+    assert.ok(reads[`/x/hy/mainnet/tx/${txid}`])
+    assert.equal(reads[`/x/hy/mainnet/block/${TIP - 77 - n}`], undefined)
+  })
+
+  it('never inlines an unconfirmed tx', async () => {
+    const { txid } = ids()
+    hyphen({
+      status,
+      [`rawtx/${txid}`]: { rawtx: '00' },
+      [`tx/${txid}`]: { txHash: txid, blockHeight: null, asOfHeight: TIP },
+    })
+    assert.equal(await inlined(`/tx/${txid}`), null)
+  })
+
+  it('never inlines a block, or a tx in a block, within six blocks of the tip', async () => {
+    const a = ids()
+    hyphen(minedTx(a.txid, TIP - 5))
+    assert.equal(await inlined(`/tx/${a.txid}`), null)
+    hyphen({
+      status,
+      [`rawblock/${a.hash}`]: { rawblock: '00' },
+      [`block/${a.hash}`]: block(a.hash, TIP - 5),
+    })
+    assert.equal(await inlined(`/block/${a.hash}`), null)
+    const b = ids()
+    hyphen({
+      status,
+      [`rawblock/${b.hash}`]: { rawblock: '00' },
+      [`block/${b.hash}`]: block(b.hash, TIP - 100, { orphanedAt: '2026-11-18T00:00:00Z' }),
+    })
+    assert.equal(await inlined(`/block/${b.hash}`), null)
+  })
+
+  it('reads nothing for a bad id, a devnet, a Decentralized only link or a link preview', async () => {
+    const { txid } = ids()
+    hyphen(minedTx(txid, TIP - 100))
+    for (const p of [
+      '/tx/abc',
+      `/tx/${txid}x`,
+      '/tx/123',
+      '/block/-1',
+      '/block/1234567890',
+      `/tx/${txid}?network=devnet-x`,
+      `/tx/${txid}?network=constructor`,
+      `/tx/${txid}?sources=decentralized`,
+    ])
+      assert.equal(await inlined(p), null, p)
+    assert.equal(upstreamCalls.length, 0)
+    // A preview reads its own one backend answer for the title, never the page's first data.
+    const preview = await inlined(`/tx/${txid}`, {
+      headers: { 'user-agent': 'Slackbot-LinkExpanding 1.0' },
+    })
+    assert.equal(preview, null)
+    assert.ok(upstreamCalls.length <= 1)
+  })
+
+  it('cannot close its own script element', async () => {
+    const { txid } = ids()
+    const routes = minedTx(txid, TIP - 100)
+    routes[`tx/${txid}`] = { ...routes[`tx/${txid}`], note: '</script><script>x()' }
+    hyphen(routes)
+    const html = await (await get(`/tx/${txid}`)).text()
+    assert.doesNotMatch(html, /<\/script><script>x\(\)/)
+    const m = /id="radar-first-data">([^<]*)<\/script>/.exec(html)
+    assert.equal(JSON.parse(m[1]).reads[`/x/hy/mainnet/tx/${txid}`].note, '</script><script>x()')
   })
 })
 
