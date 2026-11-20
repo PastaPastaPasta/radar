@@ -1,6 +1,7 @@
 import type { z } from 'zod'
 import type { NetworkId } from '@/lib/network'
 import type { Sourced } from '../envelope'
+import { measureAgainst, type Reference } from '../index-state'
 import { healthRegistry } from '../health'
 import { indexedLagDetail } from '../health-lag'
 import { INDEX_STALE_BLOCKS } from '../index-state'
@@ -126,7 +127,7 @@ export const hyphen = {
   async status(
     net: NetworkId,
     signal?: AbortSignal,
-    referenceHeight?: number,
+    referenceHeight?: Reference,
     opts: { probe?: boolean } = {},
   ): Promise<Sourced<HyStatus>> {
     const out = await fetchSourced({
@@ -141,7 +142,7 @@ export const hyphen = {
         return heights.length > 0 ? Math.min(...heights) : undefined
       },
     })
-    reportHyphenLag(net, out.data, referenceHeight)
+    await measureAgainst(referenceHeight, (height) => reportHyphenLag(net, out.data, height))
     return out
   },
 

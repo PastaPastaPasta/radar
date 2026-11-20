@@ -3,6 +3,8 @@ import { resolveHyphenRequest, UPSTREAM_USER_AGENT } from './hyphen-path'
 const FORWARD_REQUEST = ['accept', 'if-none-match']
 const KEEP_RESPONSE = ['etag', 'last-modified', 'content-language', 'vary']
 const LIST_TTL_SECONDS = 15
+/** Raw bytes by hash: the browser checks them against the hash, and they cannot change. */
+const IMMUTABLE_TTL_SECONDS = 86_400
 const UPSTREAM_TIMEOUT_MS = 10_000
 
 const NDJSON = 'application/x-ndjson'
@@ -44,7 +46,8 @@ export async function handleProxy(request: Request, url: URL): Promise<Response>
   }
   const resolved = resolveHyphenRequest(url.pathname, url.search)
   if (!resolved.ok) return json(resolved.status, { error: resolved.error })
-  const { url: target, stream: isStream } = resolved
+  const { url: target, stream: isStream, immutable } = resolved
+  const ttl = immutable ? IMMUTABLE_TTL_SECONDS : LIST_TTL_SECONDS
 
   const headers = new Headers({ 'user-agent': UPSTREAM_USER_AGENT })
   for (const name of FORWARD_REQUEST) {
@@ -62,7 +65,7 @@ export async function handleProxy(request: Request, url: URL): Promise<Response>
         ? { cacheTtl: 0, cacheEverything: false }
         : {
             cacheEverything: true,
-            cacheTtlByStatus: { '200-299': LIST_TTL_SECONDS, '300-499': 0, '500-599': 0 },
+            cacheTtlByStatus: { '200-299': ttl, '300-499': 0, '500-599': 0 },
           },
     })
   } catch {
@@ -87,7 +90,7 @@ export async function handleProxy(request: Request, url: URL): Promise<Response>
     out.set('cache-control', 'no-store')
     out.set('x-accel-buffering', 'no')
   } else if (upstream.ok) {
-    out.set('cache-control', `public, max-age=${LIST_TTL_SECONDS}`)
+    out.set('cache-control', `public, max-age=${ttl}${immutable ? ', immutable' : ''}`)
   } else {
     out.set('cache-control', 'no-store')
   }

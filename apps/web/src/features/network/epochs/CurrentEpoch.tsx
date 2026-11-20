@@ -1,6 +1,4 @@
 import { useLingui } from '@lingui/react/macro'
-import { useQuery } from '@tanstack/react-query'
-import { sdkQueries } from '@/data/sdk/queries'
 import { Entity, useNetwork, usePageClaim } from '@/features/entity'
 import { formatInt, formatPercent } from '@/lib/format'
 import {
@@ -15,8 +13,7 @@ import {
   useNow,
 } from '@/ui'
 import { epochLengthMs } from '@/lib/epoch-length'
-
-const NONE = {} as const
+import { useCurrentEpoch } from './current-epoch'
 
 /** The multiplier on every fee this epoch, as the chain sets it: 1000 permille is 1×. */
 export function formatMultiplier(permille: number): string {
@@ -28,7 +25,7 @@ export function CurrentEpoch() {
   const { t } = useLingui()
   const net = useNetwork()
   const ready = useAfterIdle()
-  const tip = useQuery({ ...sdkQueries['epoch.current'](net, NONE), enabled: ready })
+  const tip = useCurrentEpoch(net, ready)
   const epoch = tip.data?.data
   const height = tip.data?.height
   const length = epochLengthMs(net)
@@ -89,8 +86,17 @@ export function CurrentEpoch() {
                 label: t`Blocks so far`,
                 value: blocksSoFar === undefined ? '—' : formatInt(blocksSoFar),
               },
-              { label: t`Fee multiplier`, value: formatMultiplier(epoch.feeMultiplierPermille) },
-              { label: t`Protocol version`, value: `v${epoch.protocolVersion}` },
+              {
+                label: t`Fee multiplier`,
+                value:
+                  epoch.feeMultiplierPermille === undefined
+                    ? '—'
+                    : formatMultiplier(epoch.feeMultiplierPermille),
+              },
+              {
+                label: t`Protocol version`,
+                value: epoch.protocolVersion === undefined ? '—' : `v${epoch.protocolVersion}`,
+              },
             ]}
           />
         </div>

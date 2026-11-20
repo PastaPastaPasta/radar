@@ -562,6 +562,7 @@ msgstr "アイデンティティデコーダー"
 msgid "in {0}"
 msgstr "{0} 内"
 
+#. placeholder {0}: formatInt(tx.height ?? 0)
 #. placeholder {0}: formatInt(tx.height)
 msgid "In block {0}"
 msgstr "ブロック {0} 内"
@@ -1299,8 +1300,8 @@ msgstr "持分保有者が共有マスターノードを解散し、担保を取
 msgid "The shielded pool’s state, anchors, encrypted notes and a nullifier lookup."
 msgstr "シールドプールの状態、アンカー、暗号化ノート、ヌリファイア照会。"
 
-msgid "The transaction as Radar decoded it from DAPI's bytes. Amounts are in duffs."
-msgstr "DAPI のバイト列から Radar がデコードしたトランザクションです。金額の単位は duff です。"
+msgid "The transaction as Radar decoded it from its raw bytes, checked against its ID. Amounts are in duffs."
+msgstr "Radar が生のバイトからデコードし、ID と照合したトランザクションです。金額の単位は duff です。"
 
 msgid "The transaction is not in a block yet."
 msgstr "このトランザクションはまだブロックに含まれていません。"

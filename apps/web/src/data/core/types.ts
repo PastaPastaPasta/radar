@@ -156,6 +156,23 @@ export interface CoreClient {
     signal?: AbortSignal,
     opts?: CoreCallOptions,
   ): Promise<Sourced<DecodedTx | null>> // with height, confirmations, isInstantLocked, isChainLocked
+  /**
+   * Indexed first (§4.7): Hyphen's answer for a detail page while DAPI's is on its way, from bytes checked against the
+   * request like DAPI's, stamped `fallback: 'dapi-cold'`. Null when Hyphen may not answer (mode, devnet, a stale or
+   * down index) or has no such transaction; a miss here says nothing about the chain.
+   */
+  indexedTx(net: NetworkId, txid: string, signal?: AbortSignal): Promise<Sourced<DecodedTx> | null>
+  indexedBlock(
+    net: NetworkId,
+    ref: BlockRef,
+    signal?: AbortSignal,
+  ): Promise<Sourced<DecodedBlock> | null>
+  /** The newest `count` rows of Hyphen's block list, for the latest-blocks page until DAPI's rows land. */
+  indexedLatestRows(
+    net: NetworkId,
+    count: number,
+    signal?: AbortSignal,
+  ): Promise<Sourced<BlockRow[]> | null>
   prevouts(
     net: NetworkId,
     tx: DecodedTx,

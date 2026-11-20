@@ -63,13 +63,53 @@ export async function activateLocale(code: LocaleCode, remember = false): Promis
   }
 }
 
+/** How long startup waits for one catalog before trying the next. */
+export const STARTUP_CATALOG_MS = 8_000
+
+function within(p: Promise<void>, ms: number): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error('catalog load timed out')), ms)
+    p.then(
+      () => {
+        clearTimeout(timer)
+        resolve()
+      },
+      (e: unknown) => {
+        clearTimeout(timer)
+        reject(e instanceof Error ? e : new Error(String(e)))
+      },
+    )
+  })
+}
+
+/**
+ * Activates a locale for startup, and always settles with one active: the saved choice, else the browser's languages
+ * (the catalog the edge preloads and the service worker keeps), else English. Offline with none of them cached, it is
+ * English with no catalog, which shows message ids but never leaves Lingui without a locale or the router waiting.
+ */
+export async function startLocale(
+  activate: (code: LocaleCode) => Promise<void> = activateLocale,
+  ms = STARTUP_CATALOG_MS,
+): Promise<void> {
+  const browser = matchLocale(globalThis.navigator?.languages ?? []) ?? SOURCE_LOCALE
+  for (const code of new Set([detectLocale(), browser, SOURCE_LOCALE])) {
+    try {
+      await within(activate(code), ms)
+      return
+    } catch {
+      // that catalog is unavailable (offline and not cached): try the next
+    }
+  }
+  ++latestRequest
+  i18n.load(SOURCE_LOCALE, {})
+  apply(SOURCE_LOCALE)
+}
+
 /**
  * The catalog of the visitor's locale, loaded as its own chunk so it stays out of the entry. The app renders after this
- * settles, which keeps message ids from flashing; a missing catalog falls back to English and then to the ids.
+ * settles, which keeps message ids from flashing; it always settles with a locale active (`startLocale`).
  */
-export const i18nReady: Promise<void> = activateLocale(detectLocale())
-  .catch(() => activateLocale(SOURCE_LOCALE))
-  .catch(() => undefined)
+export const i18nReady: Promise<void> = startLocale()
 
 export function useLocale(): {
   locale: LocaleCode

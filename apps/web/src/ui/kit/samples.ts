@@ -31,6 +31,7 @@ export const STAMPS = {
   }),
   notProved: stamp('sdk', 4_000),
   sdkCold: stamp('pe', 3_000, { fallback: 'sdk-cold' }),
+  dapiCold: stamp('hyphen', 3_000, { fallback: 'dapi-cold' }),
   dapi: stamp('dapi', 2_000, { node: '45.32.107.227:1443' }),
   pe: stamp('pe', 12_000),
   radar: stamp('radar', 13 * 60_000),

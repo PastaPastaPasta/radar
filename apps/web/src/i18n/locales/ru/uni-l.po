@@ -562,6 +562,7 @@ msgstr "Декодер идентичностей"
 msgid "in {0}"
 msgstr "в {0}"
 
+#. placeholder {0}: formatInt(tx.height ?? 0)
 #. placeholder {0}: formatInt(tx.height)
 msgid "In block {0}"
 msgstr "В блоке {0}"
@@ -1299,8 +1300,8 @@ msgstr "Совладельцы распускают общую мастерно�
 msgid "The shielded pool’s state, anchors, encrypted notes and a nullifier lookup."
 msgstr "Состояние защищённого пула, якоря, зашифрованные заметки и поиск нуллификаторов."
 
-msgid "The transaction as Radar decoded it from DAPI's bytes. Amounts are in duffs."
-msgstr "Транзакция в том виде, в каком Radar декодировал её из байтов DAPI. Суммы указаны в даффах."
+msgid "The transaction as Radar decoded it from its raw bytes, checked against its ID. Amounts are in duffs."
+msgstr "Транзакция в том виде, в каком Radar декодировал её из исходных байтов и сверил с её ID. Суммы указаны в даффах."
 
 msgid "The transaction is not in a block yet."
 msgstr "Транзакция ещё не в блоке."

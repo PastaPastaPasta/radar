@@ -114,6 +114,13 @@ function base(stamp: SourceStamp): { label: string; icon: IconName; showAge: boo
     case 'pe':
       return { label: t`Indexed by Platform Explorer`, icon: ICON.pe, showAge: true }
     case 'hyphen':
+      if (stamp.fallback === 'dapi-cold') {
+        return {
+          label: t`Indexed by Hyphen · checking with DAPI…`,
+          icon: ICON.hyphen,
+          showAge: false,
+        }
+      }
       if (stamp.fallback === 'dapi-down') {
         return { label: t`Indexed by Hyphen · DAPI unreachable`, icon: ICON.hyphen, showAge: false }
       }
@@ -213,7 +220,7 @@ export function sourceView(
         : undefined,
     ...(lag === undefined ? {} : { lag }),
     ageTitle: formatIsoUtc(stamp.asOf),
-    spinner: stamp.fallback === 'sdk-cold',
+    spinner: stamp.fallback === 'sdk-cold' || stamp.fallback === 'dapi-cold',
     title,
     state: stale ? 'stale' : health.state === 'unknown' ? 'ok' : health.state,
   }

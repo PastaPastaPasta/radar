@@ -1,7 +1,10 @@
 export type SourceId = 'sdk' | 'dapi' | 'radar' | 'pe' | 'hyphen' | 'insight' | 'rate' | 'local'
 
-/** Why a value came from a fallback instead of its primary source. */
-export type FallbackReason = 'dapi-budget' | 'dapi-down' | 'sdk-cold' | 'sdk-down'
+/**
+ * Why a value came from a fallback instead of its primary source. `dapi-cold` and `sdk-cold`: an index's answer shown
+ * while the primary source is still being asked, replaced when it answers.
+ */
+export type FallbackReason = 'dapi-budget' | 'dapi-down' | 'dapi-cold' | 'sdk-cold' | 'sdk-down'
 
 /** Which chain a stamp's `height` counts on. */
 export type HeightChain = 'core' | 'platform'

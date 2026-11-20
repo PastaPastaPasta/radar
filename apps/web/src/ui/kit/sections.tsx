@@ -808,6 +808,7 @@ const MARKS: [string, (typeof STAMPS)[keyof typeof STAMPS]][] = [
   ['sdk, proved', STAMPS.proof],
   ['sdk, not proved', STAMPS.notProved],
   ['sdk-cold', STAMPS.sdkCold],
+  ['dapi-cold', STAMPS.dapiCold],
   ['dapi', STAMPS.dapi],
   ['radar', STAMPS.radar],
   ['pe', STAMPS.pe],
