@@ -186,7 +186,7 @@ test.describe('Home', () => {
 
   test('reads the Core figures again when a new block arrives @HY-01', async ({ page }) => {
     await page.goto('/')
-    const difficulty = page.locator('[data-headline] .rx-fig').filter({ hasText: 'Difficulty' })
+    const difficulty = page.locator('[data-headline] .rx-fig').filter({ hasText: /^\s*Difficulty/ })
     await expect(difficulty).toContainText(/\d/)
     await expect(difficulty).not.toHaveAttribute('aria-busy', 'true')
     await expect
