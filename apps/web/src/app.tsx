@@ -1,4 +1,4 @@
-import { QueryClientProvider } from '@tanstack/react-query'
+import { QueryClientProvider, type QueryClient } from '@tanstack/react-query'
 import { RouterProvider, type RouterHistory } from '@tanstack/react-router'
 import { useState } from 'react'
 import { createQueryClient } from './app/query-client'
@@ -7,11 +7,20 @@ import { createAppRouter } from './router'
 
 registerEntityHoverCards()
 
-export { createQueryClient }
+export { createQueryClient, createAppRouter }
 
-export function App({ history }: { history?: RouterHistory }) {
-  const [queryClient] = useState(createQueryClient)
-  const [router] = useState(() => createAppRouter(queryClient, history))
+export type AppRouter = ReturnType<typeof createAppRouter>
+
+/** `main.tsx` passes a client and router it has already started loading the first route with. */
+export function App({
+  history,
+  started,
+}: {
+  history?: RouterHistory
+  started?: { queryClient: QueryClient; router: AppRouter }
+}) {
+  const [queryClient] = useState(() => started?.queryClient ?? createQueryClient())
+  const [router] = useState(() => started?.router ?? createAppRouter(queryClient, history))
 
   return (
     <QueryClientProvider client={queryClient}>
