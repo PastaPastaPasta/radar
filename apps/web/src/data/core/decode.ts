@@ -35,7 +35,12 @@ export function createCoreDecoder(load: () => Promise<WasmCore>): CoreDecoder & 
   warm(): void
 } {
   let loaded: Promise<WasmCore> | undefined
-  const wasm = () => (loaded ??= load())
+  // A load that failed (a warm-up while offline, say) is forgotten, so the next decode tries again.
+  const wasm = () =>
+    (loaded ??= load().catch((e: unknown) => {
+      loaded = undefined
+      throw e
+    }))
 
   return {
     warm() {
