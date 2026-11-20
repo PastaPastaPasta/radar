@@ -17,8 +17,13 @@ const stamp = (source: 'dapi' | 'hyphen', extra = {}) => ({
   ...extra,
 })
 
-function harness() {
-  const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+function harness(
+  indexedAnswers: (Sourced<string> | null)[] = [
+    { ...stamp('hyphen', { fallback: 'dapi-cold' as const }), data: 'indexed' },
+  ],
+  initial: { txid: string } = { txid: 'a' },
+  client = new QueryClient({ defaultOptions: { queries: { retry: false } } }),
+) {
   let answer!: (v: Sourced<string | null>) => void
   let fail!: (e: Error) => void
   const dapi = new Promise<Sourced<string | null>>((res, rej) => {
@@ -28,21 +33,21 @@ function harness() {
   const wrapper = ({ children }: { children: ReactNode }) => (
     <QueryClientProvider client={client}>{children}</QueryClientProvider>
   )
-  const indexed = {
-    queryKey: ['mainnet', 'hyphen', 'indexed-test'] as const,
-    queryFn: () =>
-      Promise.resolve({ ...stamp('hyphen', { fallback: 'dapi-cold' as const }), data: 'indexed' }),
-  }
+  let asked = 0
+  const indexed = (txid: string) => ({
+    queryKey: ['mainnet', 'hyphen', 'indexed-test', txid] as const,
+    queryFn: () => Promise.resolve(indexedAnswers[Math.min(asked++, indexedAnswers.length - 1)]!),
+  })
   const hook = renderHook(
-    () =>
+    ({ txid }: { txid: string }) =>
       useIndexedFirst(
-        useQuery({ queryKey: ['mainnet', 'dapi', 'test'], queryFn: () => dapi }),
-        indexed,
+        useQuery({ queryKey: ['mainnet', 'dapi', 'test', txid], queryFn: () => dapi }),
+        indexed(txid),
         { enabled: true, net: 'mainnet', same: (a, b) => a === b },
       ),
-    { wrapper },
+    { wrapper, initialProps: initial },
   )
-  return { hook, answer, fail }
+  return { hook, answer, fail, client, asked: () => asked }
 }
 
 describe('useIndexedFirst', () => {
@@ -95,11 +100,37 @@ describe('useIndexedFirst', () => {
     await new Promise((r) => setTimeout(r, 30))
     expect(hook.result.current.query.data).toBeUndefined()
     probe.fit = true
-    hook.rerender()
+    hook.rerender({ txid: 'a' })
     await waitFor(() => expect(hook.result.current.query.data?.data).toBe('indexed'))
     probe.fit = false
-    hook.rerender()
+    hook.rerender({ txid: 'a' })
     expect(hook.result.current.query.data).toBeUndefined()
+  })
+
+  it('asks the index again once the probe finds it current, when its first answer was null', async () => {
+    enableEarlyAnswers()
+    probe.fit = false
+    const { hook, asked } = harness([
+      null,
+      { ...stamp('hyphen', { fallback: 'dapi-cold' as const }), data: 'indexed' },
+    ])
+    await waitFor(() => expect(asked()).toBe(1))
+    expect(hook.result.current.query.data).toBeUndefined()
+    probe.fit = true
+    hook.rerender({ txid: 'a' })
+    await waitFor(() => expect(hook.result.current.query.data?.data).toBe('indexed'))
+    expect(asked()).toBe(2)
+  })
+
+  it("compares DAPI's answer only with the index's answer for the same request", async () => {
+    enableEarlyAnswers()
+    const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+    client.setQueryData(['mainnet', 'dapi', 'test', 'b'], { ...stamp('dapi'), data: 'b from dapi' })
+    const { hook } = harness(undefined, { txid: 'a' }, client)
+    await waitFor(() => expect(hook.result.current.query.data?.data).toBe('indexed'))
+    hook.rerender({ txid: 'b' })
+    await waitFor(() => expect(hook.result.current.query.data?.data).toBe('b from dapi'))
+    expect(hook.result.current.differed).toBe(false)
   })
 
   it('asks the index nothing when early answers are off', async () => {

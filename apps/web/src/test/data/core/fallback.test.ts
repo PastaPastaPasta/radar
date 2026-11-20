@@ -327,6 +327,14 @@ describe('indexed first: Hyphen answers while DAPI is asked (§4.7)', () => {
     })
   })
 
+  it('shows no unmined transaction from a replica that does not say how far it has indexed', async () => {
+    const { core, hyphen } = setup()
+    hyphen.rawTx.mockResolvedValue(sourced('hyphen', { rawtx }) as never)
+    hyphen.tx.mockResolvedValue(sourced('hyphen', { blockHeight: null, asOfHeight: null }) as never)
+    current(hyphen)
+    expect(await core.indexedTx('mainnet', TXID)).toBeNull()
+  })
+
   it('shows nothing from an index that has fallen behind its own node', async () => {
     const { core, hyphen } = setup()
     hyphenHasTx(hyphen)

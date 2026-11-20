@@ -1083,7 +1083,8 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
       if (!found || measured === undefined) return null
       // A mined transaction's place is fixed, and Hyphen keeps its answer as it was; one not yet mined must be current.
       const mined = found.value.height !== undefined
-      return mined || keptUp(found.stamp.height, measured)
+      const asOf = found.stamp.height
+      return mined || (asOf !== undefined && keptUp(asOf, measured))
         ? { ...hostedTxResult(found), fallback: 'dapi-cold' as const }
         : null
     },

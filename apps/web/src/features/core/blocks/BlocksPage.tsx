@@ -22,6 +22,7 @@ import { isDevnet } from '@/lib/network'
 import { Card, DataTable, Empty, Hash, LockMark, SegFilter, SourceLine, Time } from '@/ui'
 import { CoreBand, RecordHeader, Section } from '../block/frame'
 import { BlocksClaim } from '../claims'
+import { useAskAgainOnceCurrent } from '../indexed-first'
 import {
   BLOCKS_PER_PAGE,
   DAY_MS,
@@ -227,6 +228,7 @@ function useIndexedLatestRows(
     ...coreQueries.indexedLatestRows(net, LATEST_BLOCK_ROWS),
     enabled: on,
   })
+  useAskAgainOnceCurrent(on, fit, query.data, query.refetch)
   const data = query.data
   if (!on || !fit || !data || data.data.length === 0) return undefined
   return {

@@ -4,7 +4,7 @@ import {
   type UseQueryOptions,
   type UseQueryResult,
 } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { earlyAnswers } from '@/data/early'
 import type { Sourced } from '@/data/envelope'
 import { useHyphenFit } from '@/data/hyphen/fit'
@@ -14,6 +14,21 @@ export interface IndexedFirst<T> {
   query: UseQueryResult<Sourced<T | null>>
   /** Hyphen's answer was on screen and DAPI's, when it landed, said something else. */
   differed: boolean
+}
+
+/**
+ * An index read that answered null (its status read failed, or the index trailed) before the probe found the index
+ * current is no verdict: once the probe does, it is asked again. A null it gives after that stands.
+ */
+export function useAskAgainOnceCurrent(
+  on: boolean,
+  fit: boolean,
+  data: unknown,
+  refetch: () => Promise<unknown>,
+): void {
+  useEffect(() => {
+    if (on && fit && data === null) void refetch()
+  }, [on, fit, data, refetch])
 }
 
 /**
@@ -32,16 +47,19 @@ export function useIndexedFirst<T, K extends QueryKey>(
   const waiting = enabled && earlyAnswers() && primary.data === undefined && !primary.isError
   // The read starts at once (the loader started it too); only the probe's verdict lets it on screen.
   const stand = useQuery({ ...indexed, enabled: waiting })
-  // The index's answer last put on screen, to say whether DAPI's differed from it.
-  const [shown, setShown] = useState<Sourced<T> | undefined>(undefined)
+  useAskAgainOnceCurrent(waiting, fit, stand.data, stand.refetch)
+  // The index's answer last put on screen for this request, to say whether DAPI's differed from it.
+  const request = JSON.stringify(indexed.queryKey)
+  const [shown, setShown] = useState<{ request: string; answer: Sourced<T> } | undefined>(undefined)
   if (waiting && fit && stand.data) {
-    if (shown !== stand.data) setShown(stand.data)
+    if (shown?.request !== request || shown.answer !== stand.data)
+      setShown({ request, answer: stand.data })
     return {
       query: { ...primary, data: stand.data } as unknown as UseQueryResult<Sourced<T | null>>,
       differed: false,
     }
   }
-  const before = shown?.data
+  const before = shown?.request === request ? shown.answer.data : undefined
   const after = primary.data?.data
   const differed =
     before !== undefined && primary.data !== undefined && (after == null || !same(before, after))
