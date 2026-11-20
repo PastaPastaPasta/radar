@@ -126,7 +126,13 @@ describe('looksLikeCoinJoinMix', () => {
     expect(looksLikeCoinJoinMix(row, 'mainnet')).toBe(true)
     expect(looksLikeCoinJoinMix({ ...row, fee: 226n }, 'mainnet')).toBe(false)
     expect(looksLikeCoinJoinMix({ ...row, fee: null }, 'mainnet')).toBe(false)
-    expect(looksLikeCoinJoinMix({ ...row, valueOut: 2_000_020n }, 'mainnet')).toBe(false)
+    expect(looksLikeCoinJoinMix({ ...row, valueOut: 200_002n }, 'mainnet')).toBe(false)
+  })
+
+  it('tries every denomination: ten 0.100001 DASH coins are one 1.00001, too few alone', () => {
+    const row = { txType: 'normal', valueOut: 10n * 10_000_100n, fee: 0n }
+    expect(looksLikeCoinJoinMix(row, 'mainnet')).toBe(true)
+    expect(looksLikeCoinJoinMix({ ...row, valueOut: 0n }, 'mainnet')).toBe(false)
   })
 
   it('leaves a row with neither counts nor a fee alone', () => {

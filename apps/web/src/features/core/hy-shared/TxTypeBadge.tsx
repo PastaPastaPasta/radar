@@ -16,7 +16,15 @@ export function TxTypeBadge({
 }) {
   const { t } = useLingui()
   const net = useNetwork()
-  if (row && looksLikeCoinJoinMix(row, net)) return <TypeBadge type="coinjoin" />
+  if (row && looksLikeCoinJoinMix(row, net))
+    return (
+      <span
+        title={t`CoinJoin, inferred from the transaction’s total and zero fee; its page checks each output`}
+        data-inferred=""
+      >
+        <TypeBadge type="coinjoin" />
+      </span>
+    )
   const known = coreTxType(type, outputCount)
   if (known) return <TypeBadge type={known} />
   return <Badge>{type === 'data' ? t`Carries data` : txTypeLabel(type)}</Badge>

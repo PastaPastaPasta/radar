@@ -51,21 +51,23 @@ export interface TxRowFacts {
 /**
  * The same test from an index's list row, which has a total but no outputs: a plain transaction whose total is a whole
  * number of one denomination, with as many inputs as outputs when the row counts them, or no fee when it gives one (only
- * a mixing transaction is relayed without one). A row that says neither, or mixes denominations, is not labelled.
+ * a mixing transaction is relayed without one). A row that says neither is not labelled. The label is inferred: only
+ * a decoded transaction is checked output by output.
  */
 export function looksLikeCoinJoinMix(row: TxRowFacts, net: NetworkId): boolean {
   if (row.txType !== 'normal') return false
-  let n: number
+  const fits = (n: number) => n >= minParticipants(net) && n <= MAX_INPUTS
   if (row.inputCount !== undefined && row.outputCount !== undefined) {
-    if (row.inputCount !== row.outputCount) return false
-    n = row.outputCount
-    if (!COINJOIN_DENOMINATIONS.some((d) => d * BigInt(n) === row.valueOut)) return false
-  } else if (row.fee === 0n) {
-    const d = COINJOIN_DENOMINATIONS.find((x) => row.valueOut % x === 0n)
-    if (d === undefined) return false
-    n = Number(row.valueOut / d)
-  } else {
-    return false
+    const n = row.outputCount
+    return (
+      row.inputCount === n &&
+      fits(n) &&
+      COINJOIN_DENOMINATIONS.some((d) => d * BigInt(n) === row.valueOut)
+    )
   }
-  return n >= minParticipants(net) && n <= MAX_INPUTS
+  if (row.fee !== 0n) return false
+  // Any denomination whose count fits: 10 × 0.100001 is also 1 × 1.00001, which alone is too few.
+  return COINJOIN_DENOMINATIONS.some(
+    (d) => row.valueOut > 0n && row.valueOut % d === 0n && fits(Number(row.valueOut / d)),
+  )
 }
