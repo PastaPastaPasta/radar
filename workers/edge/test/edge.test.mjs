@@ -189,9 +189,14 @@ describe('route preloads', () => {
     assert.doesNotMatch(html, /identity\.js/)
   })
 
-  it("follows the visitor's language", async () => {
+  it("follows the visitor's language, marks the catalog apart from the route's chunks, and varies by language", async () => {
     const files = await preloads('/?network=testnet', { 'accept-language': 'de-AT,de;q=0.9' })
     assert.deepEqual(files, ['/assets/de.js', '/assets/home.js'])
+    const res = await get('/', { headers: { 'accept-language': 'de' } })
+    assert.match(res.headers.get('vary') ?? '', /accept-language/i)
+    const html = await res.text()
+    assert.match(html, /<link rel="modulepreload" crossorigin data-locale href="\/assets\/de.js">/)
+    assert.match(html, /<link rel="modulepreload" crossorigin data-route href="\/assets\/home.js">/)
   })
 
   it('still preloads the catalog on a path no route claims', async () => {

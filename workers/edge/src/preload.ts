@@ -76,31 +76,48 @@ export function localeFor(acceptLanguage: string | null, locales: readonly strin
   return locales.includes('en') ? 'en' : (locales[0] ?? 'en')
 }
 
+/**
+ * A file to preload and what it is for: the visitor's catalog, which every page needs and the service worker keeps
+ * for offline visits, or one route's chunks, which it leaves out of the shell (`apps/web/src/sw/sw-core.ts`).
+ */
+export interface Preload {
+  file: string
+  kind: 'locale' | 'route'
+}
+
 /** Every file the page at `url` loads before its first data arrives, beyond the entry itself. */
 export function preloadFiles(
   compiled: Compiled,
   url: URL,
   acceptLanguage: string | null,
-): string[] {
+): Preload[] {
   const { table, routes } = compiled
   const path = trimSlash(url.pathname)
   const route = routes.find((r) => r.re.test(path))
   const locale = localeFor(acceptLanguage, Object.keys(table.locales))
-  const ix = new Set([...(table.locales[locale] ?? []), ...(route?.files ?? [])])
-  return [...ix].flatMap((i) => table.files[i] ?? [])
+  const catalog = new Set(table.locales[locale] ?? [])
+  const ix = new Set([...catalog, ...(route?.files ?? [])])
+  return [...ix].flatMap((i) => {
+    const file = table.files[i]
+    return file ? [{ file, kind: catalog.has(i) ? ('locale' as const) : ('route' as const) }] : []
+  })
 }
 
-const linkTag = (file: string) =>
+const linkTag = ({ file, kind }: Preload) =>
   file.endsWith('.css')
-    ? `<link rel="preload" as="style" crossorigin data-route href="/${file}">`
-    : `<link rel="modulepreload" crossorigin data-route href="/${file}">`
+    ? `<link rel="preload" as="style" crossorigin data-${kind} href="/${file}">`
+    : `<link rel="modulepreload" crossorigin data-${kind} href="/${file}">`
 
-/** Adds the preload links to the page's head; the browser fetches them beside the entry instead of after it. */
-export function withPreloads(res: Response, files: readonly string[]): Response {
+/**
+ * Adds the preload links to the page's head; the browser fetches them beside the entry instead of after it. The page
+ * then names the catalog of the visitor's language, so it varies by `Accept-Language`.
+ */
+export function withPreloads(res: Response, files: readonly Preload[]): Response {
   if (files.length === 0) return res
   const out = new Response(res.body, res)
   out.headers.delete('etag')
   out.headers.delete('last-modified')
+  out.headers.append('vary', 'accept-language')
   const tags = files.map(linkTag).join('')
   return new HTMLRewriter()
     .on('head', { element: (el) => void el.append(tags, { html: true }) })

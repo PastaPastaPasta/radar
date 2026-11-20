@@ -25,7 +25,8 @@ const ROUTE_PRELOAD = /\sdata-route(?=[\s=>/])/i
 /**
  * The hashed files a build's HTML names: its scripts, preloaded chunks and styles, and nothing from another origin.
  * The edge's route preloads are left out: the shell is the same for every page, and fetching one route's chunks again
- * while that page loads would only compete with it.
+ * while that page loads would only compete with it. The catalog it names (`data-locale`) stays, so an offline visit
+ * can render.
  */
 export function assetUrls(html: string, origin: string): string[] {
   const found = new Set<string>()
