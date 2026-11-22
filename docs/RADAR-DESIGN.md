@@ -2,7 +2,7 @@
 
 Radar is the read-only explorer for the whole Dash network: Core blocks and transactions, the masternode network, and Dash Platform. It ships first at explorer.dashhq.org. This document sets how Radar looks and moves. `docs/ARCHITECTURE.md` owns component names, props and data flow; this document uses the same names and owns what they look like.
 
-Radar is a dashhq product. It sits on shell 1.9.3 (`dashhq-tokens.css`, `dashhq-shell.css`, `dashhq-components.css`) and follows `dashhq-lab/design/DESIGN.md`: Archivo, sentence case, one amber primary per view, blue for wayfinding, status green/orange/red always with a word, sources beside figures. Everything below adds to that; nothing here overrides a family rule without saying so (§15).
+Radar is a dashhq product. It sits on shell 1.9.5 (`dashhq-tokens.css`, `dashhq-shell.css`, `dashhq-components.css`) and follows `dashhq-lab/design/DESIGN.md`: Archivo, sentence case, one amber primary per view, blue for wayfinding, status green/orange/red always with a word, sources beside figures. Everything below adds to that; nothing here overrides a family rule without saying so (§15).
 
 Mockups: `docs/mockups/index.html` (static HTML, live data captured 10 Nov 2026). Screenshots: `docs/mockups/shots/`. The CSS in `docs/mockups/assets/radar.css` is the reference implementation of every value in this file.
 
