@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { stampOf, type SourceStamp } from '@/data/envelope'
 import { recentMempoolTxs } from '@/data/hyphen/queries'
 import { MEMPOOL_REREAD_DELAY_MS } from '@/data/query/stale'
+import { whenVisible } from '@/features/entity'
 import type { NetworkId } from '@/lib/network'
 
 export interface FirstSeen {
@@ -28,12 +29,16 @@ export function useFirstSeen(
   // A transaction opened just after it was broadcast may not be indexed yet: look once more, a moment later.
   useEffect(() => {
     if (!missing) return
-    const timer = setTimeout(
-      () =>
-        void client.invalidateQueries({ queryKey: recentMempoolTxs(net).queryKey, exact: true }),
-      MEMPOOL_REREAD_DELAY_MS,
-    )
-    return () => clearTimeout(timer)
+    let cancelWait: () => void = () => undefined
+    const reread = () =>
+      void client.invalidateQueries({ queryKey: recentMempoolTxs(net).queryKey, exact: true })
+    const timer = setTimeout(() => {
+      cancelWait = whenVisible(reread)
+    }, MEMPOOL_REREAD_DELAY_MS)
+    return () => {
+      clearTimeout(timer)
+      cancelWait()
+    }
   }, [missing, client, net, txid])
   if (row && query.data && held?.at !== row.firstSeenAt) {
     setHeld({ at: row.firstSeenAt, stamp: stampOf(query.data) })
