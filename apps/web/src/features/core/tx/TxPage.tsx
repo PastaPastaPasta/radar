@@ -7,7 +7,7 @@ import { instantLockView } from '@/data/core/lock-state'
 import { coreQueries } from '@/data/core/queries'
 import type { DecodedTx } from '@/data/core/types'
 import { stampOf, type SourceStamp } from '@/data/envelope'
-import { hyQueries } from '@/data/hyphen/queries'
+import { hyQueries, recentMempoolTxs } from '@/data/hyphen/queries'
 import { useDocumentTitle, useNetwork } from '@/features/entity'
 import { formatBytes, formatInt } from '@/lib/format'
 import { formatAmountText } from '@/lib/units'
@@ -79,7 +79,7 @@ export function TxPage({ txid }: { txid: string }) {
   })
   const found = tx.data?.data
   const tipHeight = useFollowTip(net, {
-    keys: [coreQueries.tx(net, txid).queryKey, hyQueries.mempoolTxs(net, { limit: 20 }).queryKey],
+    keys: [coreQueries.tx(net, txid).queryKey, recentMempoolTxs(net).queryKey],
     settled: found?.isChainLocked === true,
     enabled: valid,
   })
