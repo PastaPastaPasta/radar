@@ -250,25 +250,31 @@ function BlocksCard({ blocks }: { blocks: ReturnType<typeof useCoreBlocks> }) {
 
 function usePending(paused: boolean) {
   const { net, fit, devnet, stale, off } = useHyphenBlocked()
-  const query = useQuery({ ...hyQueries.mempoolTxs(net, { limit: 20 }), enabled: fit })
+  const indexed = hyQueries.mempoolTxs(net, { limit: 20 })
+  const query = useQuery({ ...indexed, enabled: fit })
+  const tip = useQuery(coreQueries.tip(net))
+  // Hyphen's list is read once, then again on each block; DAPI's live feed adds what arrives in between.
+  useRefetchOnRise(net, tip.data?.data.height, { keys: [indexed.queryKey], settled: !fit })
   const seenOnly = (stale || off) && !devnet
   // Asking for every stored row returns the hook's own array, which keeps its identity between events; a shorter limit is
   // a fresh slice on each render, and `useFrozen` follows identity.
-  const seen = useSeenPending(net, seenOnly, SEEN_STORE_LIMIT)
-  const live = useMemo<PendingRow[]>(
-    () =>
-      seenOnly
-        ? seen.rows
-            .slice(0, PENDING)
-            .map((r) => ({ txid: r.txid, value: r.value, size: r.size, at: r.seenAt }))
-        : (query.data?.data.items ?? []).map((r) => ({
-            txid: r.txHash,
-            value: r.valueOut,
-            size: r.txSize,
-            at: r.firstSeenAt,
-          })),
-    [seenOnly, seen.rows, query.data],
-  )
+  const seen = useSeenPending(net, !devnet, SEEN_STORE_LIMIT)
+  const live = useMemo<PendingRow[]>(() => {
+    const fromSeen = seen.rows.slice(0, PENDING).map((r) => ({
+      txid: r.txid,
+      value: r.value,
+      size: r.size,
+      at: r.seenAt,
+    }))
+    if (seenOnly) return fromSeen
+    const fromIndex = (query.data?.data.items ?? [])
+      .filter((r) => !seen.mined.has(r.txHash))
+      .map((r) => ({ txid: r.txHash, value: r.valueOut, size: r.txSize, at: r.firstSeenAt }))
+    const listed = new Set(fromIndex.map((r) => r.txid))
+    return [...fromSeen.filter((r) => !listed.has(r.txid)), ...fromIndex]
+      .sort((a, b) => b.at - a.at)
+      .slice(0, PENDING)
+  }, [seenOnly, seen.rows, seen.mined, query.data])
   const rows = useFrozen(live, paused)
   const stamp = seenOnly ? seen.stamp : query.data ? stampOf(query.data) : undefined
   return { query, rows, stamp, seenOnly, seenAny: seen.rows.length > 0, fit, devnet, off }

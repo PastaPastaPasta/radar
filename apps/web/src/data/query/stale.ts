@@ -54,10 +54,11 @@ export function staleAfterMs(c: DataClass): number {
 
 /** Polling interval for the classes that poll only some of their queries (§5.2). */
 export const POLL_MS = {
-  radarStatus: MINUTE,
-  radarActivation: MINUTE,
+  radarStatus: 5 * MINUTE,
+  radarActivation: 5 * MINUTE,
   peLatest: 10 * SECOND,
-  mempool: 15 * SECOND,
+  /** A backstop only: mempool lists are read again on each new block, and DAPI's live feed fills in between. */
+  mempool: 5 * MINUTE,
   /** The address page's own history, read only while DAPI's transaction stream has given up (IN-06). */
   addressFallback: 30 * SECOND,
   rate: MINUTE,

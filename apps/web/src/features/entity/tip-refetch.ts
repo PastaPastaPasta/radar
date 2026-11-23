@@ -3,9 +3,29 @@ import { useEffect, useRef } from 'react'
 import type { NetworkId } from '@/lib/network'
 
 /**
+ * Runs `fn` now if the page is visible, else once it next becomes visible. A hidden tab keeps its streams open, so
+ * the tip still rises there, but nobody is looking: the reads a new block calls for wait until somebody is.
+ * Returns a cancel.
+ */
+export function whenVisible(fn: () => void): () => void {
+  if (typeof document === 'undefined' || document.visibilityState !== 'hidden') {
+    fn()
+    return () => undefined
+  }
+  const onChange = () => {
+    if (document.visibilityState === 'hidden') return
+    document.removeEventListener('visibilitychange', onChange)
+    fn()
+  }
+  document.addEventListener('visibilitychange', onChange)
+  return () => document.removeEventListener('visibilitychange', onChange)
+}
+
+/**
  * Reads the queries in `keys` again each time `height`, the live Core tip, rises on the same network, unless `settled`.
  * A detail page uses it to refresh itself until it settles; the home page uses it for the figures no stream pushes.
- * A height that falls or repeats, or the first one seen after a network change, is not a new block.
+ * A height that falls or repeats, or the first one seen after a network change, is not a new block. Blocks that arrive
+ * while the tab is hidden cost one read, made when it is shown again.
  */
 export function useRefetchOnRise(
   net: NetworkId,
@@ -15,10 +35,13 @@ export function useRefetchOnRise(
   const queryClient = useQueryClient()
   const last = useRef<{ net: NetworkId; height: number | undefined }>(undefined)
   const wanted = useRef(keys)
+  const deferred = useRef<(() => void) | undefined>(undefined)
 
   useEffect(() => {
     wanted.current = keys
   })
+
+  useEffect(() => () => deferred.current?.(), [])
 
   useEffect(() => {
     const previous = last.current
@@ -32,9 +55,13 @@ export function useRefetchOnRise(
     ) {
       return
     }
-    for (const queryKey of wanted.current) {
-      void queryClient.invalidateQueries({ queryKey, exact: true })
-    }
+    deferred.current?.()
+    deferred.current = whenVisible(() => {
+      deferred.current = undefined
+      for (const queryKey of wanted.current) {
+        void queryClient.invalidateQueries({ queryKey, exact: true })
+      }
+    })
   }, [net, height, settled, queryClient])
 }
 
@@ -70,16 +97,22 @@ export function useCatchUpToTip(
     if (!enabled || !loaded || tipHeight === undefined) return
     const behind = () => (current.current.dataHeight ?? Infinity) < tipHeight
     let timer: ReturnType<typeof setTimeout> | undefined
+    let cancelWait = () => undefined as void
     const attempt = (n: number) => {
       const delay = CATCH_UP_DELAYS_MS[n]
       if (delay === undefined || !behind()) return
       timer = setTimeout(() => {
-        if (!behind()) return
-        void queryClient.invalidateQueries({ queryKey: current.current.key, exact: true })
-        attempt(n + 1)
+        cancelWait = whenVisible(() => {
+          if (!behind()) return
+          void queryClient.invalidateQueries({ queryKey: current.current.key, exact: true })
+          attempt(n + 1)
+        })
       }, delay)
     }
     attempt(0)
-    return () => clearTimeout(timer)
+    return () => {
+      clearTimeout(timer)
+      cancelWait()
+    }
   }, [net, tipHeight, enabled, loaded, queryClient])
 }

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useSyncExternalStore } from 'react'
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 import type { SourceStamp } from '../envelope'
 import type { NetworkId } from '@/lib/network'
 import type { CoreTxType } from '@/lib/tx-types'
@@ -17,11 +17,17 @@ const MAX_SEEN = 20
 /** How many transactions are kept to count and sum: on a chain with no blocks the list would otherwise grow for ever. */
 export const SEEN_STORE_LIMIT = 5000
 const TICK_MS = 10_000
+const NONE: ReadonlySet<string> = new Set()
 
 interface Scoped {
   net: NetworkId
   rows: SeenTx[]
+  /** The transactions of the last few blocks the feed reported, so a list read from an index can drop them too. */
+  mined: ReadonlySet<string>
 }
+
+/** Blocks whose transactions `mined` keeps: an index read just after a block may not have taken it in yet. */
+const MINED_BLOCKS_KEPT = 3
 
 let now = Date.now()
 let timer: ReturnType<typeof setInterval> | undefined
@@ -90,16 +96,19 @@ export function useSeenPending(
   bytes: number
   capped: boolean
   stamp: SourceStamp | undefined
+  mined: ReadonlySet<string>
 } {
-  const [state, setState] = useState<Scoped>({ net, rows: [] })
+  const [state, setState] = useState<Scoped>({ net, rows: [], mined: NONE })
+  const blocks = useRef<{ net: NetworkId; txids: string[][] }>({ net, txids: [] })
   const stamp = useLiveFeedStamp(net, enabled)
   useEffect(() => {
     if (!enabled) return
     return coreLive.transactions(net, (event) => {
       setState((s) => {
         const rows = s.net === net ? s.rows : []
+        const mined = s.net === net ? s.mined : NONE
         if (event.kind === 'tx') {
-          if (rows.some((r) => r.txid === event.tx.txid)) return { net, rows }
+          if (rows.some((r) => r.txid === event.tx.txid)) return { net, rows, mined }
           const row = {
             txid: event.tx.txid,
             type: event.tx.type,
@@ -107,11 +116,13 @@ export function useSeenPending(
             size: event.tx.size,
             seenAt: Date.now(),
           }
-          return { net, rows: [row, ...rows].slice(0, SEEN_STORE_LIMIT) }
+          return { net, rows: [row, ...rows].slice(0, SEEN_STORE_LIMIT), mined }
         }
         if (event.kind === 'block') {
-          const mined = new Set(event.txids)
-          return { net, rows: rows.filter((r) => !mined.has(r.txid)) }
+          const recent = blocks.current.net === net ? blocks.current.txids : []
+          blocks.current = { net, txids: [event.txids, ...recent].slice(0, MINED_BLOCKS_KEPT) }
+          const now = new Set(blocks.current.txids.flat())
+          return { net, rows: rows.filter((r) => !now.has(r.txid)), mined: now }
         }
         return s
       })
@@ -119,6 +130,7 @@ export function useSeenPending(
   }, [net, enabled])
 
   const kept = useMemo(() => (state.net === net ? state.rows : []), [state, net])
+  const mined = state.net === net ? state.mined : NONE
   const bytes = useMemo(() => kept.reduce((n, r) => n + r.size, 0), [kept])
   const rows = useMemo(() => (kept.length > limit ? kept.slice(0, limit) : kept), [kept, limit])
   return {
@@ -127,5 +139,6 @@ export function useSeenPending(
     bytes,
     capped: kept.length >= SEEN_STORE_LIMIT,
     stamp,
+    mined,
   }
 }

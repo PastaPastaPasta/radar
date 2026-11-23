@@ -2,12 +2,12 @@ import { useLingui } from '@lingui/react/macro'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
+import { coreQueries } from '@/data/core/queries'
 import { useSeenPending, type SeenTx } from '@/data/core/seen-pending'
 import { stampOf } from '@/data/envelope'
 import type { HyMempoolTx } from '@/data/hyphen/schemas'
 import { useIndexHealth } from '@/data/index-health'
-import { POLL_MS } from '@/data/query/stale'
-import { Entity, PageFrame, useNetwork, usePageClaim } from '@/features/entity'
+import { Entity, PageFrame, useNetwork, usePageClaim, useRefetchOnRise } from '@/features/entity'
 import { formatBytes, formatInt, formatPercent } from '@/lib/format'
 import { Amount, Card, DataTable, Empty, LiveDot, Stat, Time, TypeBadge, Unavailable } from '@/ui'
 import { mempoolClaim } from '../claims'
@@ -152,8 +152,12 @@ function SeenMempool({
 function IndexedMempool() {
   const { t } = useLingui()
   const net = useNetwork()
-  const summary = useQuery(mempoolQueries.summary(net))
-  const txs = useInfiniteQuery(mempoolQueries.txs(net))
+  const summaryQuery = mempoolQueries.summary(net)
+  const txsQuery = mempoolQueries.txs(net)
+  const summary = useQuery(summaryQuery)
+  const txs = useInfiniteQuery(txsQuery)
+  const tip = useQuery(coreQueries.tip(net))
+  useRefetchOnRise(net, tip.data?.data.height, { keys: [summaryQuery.queryKey, txsQuery.queryKey] })
   const m = summary.data?.data
   const table = infiniteTableProps(txs)
   const total = txs.data?.pages[0]?.data.total
@@ -200,7 +204,7 @@ function IndexedMempool() {
     <>
       <p role="status" className="flex items-center gap-2 text-sm" data-mempool-view="index">
         <LiveDot state="live" />
-        {t`Refreshes every ${POLL_MS.mempool / 1000} seconds.`}
+        {t`Refreshes with each new block.`}
       </p>
       <Card
         title={t`Summary`}
