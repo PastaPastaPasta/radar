@@ -79,7 +79,7 @@ export function TxPage({ txid }: { txid: string }) {
   })
   const found = tx.data?.data
   const tipHeight = useFollowTip(net, {
-    keys: [coreQueries.tx(net, txid).queryKey],
+    keys: [coreQueries.tx(net, txid).queryKey, hyQueries.mempoolTxs(net, { limit: 20 }).queryKey],
     settled: found?.isChainLocked === true,
     enabled: valid,
   })

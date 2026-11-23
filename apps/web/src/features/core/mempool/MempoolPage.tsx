@@ -45,9 +45,8 @@ function MempoolContent() {
   const net = useNetwork()
   const index = useIndexHealth(net)
   const seenOnly = index.off || index.pending || index.state === 'stale'
-  // Always on: while Hyphen's list is shown, the feed's blocks say which of its rows were just mined.
-  const seen = useSeenPending(net, true, SEEN_LIMIT, seenOnly)
-  if (!seenOnly) return <IndexedMempool mined={seen.mined} />
+  const seen = useSeenPending(net, seenOnly, SEEN_LIMIT)
+  if (!seenOnly) return <IndexedMempool />
   const reason = index.off ? 'mode' : index.pending ? 'checking' : 'stale'
   return <SeenMempool seen={seen} reason={reason} />
 }
@@ -151,7 +150,7 @@ function SeenMempool({
   )
 }
 
-function IndexedMempool({ mined }: { mined: ReadonlySet<string> }) {
+function IndexedMempool() {
   const { t } = useLingui()
   const net = useNetwork()
   const summaryQuery = mempoolQueries.summary(net)
@@ -164,8 +163,7 @@ function IndexedMempool({ mined }: { mined: ReadonlySet<string> }) {
     delayMs: MEMPOOL_REREAD_DELAY_MS,
   })
   const m = summary.data?.data
-  const listed = infiniteTableProps(txs)
-  const table = { ...listed, rows: listed.rows.filter((r) => !mined.has(r.txHash)) }
+  const table = infiniteTableProps(txs)
   const total = txs.data?.pages[0]?.data.total
   const usage = m?.usageBytes != null && m.maxBytes ? m.usageBytes / m.maxBytes : undefined
   usePageClaim(m ? mempoolClaim(m.count) : undefined)
