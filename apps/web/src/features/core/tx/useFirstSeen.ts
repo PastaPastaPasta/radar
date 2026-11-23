@@ -1,9 +1,10 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
+import { coreQueries } from '@/data/core/queries'
 import { stampOf, type SourceStamp } from '@/data/envelope'
 import { recentMempoolTxs } from '@/data/hyphen/queries'
 import { MEMPOOL_REREAD_DELAY_MS } from '@/data/query/stale'
-import { whenVisible } from '@/features/entity'
+import { useRefetchOnRise, whenVisible } from '@/features/entity'
 import type { NetworkId } from '@/lib/network'
 
 export interface FirstSeen {
@@ -40,6 +41,13 @@ export function useFirstSeen(
       cancelWait()
     }
   }, [missing, client, net, txid])
+  const tip = useQuery({ ...coreQueries.tip(net), enabled })
+  // While the time is unknown and the transaction unmined, each block may bring Hyphen up to date.
+  useRefetchOnRise(net, tip.data?.data.height, {
+    keys: [recentMempoolTxs(net).queryKey],
+    settled: !enabled || held !== undefined,
+    delayMs: MEMPOOL_REREAD_DELAY_MS,
+  })
   if (row && query.data && held?.at !== row.firstSeenAt) {
     setHeld({ at: row.firstSeenAt, stamp: stampOf(query.data) })
   }

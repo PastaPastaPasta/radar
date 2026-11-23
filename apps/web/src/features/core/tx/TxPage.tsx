@@ -7,9 +7,8 @@ import { instantLockView } from '@/data/core/lock-state'
 import { coreQueries } from '@/data/core/queries'
 import type { DecodedTx } from '@/data/core/types'
 import { stampOf, type SourceStamp } from '@/data/envelope'
-import { hyQueries, recentMempoolTxs } from '@/data/hyphen/queries'
-import { MEMPOOL_REREAD_DELAY_MS } from '@/data/query/stale'
-import { useDocumentTitle, useNetwork, useRefetchOnRise } from '@/features/entity'
+import { hyQueries } from '@/data/hyphen/queries'
+import { useDocumentTitle, useNetwork } from '@/features/entity'
 import { formatBytes, formatInt } from '@/lib/format'
 import { formatAmountText } from '@/lib/units'
 import { useFollowTip } from '../follow-tip'
@@ -79,16 +78,10 @@ export function TxPage({ txid }: { txid: string }) {
     same: (a, b) => a.height === b.height,
   })
   const found = tx.data?.data
-  const settled = found?.isChainLocked === true
   const tipHeight = useFollowTip(net, {
     keys: [coreQueries.tx(net, txid).queryKey],
-    settled,
+    settled: found?.isChainLocked === true,
     enabled: valid,
-  })
-  useRefetchOnRise(net, tipHeight, {
-    keys: [recentMempoolTxs(net).queryKey],
-    settled,
-    delayMs: MEMPOOL_REREAD_DELAY_MS,
   })
 
   if (!valid || tx.data?.data === null) {
