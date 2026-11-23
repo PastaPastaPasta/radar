@@ -52,6 +52,9 @@ export function staleAfterMs(c: DataClass): number {
   return CLASSES[c].staleTime * STALE_AGE_FACTOR
 }
 
+/** Hyphen takes a few seconds to take in a block, so a mempool list is read again this long after one. */
+export const MEMPOOL_REREAD_DELAY_MS = 10 * SECOND
+
 /** Polling interval for the classes that poll only some of their queries (§5.2). */
 export const POLL_MS = {
   radarStatus: 5 * MINUTE,

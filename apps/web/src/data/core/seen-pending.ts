@@ -24,6 +24,8 @@ interface Scoped {
   rows: SeenTx[]
   /** The transactions of the last few blocks the feed reported, so a list read from an index can drop them too. */
   mined: ReadonlySet<string>
+  /** When the feed delivered its first transaction on `net`. */
+  firstAt?: number
 }
 
 /** Blocks whose transactions `mined` keeps: an index read just after a block may not have taken it in yet. */
@@ -80,6 +82,17 @@ export function useLiveFeedStamp(net: NetworkId, enabled: boolean): SourceStamp 
   return asOf === undefined ? undefined : { source: 'dapi', asOf, fetchedAt: asOf, proved: false }
 }
 
+interface BlockMemory {
+  current: { net: NetworkId; txids: string[][] }
+}
+
+/** Adds a block's transactions to the last few kept for `net` and returns all of them. */
+function rememberBlock(blocks: BlockMemory, net: NetworkId, txids: string[]): ReadonlySet<string> {
+  const recent = blocks.current.net === net ? blocks.current.txids : []
+  blocks.current = { net, txids: [txids, ...recent].slice(0, MINED_BLOCKS_KEPT) }
+  return new Set(blocks.current.txids.flat())
+}
+
 /**
  * Transactions DAPI's live feed has delivered since the page opened, newest first, minus those a block has since
  * confirmed. It stands in for the mempool list while Hyphen's index is behind or Decentralized only mode keeps Hyphen
@@ -90,6 +103,8 @@ export function useSeenPending(
   net: NetworkId,
   enabled: boolean,
   limit = MAX_SEEN,
+  /** Whether the feed's stamp is shown: keeping it current re-renders every ten seconds. */
+  stamped = enabled,
 ): {
   rows: SeenTx[]
   count: number
@@ -97,18 +112,21 @@ export function useSeenPending(
   capped: boolean
   stamp: SourceStamp | undefined
   mined: ReadonlySet<string>
+  firstAt: number | undefined
 } {
   const [state, setState] = useState<Scoped>({ net, rows: [], mined: NONE })
   const blocks = useRef<{ net: NetworkId; txids: string[][] }>({ net, txids: [] })
-  const stamp = useLiveFeedStamp(net, enabled)
+  const stamp = useLiveFeedStamp(net, enabled && stamped)
   useEffect(() => {
     if (!enabled) return
     return coreLive.transactions(net, (event) => {
+      const minedNow = event.kind === 'block' ? rememberBlock(blocks, net, event.txids) : undefined
       setState((s) => {
         const rows = s.net === net ? s.rows : []
         const mined = s.net === net ? s.mined : NONE
+        const firstAt = s.net === net ? s.firstAt : undefined
         if (event.kind === 'tx') {
-          if (rows.some((r) => r.txid === event.tx.txid)) return { net, rows, mined }
+          if (rows.some((r) => r.txid === event.tx.txid)) return { net, rows, mined, firstAt }
           const row = {
             txid: event.tx.txid,
             type: event.tx.type,
@@ -116,14 +134,15 @@ export function useSeenPending(
             size: event.tx.size,
             seenAt: Date.now(),
           }
-          return { net, rows: [row, ...rows].slice(0, SEEN_STORE_LIMIT), mined }
+          return {
+            net,
+            rows: [row, ...rows].slice(0, SEEN_STORE_LIMIT),
+            mined,
+            firstAt: firstAt ?? row.seenAt,
+          }
         }
-        if (event.kind === 'block') {
-          const recent = blocks.current.net === net ? blocks.current.txids : []
-          blocks.current = { net, txids: [event.txids, ...recent].slice(0, MINED_BLOCKS_KEPT) }
-          const now = new Set(blocks.current.txids.flat())
-          return { net, rows: rows.filter((r) => !now.has(r.txid)), mined: now }
-        }
+        if (minedNow)
+          return { net, rows: rows.filter((r) => !minedNow.has(r.txid)), mined: minedNow, firstAt }
         return s
       })
     })
@@ -131,6 +150,7 @@ export function useSeenPending(
 
   const kept = useMemo(() => (state.net === net ? state.rows : []), [state, net])
   const mined = state.net === net ? state.mined : NONE
+  const firstAt = state.net === net ? state.firstAt : undefined
   const bytes = useMemo(() => kept.reduce((n, r) => n + r.size, 0), [kept])
   const rows = useMemo(() => (kept.length > limit ? kept.slice(0, limit) : kept), [kept, limit])
   return {
@@ -140,5 +160,6 @@ export function useSeenPending(
     capped: kept.length >= SEEN_STORE_LIMIT,
     stamp,
     mined,
+    firstAt,
   }
 }

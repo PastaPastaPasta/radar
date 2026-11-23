@@ -3,13 +3,14 @@ import { useQuery } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import { coreQueries } from '@/data/core/queries'
-import { SEEN_STORE_LIMIT, useSeenPending } from '@/data/core/seen-pending'
+import { SEEN_STORE_LIMIT, useSeenPending, type SeenTx } from '@/data/core/seen-pending'
 import type { BlockRow } from '@/data/core/types'
 import { stampOf } from '@/data/envelope'
 import { useHyphenFit } from '@/data/hyphen/fit'
 import { hyQueries } from '@/data/hyphen/queries'
 import { useIndexHealth } from '@/data/index-health'
 import { dapiKeys } from '@/data/query'
+import { MEMPOOL_REREAD_DELAY_MS } from '@/data/query/stale'
 import { Entity, PageLink, useCatchUpToTip, useNetwork, useRefetchOnRise } from '@/features/entity'
 import { formatBytes, formatInt, formatSignificant } from '@/lib/format'
 import { formatHashrate, hashrateFromDifficulty } from '@/lib/hashrate'
@@ -248,33 +249,46 @@ function BlocksCard({ blocks }: { blocks: ReturnType<typeof useCoreBlocks> }) {
   )
 }
 
+/**
+ * A transaction feed that opens sends the node's whole mempool first. Those rows say when this page heard of them, not
+ * when the network did, so only rows arriving this long after the first one are added to Hyphen's dated list.
+ */
+const FEED_BURST_MS = 5_000
+
 function usePending(paused: boolean) {
   const { net, fit, devnet, stale, off } = useHyphenBlocked()
   const indexed = hyQueries.mempoolTxs(net, { limit: 20 })
   const query = useQuery({ ...indexed, enabled: fit })
   const tip = useQuery(coreQueries.tip(net))
-  // Hyphen's list is read once, then again on each block; DAPI's live feed adds what arrives in between.
-  useRefetchOnRise(net, tip.data?.data.height, { keys: [indexed.queryKey], settled: !fit })
+  // Hyphen's list is read once, then again after each block; DAPI's live feed adds what arrives in between.
+  useRefetchOnRise(net, tip.data?.data.height, {
+    keys: [indexed.queryKey],
+    settled: !fit,
+    delayMs: MEMPOOL_REREAD_DELAY_MS,
+  })
   const seenOnly = (stale || off) && !devnet
   // Asking for every stored row returns the hook's own array, which keeps its identity between events; a shorter limit is
   // a fresh slice on each render, and `useFrozen` follows identity.
-  const seen = useSeenPending(net, !devnet, SEEN_STORE_LIMIT)
+  const seen = useSeenPending(net, !devnet, SEEN_STORE_LIMIT, seenOnly)
   const live = useMemo<PendingRow[]>(() => {
-    const fromSeen = seen.rows.slice(0, PENDING).map((r) => ({
+    const asRow = (r: SeenTx): PendingRow => ({
       txid: r.txid,
       value: r.value,
       size: r.size,
       at: r.seenAt,
-    }))
-    if (seenOnly) return fromSeen
+    })
+    if (seenOnly) return seen.rows.slice(0, PENDING).map(asRow)
     const fromIndex = (query.data?.data.items ?? [])
       .filter((r) => !seen.mined.has(r.txHash))
       .map((r) => ({ txid: r.txHash, value: r.valueOut, size: r.txSize, at: r.firstSeenAt }))
+    const after = Math.max(query.dataUpdatedAt, (seen.firstAt ?? 0) + FEED_BURST_MS)
     const listed = new Set(fromIndex.map((r) => r.txid))
-    return [...fromSeen.filter((r) => !listed.has(r.txid)), ...fromIndex]
-      .sort((a, b) => b.at - a.at)
+    const fresh = seen.rows
       .slice(0, PENDING)
-  }, [seenOnly, seen.rows, seen.mined, query.data])
+      .filter((r) => r.seenAt > after && !listed.has(r.txid))
+      .map(asRow)
+    return [...fresh, ...fromIndex].sort((a, b) => b.at - a.at).slice(0, PENDING)
+  }, [seenOnly, seen.rows, seen.mined, seen.firstAt, query.data, query.dataUpdatedAt])
   const rows = useFrozen(live, paused)
   const stamp = seenOnly ? seen.stamp : query.data ? stampOf(query.data) : undefined
   return { query, rows, stamp, seenOnly, seenAny: seen.rows.length > 0, fit, devnet, off }

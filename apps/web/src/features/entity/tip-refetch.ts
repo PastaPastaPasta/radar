@@ -30,7 +30,16 @@ export function whenVisible(fn: () => void): () => void {
 export function useRefetchOnRise(
   net: NetworkId,
   height: number | undefined,
-  { keys, settled = false }: { keys: readonly QueryKey[]; settled?: boolean },
+  {
+    keys,
+    settled = false,
+    delayMs = 0,
+  }: {
+    keys: readonly QueryKey[]
+    settled?: boolean
+    /** Wait this long after the block first: an index takes a few seconds to take one in. */
+    delayMs?: number
+  },
 ): void {
   const queryClient = useQueryClient()
   const last = useRef<{ net: NetworkId; height: number | undefined }>(undefined)
@@ -46,6 +55,10 @@ export function useRefetchOnRise(
   useEffect(() => {
     const previous = last.current
     last.current = { net, height }
+    if (settled || previous?.net !== net) {
+      deferred.current?.()
+      deferred.current = undefined
+    }
     if (
       settled ||
       height === undefined ||
@@ -56,13 +69,25 @@ export function useRefetchOnRise(
       return
     }
     deferred.current?.()
-    deferred.current = whenVisible(() => {
+    const refetch = () => {
       deferred.current = undefined
       for (const queryKey of wanted.current) {
         void queryClient.invalidateQueries({ queryKey, exact: true })
       }
-    })
-  }, [net, height, settled, queryClient])
+    }
+    if (delayMs <= 0) {
+      deferred.current = whenVisible(refetch)
+      return
+    }
+    let cancelWait: () => void = () => undefined
+    const timer = setTimeout(() => {
+      cancelWait = whenVisible(refetch)
+    }, delayMs)
+    deferred.current = () => {
+      clearTimeout(timer)
+      cancelWait()
+    }
+  }, [net, height, settled, delayMs, queryClient])
 }
 
 /** Pauses between the re-reads of a figure that trails the tip: the index takes a few seconds to take in a block. */
@@ -97,7 +122,7 @@ export function useCatchUpToTip(
     if (!enabled || !loaded || tipHeight === undefined) return
     const behind = () => (current.current.dataHeight ?? Infinity) < tipHeight
     let timer: ReturnType<typeof setTimeout> | undefined
-    let cancelWait = () => undefined as void
+    let cancelWait: () => void = () => undefined
     const attempt = (n: number) => {
       const delay = CATCH_UP_DELAYS_MS[n]
       if (delay === undefined || !behind()) return

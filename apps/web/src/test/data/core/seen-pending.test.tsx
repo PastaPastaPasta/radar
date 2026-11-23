@@ -56,6 +56,35 @@ afterEach(() => {
 })
 
 describe('useSeenPending', () => {
+  it("keeps the last three blocks' transactions as mined, and forgets them on another network", () => {
+    const { result, rerender } = renderHook(({ net }) => useSeenPending(net, true), {
+      initialProps: { net: 'testnet' as 'testnet' | 'mainnet' },
+    })
+    const id = (n: number) => tx(n).txid
+    for (const n of [1, 2, 3, 4]) emit({ kind: 'block', txids: [id(n)] })
+    expect([...result.current.mined].sort()).toEqual([id(2), id(3), id(4)])
+    rerender({ net: 'mainnet' })
+    expect(result.current.mined.size).toBe(0)
+  })
+
+  it('says when the feed delivered its first transaction, and keeps that time as rows are mined', () => {
+    const { result } = renderHook(() => useSeenPending('testnet', true))
+    expect(result.current.firstAt).toBeUndefined()
+    emit({ kind: 'tx', tx: tx(1) })
+    act(() => void vi.advanceTimersByTime(MINUTE))
+    emit({ kind: 'tx', tx: tx(2) })
+    emit({ kind: 'block', txids: [tx(1).txid] })
+    expect(result.current.rows.map((r) => r.txid)).toEqual([tx(2).txid])
+    expect(result.current.firstAt).toBe(T0)
+  })
+
+  it('keeps no stamp ticking when the stamp is not shown', () => {
+    const { result } = renderHook(() => useSeenPending('testnet', true, 20, false))
+    emit({ kind: 'tx', tx: tx(1) })
+    expect(result.current.rows).toHaveLength(1)
+    expect(result.current.stamp).toBeUndefined()
+  })
+
   it('stamps the list by the stream being connected, not by when the last transaction arrived', () => {
     const { result } = renderHook(() => useSeenPending('testnet', true))
     emit({ kind: 'tx', tx: tx(1) })

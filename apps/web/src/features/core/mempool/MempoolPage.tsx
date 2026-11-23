@@ -7,6 +7,7 @@ import { useSeenPending, type SeenTx } from '@/data/core/seen-pending'
 import { stampOf } from '@/data/envelope'
 import type { HyMempoolTx } from '@/data/hyphen/schemas'
 import { useIndexHealth } from '@/data/index-health'
+import { MEMPOOL_REREAD_DELAY_MS } from '@/data/query/stale'
 import { Entity, PageFrame, useNetwork, usePageClaim, useRefetchOnRise } from '@/features/entity'
 import { formatBytes, formatInt, formatPercent } from '@/lib/format'
 import { Amount, Card, DataTable, Empty, LiveDot, Stat, Time, TypeBadge, Unavailable } from '@/ui'
@@ -44,8 +45,9 @@ function MempoolContent() {
   const net = useNetwork()
   const index = useIndexHealth(net)
   const seenOnly = index.off || index.pending || index.state === 'stale'
-  const seen = useSeenPending(net, seenOnly, SEEN_LIMIT)
-  if (!seenOnly) return <IndexedMempool />
+  // Always on: while Hyphen's list is shown, the feed's blocks say which of its rows were just mined.
+  const seen = useSeenPending(net, true, SEEN_LIMIT, seenOnly)
+  if (!seenOnly) return <IndexedMempool mined={seen.mined} />
   const reason = index.off ? 'mode' : index.pending ? 'checking' : 'stale'
   return <SeenMempool seen={seen} reason={reason} />
 }
@@ -149,7 +151,7 @@ function SeenMempool({
   )
 }
 
-function IndexedMempool() {
+function IndexedMempool({ mined }: { mined: ReadonlySet<string> }) {
   const { t } = useLingui()
   const net = useNetwork()
   const summaryQuery = mempoolQueries.summary(net)
@@ -157,9 +159,13 @@ function IndexedMempool() {
   const summary = useQuery(summaryQuery)
   const txs = useInfiniteQuery(txsQuery)
   const tip = useQuery(coreQueries.tip(net))
-  useRefetchOnRise(net, tip.data?.data.height, { keys: [summaryQuery.queryKey, txsQuery.queryKey] })
+  useRefetchOnRise(net, tip.data?.data.height, {
+    keys: [summaryQuery.queryKey, txsQuery.queryKey],
+    delayMs: MEMPOOL_REREAD_DELAY_MS,
+  })
   const m = summary.data?.data
-  const table = infiniteTableProps(txs)
+  const listed = infiniteTableProps(txs)
+  const table = { ...listed, rows: listed.rows.filter((r) => !mined.has(r.txHash)) }
   const total = txs.data?.pages[0]?.data.total
   const usage = m?.usageBytes != null && m.maxBytes ? m.usageBytes / m.maxBytes : undefined
   usePageClaim(m ? mempoolClaim(m.count) : undefined)
