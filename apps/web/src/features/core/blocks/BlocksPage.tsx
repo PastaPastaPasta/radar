@@ -1,8 +1,8 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate, useRouter } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type RefObject } from 'react'
 import { coreQueries, LATEST_BLOCK_ROWS } from '@/data/core/queries'
 import { earlyAnswers } from '@/data/early'
 import type { BlockRow } from '@/data/core/types'
@@ -20,6 +20,17 @@ import {
 import { formatBytes, formatDate, formatInt } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
 import { Card, DataTable, Empty, Hash, LockMark, SegFilter, SourceLine, Time } from '@/ui'
+import {
+  InfiniteSentinel,
+  barInset,
+  firstVisibleRow,
+  replaceUrlQuietly,
+  scrollQuietly,
+  useOwnScrollAnchoring,
+  useScrollAnchor,
+  useScrolledUp,
+  useTopInView,
+} from '@/ui/infinite'
 import { CoreBand, RecordHeader, Section } from '../block/frame'
 import { BlocksClaim } from '../claims'
 import { useAskAgainOnceCurrent } from '../indexed-first'
@@ -27,15 +38,18 @@ import {
   BLOCKS_PER_PAGE,
   DAY_MS,
   FIRST_CHUNK,
+  MAX_RENDERED_PAGES,
   PAGE_SIZES,
   chunksOf,
   dayStartMs,
   isPageSize,
+  newestPage,
   shiftDay,
   todayUtc,
   windowOf,
   type Window,
 } from './blocks-range'
+import { type RowSource, type ScrollPage, useScrollPages, withBestLock } from './scroll-pages'
 
 /** Height ranges for the rows shown, from the DAPI tip and, for a day, the heights where that day begins and ends. */
 function useRange(date: string | undefined) {
@@ -86,9 +100,6 @@ function useRange(date: string | undefined) {
     found: (first.data !== undefined ? 1 : 0) + (endFound ? 1 : 0),
   }
 }
-
-/** Where a page's rows come from: DAPI block by block, or one request to an index list. */
-type RowSource = 'dapi' | 'hyphen' | 'insight'
 
 interface PageRows {
   rows: BlockRow[]
@@ -185,17 +196,7 @@ function useInsightRows(window: Window | null, enabled: boolean): PageRows {
   })
   const lock = useQuery({ ...coreQueries.chainLock(net), enabled: enabled && window !== null })
   const best = lock.data?.data
-  const rows = useMemo(
-    () =>
-      (page.data?.rows ?? []).map((r) =>
-        best === undefined || r.height > best.height
-          ? r
-          : best.claim
-            ? { ...r, chainLockClaim: 'one-node' as const }
-            : { ...r, chainLocked: true },
-      ),
-    [page.data, best],
-  )
+  const rows = useMemo(() => withBestLock(page.data?.rows ?? [], best), [page.data, best])
   return {
     rows,
     settled: page.isSuccess && !page.isPlaceholderData,
@@ -254,10 +255,13 @@ function useFreshRows(rows: BlockRow[], live: boolean): Set<string> {
     if (seen === null) {
       setSeen(new Set(ids))
     } else {
-      const added = ids.filter((id) => !seen.has(id))
-      if (added.length > 0) {
+      // Only blocks above the newest one already seen are new; older pages loaded by scrolling are not.
+      const newest = Math.max(...[...seen].map(Number))
+      const added = ids.filter((id) => !seen.has(id) && Number(id) > newest)
+      const unseen = ids.filter((id) => !seen.has(id))
+      if (unseen.length > 0) {
         setSeen(new Set([...seen, ...ids]))
-        setFresh(new Set(added))
+        if (added.length > 0) setFresh(new Set(added))
       }
     }
   }
@@ -350,9 +354,9 @@ function PageSizeControl({
   const { t } = useLingui()
   return (
     <div className="rx-row" style={{ gap: 8, flexWrap: 'wrap' }} data-nav="page-size">
-      <span className="rx-dim">{t`Blocks per page`}</span>
+      <span className="rx-dim">{t`Blocks per load`}</span>
       <SegFilter
-        label={t`Blocks per page`}
+        label={t`Blocks per load`}
         value={String(size)}
         onChange={(id) => {
           link(Number(id))
@@ -367,6 +371,107 @@ function PageSizeControl({
   )
 }
 
+/**
+ * The URL follows the reader: `from` names the first block in view, written with `replaceState` (no navigation, so the
+ * list keeps its place), so a reload or Back opens at the same block. Returning to a URL this list wrote, the page
+ * scrolls that block back to the top of the view once it has loaded.
+ */
+function useScrollPosition(
+  list: RefObject<HTMLElement | null>,
+  {
+    from,
+    ceiling,
+    rows,
+    ready,
+    settled,
+  }: { from?: number; ceiling: number; rows: BlockRow[]; ready: boolean; settled: boolean },
+) {
+  const [returning] = useState(
+    () =>
+      from !== undefined &&
+      (history.state as { radarBlocksRow?: number } | null)?.radarBlocksRow === from,
+  )
+  const restored = useRef(!returning)
+  const hasRow = from !== undefined && rows.some((r) => r.height === from)
+  useEffect(() => {
+    if (restored.current || !list.current || !(hasRow || (ready && settled))) return
+    const row = list.current.querySelector<HTMLElement>(`[data-row-id="${from}"]`)
+    if (row) scrollQuietly(row.getBoundingClientRect().top - barInset())
+    restored.current = true
+  }, [hasRow, ready, settled, from, list])
+  const latest = useRef({ ceiling, ready })
+  useEffect(() => {
+    latest.current = { ceiling, ready }
+  })
+  const router = useRouter()
+  const rewrite = useRef<(() => void) | undefined>(undefined)
+  useEffect(() => {
+    let frame = 0
+    // The address bar, not the router's copy: a list started over by a link to the router's last address finds the
+    // `from` an earlier list wrote there, and clears it.
+    let written = currentFrom()
+    // Once the router starts another navigation its URL is not this list's to write, until that one settles.
+    let leaving = false
+    const write = () => {
+      const el = list.current
+      const now = latest.current
+      if (
+        leaving ||
+        !el ||
+        !now.ready ||
+        !restored.current ||
+        window.location.pathname !== '/blocks'
+      )
+        return
+      const first = firstVisibleRow(el, barInset())
+      const height = first ? Number(first.id) : undefined
+      if (height === undefined || !Number.isFinite(height)) return
+      // The tip itself is the page without `from`; once newer blocks arrive, the same row needs its height.
+      const value = height >= now.ceiling ? undefined : height
+      if (value === written) return
+      const url = new URL(window.location.href)
+      if (value === undefined) url.searchParams.delete('from')
+      else url.searchParams.set('from', String(value))
+      written = value
+      const state = (history.state as Record<string, unknown> | null) ?? {}
+      replaceUrlQuietly(url, { ...state, radarBlocksRow: height })
+    }
+    const onScroll = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(write)
+    }
+    rewrite.current = onScroll
+    window.addEventListener('scroll', onScroll, { passive: true })
+    const stopOnLeave = router.subscribe('onBeforeNavigate', () => {
+      leaving = true
+      cancelAnimationFrame(frame)
+    })
+    const resumeOnSettle = router.subscribe('onResolved', () => {
+      leaving = false
+    })
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', onScroll)
+      stopOnLeave()
+      resumeOnSettle()
+    }
+  }, [list, router])
+  // The row at the top can change without a scroll: a new tip lands there, or the list is first ready. A row that was
+  // the tip then needs its own height, and the tip itself none.
+  const firstRow = rows[0]?.height
+  useEffect(() => rewrite.current?.(), [ceiling, firstRow, ready])
+}
+
+/** The `from` the URL holds now: the list writes it as the reader scrolls, so the router's copy may be older. */
+function currentFrom(): number | undefined {
+  const value = new URL(window.location.href).searchParams.get('from')
+  return value === null || value === '' ? undefined : Number(value)
+}
+
+/** The lowest height among a page's rows. */
+const lowestOf = (rows: BlockRow[]) =>
+  rows.length > 0 ? Math.min(...rows.map((r) => r.height)) : undefined
+
 export function BlocksPage({
   date,
   from,
@@ -378,6 +483,7 @@ export function BlocksPage({
 }) {
   const { t } = useLingui()
   const navigate = useNavigate()
+  const net = useNetwork()
   const range = useRange(date)
   const pageSource = usePageSource(requestedSize)
   const size = pageSource.size
@@ -392,9 +498,15 @@ export function BlocksPage({
     range.state === 'loading' &&
     pageSource.source === 'dapi' &&
     !pageSource.waiting
+  // The list is anchored where it opened (the height the URL names, or the tip once known), so page 0 stays put while
+  // new blocks arrive above it and older ones load below.
+  const [anchor, setAnchor] = useState(from)
+  if (anchor === undefined && range.state === 'ready' && !pageSource.waiting) {
+    setAnchor(range.ceiling)
+  }
   const window: Window | null =
     range.state === 'ready' && !pageSource.waiting
-      ? windowOf(range.ceiling, range.floor, from, size)
+      ? windowOf(range.ceiling, range.floor, anchor ?? from, size)
       : early
         ? {
             top: range.ceiling,
@@ -420,10 +532,109 @@ export function BlocksPage({
     () => (early ? page.rows.filter((r) => r.time >= dayStart) : page.rows),
     [early, page.rows, dayStart],
   )
-  const newestPage = window !== null && window.newer === null
+  const ready = range.state === 'ready' && window !== null && !indexedRows
+  const tipPage = ready ? newestPage(window.top, range.ceiling, size) : 0
+  const [view, setView] = useState({ lo: 0, hi: 0, follow: from === undefined })
+  const listRef = useRef<HTMLDivElement>(null)
+  // Re-anchoring at the tip reads the newest page afresh instead of filling every page between here and there.
+  const reanchor = () => {
+    setAnchor(range.ceiling)
+    setView({ lo: 0, hi: 0, follow: true })
+  }
+  const topInView = useTopInView(listRef)
+  // While the reader sits at the top of the newest page it follows the tip: a page that fills gives way to the next,
+  // and a tip that ran more than a page ahead (a tab back from sleep) starts the list again at the tip. A reader further
+  // down keeps their rows; the pill offers the newer blocks instead.
+  if (ready && view.follow && view.lo !== tipPage) {
+    if (!topInView) {
+      setView({ ...view, follow: false })
+    } else if (tipPage >= view.lo - 1) {
+      setView({
+        ...view,
+        lo: tipPage,
+        hi: Math.max(tipPage, Math.min(view.hi, tipPage + MAX_RENDERED_PAGES - 1)),
+      })
+    } else {
+      reanchor()
+    }
+  }
+  const pages = useScrollPages({
+    net,
+    source: pageSource.source,
+    base: ready
+      ? { top: window.top, count: window.count, rows: page.rows, settled: page.settled }
+      : null,
+    ceiling: range.ceiling,
+    floor: range.floor,
+    size,
+    lo: view.lo,
+    hi: view.hi,
+  })
+  const above = pages.filter((p) => p.k < 0 && p.k >= view.lo).sort((a, b) => a.k - b.k)
+  const below = pages.filter((p) => p.k > 0 && p.k <= view.hi).sort((a, b) => a.k - b.k)
+  const showsBase = view.lo <= 0 && view.hi >= 0
+  const shownRows = [
+    ...above.flatMap((p) => p.rows),
+    ...(showsBase ? rows : []),
+    ...below.flatMap((p) => p.rows),
+  ]
+  const basePage = {
+    k: 0,
+    settled: page.settled,
+    failed: page.failed,
+    rows: page.rows,
+    refetch: page.refetch,
+  }
+  const topPage = above[0] ?? (showsBase ? basePage : below[0])
+  const bottomPage = below.at(-1) ?? (showsBase ? basePage : above.at(-1))
+  const insight = pageSource.source === 'insight'
+  const lastBottom =
+    !ready || !bottomPage
+      ? undefined
+      : insight
+        ? bottomPage.settled
+          ? lowestOf(bottomPage.rows)
+          : undefined
+        : bottomPage.k !== 0
+          ? (bottomPage as ScrollPage).span.top - (bottomPage as ScrollPage).span.count + 1
+          : window.top - window.count + 1
+  const moreBelow = lastBottom !== undefined && lastBottom > range.floor
+  const moreAbove = ready && view.lo > tipPage
+  const atTip = ready && view.lo === tipPage
+  const scrolledUp = useScrolledUp()
+  const extend = (edge: 'start' | 'end') => {
+    if (edge === 'end') {
+      const hi = view.hi + 1
+      const lo = Math.max(view.lo, hi - MAX_RENDERED_PAGES + 1)
+      setView({ lo, hi, follow: view.follow && lo === view.lo })
+    } else {
+      const lo = view.lo - 1
+      setView({ lo, hi: Math.min(view.hi, lo + MAX_RENDERED_PAGES - 1), follow: lo === tipPage })
+    }
+  }
+  const resetAnchor = useScrollAnchor(
+    listRef,
+    `${shownRows[0]?.height ?? ''}:${shownRows.length}`,
+    view.follow,
+  )
+  // The newest blocks are a fresh start at the tip: the view moves to the top of the list, then the page opens anew.
+  const jumpToNewest = () => {
+    resetAnchor()
+    const top = listRef.current?.getBoundingClientRect().top
+    if (top !== undefined) scrollQuietly(top - barInset())
+    void navigate(link({}) as never)
+  }
+  useOwnScrollAnchoring()
+  useScrollPosition(listRef, {
+    from,
+    ceiling: range.ceiling,
+    rows: shownRows,
+    ready,
+    settled: page.settled,
+  })
   const today = todayUtc()
-  const fresh = useFreshRows(rows, newestPage && (!date || date === today))
-  const hasPool = rows.some((r) => r.pool)
+  const fresh = useFreshRows(shownRows, atTip && (!date || date === today))
+  const hasPool = shownRows.some((r) => r.pool)
 
   const columns = useMemo<ColumnDef<BlockRow>[]>(
     () => [
@@ -478,12 +689,12 @@ export function BlocksPage({
 
   const stamp = page.stamp
   const noBlocks = window === null && range.state === 'ready' && !pageSource.waiting
-  const shownEmpty = window !== null && !early && !named && page.settled && rows.length === 0
+  const shownEmpty = window !== null && !early && !named && page.settled && shownRows.length === 0
   // A named page read before the tip may name a height above it; that read's failure is not the page's.
   const state =
     range.state === 'error' || (page.failed && !named)
       ? 'error'
-      : rows.length > 0 || noBlocks
+      : shownRows.length > 0 || noBlocks
         ? 'ready'
         : 'loading'
   const dateLabel = date ? formatDate(dayStartMs(date), { utc: true, time: false }) : undefined
@@ -501,15 +712,15 @@ export function BlocksPage({
   })
   // A page read from Insight can come back short of its window (see `readInsightPage`), so the page after it starts at
   // the lowest height it shows and no block is skipped.
-  const heights = rows.map((r) => r.height)
+  const heights = shownRows.map((r) => r.height)
   const lowest = heights.length > 0 ? Math.min(...heights) : undefined
-  const older =
-    pageSource.source === 'insight' && lowest !== undefined && page.settled
-      ? lowest - 1 >= range.floor
-        ? { from: lowest - 1 }
-        : null
-      : (window?.older ?? null)
   const firstOfDay = date && range.state === 'ready' ? range.floor : undefined
+  const reachedFloor = ready && !moreBelow && bottomPage?.settled === true
+  const loadingAbove = moreAbove && topPage !== undefined && !topPage.settled && !topPage.failed
+  const loadingBelow =
+    bottomPage !== undefined && bottomPage.k !== 0 && !bottomPage.settled && !bottomPage.failed
+  const newerCount =
+    moreAbove && shownRows[0] ? Math.max(0, range.ceiling - shownRows[0].height) : 0
 
   return (
     <article data-page="/blocks" data-layer="core">
@@ -562,7 +773,7 @@ export function BlocksPage({
             <PageSizeControl
               size={pageSource.waiting ? pageSource.requested : size}
               available={pageSource.longPageAvailable}
-              link={(n) => void navigate(link({ from }, n) as never)}
+              link={(n) => void navigate(link({ from: currentFrom() }, n) as never)}
             />
           ) : null}
           {!pageSource.waiting && pageSource.requested > size ? (
@@ -585,70 +796,119 @@ export function BlocksPage({
                 : t`Reading the chain tip…`}
             </p>
           ) : null}
-          <Card layer="core">
-            {noBlocks ? (
-              <Empty
-                kind="none-yet"
-                title={t`No blocks on this date`}
-                body={t`This network has no blocks in this day, or the day has not happened yet.`}
+          {moreAbove ? (
+            <div className="rx-jump" data-nav="newest">
+              <button type="button" className="rx-newrows" onClick={jumpToNewest}>
+                {newerCount > 0
+                  ? t`${formatInt(newerCount)} newer blocks · jump to the newest`
+                  : t`Jump to the newest blocks`}
+              </button>
+            </div>
+          ) : null}
+          <div ref={listRef} className="rx-scrolllist" tabIndex={-1}>
+            {topPage?.failed && topPage.k < 0 ? (
+              <p className="rx-note" role="status" data-nav="newer-failed">
+                {t`The newer blocks could not be loaded.`}{' '}
+                <button
+                  type="button"
+                  className="dh-btn dh-btn--sm"
+                  onClick={() => {
+                    topPage.refetch()
+                  }}
+                >
+                  {t`Try again`}
+                </button>
+              </p>
+            ) : moreAbove ? (
+              <InfiniteSentinel
+                edge="start"
+                onNear={() => {
+                  extend('start')
+                }}
+                enabled={topPage?.settled === true}
+                auto={scrolledUp}
+                loading={loadingAbove}
+                version={shownRows.length}
+                status={loadingAbove ? t`Loading newer blocks…` : ''}
+                fallbackLabel={t`Show newer blocks`}
               />
-            ) : shownEmpty ? (
-              <Empty
-                kind="none-yet"
-                title={t`No blocks came back for this page`}
-                body={t`The source returned no blocks for heights ${formatInt(window.top - window.count + 1)} to ${formatInt(window.top)}. Try the page either side, or a shorter page.`}
-                action={
-                  <span
-                    className="rx-row"
-                    style={{ gap: 8, flexWrap: 'wrap' }}
-                    data-nav="empty-page"
+            ) : null}
+            <Card layer="core">
+              {noBlocks ? (
+                <Empty
+                  kind="none-yet"
+                  title={t`No blocks on this date`}
+                  body={t`This network has no blocks in this day, or the day has not happened yet.`}
+                />
+              ) : shownEmpty ? (
+                <Empty
+                  kind="none-yet"
+                  title={t`No blocks came back for this page`}
+                  body={t`The source returned no blocks for heights ${formatInt(window.top - window.count + 1)} to ${formatInt(window.top)}. Try the page either side, or a shorter page.`}
+                  action={
+                    <span
+                      className="rx-row"
+                      style={{ gap: 8, flexWrap: 'wrap' }}
+                      data-nav="empty-page"
+                    >
+                      {window.newer ? (
+                        <Link className="dh-btn" to="/blocks" search={link({}).search as never}>
+                          {t`Newest blocks`}
+                        </Link>
+                      ) : null}
+                    </span>
+                  }
+                />
+              ) : (
+                <DataTable
+                  caption={dateLabel ? t`Blocks on ${dateLabel}` : t`Core blocks`}
+                  columns={columns}
+                  rows={shownRows}
+                  getRowId={(r) => String(r.height)}
+                  state={state}
+                  error={range.error ?? page.error}
+                  onRetry={page.refetch}
+                  pendingRows={
+                    (early || named) && rows.length > 0
+                      ? (named ? Math.min(size, (from ?? 0) + 1) : size) - rows.length
+                      : page.pending
+                  }
+                  rowLink={(r) => ({ to: '/block/$id', params: { id: String(r.height) } })}
+                  live={{ newRowIds: fresh }}
+                />
+              )}
+            </Card>
+            {ready && (moreBelow || loadingBelow || bottomPage?.failed === true) ? (
+              bottomPage?.failed ? (
+                <p className="rx-note" role="status" data-nav="older-failed">
+                  {t`The older blocks could not be loaded.`}{' '}
+                  <button
+                    type="button"
+                    className="dh-btn dh-btn--sm"
+                    onClick={() => {
+                      bottomPage.refetch()
+                    }}
                   >
-                    {window.newer ? (
-                      <Link
-                        className="dh-btn"
-                        to="/blocks"
-                        search={link(window.newer).search as never}
-                      >
-                        {t`Newer`}
-                      </Link>
-                    ) : null}
-                    {older ? (
-                      <Link className="dh-btn" to="/blocks" search={link(older).search as never}>
-                        {t`Older`}
-                      </Link>
-                    ) : null}
-                  </span>
-                }
-              />
-            ) : (
-              <DataTable
-                caption={dateLabel ? t`Blocks on ${dateLabel}` : t`Core blocks`}
-                columns={columns}
-                rows={rows}
-                getRowId={(r) => String(r.height)}
-                state={state}
-                error={range.error ?? page.error}
-                onRetry={page.refetch}
-                pendingRows={
-                  (early || named) && rows.length > 0
-                    ? (named ? Math.min(size, (from ?? 0) + 1) : size) - rows.length
-                    : page.pending
-                }
-                rowLink={(r) => ({ to: '/block/$id', params: { id: String(r.height) } })}
-                live={{ newRowIds: fresh }}
-                paging={
-                  window && !indexedRows
-                    ? {
-                        kind: 'cursor',
-                        prev: window.newer ? (link(window.newer) as never) : undefined,
-                        next: older ? (link(older) as never) : undefined,
-                      }
-                    : undefined
-                }
-              />
-            )}
-          </Card>
-          {firstOfDay !== undefined && firstOfDay > 0 && window && !older ? (
+                    {t`Try again`}
+                  </button>
+                </p>
+              ) : (
+                <InfiniteSentinel
+                  onNear={() => {
+                    extend('end')
+                  }}
+                  enabled={moreBelow && bottomPage?.settled === true}
+                  loading={loadingBelow}
+                  version={shownRows.length}
+                  status={
+                    loadingBelow ? t`Loading older blocks…` : t`Older blocks load as you scroll.`
+                  }
+                  fallbackLabel={t`Show older blocks`}
+                />
+              )
+            ) : null}
+          </div>
+          {firstOfDay !== undefined && firstOfDay > 0 && reachedFloor ? (
             <p className="rx-note" data-nav="older-than-day">
               {t`That is the first block on ${dateLabel ?? date}. Going older leaves this day.`}{' '}
               <Link
@@ -666,7 +926,7 @@ export function BlocksPage({
               </Link>
             </p>
           ) : null}
-          <p className="rx-note rx-dim">{t`${formatInt(size)} blocks a page, newest first.`}</p>
+          <p className="rx-note rx-dim">{t`Newest first; ${formatInt(size)} more load at a time as you scroll.`}</p>
         </Section>
       </div>
     </article>

@@ -18,9 +18,9 @@ msgstr ""
 msgid "{0, plural, one {# transaction} other {# transactions}}"
 msgstr "{0, plural, one {# транзакция} few {# транзакции} many {# транзакций} other {# транзакции}}"
 
-#. placeholder {0}: formatInt(size)
-msgid "{0} blocks a page, newest first."
-msgstr "{0} блоков на странице, сначала новые."
+#. placeholder {0}: formatInt(newerCount)
+msgid "{0} newer blocks · jump to the newest"
+msgstr "Новых блоков: {0} · перейти к последним"
 
 msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
 msgstr "{confirmations, plural, one {# подтверждение} few {# подтверждения} many {# подтверждений} other {# подтверждения}}"
@@ -64,8 +64,8 @@ msgstr "Блоки за {date}"
 msgid "Blocks on {dateLabel}"
 msgstr "Блоки за {dateLabel}"
 
-msgid "Blocks per page"
-msgstr "Блоков на странице"
+msgid "Blocks per load"
+msgstr "Блоков за загрузку"
 
 msgid "Browse by date"
 msgstr "Просмотр по дате"
@@ -132,14 +132,27 @@ msgstr "Не удалось связаться с Insight"
 msgid "Jump to a date"
 msgstr "Перейти к дате"
 
+msgid "Jump to the newest blocks"
+msgstr "Перейти к последним блокам"
+
 msgid "Latest blocks"
 msgstr "Последние блоки"
+
+msgid "Loading newer blocks…"
+msgstr "Загружаем более новые блоки…"
+
+msgid "Loading older blocks…"
+msgstr "Загружаем более старые блоки…"
 
 msgid "Merkle root"
 msgstr "Корень Меркла"
 
-msgid "Newer"
-msgstr "Новее"
+msgid "Newest blocks"
+msgstr "Новейшие блоки"
+
+#. placeholder {0}: formatInt(size)
+msgid "Newest first; {0} more load at a time as you scroll."
+msgstr "Сначала новые; при прокрутке загружается ещё по {0}."
 
 msgid "Next →"
 msgstr "Далее →"
@@ -181,11 +194,11 @@ msgstr "Не найдено в сети {0}"
 msgid "Not in DAPI"
 msgstr "Нет в DAPI"
 
-msgid "Older"
-msgstr "Старее"
-
 msgid "Older blocks from before this date"
 msgstr "Более старые блоки до этой даты"
+
+msgid "Older blocks load as you scroll."
+msgstr "Более старые блоки загрузятся при прокрутке."
 
 msgid "On this page"
 msgstr "На этой странице"
@@ -218,6 +231,12 @@ msgstr "Поиск в заголовках блоков начала и конц
 msgid "See the sources"
 msgstr "Посмотреть источники"
 
+msgid "Show newer blocks"
+msgstr "Показать более новые блоки"
+
+msgid "Show older blocks"
+msgstr "Показать более старые блоки"
+
 msgid "Size"
 msgstr "Размер"
 
@@ -233,6 +252,12 @@ msgstr "Это первый блок за {0}. Переход к более ст
 
 msgid "The latest block was mined <0/>"
 msgstr "Последний блок добыт <0/>"
+
+msgid "The newer blocks could not be loaded."
+msgstr "Не удалось загрузить более новые блоки."
+
+msgid "The older blocks could not be loaded."
+msgstr "Не удалось загрузить более старые блоки."
 
 #. placeholder {0}: formatInt(window.top - window.count + 1)
 #. placeholder {1}: formatInt(window.top)
@@ -263,6 +288,9 @@ msgstr "Транзакции"
 #. placeholder {0}: formatInt(block.height)
 msgid "Transactions in block {0}"
 msgstr "Транзакции в блоке {0}"
+
+msgid "Try again"
+msgstr "Повторить"
 
 msgid "tx"
 msgstr "тх"

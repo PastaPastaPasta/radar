@@ -332,6 +332,102 @@ describe('DataTable paging', () => {
     expect(screen.getByRole('link', { name: 'Back to top' })).toBeInTheDocument()
   })
 
+  it('loads more by itself as the end of the list nears, and says so', async () => {
+    const seen: ((entries: { isIntersecting: boolean }[]) => void)[] = []
+    vi.stubGlobal(
+      'IntersectionObserver',
+      class {
+        constructor(cb: (entries: { isIntersecting: boolean }[]) => void) {
+          seen.push(cb)
+        }
+        observe = vi.fn()
+        disconnect = vi.fn()
+      },
+    )
+    try {
+      const fetchNext = vi.fn()
+      await renderInRouter(
+        <Harness paging={{ kind: 'infinite', hasNext: true, fetching: false, fetchNext }} />,
+      )
+      expect(screen.queryByRole('button', { name: 'Show more' })).toBeNull()
+      expect(screen.getByRole('status')).toHaveTextContent('3 shown. More load as you scroll.')
+      act(() => {
+        seen.at(-1)?.([{ isIntersecting: true }])
+      })
+      expect(fetchNext, 'nothing loads before the reader moves').not.toHaveBeenCalled()
+      act(() => {
+        window.dispatchEvent(new Event('wheel'))
+      })
+      act(() => {
+        seen.at(-1)?.([{ isIntersecting: true }])
+      })
+      expect(fetchNext).toHaveBeenCalledTimes(1)
+    } finally {
+      vi.unstubAllGlobals()
+    }
+  })
+
+  it('stops loading by itself after a load it asked for brought nothing, and offers to try again', async () => {
+    const user = userEvent.setup()
+    let asks = 0
+    function Loading() {
+      const [fetching, setFetching] = useState(false)
+      return (
+        <>
+          <button
+            type="button"
+            onClick={() => {
+              setFetching(false)
+            }}
+          >
+            finish
+          </button>
+          <Harness
+            paging={{
+              kind: 'infinite',
+              hasNext: true,
+              fetching,
+              fetchNext: () => {
+                asks++
+                setFetching(true)
+              },
+            }}
+          />
+        </>
+      )
+    }
+    await renderInRouter(<Loading />)
+    await user.click(screen.getByRole('button', { name: 'Show more' }))
+    expect(screen.getByText('Loading more…')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'finish' }))
+    await user.click(await screen.findByRole('button', { name: 'Try again' }))
+    expect(asks).toBe(2)
+  })
+
+  it('does not count a refetch it did not ask for as a failed load', async () => {
+    const user = userEvent.setup()
+    function Polling() {
+      const [fetching, setFetching] = useState(true)
+      return (
+        <>
+          <button
+            type="button"
+            onClick={() => {
+              setFetching(false)
+            }}
+          >
+            finish
+          </button>
+          <Harness paging={{ kind: 'infinite', hasNext: true, fetching, fetchNext: vi.fn() }} />
+        </>
+      )
+    }
+    await renderInRouter(<Polling />)
+    await user.click(screen.getByRole('button', { name: 'finish' }))
+    expect(screen.queryByRole('button', { name: 'Try again' })).toBeNull()
+    expect(screen.getByRole('button', { name: 'Show more' })).toBeInTheDocument()
+  })
+
   it('renders only a window of rows when virtual', async () => {
     const height = vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockReturnValue(53)
     const rect = vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({

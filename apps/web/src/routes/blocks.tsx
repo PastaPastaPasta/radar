@@ -1,4 +1,5 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { useEffect, useState } from 'react'
 import { z } from 'zod'
 import { zIsoDate } from '@/app/search'
 import { prefetchForRoute, routeNetwork } from '@/data/query'
@@ -33,6 +34,28 @@ export const Route = createFileRoute('/blocks')({
 })
 
 function BlocksRoute() {
-  const { date, from, size } = Route.useSearch()
-  return <BlocksPage date={date} from={from} size={size} />
+  const search = Route.useSearch()
+  const { date, from, size } = search
+  const router = useRouter()
+  // The list notes the reader's place in the URL without telling the router, so a link to the address the router
+  // last saw looks like no change to it, and the router keeps the scroll; such a navigation still starts the list
+  // over, at the top.
+  const [restart, setRestart] = useState(0)
+  useEffect(
+    () =>
+      router.subscribe('onBeforeNavigate', (e) => {
+        if (e.toLocation.pathname !== '/blocks' || e.hrefChanged) return
+        window.scrollTo({ top: 0 })
+        setRestart((n) => n + 1)
+      }),
+    [router],
+  )
+  const key = [
+    search.network ?? search.net ?? '',
+    date ?? '',
+    from ?? '',
+    size ?? '',
+    restart,
+  ].join('|')
+  return <BlocksPage key={key} date={date} from={from} size={size} />
 }

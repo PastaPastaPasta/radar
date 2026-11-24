@@ -18,9 +18,9 @@ msgstr ""
 msgid "{0, plural, one {# transaction} other {# transactions}}"
 msgstr "{0, plural, other {# 笔交易}}"
 
-#. placeholder {0}: formatInt(size)
-msgid "{0} blocks a page, newest first."
-msgstr "每页 {0} 个区块，最新的在前。"
+#. placeholder {0}: formatInt(newerCount)
+msgid "{0} newer blocks · jump to the newest"
+msgstr "{0} 个更新的区块 · 跳到最新"
 
 msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
 msgstr "{confirmations, plural, other {# 次确认}}"
@@ -64,8 +64,8 @@ msgstr "{date} 的区块"
 msgid "Blocks on {dateLabel}"
 msgstr "{dateLabel} 的区块"
 
-msgid "Blocks per page"
-msgstr "每页区块数"
+msgid "Blocks per load"
+msgstr "每次加载的区块数"
 
 msgid "Browse by date"
 msgstr "按日期浏览"
@@ -132,14 +132,27 @@ msgstr "无法连接 Insight"
 msgid "Jump to a date"
 msgstr "跳转到日期"
 
+msgid "Jump to the newest blocks"
+msgstr "跳到最新区块"
+
 msgid "Latest blocks"
 msgstr "最新区块"
+
+msgid "Loading newer blocks…"
+msgstr "正在加载更新的区块…"
+
+msgid "Loading older blocks…"
+msgstr "正在加载更早的区块…"
 
 msgid "Merkle root"
 msgstr "Merkle 根"
 
-msgid "Newer"
-msgstr "较新"
+msgid "Newest blocks"
+msgstr "最新区块"
+
+#. placeholder {0}: formatInt(size)
+msgid "Newest first; {0} more load at a time as you scroll."
+msgstr "最新的在前；滚动时每次再加载 {0} 个。"
 
 msgid "Next →"
 msgstr "下一页 →"
@@ -181,11 +194,11 @@ msgstr "在 {0} 上未找到"
 msgid "Not in DAPI"
 msgstr "不在 DAPI 中"
 
-msgid "Older"
-msgstr "较早"
-
 msgid "Older blocks from before this date"
 msgstr "此日期之前的较早区块"
+
+msgid "Older blocks load as you scroll."
+msgstr "滚动时会加载更早的区块。"
 
 msgid "On this page"
 msgstr "本页内容"
@@ -218,6 +231,12 @@ msgstr "正在搜索区块头，以确定这一天的起止位置：已找到 {0
 msgid "See the sources"
 msgstr "查看数据源"
 
+msgid "Show newer blocks"
+msgstr "显示更新的区块"
+
+msgid "Show older blocks"
+msgstr "显示更早的区块"
+
 msgid "Size"
 msgstr "大小"
 
@@ -233,6 +252,12 @@ msgstr "这是 {0} 的第一个区块。再往更早翻会离开这一天。"
 
 msgid "The latest block was mined <0/>"
 msgstr "最新区块挖出于 <0/>"
+
+msgid "The newer blocks could not be loaded."
+msgstr "无法加载更新的区块。"
+
+msgid "The older blocks could not be loaded."
+msgstr "无法加载更早的区块。"
 
 #. placeholder {0}: formatInt(window.top - window.count + 1)
 #. placeholder {1}: formatInt(window.top)
@@ -263,6 +288,9 @@ msgstr "交易"
 #. placeholder {0}: formatInt(block.height)
 msgid "Transactions in block {0}"
 msgstr "区块 {0} 中的交易"
+
+msgid "Try again"
+msgstr "重试"
 
 msgid "tx"
 msgstr "笔"

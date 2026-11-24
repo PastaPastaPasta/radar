@@ -88,13 +88,13 @@ describe('Blocks list, indexed first', () => {
 
     const client = mount('/blocks')
     await screen.findAllByText(INDEXED)
-    expect(screen.queryByRole('navigation', { name: 'Pagination' })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'Show older blocks' })).toBeNull()
 
     dapi.release()
     await waitFor(() => expect(screen.queryAllByText(INDEXED)).toHaveLength(0))
     await waitFor(() => expect(within(table()).getAllByRole('row')).toHaveLength(21))
     expect(within(table()).getByRole('link', { name: /2,570,085/ })).toBeInTheDocument()
-    expect(screen.getByRole('navigation', { name: 'Pagination' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Show older blocks' })).toBeInTheDocument()
     const indexedCalls = indexed.mock.calls.length
 
     bump = 1
@@ -148,12 +148,11 @@ describe('Blocks list, a page named by its height', () => {
       expect(within(table()).getByRole('link', { name: /2,570,085/ })).toBeInTheDocument(),
     )
     expect(asked).toEqual([{ fromHeight: from, count: 4 }])
-    const pager = () => screen.getByRole('navigation', { name: 'Pagination' })
-    expect(within(pager()).queryByRole('link', { name: 'Older' })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'Show older blocks' })).toBeNull()
 
     tipGate.release()
     await waitFor(() => expect(within(table()).getAllByRole('row')).toHaveLength(21))
-    expect(within(pager()).getByRole('link', { name: 'Older' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Show older blocks' })).toBeInTheDocument()
     expect(asked.filter((q) => q.fromHeight === from)).toHaveLength(1)
   })
 

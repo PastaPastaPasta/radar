@@ -1,4 +1,5 @@
 import { expectAccessible } from '../helpers/a11y'
+import type { Page } from '@playwright/test'
 import { expect as baseExpect, test } from '../helpers/test'
 import { CLAIM } from '../routes/claims'
 
@@ -8,8 +9,51 @@ const TIP = 2570085
 const PREVIOUS_HASH = '0000000000000027cf3cde6fa7d6361587cd5ac4f211ceb6b7bfaf1ba4e01ce4'
 const TESTNET_TIP = 1589232
 
+/** Rows below the recorded window (the newest 20 blocks) come from here, so a test can scroll as far as it likes. */
+async function synthesizeOlderRows(page: Page, newest = TIP) {
+  await page.addInitScript((tip: number) => {
+    const w = window as unknown as {
+      __radarCore?: Record<string, (...args: unknown[]) => Promise<unknown>>
+    }
+    let core: typeof w.__radarCore
+    Object.defineProperty(w, '__radarCore', {
+      configurable: true,
+      get: () => core,
+      set(value: typeof core) {
+        core = value
+        const original = value?.blockRows
+        if (!value || !original) return
+        value.blockRows = (...args) => {
+          const q = args[1] as { fromHeight: number; count: number; via?: string }
+          const asked = window as unknown as { __rowReads?: number[] }
+          ;(asked.__rowReads ??= []).push(q.fromHeight)
+          if (q.via || q.fromHeight - q.count + 1 >= tip - 19) return original.apply(value, args)
+          const now = Date.now()
+          return Promise.resolve({
+            source: 'dapi',
+            asOf: now,
+            fetchedAt: now,
+            proved: false,
+            data: Array.from({ length: q.count }, (_, i) => ({
+              height: q.fromHeight - i,
+              hash: (q.fromHeight - i).toString(16).padStart(64, '0'),
+              time: now - (tip - q.fromHeight + i) * 150_000,
+              txCount: 1,
+              size: 300,
+              chainLocked: true,
+            })),
+          })
+        }
+      },
+    })
+  }, newest)
+}
+
 test.describe('Blocks list', () => {
-  test('lists the newest blocks and pages back by cursor @HY-04', async ({ page }) => {
+  test('lists the newest blocks, then loads older ones as the reader scrolls @HY-04', async ({
+    page,
+  }) => {
+    await synthesizeOlderRows(page)
     await page.goto('/blocks')
     await expect(page.getByRole('heading', { level: 1, name: CLAIM.blocks })).toBeVisible()
     const [headline, kicker] = await Promise.all(
@@ -20,10 +64,149 @@ test.describe('Blocks list', () => {
     )
     await expect(page.locator(`a[href="/block/${TIP}"]`).first()).toBeVisible()
     await expectAccessible(page)
-    await page.getByRole('link', { name: 'Older' }).click()
-    await expect(page).toHaveURL(/from=2570065/)
-    await expect(page.locator('a[href="/block/2570065"]').first()).toBeVisible()
-    await expect(page.getByRole('link', { name: 'Newer' })).toBeVisible()
+    const rows = page.locator('#blocks tbody tr[data-row-id]')
+    await expect(rows).toHaveCount(20)
+    await expect(page.getByRole('navigation', { name: 'Pagination' })).toHaveCount(0)
+    await page.evaluate(() => {
+      window.scrollTo(0, document.body.scrollHeight)
+    })
+    await expect(rows).toHaveCount(40)
+    await expect(page.locator('a[href="/block/2570046"]').first()).toBeAttached()
+    await expect(page.locator('[data-sentinel="end"] [role="status"]')).toContainText(
+      /Older blocks load as you scroll/,
+    )
+    await expectAccessible(page)
+  })
+
+  test('keeps the reader’s place in the URL, so a reload opens at the same block @HY-04', async ({
+    page,
+  }) => {
+    await synthesizeOlderRows(page)
+    await page.goto('/blocks')
+    const rows = page.locator('#blocks tbody tr[data-row-id]')
+    await expect(rows).toHaveCount(20)
+    for (const expected of [40, 60]) {
+      await page.evaluate(() => {
+        window.scrollTo(0, document.body.scrollHeight)
+      })
+      await expect(rows).toHaveCount(expected)
+    }
+    await page.evaluate(() => {
+      const row = document.querySelector('[data-row-id="2570040"]')!
+      window.scrollBy(0, row.getBoundingClientRect().top - 100)
+    })
+    await expect(page).toHaveURL(/from=25700[34]\d/)
+    const from = Number(new URL(page.url()).searchParams.get('from'))
+    await page.reload()
+    const row = page.locator(`[data-row-id="${from}"]`)
+    await expect(row).toBeVisible()
+    const top = await row.evaluate((el) => el.getBoundingClientRect().top)
+    expect(top, 'the block the URL names is back near the top of the view').toBeLessThan(200)
+    await page.getByRole('button', { name: /newest/ }).click()
+    await expect(page.locator(`a[href="/block/${TIP}"]`).first()).toBeVisible()
+    await expect(page).not.toHaveURL(/from=/)
+  })
+
+  test('clears the place in the URL when the reader follows a link to the blocks list it opened at @HY-04', async ({
+    page,
+  }) => {
+    await synthesizeOlderRows(page)
+    await page.goto('/blocks')
+    const rows = page.locator('#blocks tbody tr[data-row-id]')
+    await expect(rows).toHaveCount(20)
+    for (const expected of [40, 60]) {
+      await page.evaluate(() => {
+        window.scrollTo(0, document.body.scrollHeight)
+      })
+      await expect(rows).toHaveCount(expected)
+    }
+    await expect(page).toHaveURL(/from=/)
+    await page.evaluate(() => {
+      ;(window as { sameDocument?: boolean }).sameDocument = true
+    })
+    await page
+      .getByRole('navigation', { name: 'Radar' })
+      .getByRole('link', { name: 'Core' })
+      .click()
+    await expect(page.locator(`a[href="/block/${TIP}"]`).first()).toBeVisible()
+    await expect(page).not.toHaveURL(/from=/)
+    expect(await page.evaluate(() => (window as { sameDocument?: boolean }).sameDocument)).toBe(
+      true,
+    )
+  })
+
+  test('opens a fresh link at the block it names and reads only that page until the reader scrolls @HY-04', async ({
+    page,
+  }) => {
+    await synthesizeOlderRows(page)
+    const from = TIP - 100
+    await page.goto(`/blocks?from=${from}`)
+    const rows = page.locator('#blocks tbody tr[data-row-id]')
+    await expect(rows).toHaveCount(20)
+    await page.waitForTimeout(1500)
+    await expect(rows.first()).toHaveAttribute('data-row-id', String(from))
+    const reads = await page.evaluate(
+      () => (window as unknown as { __rowReads?: number[] }).__rowReads ?? [],
+    )
+    expect(reads.every((h) => h <= from && h > from - 20)).toBe(true)
+    await expect(page.getByRole('button', { name: /newest/ })).toBeVisible()
+  })
+
+  test('keeps the same list while the reader scrolls a page with other parameters, such as testnet @HY-04', async ({
+    page,
+  }) => {
+    await synthesizeOlderRows(page, TESTNET_TIP)
+    await page.goto('/blocks?network=testnet')
+    const rows = page.locator('#blocks tbody tr[data-row-id]')
+    await expect(rows).toHaveCount(20)
+    await page.locator('#blocks table').evaluate((el) => {
+      el.setAttribute('data-test-mark', 'kept')
+    })
+    await page.evaluate(() => {
+      window.scrollTo(0, document.body.scrollHeight)
+    })
+    await page.mouse.wheel(0, 120)
+    await expect(rows).toHaveCount(40)
+    await expect(page.locator('#blocks table[data-test-mark="kept"]')).toHaveCount(1)
+    await expect(page).toHaveURL(/network=testnet/)
+    await expect(page).toHaveURL(/from=\d+/)
+  })
+
+  test('keeps the list when the reader scrolls a little at the top @HY-04', async ({ page }) => {
+    await page.goto('/blocks')
+    const rows = page.locator('#blocks tbody tr[data-row-id]')
+    await expect(rows).toHaveCount(20)
+    await page.locator('#blocks table').evaluate((el) => {
+      el.setAttribute('data-test-mark', 'kept')
+    })
+    await page.mouse.wheel(0, 30)
+    await page.waitForTimeout(600)
+    await page.mouse.wheel(0, -30)
+    await page.waitForTimeout(600)
+    await expect(page.locator('#blocks table[data-test-mark="kept"]')).toHaveCount(1)
+  })
+
+  test('keeps at most eight pages of rows on the page however far the reader scrolls @HY-04', async ({
+    page,
+  }) => {
+    await synthesizeOlderRows(page)
+    await page.goto('/blocks')
+    const rows = page.locator('#blocks tbody tr[data-row-id]')
+    await expect(rows).toHaveCount(20)
+    for (let i = 0; i < 10; i++) {
+      const before = await rows.last().getAttribute('data-row-id')
+      await page.evaluate(() => {
+        window.scrollTo(0, document.body.scrollHeight)
+      })
+      await expect(rows.last()).not.toHaveAttribute('data-row-id', before!)
+    }
+    expect(await rows.count()).toBeLessThanOrEqual(160)
+    const reads = await page.evaluate(
+      () => (window as unknown as { __rowReads?: number[] }).__rowReads ?? [],
+    )
+    expect(reads.length, 'one read per page scrolled to, none ahead').toBeLessThanOrEqual(13)
+    await expect(page.locator(`[data-row-id="${TIP}"]`)).toHaveCount(0)
+    await expect(page.getByRole('button', { name: /newest/ })).toBeVisible()
   })
 
   test('never shows a part-filled page as a whole one: it stays busy and says how many rows are still coming @HY-04 @IN-02', async ({
@@ -120,10 +303,6 @@ test.describe('Blocks list', () => {
       )
     expect(heights).toEqual(Array.from({ length: 50 }, (_, i) => 1586890 - i))
     await expect(page.getByText('Heights 1,586,841 to 1,586,890')).toBeVisible()
-    await expect(page.getByRole('link', { name: 'Older' })).toHaveAttribute(
-      'href',
-      /from=1586840.*size=50|size=50.*from=1586840/,
-    )
   })
 })
 

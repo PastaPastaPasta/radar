@@ -9,6 +9,18 @@ import { expect, test } from '../helpers/test'
 import { sourceLineOf } from '../helpers/sources'
 import { CLAIM, H1 } from '../routes/claims'
 
+/** Loads the next part of a list: lists load as the reader nears their end, a few still have a button. */
+async function loadMore(page: Page) {
+  const button = page.getByRole('button', { name: 'Show more' })
+  if (await button.isVisible()) {
+    await button.click()
+    return
+  }
+  const sentinel = page.locator('[data-sentinel="end"]').last()
+  await sentinel.scrollIntoViewIfNeeded()
+  await page.mouse.wheel(0, 120)
+}
+
 const HY_FIXTURES = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
   '..',
@@ -212,7 +224,7 @@ test.describe('address page', () => {
     const table = page.getByRole('table', { name: /Transactions/ })
     await expect(table).toBeVisible()
     const before = await table.getByRole('row').count()
-    await page.getByRole('button', { name: 'Show more' }).click()
+    await loadMore(page)
     await expect.poll(async () => table.getByRole('row').count()).toBeGreaterThan(before)
   })
 
@@ -374,7 +386,7 @@ test.describe('rich list', () => {
     await expect(page.getByText('Supply concentration')).toBeVisible()
     const items = ranked.getByRole('row').or(ranked.getByRole('listitem'))
     const before = await items.count()
-    await page.getByRole('button', { name: 'Show more' }).click()
+    await loadMore(page)
     await expect.poll(async () => items.count()).toBeGreaterThan(before)
     await sourced(page)
     await expectAccessible(page)
@@ -394,7 +406,7 @@ test.describe('rich list', () => {
       )
       document.adoptedStyleSheets = [...document.adoptedStyleSheets, slow]
     })
-    await page.getByRole('button', { name: 'Show more' }).click()
+    await loadMore(page)
     await expect(page.locator('.rx-tick.is-new').first()).toBeVisible()
     await expectAccessible(page)
   })
@@ -461,7 +473,7 @@ test.describe('rich list', () => {
       await expect(first.getByText(label, { exact: false }).first()).toBeVisible()
     }
     await expect(first).toContainText(/\d[\d,]* tx/)
-    await page.getByRole('button', { name: 'Show more' }).click()
+    await loadMore(page)
     await expect(list.getByRole('listitem')).toHaveCount(50)
     const before = await page.evaluate(() => window.scrollY)
     await page.getByRole('link', { name: 'Back to summary' }).click()
@@ -505,7 +517,7 @@ test.describe('rich list', () => {
     for (const label of ['Received', 'Sent', 'Transactions']) {
       await expect(first.locator(`td[data-l="${label}"]`)).toBeVisible()
     }
-    await page.getByRole('button', { name: 'Show more' }).click()
+    await loadMore(page)
     const rows = page
       .getByRole('table', { name: /Addresses ranked by balance/ })
       .locator('tbody tr')

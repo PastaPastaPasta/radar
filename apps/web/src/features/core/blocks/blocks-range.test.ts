@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest'
-import { BLOCKS_PER_PAGE, MAX_DAPI_READS, chunksOf, shiftDay, windowOf } from './blocks-range'
+import {
+  BLOCKS_PER_PAGE,
+  MAX_DAPI_READS,
+  chunksOf,
+  newestPage,
+  shiftDay,
+  spanAbove,
+  spanBelow,
+  windowOf,
+} from './blocks-range'
 
 describe('windowOf', () => {
   it('starts at the newest block and pages back', () => {
@@ -61,5 +70,23 @@ describe('chunksOf @IN-02', () => {
       { offset: 4, count: 3 },
     ])
     expect(chunksOf(0)).toEqual([])
+  })
+})
+
+describe('scrolling spans', () => {
+  it('reads the page below down to the floor, and none past it', () => {
+    expect(spanBelow(2_000_001, 0, 20)).toEqual({ top: 2_000_000, count: 20 })
+    expect(spanBelow(11, 5, 20)).toEqual({ top: 10, count: 6 })
+    expect(spanBelow(5, 5, 20)).toBeNull()
+  })
+
+  it('stacks full pages above the anchor, the newest one ending at the tip', () => {
+    expect(spanAbove(-1, 100, 150, 20)).toEqual({ top: 120, count: 20 })
+    expect(spanAbove(-3, 100, 150, 20)).toEqual({ top: 150, count: 10 })
+    expect(spanAbove(-4, 100, 150, 20)).toBeNull()
+    expect(spanAbove(-1, 100, 100, 20)).toBeNull()
+    expect(newestPage(100, 150, 20)).toBe(-3)
+    expect(newestPage(100, 100, 20)).toBe(0)
+    expect(newestPage(100, 101, 20)).toBe(-1)
   })
 })

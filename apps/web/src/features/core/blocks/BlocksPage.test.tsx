@@ -29,12 +29,29 @@ describe('Blocks list', () => {
     const h1 = screen.getByRole('heading', { level: 1 })
     expect(h1).toHaveTextContent(/^The latest block was mined .+$/)
     expect(h1.querySelector('time')).not.toBeNull()
-    const pager = screen.getByRole('navigation', { name: 'Pagination' })
-    expect(within(pager).getByRole('link', { name: 'Older' })).toHaveAttribute(
-      'href',
-      expect.stringContaining('from=2570065'),
-    )
-    expect(within(pager).queryByRole('link', { name: 'Newer' })).toBeNull()
+    expect(screen.queryByRole('button', { name: /newest blocks/ })).toBeNull()
+    const asked: { fromHeight: number; count: number }[] = []
+    vi.spyOn(core, 'blockRows').mockImplementation((_net, q) => {
+      asked.push({ fromHeight: q.fromHeight, count: q.count })
+      return Promise.resolve({
+        source: 'dapi' as const,
+        asOf: Date.now(),
+        fetchedAt: Date.now(),
+        proved: false,
+        data: Array.from({ length: q.count }, (_, i) => ({
+          height: q.fromHeight - i,
+          hash: (q.fromHeight - i).toString(16).padStart(64, '0'),
+          time: Date.now() - i * 150_000,
+          txCount: 1,
+          size: 300,
+          chainLocked: true,
+        })),
+      })
+    })
+    await userEvent.setup().click(screen.getByRole('button', { name: 'Show older blocks' }))
+    await waitFor(() => expect(within(table()).getAllByRole('row')).toHaveLength(41))
+    expect(asked).toEqual([{ fromHeight: 2570065, count: 20 }])
+    expect(within(table()).getByRole('link', { name: /2,570,046/ })).toBeInTheDocument()
   })
 
   it('carries a short unit on each count for the phone card, which has no column header @HY-04', async () => {
@@ -198,7 +215,7 @@ describe('Blocks list', () => {
       await screen.findByRole('table', { name: /Blocks on 3 Nov 2026/ })
       const table = () => screen.getByRole('table', { name: /Blocks on 3 Nov 2026/ })
       await waitFor(() => expect(within(table()).getAllByRole('row')).toHaveLength(21))
-      const group = screen.getByRole('group', { name: 'Blocks per page' })
+      const group = screen.getByRole('group', { name: 'Blocks per load' })
       expect(within(group).getByRole('button', { name: '20' })).toHaveAttribute(
         'aria-pressed',
         'true',
@@ -206,7 +223,9 @@ describe('Blocks list', () => {
       for (const n of ['50', '100']) {
         expect(within(group).getByRole('button', { name: n })).toBeEnabled()
       }
-      expect(screen.getByText('20 blocks a page, newest first.')).toBeInTheDocument()
+      expect(
+        screen.getByText('Newest first; 20 more load at a time as you scroll.'),
+      ).toBeInTheDocument()
     })
 
     it('reads a page of 50 from Hyphen in one request, not one DAPI block each, and pages on with its size @IN-02', async () => {
@@ -220,12 +239,15 @@ describe('Blocks list', () => {
       const table = () => screen.getByRole('table', { name: /Blocks on 3 Nov 2026/ })
       await waitFor(() => expect(within(table()).getAllByRole('row')).toHaveLength(51))
       expect(calls).toEqual([{ count: 50, via: 'index' }])
-      expect(screen.getByText('50 blocks a page, newest first.')).toBeInTheDocument()
-      const pager = screen.getByRole('navigation', { name: 'Pagination' })
-      const older = within(pager).getByRole('link', { name: 'Older' }).getAttribute('href')!
-      expect(older).toContain('date=2026-11-03')
-      expect(older).toContain('size=50')
-      expect(older).toContain('from=')
+      expect(
+        screen.getByText('Newest first; 50 more load at a time as you scroll.'),
+      ).toBeInTheDocument()
+      await userEvent.setup().click(screen.getByRole('button', { name: 'Show older blocks' }))
+      await waitFor(() => expect(within(table()).getAllByRole('row')).toHaveLength(101))
+      expect(calls).toEqual([
+        { count: 50, via: 'index' },
+        { count: 50, via: 'index' },
+      ])
     })
 
     it('goes to another size from the control and keeps the date @IN-02', async () => {
@@ -237,7 +259,7 @@ describe('Blocks list', () => {
       )
       const user = userEvent.setup()
       renderAt('/blocks?date=2026-11-03')
-      const group = await screen.findByRole('group', { name: 'Blocks per page' })
+      const group = await screen.findByRole('group', { name: 'Blocks per load' })
       const hundred = within(group).getByRole('button', { name: '100' })
       await waitFor(() => expect(hundred).toBeEnabled())
       await user.click(hundred)
@@ -245,7 +267,7 @@ describe('Blocks list', () => {
       const table = () => screen.getByRole('table', { name: /Blocks on 3 Nov 2026/ })
       await waitFor(() => expect(within(table()).getAllByRole('row')).toHaveLength(101))
       expect(
-        within(screen.getByRole('group', { name: 'Blocks per page' })).getByRole('button', {
+        within(screen.getByRole('group', { name: 'Blocks per load' })).getByRole('button', {
           name: '100',
         }),
       ).toHaveAttribute('aria-pressed', 'true')
@@ -291,10 +313,8 @@ describe('Blocks list', () => {
       expect(rows).not.toHaveBeenCalled()
       expect(within(table).getByRole('link', { name: /1,589,232/ })).toBeInTheDocument()
       expect(document.querySelector('[data-source="insight"]')).not.toBeNull()
-      const pager = screen.getByRole('navigation', { name: 'Pagination' })
-      const older = within(pager).getByRole('link', { name: 'Older' }).getAttribute('href')!
-      expect(older).toContain('size=100')
-      expect(older).toContain('from=1589132')
+      expect(screen.getByRole('button', { name: 'Show older blocks' })).toBeInTheDocument()
+      expect(screen.getByText('Older blocks load as you scroll.')).toBeInTheDocument()
     })
 
     it('shows a page that crosses UTC midnight whole, reading both days, and pages on from its last row @IN-02 @IN-16', async () => {
@@ -331,13 +351,9 @@ describe('Blocks list', () => {
       expect(shown).toEqual(Array.from({ length: 50 }, (_, i) => 1586890 - i))
       expect(days).toEqual(['2026-11-07:50', '2026-11-06:38'])
       expect(screen.getByText('Heights 1,586,841 to 1,586,890')).toBeInTheDocument()
-      const pager = screen.getByRole('navigation', { name: 'Pagination' })
-      expect(within(pager).getByRole('link', { name: 'Older' }).getAttribute('href')).toContain(
-        'from=1586840',
-      )
-      expect(within(pager).getByRole('link', { name: 'Newer' }).getAttribute('href')).toContain(
-        'from=1586940',
-      )
+      expect(screen.getByRole('button', { name: 'Show older blocks' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'Show newer blocks' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /jump to the newest/ })).toBeInTheDocument()
     })
 
     it('starts the page after a short one at the lowest block it showed @IN-02', async () => {
@@ -368,11 +384,8 @@ describe('Blocks list', () => {
           within(screen.getByRole('table', { name: 'Core blocks' })).getAllByRole('row'),
         ).toHaveLength(61),
       )
-      const pager = screen.getByRole('navigation', { name: 'Pagination' })
-      const older = within(pager).getByRole('link', { name: 'Older' }).getAttribute('href')!
-      expect(older).toContain('from=1589172')
-      expect(older).toContain('size=100')
       expect(screen.getByText('Heights 1,589,173 to 1,589,232')).toBeInTheDocument()
+      expect(screen.getByText('Older blocks load as you scroll.')).toBeInTheDocument()
     })
 
     it('says what happened when Insight returns no blocks, with the page either side @IN-02', async () => {
@@ -394,13 +407,10 @@ describe('Blocks list', () => {
       )
       renderAt('/blocks?network=testnet&size=50&from=1589000')
       expect(await screen.findByText('No blocks came back for this page')).toBeInTheDocument()
-      expect(
-        document.querySelector('[data-nav="empty-page"] a[href*="from=1588950"]'),
-      ).not.toBeNull()
-      expect(
-        document.querySelector('[data-nav="empty-page"] a[href*="from=1589050"]'),
-      ).not.toBeNull()
-      expect(document.querySelector('[data-nav="empty-page"] a[href*="size=50"]')).not.toBeNull()
+      const newest = document.querySelector('[data-nav="empty-page"] a')
+      expect(newest).toHaveTextContent('Newest blocks')
+      expect(newest?.getAttribute('href')).toContain('size=50')
+      expect(newest?.getAttribute('href')).not.toContain('from=')
       expect(screen.queryByText('No blocks on this date')).toBeNull()
     })
 
@@ -424,7 +434,7 @@ describe('Blocks list', () => {
       await delay(300)
       expect(screen.queryByText('No blocks on this date')).toBeNull()
       expect(
-        within(screen.getByRole('group', { name: 'Blocks per page' })).getByRole('button', {
+        within(screen.getByRole('group', { name: 'Blocks per load' })).getByRole('button', {
           name: '50',
         }),
       ).toHaveAttribute('aria-pressed', 'true')
@@ -450,17 +460,14 @@ describe('Blocks list', () => {
           within(screen.getByRole('table', { name: /Blocks on 3 Nov 2026/ })).getAllByRole('row'),
         ).toHaveLength(21),
       )
-      const group = screen.getByRole('group', { name: 'Blocks per page' })
+      const group = screen.getByRole('group', { name: 'Blocks per load' })
       expect(within(group).getByRole('button', { name: '20' })).toHaveAttribute(
         'aria-pressed',
         'true',
       )
       expect(within(group).getByRole('button', { name: '50' })).toBeDisabled()
       expect(screen.getByText(/Pages of 50 need an index that is up to date/)).toBeInTheDocument()
-      const pager = screen.getByRole('navigation', { name: 'Pagination' })
-      expect(within(pager).getByRole('link', { name: 'Older' }).getAttribute('href')).toContain(
-        'size=50',
-      )
+      expect(screen.getByRole('button', { name: 'Show older blocks' })).toBeInTheDocument()
     })
 
     it('keeps size on the link to blocks before the day @IN-02', async () => {

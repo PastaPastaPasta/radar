@@ -35,6 +35,7 @@ export function infiniteTableProps<P extends ListPage>(
       hasNext: query.hasNextPage,
       fetchNext: () => void query.fetchNextPage(),
       fetching: query.isFetchingNextPage,
+      failed: query.isFetchNextPageError,
     },
   }
 }

@@ -30,6 +30,7 @@ import { reportsAttr, stampsOfInput, useSectionSource } from './section-source'
 import { AmountDensity } from './units-context'
 import { Empty, ErrorState, SourceLine } from './states'
 import type { LoadState } from './types'
+import { InfiniteSentinel } from './infinite'
 
 export interface DataTableProps<Row> {
   columns: ColumnDef<Row>[]
@@ -44,7 +45,14 @@ export interface DataTableProps<Row> {
   paging?:
     | { kind: 'page'; page: number; limit: number; total?: number; to: (page: number) => LinkProps }
     | { kind: 'cursor'; next?: LinkProps; prev?: LinkProps }
-    | { kind: 'infinite'; hasNext: boolean; fetchNext: () => void; fetching: boolean }
+    | {
+        kind: 'infinite'
+        hasNext: boolean
+        fetchNext: () => void
+        fetching: boolean
+        /** The last load failed: no more loads start by themselves until the reader asks again. */
+        failed?: boolean
+      }
   virtual?: boolean
   rowLink?: (r: Row) => LinkProps
   onCellFilter?: (columnId: string, value: string) => void
@@ -149,6 +157,68 @@ function CellContent<Row>({
   return <>{content}</>
 }
 
+function InfinitePager({
+  paging,
+  shown,
+}: {
+  paging: Extract<NonNullable<DataTableProps<unknown>['paging']>, { kind: 'infinite' }>
+  shown: number
+}) {
+  // A load this pager asked for that ends without a single new row is treated as failed, so a broken source is not
+  // asked again and again. Refetches it did not start (a poll, a background refresh) never count.
+  const [asked, setAsked] = useState<number | null>(null)
+  const [stalled, setStalled] = useState(false)
+  const [wasFetching, setWasFetching] = useState(paging.fetching)
+  if (paging.fetching !== wasFetching) {
+    setWasFetching(paging.fetching)
+    if (!paging.fetching && asked !== null) {
+      setStalled(shown <= asked)
+      setAsked(null)
+    }
+  }
+  const failed = paging.failed === true || stalled
+  const more = () => {
+    setAsked(shown)
+    setStalled(false)
+    paging.fetchNext()
+  }
+  return (
+    <div className="rx-pager" data-infinite>
+      <span>{t`${formatInt(shown)} loaded`}</span>
+      {failed && paging.hasNext && !paging.fetching ? (
+        <button type="button" className="dh-btn dh-btn--sm" onClick={more}>
+          {t`Try again`}
+        </button>
+      ) : (
+        <InfiniteSentinel
+          onNear={more}
+          enabled={paging.hasNext && !paging.fetching && !failed}
+          loading={paging.fetching}
+          version={shown}
+          status={
+            paging.fetching
+              ? t`Loading more…`
+              : paging.hasNext
+                ? t`${formatInt(shown)} shown. More load as you scroll.`
+                : t`All ${formatInt(shown)} shown.`
+          }
+          fallbackLabel={t`Show more`}
+        />
+      )}
+      <a
+        className="rx-go rx-go--up"
+        href="#top"
+        onClick={(e) => {
+          e.preventDefault()
+          window.scrollTo({ top: 0 })
+        }}
+      >
+        {t`Back to top`}
+      </a>
+    </div>
+  )
+}
+
 export function Pager({
   paging,
   shown,
@@ -157,31 +227,7 @@ export function Pager({
   shown: number
 }) {
   if (paging.kind === 'infinite') {
-    return (
-      <div className="rx-pager">
-        <span>{t`${formatInt(shown)} loaded`}</span>
-        {paging.hasNext ? (
-          <button
-            type="button"
-            className="dh-btn dh-btn--sm"
-            disabled={paging.fetching}
-            onClick={paging.fetchNext}
-          >
-            {t`Show more`}
-          </button>
-        ) : null}
-        <a
-          className="rx-go rx-go--up"
-          href="#top"
-          onClick={(e) => {
-            e.preventDefault()
-            window.scrollTo({ top: 0 })
-          }}
-        >
-          {t`Back to top`}
-        </a>
-      </div>
-    )
+    return <InfinitePager paging={paging} shown={shown} />
   }
   const link = (props: LinkProps | undefined, label: string, rel: 'next' | 'prev') =>
     props ? (

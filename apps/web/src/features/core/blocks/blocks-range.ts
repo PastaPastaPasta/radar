@@ -66,3 +66,39 @@ export function windowOf(
     older: top - count >= floor ? { from: top - count } : null,
   }
 }
+
+/** At most this many pages are on screen at once; the far end is dropped as the reader scrolls, and read back on return. */
+export const MAX_RENDERED_PAGES = 8
+
+/** The heights of one page in a scrolling list: its newest height and how many rows it holds. */
+export interface Span {
+  top: number
+  count: number
+}
+
+/** The page below one ending at `bottom` (its lowest height), within `floor`, or null when there is none. */
+export function spanBelow(bottom: number, floor: number, size: number): Span | null {
+  const top = bottom - 1
+  return top < floor ? null : { top, count: Math.min(size, top - floor + 1) }
+}
+
+/**
+ * Page `k` (k < 0) above page 0, which starts at `anchorTop`: pages above are `size` rows each and the newest one ends
+ * at `ceiling`, so it fills up as new blocks arrive. Null above the newest page.
+ */
+export function spanAbove(
+  k: number,
+  anchorTop: number,
+  ceiling: number,
+  size: number,
+): Span | null {
+  const bottom = anchorTop + (-k - 1) * size + 1
+  if (k >= 0 || bottom > ceiling) return null
+  const top = Math.min(anchorTop - k * size, ceiling)
+  return { top, count: top - bottom + 1 }
+}
+
+/** The index of the newest page above an anchor, 0 when the anchor is the newest block. */
+export function newestPage(anchorTop: number, ceiling: number, size: number): number {
+  return ceiling > anchorTop ? -Math.ceil((ceiling - anchorTop) / size) : 0
+}

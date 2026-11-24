@@ -18,9 +18,9 @@ msgstr ""
 msgid "{0, plural, one {# transaction} other {# transactions}}"
 msgstr "{0, plural, other {トランザクション #件}}"
 
-#. placeholder {0}: formatInt(size)
-msgid "{0} blocks a page, newest first."
-msgstr "1ページ {0} ブロック、新しい順。"
+#. placeholder {0}: formatInt(newerCount)
+msgid "{0} newer blocks · jump to the newest"
+msgstr "新しいブロック {0} 件 · 最新へ移動"
 
 msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
 msgstr "{confirmations, plural, other {# 承認}}"
@@ -64,8 +64,8 @@ msgstr "{date} のブロック"
 msgid "Blocks on {dateLabel}"
 msgstr "{dateLabel} のブロック"
 
-msgid "Blocks per page"
-msgstr "1ページあたりのブロック数"
+msgid "Blocks per load"
+msgstr "1 回に読み込むブロック数"
 
 msgid "Browse by date"
 msgstr "日付で探す"
@@ -132,14 +132,27 @@ msgstr "Insight に接続できませんでした"
 msgid "Jump to a date"
 msgstr "日付へ移動"
 
+msgid "Jump to the newest blocks"
+msgstr "最新のブロックへ移動"
+
 msgid "Latest blocks"
 msgstr "最新のブロック"
+
+msgid "Loading newer blocks…"
+msgstr "新しいブロックを読み込んでいます…"
+
+msgid "Loading older blocks…"
+msgstr "古いブロックを読み込んでいます…"
 
 msgid "Merkle root"
 msgstr "マークルルート"
 
-msgid "Newer"
-msgstr "新しい方へ"
+msgid "Newest blocks"
+msgstr "最新のブロック"
+
+#. placeholder {0}: formatInt(size)
+msgid "Newest first; {0} more load at a time as you scroll."
+msgstr "新しい順。スクロールすると {0} 件ずつ読み込みます。"
 
 msgid "Next →"
 msgstr "次へ →"
@@ -181,11 +194,11 @@ msgstr "{0} には見つかりません"
 msgid "Not in DAPI"
 msgstr "DAPI にありません"
 
-msgid "Older"
-msgstr "古い方へ"
-
 msgid "Older blocks from before this date"
 msgstr "この日付より前の古いブロック"
+
+msgid "Older blocks load as you scroll."
+msgstr "スクロールすると古いブロックを読み込みます。"
 
 msgid "On this page"
 msgstr "このページの内容"
@@ -218,6 +231,12 @@ msgstr "ブロックヘッダーを検索して、この日の開始と終了の
 msgid "See the sources"
 msgstr "ソースを見る"
 
+msgid "Show newer blocks"
+msgstr "新しいブロックを表示"
+
+msgid "Show older blocks"
+msgstr "古いブロックを表示"
+
 msgid "Size"
 msgstr "サイズ"
 
@@ -233,6 +252,12 @@ msgstr "{0} の最初のブロックです。さらに古い方へ進むと、�
 
 msgid "The latest block was mined <0/>"
 msgstr "最新のブロックがマイニングされたのは <0/>"
+
+msgid "The newer blocks could not be loaded."
+msgstr "新しいブロックを読み込めませんでした。"
+
+msgid "The older blocks could not be loaded."
+msgstr "古いブロックを読み込めませんでした。"
 
 #. placeholder {0}: formatInt(window.top - window.count + 1)
 #. placeholder {1}: formatInt(window.top)
@@ -263,6 +288,9 @@ msgstr "トランザクション"
 #. placeholder {0}: formatInt(block.height)
 msgid "Transactions in block {0}"
 msgstr "ブロック {0} のトランザクション"
+
+msgid "Try again"
+msgstr "再試行"
 
 msgid "tx"
 msgstr "Tx"
