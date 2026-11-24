@@ -18,9 +18,9 @@ msgstr ""
 msgid "{0, plural, one {# transaction} other {# transactions}}"
 msgstr "{0, plural, one {# Transaktion} other {# Transaktionen}}"
 
-#. placeholder {0}: formatInt(size)
-msgid "{0} blocks a page, newest first."
-msgstr "{0} Blöcke pro Seite, neueste zuerst."
+#. placeholder {0}: formatInt(newerCount)
+msgid "{0} newer blocks · jump to the newest"
+msgstr "{0} neuere Blöcke · zu den neuesten springen"
 
 msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
 msgstr "{confirmations, plural, one {# Bestätigung} other {# Bestätigungen}}"
@@ -64,8 +64,8 @@ msgstr "Blöcke am {date}"
 msgid "Blocks on {dateLabel}"
 msgstr "Blöcke am {dateLabel}"
 
-msgid "Blocks per page"
-msgstr "Blöcke pro Seite"
+msgid "Blocks per load"
+msgstr "Blöcke pro Ladevorgang"
 
 msgid "Browse by date"
 msgstr "Nach Datum durchsuchen"
@@ -132,14 +132,27 @@ msgstr "Insight war nicht erreichbar"
 msgid "Jump to a date"
 msgstr "Zu einem Datum springen"
 
+msgid "Jump to the newest blocks"
+msgstr "Zu den neuesten Blöcken springen"
+
 msgid "Latest blocks"
 msgstr "Neueste Blöcke"
+
+msgid "Loading newer blocks…"
+msgstr "Neuere Blöcke werden geladen…"
+
+msgid "Loading older blocks…"
+msgstr "Ältere Blöcke werden geladen…"
 
 msgid "Merkle root"
 msgstr "Merkle-Root"
 
-msgid "Newer"
-msgstr "Neuer"
+msgid "Newest blocks"
+msgstr "Neueste Blöcke"
+
+#. placeholder {0}: formatInt(size)
+msgid "Newest first; {0} more load at a time as you scroll."
+msgstr "Neueste zuerst; beim Scrollen werden jeweils {0} weitere geladen."
 
 msgid "Next →"
 msgstr "Weiter →"
@@ -181,11 +194,11 @@ msgstr "Nicht gefunden im {0}"
 msgid "Not in DAPI"
 msgstr "Nicht in DAPI"
 
-msgid "Older"
-msgstr "Älter"
-
 msgid "Older blocks from before this date"
 msgstr "Ältere Blöcke vor diesem Datum"
+
+msgid "Older blocks load as you scroll."
+msgstr "Ältere Blöcke werden beim Scrollen geladen."
 
 msgid "On this page"
 msgstr "Auf dieser Seite"
@@ -218,6 +231,12 @@ msgstr "Block-Header werden durchsucht, wo dieser Tag beginnt und endet: {0} von
 msgid "See the sources"
 msgstr "Quellen ansehen"
 
+msgid "Show newer blocks"
+msgstr "Neuere Blöcke anzeigen"
+
+msgid "Show older blocks"
+msgstr "Ältere Blöcke anzeigen"
+
 msgid "Size"
 msgstr "Größe"
 
@@ -233,6 +252,12 @@ msgstr "Das ist der erste Block am {0}. Weiter zurück verlässt diesen Tag."
 
 msgid "The latest block was mined <0/>"
 msgstr "Der neueste Block wurde <0/> gefunden"
+
+msgid "The newer blocks could not be loaded."
+msgstr "Die neueren Blöcke konnten nicht geladen werden."
+
+msgid "The older blocks could not be loaded."
+msgstr "Die älteren Blöcke konnten nicht geladen werden."
 
 #. placeholder {0}: formatInt(window.top - window.count + 1)
 #. placeholder {1}: formatInt(window.top)
@@ -263,6 +288,9 @@ msgstr "Transaktionen"
 #. placeholder {0}: formatInt(block.height)
 msgid "Transactions in block {0}"
 msgstr "Transaktionen in Block {0}"
+
+msgid "Try again"
+msgstr "Erneut versuchen"
 
 msgid "tx"
 msgstr "Tx"

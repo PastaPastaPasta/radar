@@ -18,9 +18,9 @@ msgstr ""
 msgid "{0, plural, one {# transaction} other {# transactions}}"
 msgstr "{0, plural, one {# transaction} many {# de transactions} other {# transactions}}"
 
-#. placeholder {0}: formatInt(size)
-msgid "{0} blocks a page, newest first."
-msgstr "{0} blocs par page, du plus récent au plus ancien."
+#. placeholder {0}: formatInt(newerCount)
+msgid "{0} newer blocks · jump to the newest"
+msgstr "{0} blocs plus récents · aller aux plus récents"
 
 msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
 msgstr "{confirmations, plural, one {# confirmation} many {# de confirmations} other {# confirmations}}"
@@ -64,8 +64,8 @@ msgstr "Blocs du {date}"
 msgid "Blocks on {dateLabel}"
 msgstr "Blocs du {dateLabel}"
 
-msgid "Blocks per page"
-msgstr "Blocs par page"
+msgid "Blocks per load"
+msgstr "Blocs par chargement"
 
 msgid "Browse by date"
 msgstr "Parcourir par date"
@@ -132,14 +132,27 @@ msgstr "Insight n’a pas pu être joint"
 msgid "Jump to a date"
 msgstr "Aller à une date"
 
+msgid "Jump to the newest blocks"
+msgstr "Aller aux blocs les plus récents"
+
 msgid "Latest blocks"
 msgstr "Derniers blocs"
+
+msgid "Loading newer blocks…"
+msgstr "Chargement des blocs plus récents…"
+
+msgid "Loading older blocks…"
+msgstr "Chargement des blocs plus anciens…"
 
 msgid "Merkle root"
 msgstr "Racine de Merkle"
 
-msgid "Newer"
-msgstr "Plus récents"
+msgid "Newest blocks"
+msgstr "Derniers blocs"
+
+#. placeholder {0}: formatInt(size)
+msgid "Newest first; {0} more load at a time as you scroll."
+msgstr "Les plus récents d’abord ; {0} de plus se chargent à chaque fois au défilement."
 
 msgid "Next →"
 msgstr "Suivant →"
@@ -181,11 +194,11 @@ msgstr "Introuvable sur {0}"
 msgid "Not in DAPI"
 msgstr "Absent de DAPI"
 
-msgid "Older"
-msgstr "Plus anciens"
-
 msgid "Older blocks from before this date"
 msgstr "Blocs plus anciens, antérieurs à cette date"
+
+msgid "Older blocks load as you scroll."
+msgstr "Les blocs plus anciens se chargent au défilement."
 
 msgid "On this page"
 msgstr "Sur cette page"
@@ -218,6 +231,12 @@ msgstr "Recherche dans les en-têtes de bloc du début et de la fin de ce jour :
 msgid "See the sources"
 msgstr "Voir les sources"
 
+msgid "Show newer blocks"
+msgstr "Afficher les blocs plus récents"
+
+msgid "Show older blocks"
+msgstr "Afficher les blocs plus anciens"
+
 msgid "Size"
 msgstr "Taille"
 
@@ -233,6 +252,12 @@ msgstr "C’est le premier bloc du {0}. Aller plus loin quitte ce jour."
 
 msgid "The latest block was mined <0/>"
 msgstr "Le dernier bloc a été miné <0/>"
+
+msgid "The newer blocks could not be loaded."
+msgstr "Les blocs plus récents n’ont pas pu être chargés."
+
+msgid "The older blocks could not be loaded."
+msgstr "Les blocs plus anciens n’ont pas pu être chargés."
 
 #. placeholder {0}: formatInt(window.top - window.count + 1)
 #. placeholder {1}: formatInt(window.top)
@@ -263,6 +288,9 @@ msgstr "Transactions"
 #. placeholder {0}: formatInt(block.height)
 msgid "Transactions in block {0}"
 msgstr "Transactions du bloc {0}"
+
+msgid "Try again"
+msgstr "Réessayer"
 
 msgid "tx"
 msgstr "tx"

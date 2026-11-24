@@ -1263,3 +1263,51 @@ button.rx-srcline:hover {
 .dh-textarea::placeholder {
   color: var(--rx-placeholder);
 }
+
+/* Infinite lists: the sentinel loads more as it nears the viewport and says so in a live region. */
+.rx-sentinel {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 8px;
+  min-height: 1px;
+}
+.rx-sentinel .rx-note {
+  margin: 0;
+}
+.rx-sentinel__bar {
+  display: inline-block;
+  width: 72px;
+  height: 8px;
+  border-radius: 4px;
+}
+.rx-sentinel[data-sentinel='start'] {
+  justify-content: center;
+  min-height: 1px;
+  padding-block: 4px;
+}
+.rx-jump {
+  position: sticky;
+  top: calc(var(--dh-bar-h, 56px) + 8px);
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  height: 0;
+  overflow: visible;
+}
+.rx-jump > * {
+  box-shadow: var(--dh-shadow-pop);
+}
+/* The scrolling list keeps the reader's rows in place itself; the browser's own anchoring would move them twice. */
+.rx-scrolllist {
+  overflow-anchor: none;
+}
+.rx-scrolllist:focus {
+  outline: none;
+}
+@media (min-width: 641px) {
+  /* Below the table's sticky header row, which the pill would otherwise cover. */
+  .rx-jump {
+    top: calc(var(--dh-bar-h, 56px) + 48px);
+  }
+}

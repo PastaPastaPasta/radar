@@ -161,21 +161,20 @@ test.describe('Governance filters', () => {
   })
 })
 
-test.describe('Blocks per page', () => {
+test.describe('Blocks per load', () => {
   test('lists 20, 50 or 100 blocks of a day from the index and keeps the size in the URL @IN-02', async ({
     page,
   }) => {
     await page.goto('/blocks?date=2026-11-03')
     const rows = page.locator('tbody tr')
     await expect(rows).toHaveCount(20)
-    const group = page.getByRole('group', { name: 'Blocks per page' })
+    const group = page.getByRole('group', { name: 'Blocks per load' })
     await group.getByRole('button', { name: '50' }).click()
     await expect(page).toHaveURL(/size=50/)
     await expect(rows).toHaveCount(50)
     await group.getByRole('button', { name: '100' }).click()
     await expect(page).toHaveURL(/size=100/)
     await expect(rows).toHaveCount(100)
-    await expect(page.getByRole('link', { name: 'Older' })).toHaveAttribute('href', /size=100/)
   })
 
   test('opens straight at a size from the URL on the newest page @IN-02', async ({ page }) => {

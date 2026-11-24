@@ -18,9 +18,9 @@ msgstr ""
 msgid "{0, plural, one {# transaction} other {# transactions}}"
 msgstr "{0, plural, one {# işlem} other {# işlem}}"
 
-#. placeholder {0}: formatInt(size)
-msgid "{0} blocks a page, newest first."
-msgstr "Sayfa başına {0} blok, en yeniden eskiye."
+#. placeholder {0}: formatInt(newerCount)
+msgid "{0} newer blocks · jump to the newest"
+msgstr "{0} daha yeni blok · en yenilere git"
 
 msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
 msgstr "{confirmations, plural, one {# onay} other {# onay}}"
@@ -64,8 +64,8 @@ msgstr "{date} tarihli bloklar"
 msgid "Blocks on {dateLabel}"
 msgstr "{dateLabel} tarihli bloklar"
 
-msgid "Blocks per page"
-msgstr "Sayfa başına blok"
+msgid "Blocks per load"
+msgstr "Yükleme başına blok"
 
 msgid "Browse by date"
 msgstr "Tarihe göre gözat"
@@ -132,14 +132,27 @@ msgstr "Insight’a ulaşılamadı"
 msgid "Jump to a date"
 msgstr "Bir tarihe git"
 
+msgid "Jump to the newest blocks"
+msgstr "En yeni bloklara git"
+
 msgid "Latest blocks"
 msgstr "Son bloklar"
+
+msgid "Loading newer blocks…"
+msgstr "Daha yeni bloklar yükleniyor…"
+
+msgid "Loading older blocks…"
+msgstr "Daha eski bloklar yükleniyor…"
 
 msgid "Merkle root"
 msgstr "Merkle kökü"
 
-msgid "Newer"
-msgstr "Yeniler"
+msgid "Newest blocks"
+msgstr "En yeni bloklar"
+
+#. placeholder {0}: formatInt(size)
+msgid "Newest first; {0} more load at a time as you scroll."
+msgstr "En yeniler önce; kaydırdıkça her seferinde {0} tane daha yüklenir."
 
 msgid "Next →"
 msgstr "Sonraki →"
@@ -181,11 +194,11 @@ msgstr "{0} üzerinde bulunamadı"
 msgid "Not in DAPI"
 msgstr "DAPI’de yok"
 
-msgid "Older"
-msgstr "Eskiler"
-
 msgid "Older blocks from before this date"
 msgstr "Bu tarihten önceki eski bloklar"
+
+msgid "Older blocks load as you scroll."
+msgstr "Daha eski bloklar kaydırdıkça yüklenir."
 
 msgid "On this page"
 msgstr "Bu sayfada"
@@ -218,6 +231,12 @@ msgstr "Bu günün nerede başlayıp bittiğini bulmak için blok başlıkları 
 msgid "See the sources"
 msgstr "Kaynaklara bak"
 
+msgid "Show newer blocks"
+msgstr "Daha yeni blokları göster"
+
+msgid "Show older blocks"
+msgstr "Daha eski blokları göster"
+
 msgid "Size"
 msgstr "Boyut"
 
@@ -233,6 +252,12 @@ msgstr "Bu, {0} tarihinin ilk bloğu. Daha eskiye gitmek bu günden çıkar."
 
 msgid "The latest block was mined <0/>"
 msgstr "Son blok <0/> çıkarıldı"
+
+msgid "The newer blocks could not be loaded."
+msgstr "Daha yeni bloklar yüklenemedi."
+
+msgid "The older blocks could not be loaded."
+msgstr "Daha eski bloklar yüklenemedi."
 
 #. placeholder {0}: formatInt(window.top - window.count + 1)
 #. placeholder {1}: formatInt(window.top)
@@ -263,6 +288,9 @@ msgstr "İşlemler"
 #. placeholder {0}: formatInt(block.height)
 msgid "Transactions in block {0}"
 msgstr "{0}. bloktaki işlemler"
+
+msgid "Try again"
+msgstr "Tekrar dene"
 
 msgid "tx"
 msgstr "işlem"

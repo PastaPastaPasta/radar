@@ -18,9 +18,9 @@ msgstr ""
 msgid "{0, plural, one {# transaction} other {# transactions}}"
 msgstr "{0, plural, one {# транзакція} few {# транзакції} many {# транзакцій} other {# транзакції}}"
 
-#. placeholder {0}: formatInt(size)
-msgid "{0} blocks a page, newest first."
-msgstr "{0} блоків на сторінці, спочатку нові."
+#. placeholder {0}: formatInt(newerCount)
+msgid "{0} newer blocks · jump to the newest"
+msgstr "Нових блоків: {0} · перейти до останніх"
 
 msgid "{confirmations, plural, one {# confirmation} other {# confirmations}}"
 msgstr "{confirmations, plural, one {# підтвердження} few {# підтвердження} many {# підтверджень} other {# підтвердження}}"
@@ -64,8 +64,8 @@ msgstr "Блоки за {date}"
 msgid "Blocks on {dateLabel}"
 msgstr "Блоки за {dateLabel}"
 
-msgid "Blocks per page"
-msgstr "Блоків на сторінці"
+msgid "Blocks per load"
+msgstr "Блоків за завантаження"
 
 msgid "Browse by date"
 msgstr "Перегляд за датою"
@@ -132,14 +132,27 @@ msgstr "Не вдалося зв’язатися з Insight"
 msgid "Jump to a date"
 msgstr "Перейти до дати"
 
+msgid "Jump to the newest blocks"
+msgstr "Перейти до останніх блоків"
+
 msgid "Latest blocks"
 msgstr "Останні блоки"
+
+msgid "Loading newer blocks…"
+msgstr "Завантажуємо новіші блоки…"
+
+msgid "Loading older blocks…"
+msgstr "Завантажуємо старіші блоки…"
 
 msgid "Merkle root"
 msgstr "Корінь Меркла"
 
-msgid "Newer"
-msgstr "Новіші"
+msgid "Newest blocks"
+msgstr "Найновіші блоки"
+
+#. placeholder {0}: formatInt(size)
+msgid "Newest first; {0} more load at a time as you scroll."
+msgstr "Спочатку нові; під час прокручування завантажується ще по {0}."
 
 msgid "Next →"
 msgstr "Далі →"
@@ -181,11 +194,11 @@ msgstr "Не знайдено в мережі {0}"
 msgid "Not in DAPI"
 msgstr "Немає в DAPI"
 
-msgid "Older"
-msgstr "Старіші"
-
 msgid "Older blocks from before this date"
 msgstr "Старіші блоки до цієї дати"
+
+msgid "Older blocks load as you scroll."
+msgstr "Старіші блоки завантажаться під час прокручування."
 
 msgid "On this page"
 msgstr "На цій сторінці"
@@ -218,6 +231,12 @@ msgstr "Пошук у заголовках блоків початку й кін
 msgid "See the sources"
 msgstr "Переглянути джерела"
 
+msgid "Show newer blocks"
+msgstr "Показати новіші блоки"
+
+msgid "Show older blocks"
+msgstr "Показати старіші блоки"
+
 msgid "Size"
 msgstr "Розмір"
 
@@ -233,6 +252,12 @@ msgstr "Це перший блок за {0}. Перехід до старіши�
 
 msgid "The latest block was mined <0/>"
 msgstr "Останній блок видобуто <0/>"
+
+msgid "The newer blocks could not be loaded."
+msgstr "Не вдалося завантажити новіші блоки."
+
+msgid "The older blocks could not be loaded."
+msgstr "Не вдалося завантажити старіші блоки."
 
 #. placeholder {0}: formatInt(window.top - window.count + 1)
 #. placeholder {1}: formatInt(window.top)
@@ -263,6 +288,9 @@ msgstr "Транзакції"
 #. placeholder {0}: formatInt(block.height)
 msgid "Transactions in block {0}"
 msgstr "Транзакції в блоці {0}"
+
+msgid "Try again"
+msgstr "Спробувати знову"
 
 msgid "tx"
 msgstr "тх"
