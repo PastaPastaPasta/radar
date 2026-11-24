@@ -30,10 +30,11 @@ export function LockInSection({
 }) {
   const { t } = useLingui()
   const pace = todaysPace(d)
-  const w = pace ? windowOutlook(d, rateOf(pace)) : undefined
-  if (!pace || !w) return null
-  const p = d.params
+  if (!pace) return null
   const rate = rateOf(pace)
+  const w = windowOutlook(d, rate)
+  if (!w) return null
+  const p = d.params
   const attempt = (d.window?.attempt ?? 0) + 1
   const next = d.schedule[Math.min(attempt, d.schedule.length - 1)]?.threshold ?? p.threshold_min
   const at = (height: number) => day(estimateMs(doc, height))
