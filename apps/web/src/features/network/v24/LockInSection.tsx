@@ -111,7 +111,7 @@ function Projection({
       ? t`Today's pace is this window's so far: ${formatInt(pace.signalled)} of ${formatInt(pace.blocks)} blocks signalled (${formatPercent(rate, 1)}).`
       : t`Today's pace is the last ${formatInt(pace.blocks)} blocks': ${formatInt(pace.signalled)} signalled (${formatPercent(rate, 1)}).`
   const floor = p.threshold_min / p.window
-  const gap = Math.max(0.1, Math.ceil((floor - rate) * 1000) / 10)
+  const gap = Math.max(0.1, Math.round((floor - rate) * 1000) / 10)
   const outcome = locksIn(projection)
     ? t`At that pace window #${String(projection.attempt + 1)} (blocks ${formatInt(projection.start)}–${formatInt(projection.end)}, threshold ${formatInt(projection.threshold)} of ${formatInt(p.window)}) is the first to lock in, about ${at(projection.end)}. Core 24 would then activate at block ${formatInt(projection.activation)}, about ${at(projection.activation)}.`
     : projection.never === 'timeout'
