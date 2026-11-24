@@ -809,9 +809,9 @@ Nothing that comes from a DAPI node is trusted on its word (`lib/core/verify.ts`
 
 A failed check is an `invalid-response` from that node: the pool benches it, reports it to health with the node's name and retries on another node (up to 3 tries). The bad answer is never cached. X11 proof-of-work uses the wasm `decoder.headerHash`, so no new dependency. Still M8: BLS verification of ChainLock and InstantSend signatures, and full header-chain work (the PoW of the headers shown is checked, not that they are the best chain).
 
-**Claims.** ChainLock, InstantSend, confirmations and "is in the best chain" are claims and are never stored as immutable.
+**Claims.** ChainLock, InstantSend, confirmations and "is in the best chain" are claims and are never stored as immutable. The one exception is the block cache (§4.5): a block is written there only once its height is corroborated as locked, and that is kept.
 
-- `ChainLocked` is shown only when two distinct claimants report the lock for that height: two DAPI nodes, or one node plus Hyphen (`refreshLocks`, one shared lookup, 12 s deadline). Otherwise the stamp carries `chainLockClaim: 'one-node'` (likewise `instantLockClaim`), and the UI says "reported by one node" through `ChainLockBadge`, `InstantSendBadge` and `LockMark` (§7.2); a plain lock icon is never used for a one-node claim.
+- `ChainLocked` is shown only when two distinct claimants report the lock for that height: two DAPI nodes, or one node plus Hyphen (`refreshLocks`, one shared lookup that asks two nodes at once, 12 s deadline; a transaction page starts it beside the transaction read when no ChainLock is known yet). Otherwise the stamp carries `chainLockClaim: 'one-node'` (likewise `instantLockClaim`), and the UI says "reported by one node" through `ChainLockBadge`, `InstantSendBadge` and `LockMark` (§7.2); a plain lock icon is never used for a one-node claim.
 - An InstantSend lock is always one source's claim (the node that answered), and is shown only until the transaction's block is ChainLocked (§4.7, "InstantSend state ends at the ChainLock").
 - Hyphen-only lock state uses the tag Hyphen sends, or depth (`HYPHEN_FINAL_DEPTH`, 24 blocks), or a corroborated claim.
 - Stamps stay `proved: false`; only `data/sdk` sets `proved`.
@@ -829,7 +829,7 @@ A failed check is an `invalid-response` from that node: the pool benches it, rep
 - The database is version 2 (older stores are dropped). `touchAll` writes at most every 10 min per entry and `trim` re-sums sizes.
 - Headers are written only at or below the corroborated lock (§4.4a) and only after the hold time `headersHold`. The only cached tx payload is the verified raw bytes (`CachedTx = { txid, bytes }`); block lists cache each locked row, and `block()` and `blockRows()` carry no `immutable` stamp.
 - Mempool and unlocked answers are never written; they live only in TanStack memory.
-- Reads check the cache before the budget is touched; a hit costs nothing and returns `immutable: true`.
+- Reads check the cache before the budget is touched; a hit costs nothing and returns `immutable: true`. A cached block is shown ChainLocked without a lookup, since only blocks at a height two claimants had locked are written and a ChainLock is final; in Decentralized only mode it is checked again, as a Hyphen claim may have been one of the two.
 - Size cap 200 MB per origin, LRU by `lastRead` (store `lru`), trimmed to 150 MB at startup and every 10 min. Quota errors disable writes for the session; reads keep working. Devnet answers are never cached.
 - Decoded JSON is not stored; decoding is cheap compared with fetching.
 

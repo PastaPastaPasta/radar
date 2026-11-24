@@ -318,8 +318,9 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
   }
 
   /**
-   * Asks two different nodes for their best ChainLock, at most every 10 s. The lookup is shared by every caller and
-   * has its own deadline, so one caller leaving does not fail the rest.
+   * Asks two different nodes for their best ChainLock at once, at most every 10 s. The pool hands two requests that
+   * start together to different nodes; when fewer than two distinct nodes answered, one more asks another. The lookup is shared
+   * by every caller and has its own deadline, so one caller leaving does not fail the rest.
    */
   function refreshLocks(
     net: NetworkId,
@@ -335,8 +336,16 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
       const timer = setTimeout(() => ctrl.abort(), CHAIN_LOCK_LOOKUP_MS)
       flight = (async () => {
         try {
-          const first = await fetchLockFrom(net, ctrl.signal, [], priority)
-          await fetchLockFrom(net, ctrl.signal, first.node ? [first.node] : [], priority)
+          const answers = await Promise.allSettled([
+            fetchLockFrom(net, ctrl.signal, [], priority),
+            fetchLockFrom(net, ctrl.signal, [], priority),
+          ])
+          const nodes = new Set(
+            answers.flatMap((a) =>
+              a.status === 'fulfilled' && a.value.node ? [a.value.node] : [],
+            ),
+          )
+          if (nodes.size < 2) await fetchLockFrom(net, ctrl.signal, [...nodes], priority)
           lockRefreshedAt.set(net, deps.now())
         } catch {
           // A failed lookup is retried in a few seconds, not on every page.
@@ -636,6 +645,10 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
     const hit = await cache?.getTx(net, txid)
     if (!o.placement && hit) {
       return { tx: await decoder.tx(hit.bytes, net), isInstantLocked: false, lock: 'none' }
+    }
+    // A mined transaction's lock status is asked after its block; with no ChainLock known yet, ask beside it.
+    if (o.placement && lockView(net).corroborated < 0) {
+      refreshLocks(net, o.signal, o.priority).catch(() => undefined)
     }
     let result
     try {
@@ -987,7 +1000,11 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
         : await cache?.getBlockByHeight(net, ref.height)
       if (hit) {
         const block = await decoder.block(hit.bytes, net, hit.height)
-        const status = await lockStatusOrKnown(net, block.height, signal, opts.priority)
+        // Only a block at a height two claimants had ChainLocked is cached, and a ChainLock is final; one of them may
+        // have been Hyphen, which Decentralized only mode does not count.
+        const status = sourceOff('hyphen')
+          ? await lockStatusOrKnown(net, block.height, signal, opts.priority)
+          : 'locked'
         return dapi({ ...block, ...lockFields(status) }, { height: block.height })
       }
       if (hyphenStandsIn(net)) {
