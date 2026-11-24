@@ -153,10 +153,12 @@ function WindowBar({ w, size }: { w: WindowOutlook; size: number }) {
           <span className="rx-sw rx-v24-no" />
           {t`Not signalled`} <b>{formatInt(lost)}</b>
         </li>
-        <li>
-          <span className="rx-sw rx-v24-sw-pace" />
-          {t`Left, at today's pace`} <b>{formatInt(w.remaining)}</b>
-        </li>
+        {w.remaining > 0 ? (
+          <li>
+            <span className="rx-sw rx-v24-sw-pace" />
+            {t`Left, at today's pace`} <b>{formatInt(w.remaining)}</b>
+          </li>
+        ) : null}
       </ul>
     </figure>
   )
