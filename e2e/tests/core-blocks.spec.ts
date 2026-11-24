@@ -104,6 +104,35 @@ test.describe('Blocks list', () => {
     expect(top, 'the block the URL names is back near the top of the view').toBeLessThan(200)
     await page.getByRole('button', { name: /newest/ }).click()
     await expect(page.locator(`a[href="/block/${TIP}"]`).first()).toBeVisible()
+    await expect(page).not.toHaveURL(/from=/)
+  })
+
+  test('clears the place in the URL when the reader follows a link to the blocks list it opened at @HY-04', async ({
+    page,
+  }) => {
+    await synthesizeOlderRows(page)
+    await page.goto('/blocks')
+    const rows = page.locator('#blocks tbody tr[data-row-id]')
+    await expect(rows).toHaveCount(20)
+    for (const expected of [40, 60]) {
+      await page.evaluate(() => {
+        window.scrollTo(0, document.body.scrollHeight)
+      })
+      await expect(rows).toHaveCount(expected)
+    }
+    await expect(page).toHaveURL(/from=/)
+    await page.evaluate(() => {
+      ;(window as { sameDocument?: boolean }).sameDocument = true
+    })
+    await page
+      .getByRole('navigation', { name: 'Radar' })
+      .getByRole('link', { name: 'Core' })
+      .click()
+    await expect(page.locator(`a[href="/block/${TIP}"]`).first()).toBeVisible()
+    await expect(page).not.toHaveURL(/from=/)
+    expect(await page.evaluate(() => (window as { sameDocument?: boolean }).sameDocument)).toBe(
+      true,
+    )
   })
 
   test('opens a fresh link at the block it names and reads only that page until the reader scrolls @HY-04', async ({

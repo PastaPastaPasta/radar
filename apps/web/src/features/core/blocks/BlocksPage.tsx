@@ -1,6 +1,6 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate, useRouter } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useEffect, useMemo, useRef, useState, type RefObject } from 'react'
 import { coreQueries, LATEST_BLOCK_ROWS } from '@/data/core/queries'
@@ -403,15 +403,26 @@ function useScrollPosition(
   useEffect(() => {
     latest.current = { ceiling, ready }
   })
+  const router = useRouter()
   const rewrite = useRef<(() => void) | undefined>(undefined)
   useEffect(() => {
     let frame = 0
-    let written = from
+    // The address bar, not the router's copy: a list started over by a link to the router's last address finds the
+    // `from` an earlier list wrote there, and clears it.
+    let written = currentFrom()
+    // Once the router starts another navigation its URL is not this list's to write, until that one settles.
+    let leaving = false
     const write = () => {
       const el = list.current
       const now = latest.current
-      // The router may already be loading another page; its URL is not this list's to write.
-      if (!el || !now.ready || !restored.current || window.location.pathname !== '/blocks') return
+      if (
+        leaving ||
+        !el ||
+        !now.ready ||
+        !restored.current ||
+        window.location.pathname !== '/blocks'
+      )
+        return
       const first = firstVisibleRow(el, barInset())
       const height = first ? Number(first.id) : undefined
       if (height === undefined || !Number.isFinite(height)) return
@@ -431,13 +442,24 @@ function useScrollPosition(
     }
     rewrite.current = onScroll
     window.addEventListener('scroll', onScroll, { passive: true })
+    const stopOnLeave = router.subscribe('onBeforeNavigate', () => {
+      leaving = true
+      cancelAnimationFrame(frame)
+    })
+    const resumeOnSettle = router.subscribe('onResolved', () => {
+      leaving = false
+    })
     return () => {
       cancelAnimationFrame(frame)
       window.removeEventListener('scroll', onScroll)
+      stopOnLeave()
+      resumeOnSettle()
     }
-  }, [list, from])
-  // A new tip turns the row in view from "the tip" into a named height, without the reader scrolling.
-  useEffect(() => rewrite.current?.(), [ceiling])
+  }, [list, router])
+  // The row at the top can change without a scroll: a new tip lands there, or the list is first ready. A row that was
+  // the tip then needs its own height, and the tip itself none.
+  const firstRow = rows[0]?.height
+  useEffect(() => rewrite.current?.(), [ceiling, firstRow, ready])
 }
 
 /** The `from` the URL holds now: the list writes it as the reader scrolls, so the router's copy may be older. */

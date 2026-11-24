@@ -38,12 +38,15 @@ function BlocksRoute() {
   const { date, from, size } = search
   const router = useRouter()
   // The list notes the reader's place in the URL without telling the router, so a link to the address the router
-  // last saw looks like no change to it; such a navigation still starts the list over.
+  // last saw looks like no change to it, and the router keeps the scroll; such a navigation still starts the list
+  // over, at the top.
   const [restart, setRestart] = useState(0)
   useEffect(
     () =>
       router.subscribe('onBeforeNavigate', (e) => {
-        if (e.toLocation.pathname === '/blocks' && !e.hrefChanged) setRestart((n) => n + 1)
+        if (e.toLocation.pathname !== '/blocks' || e.hrefChanged) return
+        window.scrollTo({ top: 0 })
+        setRestart((n) => n + 1)
       }),
     [router],
   )

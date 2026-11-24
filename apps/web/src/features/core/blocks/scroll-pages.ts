@@ -126,7 +126,7 @@ export function useScrollPages(opts: {
       if (!p.rows) continue
       const lowest = lowestOf(p.rows)
       if (source === 'insight' && lowest !== undefined) nextBottoms[chain(p.k)] = lowest
-      nextHeld[chain(p.k)] = p.rows
+      if (p.k < 0) nextHeld[chain(p.k)] = p.rows
     }
     setBottoms((b) => ({ ...b, ...nextBottoms }))
     setHeld((h) => ({ ...h, ...nextHeld }))

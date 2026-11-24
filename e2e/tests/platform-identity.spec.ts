@@ -646,7 +646,8 @@ test.describe('Identity list', () => {
       mode: 'scroll',
     })
     await expect(page.getByText('25 loaded')).toBeVisible()
-    await page.getByRole('button', { name: 'Show more' }).click()
+    await page.locator('[data-sentinel="end"]').scrollIntoViewIfNeeded()
+    await page.mouse.wheel(0, 120)
     await expect(page.getByText('50 loaded')).toBeVisible()
     await page.reload()
     await settled(page)
