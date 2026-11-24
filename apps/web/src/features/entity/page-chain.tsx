@@ -14,6 +14,7 @@ import {
   barInset,
   firstVisibleRow,
   replaceUrlQuietly,
+  scrollQuietly,
   useScrollAnchor,
   useScrolledUp,
 } from '@/ui/infinite'
@@ -383,7 +384,9 @@ export function ScrollList<Param>({
                 position(url, undefined as Param, [])
                 replaceUrlQuietly(url, history.state)
               }
-              ref.current?.scrollIntoView({ block: 'start' })
+              // The list's own move to its start, not the reader scrolling on to the next page.
+              const top = ref.current?.getBoundingClientRect().top
+              if (top !== undefined) scrollQuietly(top - barInset())
             }}
           >
             {t`Back to the start of the list`}
