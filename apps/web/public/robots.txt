@@ -1,0 +1,9 @@
+# /x/ is the edge's read-through to the Hyphen API, not pages. Every request there is a
+# Worker request against a daily allowance, and AI crawlers that render pages fetch it
+# several times per page.
+User-agent: meta-externalagent
+User-agent: Reflectionbot
+Disallow: /x/
+
+User-agent: *
+Allow: /
