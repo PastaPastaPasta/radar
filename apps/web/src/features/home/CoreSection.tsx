@@ -7,9 +7,10 @@ import { SEEN_STORE_LIMIT, useSeenPending } from '@/data/core/seen-pending'
 import type { BlockRow } from '@/data/core/types'
 import { stampOf } from '@/data/envelope'
 import { useHyphenFit } from '@/data/hyphen/fit'
-import { hyQueries } from '@/data/hyphen/queries'
+import { hyQueries, recentMempoolTxs } from '@/data/hyphen/queries'
 import { useIndexHealth } from '@/data/index-health'
 import { dapiKeys } from '@/data/query'
+import { MEMPOOL_REREAD_DELAY_MS } from '@/data/query/stale'
 import { Entity, PageLink, useCatchUpToTip, useNetwork, useRefetchOnRise } from '@/features/entity'
 import { formatBytes, formatInt, formatSignificant } from '@/lib/format'
 import { formatHashrate, hashrateFromDifficulty } from '@/lib/hashrate'
@@ -250,7 +251,14 @@ function BlocksCard({ blocks }: { blocks: ReturnType<typeof useCoreBlocks> }) {
 
 function usePending(paused: boolean) {
   const { net, fit, devnet, stale, off } = useHyphenBlocked()
-  const query = useQuery({ ...hyQueries.mempoolTxs(net, { limit: 20 }), enabled: fit })
+  const indexed = recentMempoolTxs(net)
+  const query = useQuery({ ...indexed, enabled: fit })
+  const tip = useQuery(coreQueries.tip(net))
+  useRefetchOnRise(net, tip.data?.data.height, {
+    keys: [indexed.queryKey],
+    settled: !fit,
+    delayMs: MEMPOOL_REREAD_DELAY_MS,
+  })
   const seenOnly = (stale || off) && !devnet
   // Asking for every stored row returns the hook's own array, which keeps its identity between events; a shorter limit is
   // a fresh slice on each render, and `useFrozen` follows identity.

@@ -150,3 +150,6 @@ export const hyQueries = {
       ...dataClass('index'),
     }),
 }
+
+/** The newest 20 mempool transactions: the home page's pending card, and where a tx page reads its first-seen time. */
+export const recentMempoolTxs = (net: NetworkId) => hyQueries.mempoolTxs(net, { limit: 20 })

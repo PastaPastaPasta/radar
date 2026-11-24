@@ -10,14 +10,20 @@ const OTHER = ['mainnet', 'dapi', 'status'] as const
 
 const initial: { net: NetworkId; height: number | undefined } = { net: 'mainnet', height: 100 }
 
-function setupRise(settled = false) {
+function setVisibility(state: DocumentVisibilityState) {
+  Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => state })
+  document.dispatchEvent(new Event('visibilitychange'))
+}
+
+function setupRise(settled = false, delayMs = 0) {
   const client = new QueryClient()
   const invalidate = vi.spyOn(client, 'invalidateQueries')
   const wrapper = ({ children }: { children: ReactNode }) => (
     <QueryClientProvider client={client}>{children}</QueryClientProvider>
   )
   const hook = renderHook(
-    (p: typeof initial) => useRefetchOnRise(p.net, p.height, { keys: [KEY, OTHER], settled }),
+    (p: typeof initial) =>
+      useRefetchOnRise(p.net, p.height, { keys: [KEY, OTHER], settled, delayMs }),
     { wrapper, initialProps: initial },
   )
   return { invalidate, hook }
@@ -53,6 +59,54 @@ describe('useRefetchOnRise', () => {
     expect(invalidate).not.toHaveBeenCalled()
     hook.rerender({ net: 'testnet', height: 501 })
     expect(invalidate).toHaveBeenCalledTimes(2)
+  })
+
+  describe('hidden tabs and delays', () => {
+    afterEach(() => {
+      setVisibility('visible')
+      vi.useRealTimers()
+    })
+
+    it('reads once when shown again, however many blocks arrived while hidden', () => {
+      const { invalidate, hook } = setupRise()
+      setVisibility('hidden')
+      hook.rerender({ net: 'mainnet', height: 101 })
+      hook.rerender({ net: 'mainnet', height: 102 })
+      expect(invalidate).not.toHaveBeenCalled()
+      act(() => setVisibility('visible'))
+      expect(invalidate).toHaveBeenCalledTimes(2)
+    })
+
+    it('drops a read held for a hidden tab when the network changes', () => {
+      const { invalidate, hook } = setupRise()
+      setVisibility('hidden')
+      hook.rerender({ net: 'mainnet', height: 101 })
+      hook.rerender({ net: 'testnet', height: 500 })
+      act(() => setVisibility('visible'))
+      expect(invalidate).not.toHaveBeenCalled()
+    })
+
+    it('waits `delayMs` after the block, and a newer block restarts the wait', () => {
+      vi.useFakeTimers()
+      const { invalidate, hook } = setupRise(false, 10_000)
+      hook.rerender({ net: 'mainnet', height: 101 })
+      act(() => void vi.advanceTimersByTime(9_000))
+      expect(invalidate).not.toHaveBeenCalled()
+      hook.rerender({ net: 'mainnet', height: 102 })
+      act(() => void vi.advanceTimersByTime(9_000))
+      expect(invalidate).not.toHaveBeenCalled()
+      act(() => void vi.advanceTimersByTime(1_000))
+      expect(invalidate).toHaveBeenCalledTimes(2)
+    })
+
+    it('forgets a pending read on unmount', () => {
+      vi.useFakeTimers()
+      const { invalidate, hook } = setupRise(false, 10_000)
+      hook.rerender({ net: 'mainnet', height: 101 })
+      hook.unmount()
+      act(() => void vi.advanceTimersByTime(20_000))
+      expect(invalidate).not.toHaveBeenCalled()
+    })
   })
 
   it('does not refetch when the first height arrives', () => {

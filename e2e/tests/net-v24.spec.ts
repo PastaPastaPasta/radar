@@ -147,7 +147,7 @@ test.describe('Core 24 activation tracker', () => {
     await expectAccessible(page)
   })
 
-  test('refreshes itself about every minute and says when the reading is stale @RA-70', async ({
+  test('refreshes itself about every five minutes and says when the reading is stale @RA-70', async ({
     page,
   }) => {
     let reads = 0
@@ -157,7 +157,7 @@ test.describe('Core 24 activation tracker', () => {
     await open(page, 'mainnet', MIN)
     await expect.poll(() => reads).toBeGreaterThanOrEqual(1)
     const first = reads
-    await page.clock.fastForward(61_000)
+    await page.clock.fastForward(5 * MIN + 1_000)
     await expect.poll(() => reads).toBeGreaterThan(first)
     await expect(tracker(page).locator('[data-stale-notice]')).toHaveCount(0)
     await page.clock.fastForward(11 * MIN)

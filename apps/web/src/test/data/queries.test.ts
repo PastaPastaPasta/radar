@@ -1,7 +1,11 @@
 import { QueryClient } from '@tanstack/react-query'
 import { describe, expect, it, vi } from 'vitest'
 import { fixture } from '@/test/fixtures/load'
-import { healthQueries, HEALTH_PROBE_INTERVAL_MS } from '@/data/health-queries'
+import {
+  healthQueries,
+  HEALTH_PROBE_INTERVAL_MS,
+  WORKER_PROBE_INTERVAL_MS,
+} from '@/data/health-queries'
 import { healthRegistry } from '@/data/health'
 import { hyQueries } from '@/data/hyphen/queries'
 import { peQueries } from '@/data/pe/queries'
@@ -43,13 +47,14 @@ describe('query options', () => {
 })
 
 describe('health probes', () => {
-  it('refetch once a minute without retrying', () => {
-    for (const q of [
-      healthQueries.radar('mainnet'),
-      healthQueries.pe('mainnet'),
-      healthQueries.hyphen('mainnet'),
-    ]) {
-      expect(q.refetchInterval).toBe(HEALTH_PROBE_INTERVAL_MS)
+  it('refetch without retrying: once a minute, or every five minutes through a Worker', () => {
+    for (const [q, every] of [
+      [healthQueries.radar('mainnet'), WORKER_PROBE_INTERVAL_MS],
+      [healthQueries.pe('mainnet'), HEALTH_PROBE_INTERVAL_MS],
+      [healthQueries.hyphen('mainnet'), WORKER_PROBE_INTERVAL_MS],
+      [healthQueries.insight('mainnet'), HEALTH_PROBE_INTERVAL_MS],
+    ] as const) {
+      expect(q.refetchInterval).toBe(every)
       expect(q.retry).toBe(false)
       expect(q.queryKey[1]).toBe('health')
     }

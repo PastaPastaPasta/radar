@@ -342,13 +342,13 @@ test.describe('mempool', () => {
     )
     await expect(page.locator('.rx-page__src [data-source="dapi"]').first()).toBeVisible()
     await expect(page.locator('main [data-source="hyphen"]')).toHaveCount(0)
-    await expect(page.getByText('Refreshes every 15 seconds.')).toHaveCount(0)
+    await expect(page.getByText('Refreshes with each new block.')).toHaveCount(0)
     await expectNoSideScroll(page)
   })
 
   test('says it refreshes when the mainnet index is current @HY-19', async ({ page }) => {
     await page.goto('/mempool')
-    await expect(page.getByText('Refreshes every 15 seconds.')).toBeVisible()
+    await expect(page.getByText('Refreshes with each new block.')).toBeVisible()
     await expect(page.locator('[data-stale-index]')).toHaveCount(0)
   })
 
@@ -676,6 +676,7 @@ test.describe('governance', () => {
     const name = page.locator('tbody[data-proposal] .rx-propname').first()
     const chevron = name.locator('.rx-propname__chevron')
     await expect(chevron).toBeVisible()
+    await settled(page)
     const turn = () => chevron.evaluate((el) => getComputedStyle(el).transform)
     const closed = await turn()
     await name.click()

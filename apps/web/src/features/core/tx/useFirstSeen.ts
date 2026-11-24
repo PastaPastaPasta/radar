@@ -1,7 +1,10 @@
-import { useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
+import { coreQueries } from '@/data/core/queries'
 import { stampOf, type SourceStamp } from '@/data/envelope'
-import { hyQueries } from '@/data/hyphen/queries'
+import { recentMempoolTxs } from '@/data/hyphen/queries'
+import { MEMPOOL_REREAD_DELAY_MS } from '@/data/query/stale'
+import { useRefetchOnRise, whenVisible } from '@/features/entity'
 import type { NetworkId } from '@/lib/network'
 
 export interface FirstSeen {
@@ -19,9 +22,32 @@ export function useFirstSeen(
   txid: string,
   { enabled }: { enabled: boolean },
 ): FirstSeen | undefined {
-  const query = useQuery({ ...hyQueries.mempoolTxs(net, { limit: 20 }), enabled })
+  const query = useQuery({ ...recentMempoolTxs(net), enabled })
   const [held, setHeld] = useState<FirstSeen>()
   const row = query.data?.data.items.find((r) => r.txHash === txid)
+  const missing = enabled && query.isSuccess && !row
+  const client = useQueryClient()
+  // A transaction opened just after it was broadcast may not be indexed yet: look once more, a moment later.
+  useEffect(() => {
+    if (!missing) return
+    let cancelWait: () => void = () => undefined
+    const reread = () =>
+      void client.invalidateQueries({ queryKey: recentMempoolTxs(net).queryKey, exact: true })
+    const timer = setTimeout(() => {
+      cancelWait = whenVisible(reread)
+    }, MEMPOOL_REREAD_DELAY_MS)
+    return () => {
+      clearTimeout(timer)
+      cancelWait()
+    }
+  }, [missing, client, net, txid])
+  const tip = useQuery({ ...coreQueries.tip(net), enabled })
+  // While the time is unknown and the transaction unmined, each block may bring Hyphen up to date.
+  useRefetchOnRise(net, tip.data?.data.height, {
+    keys: [recentMempoolTxs(net).queryKey],
+    settled: !enabled || held !== undefined,
+    delayMs: MEMPOOL_REREAD_DELAY_MS,
+  })
   if (row && query.data && held?.at !== row.firstSeenAt) {
     setHeld({ at: row.firstSeenAt, stamp: stampOf(query.data) })
   }

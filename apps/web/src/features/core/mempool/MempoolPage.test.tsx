@@ -157,7 +157,7 @@ describe('Mempool page', () => {
       const status = await seenView()
       expect(status).toHaveTextContent("From DAPI's live feed")
       expect(document.querySelector('[data-mempool-view="index"]')).toBeNull()
-      expect(screen.queryByText(/Refreshes every/)).toBeNull()
+      expect(screen.queryByText(/Refreshes with each new block/)).toBeNull()
       expect(asked).toBe(0)
       expect(document.querySelector('[data-stale-index]')).toBeNull()
       await waitFor(() => expect(document.querySelectorAll('[data-stale-index]')).toHaveLength(1), {
@@ -180,7 +180,7 @@ describe('Mempool page', () => {
       await seenView()
       const before = asked
       expect(document.querySelector('[data-source="hyphen"]')).toBeNull()
-      expect(screen.queryByText(/Refreshes every/)).toBeNull()
+      expect(screen.queryByText(/Refreshes with each new block/)).toBeNull()
       expect(screen.queryByText('Memory in use')).toBeNull()
       await new Promise((r) => setTimeout(r, 50))
       expect(asked).toBe(before)
@@ -204,7 +204,7 @@ describe('Mempool page', () => {
 
   it('says it refreshes while the index is current @HY-19', async () => {
     renderAt('/mempool')
-    expect(await screen.findByText('Refreshes every 15 seconds.')).toBeInTheDocument()
+    expect(await screen.findByText('Refreshes with each new block.')).toBeInTheDocument()
     expect(screen.getByText('Updated')).toBeInTheDocument()
     expect(document.querySelector('[data-stale-index]')).toBeNull()
   })

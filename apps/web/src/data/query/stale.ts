@@ -52,12 +52,16 @@ export function staleAfterMs(c: DataClass): number {
   return CLASSES[c].staleTime * STALE_AGE_FACTOR
 }
 
+/** Hyphen takes a few seconds to take in a block, so a mempool list is read again this long after one. */
+export const MEMPOOL_REREAD_DELAY_MS = 10 * SECOND
+
 /** Polling interval for the classes that poll only some of their queries (§5.2). */
 export const POLL_MS = {
-  radarStatus: MINUTE,
-  radarActivation: MINUTE,
+  radarStatus: 5 * MINUTE,
+  radarActivation: 5 * MINUTE,
   peLatest: 10 * SECOND,
-  mempool: 15 * SECOND,
+  /** A backstop only: mempool lists are read again 10 s after each new block (`MEMPOOL_REREAD_DELAY_MS`). */
+  mempool: 5 * MINUTE,
   /** The address page's own history, read only while DAPI's transaction stream has given up (IN-06). */
   addressFallback: 30 * SECOND,
   rate: MINUTE,

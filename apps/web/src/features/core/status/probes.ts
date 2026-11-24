@@ -31,7 +31,7 @@ export function useProbes(net: NetworkId): Probes {
     pe: useQuery({ ...healthQueries.pe(net), enabled: sourceInUse(net, 'pe') }),
     hyphen: useQuery({ ...healthQueries.hyphen(net), enabled: sourceInUse(net, 'hyphen') }),
     insight: useQuery({ ...healthQueries.insight(net), enabled: sourceInUse(net, 'insight') }),
-    // One proof-checked epoch read per visit, then once a minute like the others; it shares the home page's cache entry.
+    // One proof-checked epoch read per visit, then once a minute; it shares the home page's cache entry.
     sdk: useQuery({
       ...platformTipQuery(net),
       refetchInterval: HEALTH_PROBE_INTERVAL_MS,

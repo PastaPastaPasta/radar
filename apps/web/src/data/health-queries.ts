@@ -13,12 +13,14 @@ import { radar } from './radar/client'
 
 export const HEALTH_PROBE_INTERVAL_MS = 60_000
 
-const probe = {
-  staleTime: HEALTH_PROBE_INTERVAL_MS,
-  gcTime: 5 * 60_000,
-  refetchInterval: HEALTH_PROBE_INTERVAL_MS,
-  retry: false,
-} as const
+/** Hyphen and Radar are read through Workers, where every request counts against a daily allowance. */
+export const WORKER_PROBE_INTERVAL_MS = 5 * 60_000
+
+const probeEvery = (ms: number) =>
+  ({ staleTime: ms, gcTime: 5 * 60_000, refetchInterval: ms, retry: false }) as const
+
+const probe = probeEvery(HEALTH_PROBE_INTERVAL_MS)
+const workerProbe = probeEvery(WORKER_PROBE_INTERVAL_MS)
 
 /** How old the crawl's own reading of the chain may be before its height is no reference. The crawler updates it about every minute or two. */
 export const CRAWL_TIP_MAX_AGE_MS = 5 * 60_000
@@ -67,6 +69,7 @@ function referenceTip(net: NetworkId, signal: AbortSignal): ReferenceTip {
 function indexProbe<T>(
   source: 'hyphen' | 'insight',
   status: (net: NetworkId, signal: AbortSignal, tip: ReferenceTip) => Promise<Sourced<T>>,
+  timing: ReturnType<typeof probeEvery>,
 ) {
   return (net: NetworkId) =>
     queryOptions({
@@ -78,7 +81,7 @@ function indexProbe<T>(
         })
         return status(net, signal, tip)
       },
-      ...probe,
+      ...timing,
     })
 }
 
@@ -88,7 +91,7 @@ export const healthQueries = {
     queryOptions({
       queryKey: healthKeys(net, 'radar'),
       queryFn: ({ signal }) => radar.status(signal, net, { probe: true }),
-      ...probe,
+      ...workerProbe,
     }),
   pe: (net: NetworkId) =>
     queryOptions({
@@ -96,10 +99,14 @@ export const healthQueries = {
       queryFn: ({ signal }) => pe.status(net, signal, { probe: true }),
       ...probe,
     }),
-  hyphen: indexProbe('hyphen', (net, signal, tip) =>
-    hyphen.status(net, signal, tip, { probe: true }),
+  hyphen: indexProbe(
+    'hyphen',
+    (net, signal, tip) => hyphen.status(net, signal, tip, { probe: true }),
+    workerProbe,
   ),
-  insight: indexProbe('insight', (net, signal, tip) =>
-    insight.status(net, signal, tip, { probe: true }),
+  insight: indexProbe(
+    'insight',
+    (net, signal, tip) => insight.status(net, signal, tip, { probe: true }),
+    probe,
   ),
 }
