@@ -7,6 +7,7 @@ import { core } from '@/data/core/client'
 import { coreQueries } from '@/data/core/queries'
 import type { BlockRow } from '@/data/core/types'
 import { enableEarlyAnswers } from '@/data/early'
+import { SourceError } from '@/data/errors'
 
 const probe = vi.hoisted(() => ({ fit: true }))
 vi.mock('@/data/hyphen/fit', () => ({ useHyphenFit: () => probe.fit }))
@@ -122,5 +123,56 @@ describe('Blocks list, indexed first', () => {
     dapi.release()
     await waitFor(() => expect(within(table()).getAllByRole('row')).toHaveLength(21))
     expect(screen.queryAllByText(INDEXED)).toHaveLength(0)
+  })
+})
+
+describe('Blocks list, a page named by its height', () => {
+  afterEach(() => vi.restoreAllMocks())
+
+  it('reads its first rows before the tip lands, and pages once it has', async () => {
+    const tipGate = deferred()
+    const tip = core.tip.bind(core)
+    vi.spyOn(core, 'tip').mockImplementation(async (net, signal) => {
+      await tipGate.gate
+      return tip(net, signal)
+    })
+    const rows = core.blockRows.bind(core)
+    const asked: { fromHeight: number; count: number }[] = []
+    vi.spyOn(core, 'blockRows').mockImplementation((net, q, signal) => {
+      asked.push({ fromHeight: q.fromHeight, count: q.count })
+      return rows(net, q, signal)
+    })
+    const from = TIP
+    mount(`/blocks?from=${from}`)
+    await waitFor(() =>
+      expect(within(table()).getByRole('link', { name: /2,570,085/ })).toBeInTheDocument(),
+    )
+    expect(asked).toEqual([{ fromHeight: from, count: 4 }])
+    const pager = () => screen.getByRole('navigation', { name: 'Pagination' })
+    expect(within(pager()).queryByRole('link', { name: 'Older' })).toBeNull()
+
+    tipGate.release()
+    await waitFor(() => expect(within(table()).getAllByRole('row')).toHaveLength(21))
+    expect(within(pager()).getByRole('link', { name: 'Older' })).toBeInTheDocument()
+    expect(asked.filter((q) => q.fromHeight === from)).toHaveLength(1)
+  })
+
+  it('shows no error while a height above the tip is read before the tip lands', async () => {
+    const tipGate = deferred()
+    const tip = core.tip.bind(core)
+    vi.spyOn(core, 'tip').mockImplementation(async (net, signal) => {
+      await tipGate.gate
+      return tip(net, signal)
+    })
+    vi.spyOn(core, 'blockRows').mockImplementation(() =>
+      Promise.reject(
+        new SourceError({ source: 'dapi', kind: 'invalid-response', message: 'No block there' }),
+      ),
+    )
+    mount(`/blocks?from=${TIP + 50}`)
+    await screen.findByRole('table', { name: 'Core blocks' })
+    await new Promise((r) => setTimeout(r, 50))
+    expect(screen.queryByRole('button', { name: /try again|retry/i })).toBeNull()
+    expect(screen.getByRole('table', { name: 'Core blocks' })).toBeInTheDocument()
   })
 })

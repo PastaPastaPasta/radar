@@ -385,6 +385,13 @@ export function BlocksPage({
   // finished page starts with, so nothing is asked twice.
   const early =
     range.provisional && from === undefined && pageSource.source === 'dapi' && range.ceiling >= 0
+  // A page that names its newest height reads its first rows before the tip lands; the tip only bounds the pager.
+  const named =
+    !date &&
+    from !== undefined &&
+    range.state === 'loading' &&
+    pageSource.source === 'dapi' &&
+    !pageSource.waiting
   const window: Window | null =
     range.state === 'ready' && !pageSource.waiting
       ? windowOf(range.ceiling, range.floor, from, size)
@@ -395,7 +402,9 @@ export function BlocksPage({
             newer: null,
             older: null,
           }
-        : null
+        : named
+          ? { top: from, count: Math.min(FIRST_CHUNK, from + 1), newer: null, older: null }
+          : null
   useDocumentTitle(date ? t`Blocks on ${date}` : t`Blocks`)
 
   const dapiRows = useDapiRows(window, pageSource.source === 'dapi')
@@ -469,9 +478,10 @@ export function BlocksPage({
 
   const stamp = page.stamp
   const noBlocks = window === null && range.state === 'ready' && !pageSource.waiting
-  const shownEmpty = window !== null && !early && page.settled && rows.length === 0
+  const shownEmpty = window !== null && !early && !named && page.settled && rows.length === 0
+  // A named page read before the tip may name a height above it; that read's failure is not the page's.
   const state =
-    range.state === 'error' || page.failed
+    range.state === 'error' || (page.failed && !named)
       ? 'error'
       : rows.length > 0 || noBlocks
         ? 'ready'
@@ -542,7 +552,7 @@ export function BlocksPage({
           id="blocks"
           title={dateLabel ? t`Blocks on ${dateLabel}` : t`Latest blocks`}
           description={
-            lowest !== undefined && page.pending === 0 && !early
+            lowest !== undefined && page.pending === 0 && !early && !named
               ? t`Heights ${formatInt(lowest)} to ${formatInt(Math.max(...heights))}`
               : undefined
           }
@@ -619,7 +629,11 @@ export function BlocksPage({
                 state={state}
                 error={range.error ?? page.error}
                 onRetry={page.refetch}
-                pendingRows={early && rows.length > 0 ? size - rows.length : page.pending}
+                pendingRows={
+                  (early || named) && rows.length > 0
+                    ? (named ? Math.min(size, (from ?? 0) + 1) : size) - rows.length
+                    : page.pending
+                }
                 rowLink={(r) => ({ to: '/block/$id', params: { id: String(r.height) } })}
                 live={{ newRowIds: fresh }}
                 paging={
