@@ -86,6 +86,15 @@ msgstr "另有 {0} 个版本"
 msgid "{0} must sign"
 msgstr "需 {0} 个签名"
 
+#. placeholder {0}: formatInt(w.threshold)
+msgid "{0} needed"
+msgstr "需要 {0}"
+
+#. placeholder {0}: formatPercent(needed, 0)
+msgctxt "share of blocks"
+msgid "{0} needed"
+msgstr "需要 {0}"
+
 #. placeholder {0}: formatInt(p.healthy)
 #. placeholder {0}: formatInt(q.valid)
 #. placeholder {0}: formatInt(r.signalling)
@@ -94,11 +103,6 @@ msgstr "需 {0} 个签名"
 #. placeholder {1}: formatInt(q.members)
 msgid "{0} of {1}"
 msgstr "{0} / {1}"
-
-#. placeholder {0}: formatInt(w.count)
-#. placeholder {1}: formatInt(w.mined)
-msgid "{0} of {1} blocks"
-msgstr "{1} 个区块中的 {0} 个"
 
 #. placeholder {0}: formatInt(threshold ?? 0)
 #. placeholder {1}: formatInt(p.window)
@@ -139,11 +143,6 @@ msgstr "已启用的{noun}中，{0} 在其注册地址上响应了我们的握�
 msgid "{0} of enabled answered"
 msgstr "已启用的 {0} 有响应"
 
-#. placeholder {0}: formatInt(w.needed)
-#. placeholder {1}: formatInt(w.remaining)
-msgid "{0} of the {1} left"
-msgstr "剩余 {1} 个中的 {0} 个"
-
 #. placeholder {0}: formatInt(evo)
 msgid "{0} of them evonodes"
 msgstr "其中 {0} 个为 evonode"
@@ -183,6 +182,16 @@ msgstr "本周期已测试 {0} 个。中位数 {1} 个区块头/秒，ping {2} m
 #. placeholder {2}: when(blockMs(b))
 msgid "{0}, {1}{2}"
 msgstr "{0}，{1}{2}"
+
+#. placeholder {0}: s.name
+#. placeholder {1}: pct(s.blocks, mined)
+msgid "{0}: {1}, not signalling"
+msgstr "{0}：{1}，未发出信号"
+
+#. placeholder {0}: s.name
+#. placeholder {1}: pct(s.blocks, mined)
+msgid "{0}: {1}, signalling"
+msgstr "{0}：{1}，发出信号"
 
 msgid "{answered, plural, one {# masternode answered the last crawl} other {# masternodes answered the last crawl}}"
 msgstr "{answered, plural, other {# 个主节点在上次抓取中响应}}"
@@ -236,6 +245,13 @@ msgstr "约"
 #. placeholder {0}: when(blockMs(o.earliest_activation))
 msgid "about {0}"
 msgstr "约 {0}"
+
+#. placeholder {0}: formatInt(projected)
+msgid "about {0} at today's pace"
+msgstr "按今天的速度约 {0}"
+
+msgid "About the pool tags"
+msgstr "关于矿池标签"
 
 msgid "Activation"
 msgstr "激活"
@@ -318,8 +334,17 @@ msgstr "最早"
 msgid "At this pace"
 msgstr "按此速度"
 
-msgid "At today's pace"
-msgstr "按今天的速度"
+msgid "At today's pace no window locks in before the timeout."
+msgstr "按今天的速度，超时之前没有窗口能锁定。"
+
+#. placeholder {0}: formatPercent(floor, 1)
+msgid "At today's pace no window locks in: even the lowest threshold is {0}."
+msgstr "按今天的速度没有窗口能锁定：即使最低阈值也是 {0}。"
+
+#. placeholder {0}: String(projection.attempt + 1)
+#. placeholder {1}: at(projection.end)
+msgid "At today's pace window #{0} locks in, about {1}."
+msgstr "按今天的速度，第 {0} 个窗口将锁定，约在 {1}。"
 
 #. placeholder {0}: g.llmq
 #. placeholder {1}: formatInt(size)
@@ -364,13 +389,6 @@ msgstr "本窗口各矿池的区块数和发出信号的区块数"
 
 msgid "Blocks left"
 msgstr "剩余区块"
-
-#. placeholder {0}: x.pool ?? ''
-#. placeholder {1}: formatInt(x.blocks)
-#. placeholder {2}: formatInt(mined)
-#. placeholder {3}: pct(x.blocks, mined)
-msgid "Blocks tagged {0}: {1} of this window's {2} ({3}), none of them signalling."
-msgstr "标记为 {0} 的区块：本窗口 {2} 个中的 {1} 个（{3}），均未发出信号。"
 
 msgid "Builds that aren't releases"
 msgstr "非正式发布的构建"
@@ -453,6 +471,10 @@ msgstr "Core 24 正在等待第一个信号窗口"
 
 msgid "Core 24 is waiting for the masternodes' signal"
 msgstr "Core 24 正在等待主节点的信号"
+
+#. placeholder {0}: formatInt(w.endHeight + 1)
+msgid "Core 24 locks in at block {0}."
+msgstr "Core 24 在区块 {0} 锁定。"
 
 msgid "Core 24's timeout passed before the masternodes' signal was mined, so it can't start any more."
 msgstr "在主节点的信号被挖出之前，Core 24 的超时已过，因此无法再启动。"
@@ -538,6 +560,10 @@ msgstr "已启用"
 msgid "Enabled masternodes"
 msgstr "已启用的主节点"
 
+#. placeholder {0}: at(w.endHeight)
+msgid "ends about {0}"
+msgstr "约 {0} 结束"
+
 #. placeholder {0}: formatInt(data.epoch.number)
 #. placeholder {1}: formatInt(Math.max(0, data.height - data.epoch.firstBlockHeight))
 msgid "Epoch {0} · {1} blocks in"
@@ -621,6 +647,9 @@ msgstr "激活机制"
 msgid "How fast they serve"
 msgstr "服务速度"
 
+msgid "How the outlook is worked out"
+msgstr "展望如何计算"
+
 msgid "Hyphen doesn't index devnets"
 msgstr "Hyphen 不索引开发网"
 
@@ -660,6 +689,9 @@ msgstr "最新 Platform 状态转换"
 
 msgid "latest release"
 msgstr "最新发布版"
+
+msgid "Left, at today's pace"
+msgstr "剩余（按今天的速度）"
 
 msgid "Live updates have stopped."
 msgstr "实时更新已停止。"
@@ -775,11 +807,24 @@ msgstr "矿工的信号"
 msgid "Name"
 msgstr "名称"
 
+msgid "Needed"
+msgstr "所需"
+
 msgid "needed before any window counts"
 msgstr "任何窗口计入之前所需"
 
 msgid "Needed from the rest"
 msgstr "剩余中所需"
+
+#. placeholder {0}: formatInt(w.needed)
+#. placeholder {1}: formatInt(w.remaining)
+msgid "Needs {0} more signalling blocks; only {1} are left."
+msgstr "还需要 {0} 个发出信号的区块；只剩 {1} 个。"
+
+#. placeholder {0}: pct(w.needed, w.remaining)
+#. placeholder {1}: formatPercent(rate, 1)
+msgid "Needs {0} of the blocks left; signalling runs at {1}."
+msgstr "需要剩余区块的 {0}；信号率为 {1}。"
 
 #. placeholder {0}: String(minProtocol)
 msgid "needs {0}+"
@@ -815,9 +860,6 @@ msgstr "本周无响应"
 msgid "No answer this week"
 msgstr "本周无响应"
 
-msgid "no blocks in this window yet"
-msgstr "本窗口还没有区块"
-
 msgid "No Core 24 deployment in the data."
 msgstr "数据中没有 Core 24 部署。"
 
@@ -839,13 +881,6 @@ msgstr "内存池中目前没有交易"
 msgid "No window to show yet."
 msgstr "暂无可显示的窗口。"
 
-#. placeholder {0}: formatInt(w.needed)
-#. placeholder {1}: formatInt(w.remaining)
-#. placeholder {2}: formatInt(next)
-#. placeholder {3}: formatInt(p.window)
-msgid "No. It needs {0} more signalling blocks and only {1} are left. The next chance is the next window, at a threshold of {2} of {3}."
-msgstr "不能。还需要 {0} 个发出信号的区块，但只剩 {1} 个。下一次机会是下一个窗口，阈值为 {3} 中的 {2}。"
-
 msgid "Nodes"
 msgstr "节点"
 
@@ -854,15 +889,6 @@ msgstr "无未通过项"
 
 msgid "not a release"
 msgstr "非正式版本"
-
-#. placeholder {0}: formatInt(w.needed)
-#. placeholder {1}: formatInt(w.remaining)
-#. placeholder {2}: pct(w.needed, w.remaining)
-#. placeholder {3}: formatPercent(rate, 1)
-#. placeholder {4}: formatInt(w.projected)
-#. placeholder {5}: formatInt(w.threshold)
-msgid "Not at this pace. It needs {0} more signalling blocks in the {1} left, {2} of them. At {3} it ends with about {4} of the {5} it needs."
-msgstr "按此速度不能。剩余 {1} 个区块中还需要 {0} 个发出信号，即 {2}。按 {3} 计算，结束时约为 {4} 个，而需要 {5} 个。"
 
 msgid "Not checked"
 msgstr "未检查"
@@ -876,6 +902,18 @@ msgstr "未抓取：{0}"
 
 msgid "not mined yet"
 msgstr "尚未挖出"
+
+msgid "Not on pace"
+msgstr "速度不足"
+
+msgid "Not signalled"
+msgstr "未发出信号"
+
+msgid "not signalling"
+msgstr "未发出信号"
+
+msgid "Not signalling"
+msgstr "未发出信号"
 
 msgid "Not started"
 msgstr "未开始"
@@ -895,12 +933,6 @@ msgstr "现在"
 msgid "Now"
 msgstr "现在"
 
-#. placeholder {0}: formatInt(p.window)
-#. placeholder {1}: pct(w.threshold, p.window)
-#. placeholder {2}: String(attempt)
-msgid "of {0} ({1}), window #{2}"
-msgstr "共 {0}（{1}），第 {2} 号窗口"
-
 #. placeholder {0}: formatInt(r.mined)
 msgid "of {0} so far"
 msgstr "目前共 {0}"
@@ -910,6 +942,9 @@ msgstr "较早"
 
 msgid "on"
 msgstr "占"
+
+msgid "On pace"
+msgstr "速度达标"
 
 #. placeholder {0}: formatPercent(good / runs, 0)
 msgid "Once every two weeks we download the latest 50,000 headers and the masternode list from every enabled masternode. {0} of the latest tests earned an A or B."
@@ -950,11 +985,11 @@ msgstr "我们的读数与 dashd 的不一致。"
 msgid "out of reach"
 msgstr "无法达到"
 
+msgid "Out of reach"
+msgstr "无法达到"
+
 msgid "Over time"
 msgstr "随时间变化"
-
-msgid "partly"
-msgstr "部分"
 
 msgid "Pass every check"
 msgstr "通过所有检查"
@@ -1132,6 +1167,9 @@ msgstr "各版本的{noun}占比"
 msgid "Share of each window's blocks, the threshold marked. Windows to come are dated by estimate."
 msgstr "各窗口区块的占比，标出阈值。未来窗口的日期为估算。"
 
+msgid "Share of this window's blocks by pool"
+msgstr "本窗口区块按矿池的份额"
+
 #. placeholder {0}: formatInt(count)
 msgid "Show all {0}"
 msgstr "显示全部 {0} 项"
@@ -1161,9 +1199,6 @@ msgstr "目前发出信号的区块"
 #. placeholder {0}: String(slots.length)
 msgid "Signalling share and threshold for {0} windows"
 msgstr "{0} 个窗口的信号占比和阈值"
-
-msgid "Signalling so far"
-msgstr "目前的信号比例"
 
 #. placeholder {0}: formatInt(d.since)
 msgid "since block {0}"
@@ -1288,6 +1323,19 @@ msgstr "本窗口（第 {0} 次尝试），逐区块"
 msgid "This window ends (attempt {0})"
 msgstr "本窗口结束（第 {0} 次尝试）"
 
+#. placeholder {0}: formatInt(mined)
+msgid "This window's {0} blocks by pool."
+msgstr "本窗口的 {0} 个区块，按矿池划分。"
+
+#. placeholder {0}: formatInt(size)
+#. placeholder {1}: formatInt(w.count)
+#. placeholder {2}: formatInt(lost)
+#. placeholder {3}: formatInt(w.remaining)
+#. placeholder {4}: formatInt(w.threshold)
+#. placeholder {5}: formatInt(projected)
+msgid "This window's {0} blocks: {1} signalled, {2} did not and {3} are left. {4} must signal; at today's pace about {5} do."
+msgstr "本窗口的 {0} 个区块：{1} 个已发出信号，{2} 个未发出，剩余 {3} 个。需要 {4} 个发出信号；按今天的速度约 {5} 个。"
+
 msgid "Threshold"
 msgstr "阈值"
 
@@ -1296,16 +1344,14 @@ msgstr "阈值"
 msgid "Threshold {0}; at this pace the window ends with {1}."
 msgstr "阈值 {0}；按此速度，窗口结束时为 {1}。"
 
+msgid "Threshold reached"
+msgstr "已达阈值"
+
 msgid "Thresholds by window"
 msgstr "各窗口阈值"
 
 msgid "Time range"
 msgstr "时间范围"
-
-#. placeholder {0}: formatInt(w.endHeight)
-#. placeholder {1}: at(w.endHeight)
-msgid "to block {0}, about {1}"
-msgstr "至区块 {0}，约在 {1}"
 
 #. placeholder {0}: formatInt(pace.blocks)
 #. placeholder {1}: formatInt(pace.signalled)
@@ -1424,17 +1470,3 @@ msgstr "将要签名"
 
 msgid "yes"
 msgstr "是"
-
-#. placeholder {0}: formatInt(w.needed)
-#. placeholder {1}: formatInt(w.remaining)
-#. placeholder {2}: formatPercent(rate, 1)
-#. placeholder {3}: formatInt(w.projected)
-#. placeholder {4}: formatInt(w.threshold)
-msgid "Yes, at this pace. It needs {0} more signalling blocks in the {1} left, and at {2} it ends with about {3} of the {4} it needs."
-msgstr "能，按此速度。剩余 {1} 个区块中还需要 {0} 个发出信号，按 {2} 计算结束时约为 {3} 个，所需为 {4} 个。"
-
-#. placeholder {0}: formatInt(w.count)
-#. placeholder {1}: formatInt(w.threshold)
-#. placeholder {2}: formatInt(w.endHeight + 1)
-msgid "Yes. This window has {0} signalling blocks, at least its threshold of {1}, so Core 24 locks in at block {2}."
-msgstr "能。本窗口已有 {0} 个发出信号的区块，不低于阈值 {1}，因此 Core 24 将在区块 {2} 锁定。"

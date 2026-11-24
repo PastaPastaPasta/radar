@@ -8,7 +8,6 @@ import {
   milestones,
   projectLockIn,
   rateOf,
-  silentPools,
   thresholdRows,
   todaysPace,
   v24Of,
@@ -190,9 +189,5 @@ describe('the lock-in outlook (mainnet at block 2,577,670)', () => {
   it('dates heights to come at the recent pace', () => {
     expect(estimateMs(doc, 2_577_670)).toBe(1_795_530_762_000)
     expect(estimateMs(doc, 2_577_680)).toBe(1_795_530_762_000 + 1_571_000)
-  })
-
-  it('names the pools that signal none of their blocks', () => {
-    expect(silentPools(d.window!.pools!).map((x) => x.pool)).toEqual(['ViaBTC'])
   })
 })

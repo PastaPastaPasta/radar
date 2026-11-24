@@ -86,6 +86,15 @@ msgstr "ほか {0} バージョン"
 msgid "{0} must sign"
 msgstr "{0} の署名が必要"
 
+#. placeholder {0}: formatInt(w.threshold)
+msgid "{0} needed"
+msgstr "必要 {0}"
+
+#. placeholder {0}: formatPercent(needed, 0)
+msgctxt "share of blocks"
+msgid "{0} needed"
+msgstr "必要 {0}"
+
 #. placeholder {0}: formatInt(p.healthy)
 #. placeholder {0}: formatInt(q.valid)
 #. placeholder {0}: formatInt(r.signalling)
@@ -94,11 +103,6 @@ msgstr "{0} の署名が必要"
 #. placeholder {1}: formatInt(q.members)
 msgid "{0} of {1}"
 msgstr "{0} / {1}"
-
-#. placeholder {0}: formatInt(w.count)
-#. placeholder {1}: formatInt(w.mined)
-msgid "{0} of {1} blocks"
-msgstr "{1} ブロック中 {0}"
 
 #. placeholder {0}: formatInt(threshold ?? 0)
 #. placeholder {1}: formatInt(p.window)
@@ -139,11 +143,6 @@ msgstr "有効な{noun}の {0} が登録アドレスでハンドシェイクに�
 msgid "{0} of enabled answered"
 msgstr "有効なノードの {0} が応答"
 
-#. placeholder {0}: formatInt(w.needed)
-#. placeholder {1}: formatInt(w.remaining)
-msgid "{0} of the {1} left"
-msgstr "残り {1} 中 {0}"
-
 #. placeholder {0}: formatInt(evo)
 msgid "{0} of them evonodes"
 msgstr "うち {0} が Evonode"
@@ -183,6 +182,16 @@ msgstr "今回のサイクルでテストしたのは {0} 台。中央値は {1}
 #. placeholder {2}: when(blockMs(b))
 msgid "{0}, {1}{2}"
 msgstr "{0}、{1}{2}"
+
+#. placeholder {0}: s.name
+#. placeholder {1}: pct(s.blocks, mined)
+msgid "{0}: {1}, not signalling"
+msgstr "{0}：{1}、シグナルなし"
+
+#. placeholder {0}: s.name
+#. placeholder {1}: pct(s.blocks, mined)
+msgid "{0}: {1}, signalling"
+msgstr "{0}：{1}、シグナル発信中"
 
 msgid "{answered, plural, one {# masternode answered the last crawl} other {# masternodes answered the last crawl}}"
 msgstr "{answered, plural, other {# 件のマスターノードが直近のクロールに応答しました}}"
@@ -236,6 +245,13 @@ msgstr "約"
 #. placeholder {0}: when(blockMs(o.earliest_activation))
 msgid "about {0}"
 msgstr "約 {0}"
+
+#. placeholder {0}: formatInt(projected)
+msgid "about {0} at today's pace"
+msgstr "今日のペースで約 {0}"
+
+msgid "About the pool tags"
+msgstr "プールのタグについて"
 
 msgid "Activation"
 msgstr "有効化"
@@ -318,8 +334,17 @@ msgstr "最短で"
 msgid "At this pace"
 msgstr "このペースでは"
 
-msgid "At today's pace"
-msgstr "今日のペースでは"
+msgid "At today's pace no window locks in before the timeout."
+msgstr "今日のペースではタイムアウトまでにロックインするウィンドウはありません。"
+
+#. placeholder {0}: formatPercent(floor, 1)
+msgid "At today's pace no window locks in: even the lowest threshold is {0}."
+msgstr "今日のペースではロックインするウィンドウはありません：最も低いしきい値でも {0} です。"
+
+#. placeholder {0}: String(projection.attempt + 1)
+#. placeholder {1}: at(projection.end)
+msgid "At today's pace window #{0} locks in, about {1}."
+msgstr "今日のペースではウィンドウ #{0} がロックインします（{1} ごろ）。"
 
 #. placeholder {0}: g.llmq
 #. placeholder {1}: formatInt(size)
@@ -364,13 +389,6 @@ msgstr "このウィンドウのプール別ブロック数とシグナルした
 
 msgid "Blocks left"
 msgstr "残りのブロック"
-
-#. placeholder {0}: x.pool ?? ''
-#. placeholder {1}: formatInt(x.blocks)
-#. placeholder {2}: formatInt(mined)
-#. placeholder {3}: pct(x.blocks, mined)
-msgid "Blocks tagged {0}: {1} of this window's {2} ({3}), none of them signalling."
-msgstr "{0} のタグ付きブロック：このウィンドウの {2} 中 {1}（{3}）、シグナルはゼロ。"
 
 msgid "Builds that aren't releases"
 msgstr "リリースではないビルド"
@@ -453,6 +471,10 @@ msgstr "Core 24 は最初のシグナル期間を待っています"
 
 msgid "Core 24 is waiting for the masternodes' signal"
 msgstr "Core 24 はマスターノードのシグナルを待っています"
+
+#. placeholder {0}: formatInt(w.endHeight + 1)
+msgid "Core 24 locks in at block {0}."
+msgstr "Core 24 はブロック {0} でロックインします。"
 
 msgid "Core 24's timeout passed before the masternodes' signal was mined, so it can't start any more."
 msgstr "マスターノードのシグナルがマイニングされる前に Core 24 のタイムアウトを過ぎたため、もう開始できません。"
@@ -538,6 +560,10 @@ msgstr "有効"
 msgid "Enabled masternodes"
 msgstr "有効なマスターノード"
 
+#. placeholder {0}: at(w.endHeight)
+msgid "ends about {0}"
+msgstr "{0} ごろ終了"
+
 #. placeholder {0}: formatInt(data.epoch.number)
 #. placeholder {1}: formatInt(Math.max(0, data.height - data.epoch.firstBlockHeight))
 msgid "Epoch {0} · {1} blocks in"
@@ -621,6 +647,9 @@ msgstr "有効化の仕組み"
 msgid "How fast they serve"
 msgstr "応答の速さ"
 
+msgid "How the outlook is worked out"
+msgstr "見通しの計算方法"
+
 msgid "Hyphen doesn't index devnets"
 msgstr "Hyphen は devnet をインデックスしません"
 
@@ -660,6 +689,9 @@ msgstr "最新の Platform トランジション"
 
 msgid "latest release"
 msgstr "最新リリース"
+
+msgid "Left, at today's pace"
+msgstr "残り（今日のペースで）"
 
 msgid "Live updates have stopped."
 msgstr "ライブ更新が停止しました。"
@@ -775,11 +807,24 @@ msgstr "マイナーのシグナル"
 msgid "Name"
 msgstr "名前"
 
+msgid "Needed"
+msgstr "必要"
+
 msgid "needed before any window counts"
 msgstr "いずれかのウィンドウがカウントされる前に必要"
 
 msgid "Needed from the rest"
 msgstr "残りから必要"
+
+#. placeholder {0}: formatInt(w.needed)
+#. placeholder {1}: formatInt(w.remaining)
+msgid "Needs {0} more signalling blocks; only {1} are left."
+msgstr "さらに {0} のシグナルブロックが必要ですが、残りは {1} だけです。"
+
+#. placeholder {0}: pct(w.needed, w.remaining)
+#. placeholder {1}: formatPercent(rate, 1)
+msgid "Needs {0} of the blocks left; signalling runs at {1}."
+msgstr "残りのブロックの {0} が必要です。シグナル率は {1} です。"
 
 #. placeholder {0}: String(minProtocol)
 msgid "needs {0}+"
@@ -815,9 +860,6 @@ msgstr "今週は応答なし"
 msgid "No answer this week"
 msgstr "今週は応答なし"
 
-msgid "no blocks in this window yet"
-msgstr "このウィンドウにはまだブロックがありません"
-
 msgid "No Core 24 deployment in the data."
 msgstr "データに Core 24 のデプロイメントがありません。"
 
@@ -839,13 +881,6 @@ msgstr "現在メモリプールにトランザクションはありません"
 msgid "No window to show yet."
 msgstr "表示できるウィンドウはまだありません。"
 
-#. placeholder {0}: formatInt(w.needed)
-#. placeholder {1}: formatInt(w.remaining)
-#. placeholder {2}: formatInt(next)
-#. placeholder {3}: formatInt(p.window)
-msgid "No. It needs {0} more signalling blocks and only {1} are left. The next chance is the next window, at a threshold of {2} of {3}."
-msgstr "いいえ。あと {0} のシグナルブロックが必要ですが、残りは {1} しかありません。次の機会は次のウィンドウで、しきい値は {3} 中 {2} です。"
-
 msgid "Nodes"
 msgstr "ノード"
 
@@ -854,15 +889,6 @@ msgstr "不合格なし"
 
 msgid "not a release"
 msgstr "リリースではない"
-
-#. placeholder {0}: formatInt(w.needed)
-#. placeholder {1}: formatInt(w.remaining)
-#. placeholder {2}: pct(w.needed, w.remaining)
-#. placeholder {3}: formatPercent(rate, 1)
-#. placeholder {4}: formatInt(w.projected)
-#. placeholder {5}: formatInt(w.threshold)
-msgid "Not at this pace. It needs {0} more signalling blocks in the {1} left, {2} of them. At {3} it ends with about {4} of the {5} it needs."
-msgstr "このペースでは無理です。残り {1} ブロックのうちあと {0}（{2}）がシグナルする必要があります。{3} のままでは、必要な {5} に対して約 {4} で終わります。"
 
 msgid "Not checked"
 msgstr "未確認"
@@ -876,6 +902,18 @@ msgstr "未クロール: {0}"
 
 msgid "not mined yet"
 msgstr "まだマイニングされていません"
+
+msgid "Not on pace"
+msgstr "ペース不足"
+
+msgid "Not signalled"
+msgstr "シグナルなし"
+
+msgid "not signalling"
+msgstr "シグナルなし"
+
+msgid "Not signalling"
+msgstr "シグナルなし"
 
 msgid "Not started"
 msgstr "未開始"
@@ -895,12 +933,6 @@ msgstr "今"
 msgid "Now"
 msgstr "現在"
 
-#. placeholder {0}: formatInt(p.window)
-#. placeholder {1}: pct(w.threshold, p.window)
-#. placeholder {2}: String(attempt)
-msgid "of {0} ({1}), window #{2}"
-msgstr "{0} 中（{1}）、ウィンドウ #{2}"
-
 #. placeholder {0}: formatInt(r.mined)
 msgid "of {0} so far"
 msgstr "これまでの {0} のうち"
@@ -910,6 +942,9 @@ msgstr "古い方へ"
 
 msgid "on"
 msgstr "対象:"
+
+msgid "On pace"
+msgstr "ペース十分"
 
 #. placeholder {0}: formatPercent(good / runs, 0)
 msgid "Once every two weeks we download the latest 50,000 headers and the masternode list from every enabled masternode. {0} of the latest tests earned an A or B."
@@ -950,11 +985,11 @@ msgstr "こちらの読み取り結果が dashd の結果と一致しません�
 msgid "out of reach"
 msgstr "到達不可"
 
+msgid "Out of reach"
+msgstr "到達不可"
+
 msgid "Over time"
 msgstr "推移"
-
-msgid "partly"
-msgstr "一部"
 
 msgid "Pass every check"
 msgstr "すべての確認に合格"
@@ -1132,6 +1167,9 @@ msgstr "バージョン別の{noun}の割合"
 msgid "Share of each window's blocks, the threshold marked. Windows to come are dated by estimate."
 msgstr "各ウィンドウのブロックに占める割合（しきい値を表示）。今後のウィンドウの日付は推定です。"
 
+msgid "Share of this window's blocks by pool"
+msgstr "このウィンドウのブロックのプール別シェア"
+
 #. placeholder {0}: formatInt(count)
 msgid "Show all {0}"
 msgstr "{0} 件すべて表示"
@@ -1161,9 +1199,6 @@ msgstr "これまでのシグナル発信ブロック"
 #. placeholder {0}: String(slots.length)
 msgid "Signalling share and threshold for {0} windows"
 msgstr "{0} ウィンドウのシグナル割合としきい値"
-
-msgid "Signalling so far"
-msgstr "これまでのシグナル"
 
 #. placeholder {0}: formatInt(d.since)
 msgid "since block {0}"
@@ -1288,6 +1323,19 @@ msgstr "このウィンドウ（{0} 回目の試行）、ブロックごと"
 msgid "This window ends (attempt {0})"
 msgstr "このウィンドウの終了（{0} 回目の試行）"
 
+#. placeholder {0}: formatInt(mined)
+msgid "This window's {0} blocks by pool."
+msgstr "このウィンドウの {0} ブロック（プール別）。"
+
+#. placeholder {0}: formatInt(size)
+#. placeholder {1}: formatInt(w.count)
+#. placeholder {2}: formatInt(lost)
+#. placeholder {3}: formatInt(w.remaining)
+#. placeholder {4}: formatInt(w.threshold)
+#. placeholder {5}: formatInt(projected)
+msgid "This window's {0} blocks: {1} signalled, {2} did not and {3} are left. {4} must signal; at today's pace about {5} do."
+msgstr "このウィンドウの {0} ブロック：{1} がシグナル、{2} がシグナルなし、残り {3}。{4} のシグナルが必要で、今日のペースでは約 {5} です。"
+
 msgid "Threshold"
 msgstr "しきい値"
 
@@ -1296,16 +1344,14 @@ msgstr "しきい値"
 msgid "Threshold {0}; at this pace the window ends with {1}."
 msgstr "しきい値は {0}。このペースだとウィンドウは {1} で終わります。"
 
+msgid "Threshold reached"
+msgstr "しきい値到達"
+
 msgid "Thresholds by window"
 msgstr "ウィンドウごとのしきい値"
 
 msgid "Time range"
 msgstr "期間"
-
-#. placeholder {0}: formatInt(w.endHeight)
-#. placeholder {1}: at(w.endHeight)
-msgid "to block {0}, about {1}"
-msgstr "ブロック {0} まで、{1} ごろ"
 
 #. placeholder {0}: formatInt(pace.blocks)
 #. placeholder {1}: formatInt(pace.signalled)
@@ -1424,17 +1470,3 @@ msgstr "今署名するもの"
 
 msgid "yes"
 msgstr "はい"
-
-#. placeholder {0}: formatInt(w.needed)
-#. placeholder {1}: formatInt(w.remaining)
-#. placeholder {2}: formatPercent(rate, 1)
-#. placeholder {3}: formatInt(w.projected)
-#. placeholder {4}: formatInt(w.threshold)
-msgid "Yes, at this pace. It needs {0} more signalling blocks in the {1} left, and at {2} it ends with about {3} of the {4} it needs."
-msgstr "はい、このペースなら。残り {1} ブロックのうちあと {0} のシグナルが必要で、{2} なら必要な {4} に対して約 {3} で終わります。"
-
-#. placeholder {0}: formatInt(w.count)
-#. placeholder {1}: formatInt(w.threshold)
-#. placeholder {2}: formatInt(w.endHeight + 1)
-msgid "Yes. This window has {0} signalling blocks, at least its threshold of {1}, so Core 24 locks in at block {2}."
-msgstr "はい。このウィンドウには {0} のシグナルブロックがあり、しきい値 {1} 以上なので、Core 24 はブロック {2} でロックインします。"
