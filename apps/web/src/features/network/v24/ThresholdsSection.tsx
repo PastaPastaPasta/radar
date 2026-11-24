@@ -8,6 +8,7 @@ import { Badge, Card, DataTable } from '@/ui'
 import { share, when } from './v24-format'
 import {
   isDecided,
+  locksIn,
   projectLockIn,
   rateOf,
   thresholdRows,
@@ -30,7 +31,8 @@ export function ThresholdsSection({
   const rows = useMemo(() => thresholdRows(d, doc.block_seconds), [d, doc.block_seconds])
   const lockIn = useMemo(() => {
     const pace = todaysPace(d)
-    return pace && !isDecided(d) ? projectLockIn(doc, d, rateOf(pace))?.attempt : undefined
+    const projected = pace && !isDecided(d) ? projectLockIn(doc, d, rateOf(pace)) : undefined
+    return locksIn(projected) ? projected.attempt : undefined
   }, [doc, d])
   const columns = useMemo<ColumnDef<ThresholdRow>[]>(
     () => [

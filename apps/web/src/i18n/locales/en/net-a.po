@@ -77,13 +77,6 @@ msgstr "{0} hosts {1} of {noun}, and the three largest providers host {2}."
 msgid "{0} masternodes"
 msgstr "{0} masternodes"
 
-#. placeholder {0}: x.pool ?? ''
-#. placeholder {1}: formatInt(x.blocks)
-#. placeholder {2}: formatInt(mined)
-#. placeholder {3}: pct(x.blocks, mined)
-msgid "{0} mined {1} of this window's {2} blocks ({3}) and signalled none."
-msgstr "{0} mined {1} of this window's {2} blocks ({3}) and signalled none."
-
 #. placeholder {0}: formatInt(r.folded)
 msgid "{0} more versions"
 msgstr "{0} more versions"
@@ -296,10 +289,14 @@ msgstr "As many as a day ago."
 msgid "as many masternodes answering as a day ago"
 msgstr "as many masternodes answering as a day ago"
 
+#. placeholder {0}: when(p.timeout)
+msgid "At that pace no window locks in before the timeout, {0}."
+msgstr "At that pace no window locks in before the timeout, {0}."
+
 #. placeholder {0}: formatInt(p.threshold_min)
 #. placeholder {1}: formatInt(p.window)
 #. placeholder {2}: formatPercent(floor, 1)
-#. placeholder {3}: formatNumber((floor - rate) * 100, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+#. placeholder {3}: formatNumber(gap, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 msgid "At that pace no window locks in: even the lowest threshold, {0} of {1} blocks ({2}), is above it. Signalling has to rise by about {3} percentage points."
 msgstr "At that pace no window locks in: even the lowest threshold, {0} of {1} blocks ({2}), is above it. Signalling has to rise by about {3} percentage points."
 
@@ -366,6 +363,13 @@ msgstr "Blocks and signalling blocks per pool this window"
 
 msgid "Blocks left"
 msgstr "Blocks left"
+
+#. placeholder {0}: x.pool ?? ''
+#. placeholder {1}: formatInt(x.blocks)
+#. placeholder {2}: formatInt(mined)
+#. placeholder {3}: pct(x.blocks, mined)
+msgid "Blocks tagged {0}: {1} of this window's {2} ({3}), none of them signalling."
+msgstr "Blocks tagged {0}: {1} of this window's {2} ({3}), none of them signalling."
 
 msgid "Builds that aren't releases"
 msgstr "Builds that aren't releases"
@@ -810,6 +814,9 @@ msgstr "no answer this week"
 msgid "No answer this week"
 msgstr "No answer this week"
 
+msgid "no blocks in this window yet"
+msgstr "no blocks in this window yet"
+
 msgid "No Core 24 deployment in the data."
 msgstr "No Core 24 deployment in the data."
 
@@ -835,8 +842,8 @@ msgstr "No window to show yet."
 #. placeholder {1}: formatInt(w.remaining)
 #. placeholder {2}: formatInt(next)
 #. placeholder {3}: formatInt(p.window)
-msgid "No. It needs {0} more signalling blocks and only {1} are left. The next window decides, at a threshold of {2} of {3}."
-msgstr "No. It needs {0} more signalling blocks and only {1} are left. The next window decides, at a threshold of {2} of {3}."
+msgid "No. It needs {0} more signalling blocks and only {1} are left. The next chance is the next window, at a threshold of {2} of {3}."
+msgstr "No. It needs {0} more signalling blocks and only {1} are left. The next chance is the next window, at a threshold of {2} of {3}."
 
 msgid "Nodes"
 msgstr "Nodes"

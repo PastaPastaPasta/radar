@@ -78,13 +78,6 @@ msgstr "{0} aloja {1} dos {noun}, e os três maiores fornecedores alojam {2}."
 msgid "{0} masternodes"
 msgstr "{0} masternodes"
 
-#. placeholder {0}: x.pool ?? ''
-#. placeholder {1}: formatInt(x.blocks)
-#. placeholder {2}: formatInt(mined)
-#. placeholder {3}: pct(x.blocks, mined)
-msgid "{0} mined {1} of this window's {2} blocks ({3}) and signalled none."
-msgstr "{0} minerou {1} dos {2} blocos desta janela ({3}) e não sinalizou nenhum."
-
 #. placeholder {0}: formatInt(r.folded)
 msgid "{0} more versions"
 msgstr "mais {0} versões"
@@ -297,10 +290,14 @@ msgstr "Tantos quanto há um dia."
 msgid "as many masternodes answering as a day ago"
 msgstr "tantos masternodes respondendo quanto há um dia"
 
+#. placeholder {0}: when(p.timeout)
+msgid "At that pace no window locks in before the timeout, {0}."
+msgstr "Neste ritmo nenhuma janela trava antes do prazo final, {0}."
+
 #. placeholder {0}: formatInt(p.threshold_min)
 #. placeholder {1}: formatInt(p.window)
 #. placeholder {2}: formatPercent(floor, 1)
-#. placeholder {3}: formatNumber((floor - rate) * 100, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+#. placeholder {3}: formatNumber(gap, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 msgid "At that pace no window locks in: even the lowest threshold, {0} of {1} blocks ({2}), is above it. Signalling has to rise by about {3} percentage points."
 msgstr "Neste ritmo nenhuma janela trava: mesmo o limiar mais baixo, {0} de {1} blocos ({2}), está acima. A sinalização precisa subir cerca de {3} pontos percentuais."
 
@@ -367,6 +364,13 @@ msgstr "Blocos e blocos sinalizando por pool nesta janela"
 
 msgid "Blocks left"
 msgstr "Blocos restantes"
+
+#. placeholder {0}: x.pool ?? ''
+#. placeholder {1}: formatInt(x.blocks)
+#. placeholder {2}: formatInt(mined)
+#. placeholder {3}: pct(x.blocks, mined)
+msgid "Blocks tagged {0}: {1} of this window's {2} ({3}), none of them signalling."
+msgstr "Blocos com a tag {0}: {1} dos {2} desta janela ({3}), nenhum sinalizando."
 
 msgid "Builds that aren't releases"
 msgstr "Compilações que não são lançamentos"
@@ -811,6 +815,9 @@ msgstr "sem resposta esta semana"
 msgid "No answer this week"
 msgstr "Sem resposta esta semana"
 
+msgid "no blocks in this window yet"
+msgstr "ainda sem blocos nesta janela"
+
 msgid "No Core 24 deployment in the data."
 msgstr "Nenhuma implantação do Core 24 nos dados."
 
@@ -836,8 +843,8 @@ msgstr "Ainda não há nenhuma janela para mostrar."
 #. placeholder {1}: formatInt(w.remaining)
 #. placeholder {2}: formatInt(next)
 #. placeholder {3}: formatInt(p.window)
-msgid "No. It needs {0} more signalling blocks and only {1} are left. The next window decides, at a threshold of {2} of {3}."
-msgstr "Não. Faltam {0} blocos sinalizando e restam apenas {1}. A próxima janela decide, com limiar de {2} de {3}."
+msgid "No. It needs {0} more signalling blocks and only {1} are left. The next chance is the next window, at a threshold of {2} of {3}."
+msgstr "Não. Faltam {0} blocos sinalizando e restam apenas {1}. A próxima chance é a próxima janela, com limiar de {2} de {3}."
 
 msgid "Nodes"
 msgstr "Nós"

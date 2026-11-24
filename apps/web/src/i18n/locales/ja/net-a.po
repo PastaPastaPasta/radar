@@ -78,13 +78,6 @@ msgstr "{0} が {noun} の {1} をホストしており、上位3社のプロバ
 msgid "{0} masternodes"
 msgstr "マスターノード {0} 台"
 
-#. placeholder {0}: x.pool ?? ''
-#. placeholder {1}: formatInt(x.blocks)
-#. placeholder {2}: formatInt(mined)
-#. placeholder {3}: pct(x.blocks, mined)
-msgid "{0} mined {1} of this window's {2} blocks ({3}) and signalled none."
-msgstr "{0} はこのウィンドウの {2} ブロックのうち {1} ブロック（{3}）を採掘し、1 つもシグナルしていません。"
-
 #. placeholder {0}: formatInt(r.folded)
 msgid "{0} more versions"
 msgstr "ほか {0} バージョン"
@@ -297,10 +290,14 @@ msgstr "1日前と同じ数です。"
 msgid "as many masternodes answering as a day ago"
 msgstr "応答しているマスターノードは1日前と同数"
 
+#. placeholder {0}: when(p.timeout)
+msgid "At that pace no window locks in before the timeout, {0}."
+msgstr "このペースではタイムアウト（{0}）までにロックインするウィンドウはありません。"
+
 #. placeholder {0}: formatInt(p.threshold_min)
 #. placeholder {1}: formatInt(p.window)
 #. placeholder {2}: formatPercent(floor, 1)
-#. placeholder {3}: formatNumber((floor - rate) * 100, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+#. placeholder {3}: formatNumber(gap, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 msgid "At that pace no window locks in: even the lowest threshold, {0} of {1} blocks ({2}), is above it. Signalling has to rise by about {3} percentage points."
 msgstr "このペースではどのウィンドウもロックインしません。最も低いしきい値 {1} ブロック中 {0}（{2}）でも上回れません。シグナルを約 {3} ポイント増やす必要があります。"
 
@@ -367,6 +364,13 @@ msgstr "このウィンドウのプール別ブロック数とシグナルした
 
 msgid "Blocks left"
 msgstr "残りのブロック"
+
+#. placeholder {0}: x.pool ?? ''
+#. placeholder {1}: formatInt(x.blocks)
+#. placeholder {2}: formatInt(mined)
+#. placeholder {3}: pct(x.blocks, mined)
+msgid "Blocks tagged {0}: {1} of this window's {2} ({3}), none of them signalling."
+msgstr "{0} のタグ付きブロック：このウィンドウの {2} 中 {1}（{3}）、シグナルはゼロ。"
 
 msgid "Builds that aren't releases"
 msgstr "リリースではないビルド"
@@ -811,6 +815,9 @@ msgstr "今週は応答なし"
 msgid "No answer this week"
 msgstr "今週は応答なし"
 
+msgid "no blocks in this window yet"
+msgstr "このウィンドウにはまだブロックがありません"
+
 msgid "No Core 24 deployment in the data."
 msgstr "データに Core 24 のデプロイメントがありません。"
 
@@ -836,8 +843,8 @@ msgstr "表示できるウィンドウはまだありません。"
 #. placeholder {1}: formatInt(w.remaining)
 #. placeholder {2}: formatInt(next)
 #. placeholder {3}: formatInt(p.window)
-msgid "No. It needs {0} more signalling blocks and only {1} are left. The next window decides, at a threshold of {2} of {3}."
-msgstr "いいえ。あと {0} のシグナルブロックが必要ですが、残りは {1} しかありません。次のウィンドウがしきい値 {3} 中 {2} で決めます。"
+msgid "No. It needs {0} more signalling blocks and only {1} are left. The next chance is the next window, at a threshold of {2} of {3}."
+msgstr "いいえ。あと {0} のシグナルブロックが必要ですが、残りは {1} しかありません。次の機会は次のウィンドウで、しきい値は {3} 中 {2} です。"
 
 msgid "Nodes"
 msgstr "ノード"

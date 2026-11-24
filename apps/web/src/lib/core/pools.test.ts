@@ -9,6 +9,10 @@ describe('poolOfCoinbase', () => {
     expect(poolOfCoinbase(`03653727${hex('/ViaBTC/Mined by x/')}`)).toBe('ViaBTC')
     expect(poolOfCoinbase(hex('Mined by AntPool'))).toBe('AntPool')
   })
+  it('knows the merged-mining pools seen on Dash', () => {
+    expect(poolOfCoinbase(`035027${hex('\xfa\xbemm/Mining-Dutch/')}`)).toBe('Mining-Dutch')
+    expect(poolOfCoinbase(hex('/PowerPool/'))).toBe('PowerPool')
+  })
   it('knows F2Pool by its Chinese tag', () => {
     expect(poolOfCoinbase(hex('七彩神仙鱼'))).toBe('F2Pool')
   })

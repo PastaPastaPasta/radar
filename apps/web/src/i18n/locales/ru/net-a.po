@@ -78,13 +78,6 @@ msgstr "На {0} работает {1} ({noun}), а на трёх крупней�
 msgid "{0} masternodes"
 msgstr "Мастернод: {0}"
 
-#. placeholder {0}: x.pool ?? ''
-#. placeholder {1}: formatInt(x.blocks)
-#. placeholder {2}: formatInt(mined)
-#. placeholder {3}: pct(x.blocks, mined)
-msgid "{0} mined {1} of this window's {2} blocks ({3}) and signalled none."
-msgstr "{0} добыл {1} из {2} блоков этого окна ({3}) и не просигналил ни в одном."
-
 #. placeholder {0}: formatInt(r.folded)
 msgid "{0} more versions"
 msgstr "Ещё версий: {0}"
@@ -297,10 +290,14 @@ msgstr "Столько же, сколько сутки назад."
 msgid "as many masternodes answering as a day ago"
 msgstr "отвечает столько же мастернод, сколько сутки назад"
 
+#. placeholder {0}: when(p.timeout)
+msgid "At that pace no window locks in before the timeout, {0}."
+msgstr "При таком темпе ни одно окно не зафиксируется до тайм-аута, {0}."
+
 #. placeholder {0}: formatInt(p.threshold_min)
 #. placeholder {1}: formatInt(p.window)
 #. placeholder {2}: formatPercent(floor, 1)
-#. placeholder {3}: formatNumber((floor - rate) * 100, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+#. placeholder {3}: formatNumber(gap, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 msgid "At that pace no window locks in: even the lowest threshold, {0} of {1} blocks ({2}), is above it. Signalling has to rise by about {3} percentage points."
 msgstr "При таком темпе ни одно окно не зафиксируется: даже самый низкий порог, {0} из {1} блоков ({2}), выше. Доля сигналов должна вырасти примерно на {3} процентного пункта."
 
@@ -367,6 +364,13 @@ msgstr "Блоки и сигнальные блоки по пулам в это�
 
 msgid "Blocks left"
 msgstr "Осталось блоков"
+
+#. placeholder {0}: x.pool ?? ''
+#. placeholder {1}: formatInt(x.blocks)
+#. placeholder {2}: formatInt(mined)
+#. placeholder {3}: pct(x.blocks, mined)
+msgid "Blocks tagged {0}: {1} of this window's {2} ({3}), none of them signalling."
+msgstr "Блоки с меткой {0}: {1} из {2} блоков этого окна ({3}), ни в одном нет сигнала."
 
 msgid "Builds that aren't releases"
 msgstr "Сборки, не являющиеся релизами"
@@ -811,6 +815,9 @@ msgstr "нет ответа за неделю"
 msgid "No answer this week"
 msgstr "Нет ответа за неделю"
 
+msgid "no blocks in this window yet"
+msgstr "в этом окне ещё нет блоков"
+
 msgid "No Core 24 deployment in the data."
 msgstr "В данных нет развёртывания Core 24."
 
@@ -836,8 +843,8 @@ msgstr "Пока нет окна для показа."
 #. placeholder {1}: formatInt(w.remaining)
 #. placeholder {2}: formatInt(next)
 #. placeholder {3}: formatInt(p.window)
-msgid "No. It needs {0} more signalling blocks and only {1} are left. The next window decides, at a threshold of {2} of {3}."
-msgstr "Нет. Нужно ещё {0} сигнальных блоков, а осталось только {1}. Решит следующее окно с порогом {2} из {3}."
+msgid "No. It needs {0} more signalling blocks and only {1} are left. The next chance is the next window, at a threshold of {2} of {3}."
+msgstr "Нет. Нужно ещё {0} сигнальных блоков, а осталось только {1}. Следующий шанс — следующее окно с порогом {2} из {3}."
 
 msgid "Nodes"
 msgstr "Узлы"

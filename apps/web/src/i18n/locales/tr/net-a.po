@@ -78,13 +78,6 @@ msgstr "{noun} içindeki {1} payı {0} barındırıyor; en büyük üç sağlay�
 msgid "{0} masternodes"
 msgstr "{0} masternode"
 
-#. placeholder {0}: x.pool ?? ''
-#. placeholder {1}: formatInt(x.blocks)
-#. placeholder {2}: formatInt(mined)
-#. placeholder {3}: pct(x.blocks, mined)
-msgid "{0} mined {1} of this window's {2} blocks ({3}) and signalled none."
-msgstr "{0}, bu penceredeki {2} bloğun {1} tanesini ({3}) üretti ve hiçbirinde sinyal vermedi."
-
 #. placeholder {0}: formatInt(r.folded)
 msgid "{0} more versions"
 msgstr "{0} sürüm daha"
@@ -297,10 +290,14 @@ msgstr "Bir gün öncekiyle aynı sayıda."
 msgid "as many masternodes answering as a day ago"
 msgstr "yanıt veren masternode sayısı bir gün öncekiyle aynı"
 
+#. placeholder {0}: when(p.timeout)
+msgid "At that pace no window locks in before the timeout, {0}."
+msgstr "Bu hızda zaman aşımından ({0}) önce hiçbir pencere kilitlenmez."
+
 #. placeholder {0}: formatInt(p.threshold_min)
 #. placeholder {1}: formatInt(p.window)
 #. placeholder {2}: formatPercent(floor, 1)
-#. placeholder {3}: formatNumber((floor - rate) * 100, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+#. placeholder {3}: formatNumber(gap, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 msgid "At that pace no window locks in: even the lowest threshold, {0} of {1} blocks ({2}), is above it. Signalling has to rise by about {3} percentage points."
 msgstr "Bu hızda hiçbir pencere kilitlenmez: en düşük eşik bile, {1} bloğun {0} tanesi ({2}), bunun üstünde. Sinyalin yaklaşık {3} yüzde puanı artması gerekir."
 
@@ -367,6 +364,13 @@ msgstr "Bu pencerede havuz başına bloklar ve sinyal veren bloklar"
 
 msgid "Blocks left"
 msgstr "Kalan bloklar"
+
+#. placeholder {0}: x.pool ?? ''
+#. placeholder {1}: formatInt(x.blocks)
+#. placeholder {2}: formatInt(mined)
+#. placeholder {3}: pct(x.blocks, mined)
+msgid "Blocks tagged {0}: {1} of this window's {2} ({3}), none of them signalling."
+msgstr "{0} etiketli bloklar: bu penceredeki {2} bloğun {1} tanesi ({3}), hiçbiri sinyal vermiyor."
 
 msgid "Builds that aren't releases"
 msgstr "Sürüm olmayan derlemeler"
@@ -811,6 +815,9 @@ msgstr "bu hafta yanıt yok"
 msgid "No answer this week"
 msgstr "Bu hafta yanıt yok"
 
+msgid "no blocks in this window yet"
+msgstr "bu pencerede henüz blok yok"
+
 msgid "No Core 24 deployment in the data."
 msgstr "Verilerde Core 24 dağıtımı yok."
 
@@ -836,8 +843,8 @@ msgstr "Henüz gösterilecek pencere yok."
 #. placeholder {1}: formatInt(w.remaining)
 #. placeholder {2}: formatInt(next)
 #. placeholder {3}: formatInt(p.window)
-msgid "No. It needs {0} more signalling blocks and only {1} are left. The next window decides, at a threshold of {2} of {3}."
-msgstr "Hayır. {0} sinyal veren blok daha gerekiyor ve yalnızca {1} blok kaldı. Bir sonraki pencere {3} içinde {2} eşiğiyle karar verir."
+msgid "No. It needs {0} more signalling blocks and only {1} are left. The next chance is the next window, at a threshold of {2} of {3}."
+msgstr "Hayır. {0} sinyal veren blok daha gerekiyor ve yalnızca {1} blok kaldı. Sonraki şans, {3} içinde {2} eşiğiyle bir sonraki pencere."
 
 msgid "Nodes"
 msgstr "Düğümler"

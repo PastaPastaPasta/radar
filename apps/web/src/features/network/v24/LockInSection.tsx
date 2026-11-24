@@ -4,9 +4,10 @@ import type { RadarActivation, RadarActivationDeployment } from '@/data/radar/sc
 import { formatInt, formatNumber, formatPercent } from '@/lib/format'
 import { Card } from '@/ui'
 import { Figure, FigureGrid } from '../nodes/parts'
-import { day } from './v24-format'
+import { day, when } from './v24-format'
 import {
   estimateMs,
+  locksIn,
   projectLockIn,
   rateOf,
   silentPools,
@@ -41,7 +42,7 @@ export function LockInSection({
     reached: t`Yes. This window has ${formatInt(w.count)} signalling blocks, at least its threshold of ${formatInt(w.threshold)}, so Core 24 locks in at block ${formatInt(w.endHeight + 1)}.`,
     'on-track': t`Yes, at this pace. It needs ${formatInt(w.needed)} more signalling blocks in the ${formatInt(w.remaining)} left, and at ${formatPercent(rate, 1)} it ends with about ${formatInt(w.projected)} of the ${formatInt(w.threshold)} it needs.`,
     'needs-more': t`Not at this pace. It needs ${formatInt(w.needed)} more signalling blocks in the ${formatInt(w.remaining)} left, ${pct(w.needed, w.remaining)} of them. At ${formatPercent(rate, 1)} it ends with about ${formatInt(w.projected)} of the ${formatInt(w.threshold)} it needs.`,
-    impossible: t`No. It needs ${formatInt(w.needed)} more signalling blocks and only ${formatInt(w.remaining)} are left. The next window decides, at a threshold of ${formatInt(next)} of ${formatInt(p.window)}.`,
+    impossible: t`No. It needs ${formatInt(w.needed)} more signalling blocks and only ${formatInt(w.remaining)} are left. The next chance is the next window, at a threshold of ${formatInt(next)} of ${formatInt(p.window)}.`,
   }[w.verdict]
   const good = w.verdict === 'reached' || w.verdict === 'on-track'
 
@@ -58,8 +59,12 @@ export function LockInSection({
         <FigureGrid columns={4}>
           <Figure
             label={t`Signalling so far`}
-            value={pct(w.count, w.mined)}
-            note={t`${formatInt(w.count)} of ${formatInt(w.mined)} blocks`}
+            value={w.mined > 0 ? pct(w.count, w.mined) : '–'}
+            note={
+              w.mined > 0
+                ? t`${formatInt(w.count)} of ${formatInt(w.mined)} blocks`
+                : t`no blocks in this window yet`
+            }
           />
           <Figure
             label={t`Blocks left`}
@@ -105,23 +110,30 @@ function Projection({
       ? t`Today's pace is this window's so far: ${formatInt(pace.signalled)} of ${formatInt(pace.blocks)} blocks signalled (${formatPercent(rate, 1)}).`
       : t`Today's pace is the last ${formatInt(pace.blocks)} blocks': ${formatInt(pace.signalled)} signalled (${formatPercent(rate, 1)}).`
   const floor = p.threshold_min / p.window
+  const gap = Math.max(0.1, Math.ceil((floor - rate) * 1000) / 10)
+  const outcome = locksIn(projection)
+    ? t`At that pace window #${String(projection.attempt + 1)} (blocks ${formatInt(projection.start)}–${formatInt(projection.end)}, threshold ${formatInt(projection.threshold)} of ${formatInt(p.window)}) is the first to lock in, about ${at(projection.end)}. Core 24 would then activate at block ${formatInt(projection.activation)}, about ${at(projection.activation)}.`
+    : projection.never === 'timeout'
+      ? t`At that pace no window locks in before the timeout, ${when(p.timeout)}.`
+      : t`At that pace no window locks in: even the lowest threshold, ${formatInt(p.threshold_min)} of ${formatInt(p.window)} blocks (${formatPercent(floor, 1)}), is above it. Signalling has to rise by about ${formatNumber(gap, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} percentage points.`
   const silent = silentPools(d.window?.pools ?? [])
   const mined = d.window?.mined ?? 0
   return (
-    <div className="grid gap-2" data-v24-projection data-lock-in={projection?.attempt}>
+    <div
+      className="grid gap-2"
+      data-v24-projection
+      data-lock-in={locksIn(projection) ? projection.attempt : projection.never}
+    >
       <h4 className="font-semibold">{t`At today's pace`}</h4>
       <p>
-        {basis}{' '}
-        {projection
-          ? t`At that pace window #${String(projection.attempt + 1)} (blocks ${formatInt(projection.start)}–${formatInt(projection.end)}, threshold ${formatInt(projection.threshold)} of ${formatInt(p.window)}) is the first to lock in, about ${at(projection.end)}. Core 24 would then activate at block ${formatInt(projection.activation)}, about ${at(projection.activation)}.`
-          : t`At that pace no window locks in: even the lowest threshold, ${formatInt(p.threshold_min)} of ${formatInt(p.window)} blocks (${formatPercent(floor, 1)}), is above it. Signalling has to rise by about ${formatNumber((floor - rate) * 100, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} percentage points.`}
+        {basis} {outcome}
       </p>
       {silent.length > 0 && mined > 0 ? (
         <p data-v24-silent>
           {silent
             .map(
               (x) =>
-                t`${x.pool ?? ''} mined ${formatInt(x.blocks)} of this window's ${formatInt(mined)} blocks (${pct(x.blocks, mined)}) and signalled none.`,
+                t`Blocks tagged ${x.pool ?? ''}: ${formatInt(x.blocks)} of this window's ${formatInt(mined)} (${pct(x.blocks, mined)}), none of them signalling.`,
             )
             .join(' ')}
         </p>

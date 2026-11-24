@@ -147,12 +147,12 @@ describe('the lock-in outlook (mainnet at block 2,577,670)', () => {
   })
 
   it('finds no window that locks in at 56%, under the 60% floor', () => {
-    expect(projectLockIn(doc, d, 688 / 1223)).toBeNull()
+    expect(projectLockIn(doc, d, 688 / 1223)).toEqual({ never: 'floor' })
   })
 
   it('finds the first window whose threshold the rate clears', () => {
     // 0.7 × 4032 = 2822: short of 2,831 (attempt 7), enough for 2,710 (attempt 8).
-    const p = projectLockIn(doc, d, 0.7)!
+    const p = projectLockIn(doc, d, 0.7)
     expect(p).toEqual({
       attempt: 8,
       threshold: 2710,
@@ -162,10 +162,29 @@ describe('the lock-in outlook (mainnet at block 2,577,670)', () => {
       activation: 2_576_448 + 10 * 4032,
     })
     // 0.6 × 4032 rounds down to 2,419, one short of the floor.
-    expect(projectLockIn(doc, d, 0.6)).toBeNull()
-    expect(projectLockIn(doc, d, 0.61)!.attempt).toBe(10)
-    expect(projectLockIn(doc, d, 0.95)!.attempt).toBe(0)
-    expect(projectLockIn(doc, d, 0.8)!.attempt).toBe(1)
+    expect(projectLockIn(doc, d, 0.6)).toEqual({ never: 'floor' })
+    expect(projectLockIn(doc, d, 0.61)).toMatchObject({ attempt: 10 })
+    expect(projectLockIn(doc, d, 0.95)).toMatchObject({ attempt: 0 })
+    expect(projectLockIn(doc, d, 0.8)).toMatchObject({ attempt: 1 })
+  })
+
+  it('stops at the timeout, the current window included', () => {
+    const soon = (ms: number) => ({ ...d, params: { ...d.params, timeout: ms } })
+    // The window being counted ends past the timeout: it fails, so none locks in.
+    expect(projectLockIn(doc, soon(estimateMs(doc, 2_580_479)), 0.7)).toEqual({ never: 'timeout' })
+    // At 70% the ninth window would; a timeout two windows on comes first.
+    expect(projectLockIn(doc, soon(estimateMs(doc, 2_580_479 + 2 * 4032)), 0.7)).toEqual({
+      never: 'timeout',
+    })
+  })
+
+  it('ends on a schedule that never falls', () => {
+    const flat = {
+      ...d,
+      schedule: [{ attempt: 0, threshold: 3226 }],
+      params: { ...d.params, timeout: null },
+    }
+    expect(projectLockIn(doc, flat, 0.7)).toEqual({ never: 'floor' })
   })
 
   it('dates heights to come at the recent pace', () => {

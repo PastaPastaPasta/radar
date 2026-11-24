@@ -297,37 +297,43 @@ export interface LockInProjection {
 export const estimateMs = (doc: RadarActivation, height: number): number =>
   doc.tip.time + (height - doc.tip.height) * doc.block_seconds * 1000
 
+/** Why no window locks in at a pace: it is under the lowest threshold, or the timeout comes first. */
+export interface NoLockIn {
+  never: 'floor' | 'timeout'
+}
+
 /**
  * The first window that locks in if miners keep signalling at `rate`: the one being counted (by where its
- * pace leads), then each to come at that share of its blocks against its falling threshold. Null when no
- * window does before the timeout; undefined when no window is to be counted.
+ * pace leads), then each to come at that share of its blocks against its falling threshold. `never` when no
+ * window does; undefined when no window is to be counted.
  */
 export function projectLockIn(
   doc: RadarActivation,
   d: RadarActivationDeployment,
   rate: number,
-): LockInProjection | null | undefined {
+): LockInProjection | NoLockIn | undefined {
   const p = d.params
   const o = d.outlook
-  const thresholdAt = (a: number) =>
-    d.schedule[Math.min(a, d.schedule.length - 1)]?.threshold ?? p.threshold_min
+  if (d.schedule.length === 0) return undefined
+  const last = d.schedule.length - 1
   const at = (attempt: number, start: number): LockInProjection => ({
     attempt,
-    threshold: thresholdAt(attempt),
+    threshold: d.schedule[Math.min(attempt, last)]!.threshold,
     start,
     end: start + p.window - 1,
     lockIn: start + p.window,
     activation: start + 2 * p.window,
   })
+  const timedOut = (w: LockInProjection) => p.timeout != null && estimateMs(doc, w.end) >= p.timeout
   let attempt: number
   let start: number
   const now = windowOutlook(d, rate)
   if (now && d.window?.attempt != null) {
-    if (now.verdict === 'reached' || now.verdict === 'on-track') {
-      return at(d.window.attempt, d.window.start.height)
-    }
-    attempt = d.window.attempt + 1
-    start = d.window.start.height + p.window
+    const current = at(d.window.attempt, d.window.start.height)
+    if (now.verdict === 'reached' || now.verdict === 'on-track') return current
+    if (timedOut(current)) return { never: 'timeout' }
+    attempt = current.attempt + 1
+    start = current.start + p.window
   } else if (
     (o.phase === 'waiting_for_window' || o.phase === 'waiting_for_signal') &&
     o.earliest_start
@@ -337,16 +343,18 @@ export function projectLockIn(
   } else {
     return undefined
   }
-  if (d.schedule.length === 0) return undefined
   for (;;) {
     const w = at(attempt, start)
     if (Math.floor(rate * p.window) >= w.threshold) return w
-    if (p.timeout != null && estimateMs(doc, w.end) >= p.timeout) return null
-    if (w.threshold <= p.threshold_min) return null
+    if (timedOut(w)) return { never: 'timeout' }
+    if (attempt >= last || w.threshold <= p.threshold_min) return { never: 'floor' }
     attempt++
     start += p.window
   }
 }
+
+export const locksIn = (x: LockInProjection | NoLockIn | undefined): x is LockInProjection =>
+  x !== undefined && !('never' in x)
 
 export type PoolRow = NonNullable<NonNullable<RadarActivationDeployment['window']>['pools']>[number]
 

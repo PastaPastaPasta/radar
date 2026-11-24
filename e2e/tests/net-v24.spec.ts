@@ -281,7 +281,7 @@ test.describe('Core 24 activation tracker', () => {
       'At that pace no window locks in: even the lowest threshold, 2,420 of 4,032 blocks (60.0%), is above it.',
     )
     await expect(lockIn.locator('[data-v24-silent]')).toContainText(
-      "ViaBTC mined 1,000 of this window's 1,500 blocks (66.7%) and signalled none.",
+      "Blocks tagged ViaBTC: 1,000 of this window's 1,500 (66.7%), none of them signalling.",
     )
     const pools = card(page, 'pools')
     await expect(pools).toContainText('Best effort')

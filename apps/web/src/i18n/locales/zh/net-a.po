@@ -78,13 +78,6 @@ msgstr "{0} 托管了{noun}的 {1}，前三大提供商共托管 {2}。"
 msgid "{0} masternodes"
 msgstr "{0} 个主节点"
 
-#. placeholder {0}: x.pool ?? ''
-#. placeholder {1}: formatInt(x.blocks)
-#. placeholder {2}: formatInt(mined)
-#. placeholder {3}: pct(x.blocks, mined)
-msgid "{0} mined {1} of this window's {2} blocks ({3}) and signalled none."
-msgstr "{0} 挖出了本窗口 {2} 个区块中的 {1} 个（{3}），没有一个发出信号。"
-
 #. placeholder {0}: formatInt(r.folded)
 msgid "{0} more versions"
 msgstr "另有 {0} 个版本"
@@ -297,10 +290,14 @@ msgstr "与一天前数量相同。"
 msgid "as many masternodes answering as a day ago"
 msgstr "应答的主节点数量与一天前相同"
 
+#. placeholder {0}: when(p.timeout)
+msgid "At that pace no window locks in before the timeout, {0}."
+msgstr "按此速度，在超时 {0} 之前没有窗口能锁定。"
+
 #. placeholder {0}: formatInt(p.threshold_min)
 #. placeholder {1}: formatInt(p.window)
 #. placeholder {2}: formatPercent(floor, 1)
-#. placeholder {3}: formatNumber((floor - rate) * 100, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+#. placeholder {3}: formatNumber(gap, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 msgid "At that pace no window locks in: even the lowest threshold, {0} of {1} blocks ({2}), is above it. Signalling has to rise by about {3} percentage points."
 msgstr "按此速度没有窗口能锁定：即使最低阈值 {1} 个区块中的 {0} 个（{2}）也高于它。信号比例需要提高约 {3} 个百分点。"
 
@@ -367,6 +364,13 @@ msgstr "本窗口各矿池的区块数和发出信号的区块数"
 
 msgid "Blocks left"
 msgstr "剩余区块"
+
+#. placeholder {0}: x.pool ?? ''
+#. placeholder {1}: formatInt(x.blocks)
+#. placeholder {2}: formatInt(mined)
+#. placeholder {3}: pct(x.blocks, mined)
+msgid "Blocks tagged {0}: {1} of this window's {2} ({3}), none of them signalling."
+msgstr "标记为 {0} 的区块：本窗口 {2} 个中的 {1} 个（{3}），均未发出信号。"
 
 msgid "Builds that aren't releases"
 msgstr "非正式发布的构建"
@@ -811,6 +815,9 @@ msgstr "本周无响应"
 msgid "No answer this week"
 msgstr "本周无响应"
 
+msgid "no blocks in this window yet"
+msgstr "本窗口还没有区块"
+
 msgid "No Core 24 deployment in the data."
 msgstr "数据中没有 Core 24 部署。"
 
@@ -836,8 +843,8 @@ msgstr "暂无可显示的窗口。"
 #. placeholder {1}: formatInt(w.remaining)
 #. placeholder {2}: formatInt(next)
 #. placeholder {3}: formatInt(p.window)
-msgid "No. It needs {0} more signalling blocks and only {1} are left. The next window decides, at a threshold of {2} of {3}."
-msgstr "不能。还需要 {0} 个发出信号的区块，但只剩 {1} 个。由下一个窗口决定，阈值为 {3} 中的 {2}。"
+msgid "No. It needs {0} more signalling blocks and only {1} are left. The next chance is the next window, at a threshold of {2} of {3}."
+msgstr "不能。还需要 {0} 个发出信号的区块，但只剩 {1} 个。下一次机会是下一个窗口，阈值为 {3} 中的 {2}。"
 
 msgid "Nodes"
 msgstr "节点"
