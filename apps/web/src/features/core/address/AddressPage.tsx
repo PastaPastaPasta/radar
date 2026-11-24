@@ -334,16 +334,8 @@ function AddressContent({ net, address }: { net: NetworkId; address: string }) {
           rowLink={(r) => ({ to: '/tx/$txid', params: { txid: r.txHash } })}
         />
         {txs.isFetchNextPageError ? (
-          <p role="alert" className="rx-note flex flex-wrap items-center gap-3 p-3">
+          <p role="alert" className="rx-note p-3">
             {t`The next transactions could not be loaded.`}
-            <button
-              type="button"
-              className="dh-btn dh-btn--sm"
-              disabled={txs.isFetchingNextPage}
-              onClick={() => void txs.fetchNextPage()}
-            >
-              {t`Try again`}
-            </button>
           </p>
         ) : null}
       </Card>

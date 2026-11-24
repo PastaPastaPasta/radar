@@ -3,6 +3,7 @@ import { expectAccessible } from '../helpers/a11y'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect as baseExpect, test } from '../helpers/test'
 import { sourceLineOf } from '../helpers/sources'
+import { scrollNearEnd, scrollToEnd } from '../helpers/scroll'
 
 const expect = baseExpect.configure({ timeout: 15_000 })
 
@@ -391,15 +392,26 @@ test.describe('Advanced tab', () => {
 })
 
 test.describe('History tabs', () => {
-  test('lists the identity’s transitions, paged @PE-15', async ({ page }) => {
+  test('lists the identity’s transitions, more as the reader scrolls @PE-15', async ({ page }) => {
     await openIdentity(page, M, { tab: 'transactions' })
     const table = page.locator('#identity-transactions table')
-    await expect(table.locator('tbody tr')).toHaveCount(10)
+    const shown = table.locator('tbody tr[data-row-id]')
+    await expect(shown).toHaveCount(10)
     await expect(table.getByText('Document create').first()).toBeVisible()
-    await page.locator('#identity-transactions').getByRole('link', { name: 'Next' }).click()
-    await expect(page).toHaveURL(/page=2/)
-    await expect(page.locator('#identity-transactions tbody tr').first()).toBeVisible()
+    await expect(
+      page.locator('#identity-transactions').getByRole('link', { name: 'Next' }),
+    ).toHaveCount(0)
+    await scrollNearEnd(page, '#identity-transactions')
+    await expect.poll(() => shown.count()).toBeGreaterThan(10)
     await expectAccessible(page)
+  })
+
+  test('opens the identity’s transitions at the page the address names @PE-15', async ({
+    page,
+  }) => {
+    await openIdentity(page, M, { tab: 'transactions', page: '2' })
+    await expect(page.locator('#identity-transactions tbody tr[data-row-id]')).toHaveCount(10)
+    await expect(page.locator('#identity-transactions [data-sentinel="start"]')).toBeAttached()
   })
 
   test('lists the contracts the identity created @PE-15', async ({ page }) => {
@@ -502,10 +514,10 @@ test.describe('Identity lookup by key hash', () => {
     const matches = page.locator('[data-matches] li')
     await expect(matches).toHaveCount(1)
     const first = await matches.first().innerText()
-    await page.getByRole('button', { name: 'Load more' }).click()
+    await expect(page.getByRole('button', { name: 'Load more' })).toHaveCount(0)
+    await scrollNearEnd(page, '#identity-key-matches')
     await expect(matches).toHaveCount(2)
     await expect(matches.first()).toContainText(first.split('\n')[0] ?? '')
-    await page.getByRole('button', { name: 'Load more' }).click()
     await expect(page.getByText('That is every match.')).toBeVisible()
     await expect(matches).toHaveCount(2)
     await expect(matches.first()).toContainText(first.split('\n')[0] ?? '')
@@ -631,29 +643,20 @@ test.describe('Identity list', () => {
     await expect(page.locator('#identities-list tbody tr').first()).toBeVisible()
   })
 
-  test('switches between pages and scrolling, and remembers the choice @PE-14', async ({
+  test('scrolls with no choice of pages, and an old stored choice of pages changes nothing @PE-14', async ({
     page,
   }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem('radar.list.identities', JSON.stringify({ mode: 'pages', limit: 10 }))
+    })
     await page.goto('/identities')
     await settled(page)
-    await expect(page.getByRole('navigation', { name: 'Pagination' })).toBeVisible()
-    await page
-      .getByRole('group', { name: 'List view' })
-      .getByRole('button', { name: 'Scroll' })
-      .click()
     await expect(page.getByRole('navigation', { name: 'Pagination' })).toHaveCount(0)
-    expect(JSON.parse((await stored(page, 'radar.list.identities')) ?? '{}')).toMatchObject({
-      mode: 'scroll',
-    })
-    await expect(page.getByText('25 loaded')).toBeVisible()
-    await page.locator('[data-sentinel="end"]').scrollIntoViewIfNeeded()
-    await page.mouse.wheel(0, 120)
-    await expect(page.getByText('50 loaded')).toBeVisible()
-    await page.reload()
-    await settled(page)
-    await expect(
-      page.getByRole('group', { name: 'List view' }).getByRole('button', { name: 'Scroll' }),
-    ).toHaveAttribute('aria-pressed', 'true')
+    await expect(page.getByRole('group', { name: 'List view' })).toHaveCount(0)
+    const shown = page.locator('#identities-list tbody tr[data-row-id]')
+    await expect(shown).toHaveCount(25)
+    await scrollToEnd(page)
+    await expect.poll(() => shown.count()).toBeGreaterThan(25)
   })
 
   test('has no side scroll @PE-14', async ({ page }) => {

@@ -54,8 +54,6 @@ export {
 export type { RangeFilterProps, DateRangeFilterProps, DateRangeValue } from './table-tools'
 export { JsonView } from './json-view'
 export type { JsonViewProps, JsonBytes } from './json-view'
-export { ListModeToggle, useListMode } from './list-mode'
-export type { ListMode, ListModeKind, ListModeState, ListModeToggleProps } from './list-mode'
 export { EpochClock, epochProgress } from './epoch-clock'
 export type { EpochClockProps } from './epoch-clock'
 export { LinkOut, LinkOutCard } from './link-out'

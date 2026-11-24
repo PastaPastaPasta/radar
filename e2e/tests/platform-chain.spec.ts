@@ -5,6 +5,7 @@ import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
 import { expectProved, expectReports, sourceLineOf } from '../helpers/sources'
 import { CLAIM, H1 } from '../routes/claims'
+import { scrollNearEnd, synthesizeShieldedChunks } from '../helpers/scroll'
 
 const card = (page: Page, id: string) => page.locator(`#${id}`)
 const isPhone = (page: Page) => (page.viewportSize()?.width ?? 1440) < 700
@@ -599,20 +600,19 @@ test.describe('Chain state', () => {
     await audit(page)
   })
 
-  test('lists encrypted notes a chunk at a time, with a copy control on every hash @NX-58', async ({
+  test('lists encrypted notes a chunk at a time as the reader scrolls, with a copy control on every hash @NX-58', async ({
     page,
   }) => {
+    await synthesizeShieldedChunks(page)
     await open(page, '/shielded', 'Shielded pool')
     const notes = card(page, 'notes')
     await notes.scrollIntoViewIfNeeded()
     await expect(bodyRows(page, 'notes')).toHaveCount(10)
-    await expect(notes).toContainText('starting at note 0')
+    await expect(notes).toContainText('The first 10 notes of each chunk are shown')
     expect(await notes.locator('[data-copy]').count()).toBeGreaterThanOrEqual(30)
-    await expect(notes.getByRole('button', { name: 'Previous chunk' })).toBeDisabled()
-    await notes.getByRole('button', { name: 'Next chunk' }).click()
-    await expect(notes).toContainText('starting at note 2,048')
-    await expect(bodyRows(page, 'notes')).toHaveCount(10)
-    await expect(notes.getByRole('button', { name: 'Previous chunk' })).toBeEnabled()
+    await expect(notes.getByRole('button', { name: /chunk/ })).toHaveCount(0)
+    await scrollNearEnd(page, '#notes')
+    await expect(notes.getByRole('cell', { name: '2,048', exact: true })).toBeAttached()
   })
 
   test('looks up a nullifier: spent, not spent, and not a nullifier @NX-58', async ({ page }) => {

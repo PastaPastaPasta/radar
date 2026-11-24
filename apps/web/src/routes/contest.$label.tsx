@@ -13,6 +13,7 @@ const contestSearch = z.object({
   tab: zDefault(z.enum(['tally', 'votes', 'raw']), defaults.tab),
   towards: zOpt(z.string()),
   page: zDefault(zPage, defaults.page),
+  after: zOpt(z.string()),
 })
 
 export const Route = createFileRoute('/contest/$label')({

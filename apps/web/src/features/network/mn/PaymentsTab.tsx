@@ -1,13 +1,11 @@
 import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import type { ColumnDef } from '@tanstack/react-table'
-import { useNavigate } from '@tanstack/react-router'
-import { useQueries } from '@tanstack/react-query'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import type { SourceStamp } from '@/data/envelope'
 import { radarQueries } from '@/data/radar/queries'
 import type { RadarMasternodeDetail, RadarPayment } from '@/data/radar/schemas'
-import { Entity } from '@/features/entity'
+import { cursorPosition, Entity, ScrollList, usePageChain } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { formatAmountText } from '@/lib/units'
 import { Amount, Card, DataTable, Empty, Hash, Time, useUnits, type UnitsValue } from '@/ui'
@@ -57,30 +55,24 @@ function Payments({
   before: number | undefined
 }) {
   const { t } = useLingui()
-  const navigate = useNavigate()
-  const [cursors, setCursors] = useState<(number | undefined)[]>(
-    before === undefined ? [undefined] : [undefined, before],
-  )
-  const older = cursors.filter((c): c is number => c !== undefined)
-  const pages = useQueries({
-    queries: older.map((cursor) =>
+  // The newest page came with the record; older ones page back by block height, and `before` opens part-way down.
+  const head = useMemo(() => ({ ...radar, data: d.payments }), [radar, d.payments])
+  const list = usePageChain({
+    listKey: ctx.protx,
+    start: before,
+    head,
+    query: (cursor: number | undefined) =>
       radarQueries.payments(ctx.net, ctx.protx, { before: cursor, limit: PAYMENTS_PAGE }),
-    ),
+    rows: (p) => p.data,
+    getRowId: (r) => String(r.height),
+    next: (p) => (p.data.length >= PAYMENTS_PAGE ? p.data.at(-1)?.height : undefined),
   })
-  const pageRows: (RadarPayment[] | undefined)[] = cursors.map((cursor) =>
-    cursor === undefined ? d.payments : pages[older.indexOf(cursor)]?.data?.data,
-  )
-  const rows = pageRows.flatMap((p) => p ?? [])
-  const lastPage = pageRows[pageRows.length - 1]
-  const loadingMore = cursors.length > 1 && lastPage === undefined
-  const failed = pages.at(-1)?.isError === true
+  const { rows } = list
   const total = d.payments_summary?.count
-  const last = rows.at(-1)
-  const more =
-    last !== undefined &&
-    lastPage !== undefined &&
-    lastPage.length >= PAYMENTS_PAGE &&
-    (total === undefined || rows.length < total)
+  const paging = {
+    ...list.paging,
+    hasNext: list.paging.hasNext && (total === undefined || rows.length < total),
+  }
 
   const columns = useMemo<ColumnDef<RadarPayment>[]>(
     () => [
@@ -126,51 +118,19 @@ function Payments({
           : t`Radar’s payment index has not started for this node`
       }
     >
-      <DataTable
-        caption={t`Recent payments to this masternode`}
-        columns={columns}
-        rows={rows}
-        getRowId={(r) => String(r.height)}
-        state="ready"
-        empty={<Empty kind="none-yet" title={t`No payments indexed for this masternode yet.`} />}
-      />
-      <div className="rx-pager" data-payments-pager>
-        <span>
-          {total === undefined
-            ? t`${formatInt(rows.length)} shown`
-            : t`${formatInt(rows.length)} of ${formatInt(total)} shown`}
-        </span>
-        {more ? (
-          <button
-            type="button"
-            className="dh-btn dh-btn--sm"
-            disabled={loadingMore}
-            onClick={() => {
-              const cursor = last.height
-              setCursors((c) => [...c, cursor])
-              void navigate({
-                to: '.',
-                search: (s: Record<string, unknown>) => ({ ...s, before: cursor }),
-                replace: true,
-                resetScroll: false,
-              } as never)
-            }}
-          >
-            {loadingMore ? t`Loading…` : t`Show more`}
-          </button>
-        ) : null}
-        {failed ? (
-          <button
-            type="button"
-            className="dh-btn dh-btn--sm"
-            onClick={() => {
-              void pages.at(-1)?.refetch()
-            }}
-          >
-            {t`Retry`}
-          </button>
-        ) : null}
-      </div>
+      <ScrollList chain={list} position={cursorPosition('before')}>
+        <DataTable
+          caption={t`Recent payments to this masternode`}
+          columns={columns}
+          rows={rows}
+          getRowId={list.getRowId}
+          state={list.state}
+          error={list.error}
+          onRetry={list.onRetry}
+          paging={paging}
+          empty={<Empty kind="none-yet" title={t`No payments indexed for this masternode yet.`} />}
+        />
+      </ScrollList>
       <p className="rx-card__foot">
         <span>
           {t`Paid to`} <Entity kind="address" id={d.payout_address} />

@@ -1,14 +1,13 @@
 import { useLingui } from '@lingui/react/macro'
-import { useInfiniteQuery } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import { stampOf } from '@/data/envelope'
 import type { IdentityVoteDto } from '@/data/sdk/methods/p-id'
-import { Entity, IdentityRef, useNetwork } from '@/features/entity'
+import { Entity, IdentityRef, ScrollList, useNetwork, usePageChain } from '@/features/entity'
 import { systemContract } from '@/lib/well-known'
 import { Badge, Card, DataTable, Empty } from '@/ui'
-import { loadState, type IdentityTabProps } from './common'
-import { identityVotesQuery } from './queries'
+import type { IdentityTabProps } from './common'
+import { identityVotesPage, nextVotesCursor } from './queries'
 
 /** A DPNS contest is named by its label; any other contested resource by its last index value, with where to look it up. */
 function contestOf(v: IdentityVoteDto): { id: string; search?: Record<string, string> } {
@@ -23,9 +22,14 @@ function contestOf(v: IdentityVoteDto): { id: string; search?: Record<string, st
 export function VotesTab({ id }: IdentityTabProps) {
   const { t } = useLingui()
   const net = useNetwork()
-  const votes = useInfiniteQuery(identityVotesQuery(net, id))
-  const pages = votes.data?.pages ?? []
-  const rows = pages.flatMap((p) => p.data)
+  const votes = usePageChain({
+    listKey: id,
+    start: undefined as string | undefined,
+    query: (after) => identityVotesPage(net, id, after),
+    rows: (p) => p.data,
+    getRowId: (v) => v.voteId,
+    next: nextVotesCursor,
+  })
   const columns = useMemo<ColumnDef<IdentityVoteDto>[]>(
     () => [
       {
@@ -64,7 +68,7 @@ export function VotesTab({ id }: IdentityTabProps) {
     ],
     [t],
   )
-  const first = pages[0]
+  const first = votes.pages.find((p) => p.data)?.data
   return (
     <Card
       title={t`Contested-resource votes`}
@@ -73,32 +77,25 @@ export function VotesTab({ id }: IdentityTabProps) {
       source={first ? stampOf(first) : undefined}
       subtitle={t`Only masternode voting identities vote, and Platform drops a vote once its contest is decided.`}
     >
-      <DataTable
-        caption={t`Contested-resource votes`}
-        columns={columns}
-        rows={rows}
-        getRowId={(v) => v.voteId}
-        state={loadState(votes)}
-        error={votes.error}
-        onRetry={() => void votes.refetch()}
-        paging={
-          votes.hasNextPage
-            ? {
-                kind: 'infinite',
-                hasNext: votes.hasNextPage,
-                fetchNext: () => void votes.fetchNextPage(),
-                fetching: votes.isFetchingNextPage,
-              }
-            : undefined
-        }
-        empty={
-          <Empty
-            kind="none-yet"
-            title={t`This identity has no votes on record.`}
-            body={t`Only masternode voting identities cast contested-resource votes, and Platform deletes a vote once the contest is decided.`}
-          />
-        }
-      />
+      <ScrollList chain={votes}>
+        <DataTable
+          caption={t`Contested-resource votes`}
+          columns={columns}
+          rows={votes.rows}
+          getRowId={votes.getRowId}
+          state={votes.state}
+          error={votes.error}
+          onRetry={votes.onRetry}
+          paging={votes.paging.hasNext ? votes.paging : undefined}
+          empty={
+            <Empty
+              kind="none-yet"
+              title={t`This identity has no votes on record.`}
+              body={t`Only masternode voting identities cast contested-resource votes, and Platform deletes a vote once the contest is decided.`}
+            />
+          }
+        />
+      </ScrollList>
     </Card>
   )
 }

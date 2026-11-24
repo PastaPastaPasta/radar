@@ -7,7 +7,7 @@ import { useDecentralizedOnly } from '@/data/health'
 import { peQueries } from '@/data/pe/queries'
 import type { ShieldedNoteDto } from '@/data/sdk/methods/p-chain'
 import { sdkQueries } from '@/data/sdk/queries'
-import { PageFrame, PageGroupTabs, useNetwork } from '@/features/entity'
+import { PageFrame, PageGroupTabs, ScrollList, useNetwork, usePageChain } from '@/features/entity'
 import { formatBytes, formatInt } from '@/lib/format'
 import { isHex, normalizeHex } from '@/lib/hex'
 import { isDevnet } from '@/lib/network'
@@ -193,17 +193,24 @@ function Notes() {
   const net = useNetwork()
   const off = useDecentralizedOnly()
   const ready = useAfterIdle()
-  const [chunk, setChunk] = useState(0)
-  const start = chunk * NOTES_CHUNK
-  const answer = useQuery({
-    ...sdkQueries['shielded.encryptedNotes'](net, { startIndex: start, count: NOTES_SHOWN }),
-    enabled: ready,
-  })
   const pool = useQuery({ ...peQueries.shieldedPool(net), enabled: !off && !isDevnet(net) })
   const total = pool.data?.data.notesCount
-  const rows = answer.data?.data ?? []
   const last = total === undefined ? undefined : Math.max(0, Math.ceil(total / NOTES_CHUNK) - 1)
-  const hasNext = last === undefined ? rows.length >= NOTES_SHOWN : chunk < last
+  // The pool answers from the start of a chunk only, so each page is the first notes of the next chunk.
+  const notes = usePageChain({
+    listKey: 'notes',
+    start: 0,
+    query: (chunk: number) =>
+      sdkQueries['shielded.encryptedNotes'](net, {
+        startIndex: chunk * NOTES_CHUNK,
+        count: NOTES_SHOWN,
+      }),
+    rows: (p) => p.data,
+    getRowId: (r) => String(r.index),
+    next: (p, chunk) =>
+      (last === undefined ? p.data.length >= NOTES_SHOWN : chunk < last) ? chunk + 1 : undefined,
+    enabled: ready,
+  })
   const columns = useMemo<ColumnDef<ShieldedNoteDto>[]>(
     () => [
       {
@@ -245,41 +252,24 @@ function Notes() {
       title={t`Encrypted notes`}
       subtitle={
         total === undefined
-          ? t`The pool serves its notes in chunks of ${formatInt(NOTES_CHUNK)}. The first ${NOTES_SHOWN} of the chunk starting at note ${formatInt(start)} are shown.`
-          : t`The pool holds ${formatInt(total)} notes, served in chunks of ${formatInt(NOTES_CHUNK)}. The first ${NOTES_SHOWN} of the chunk starting at note ${formatInt(start)} are shown.`
+          ? t`The pool serves its notes in chunks of ${formatInt(NOTES_CHUNK)}. The first ${NOTES_SHOWN} notes of each chunk are shown, a chunk at a time as you scroll.`
+          : t`The pool holds ${formatInt(total)} notes, served in chunks of ${formatInt(NOTES_CHUNK)}. The first ${NOTES_SHOWN} notes of each chunk are shown, a chunk at a time as you scroll.`
       }
-      source={stampsOf(answer.data)}
+      source={notes.pages.flatMap((p) => (p.data ? stampsOf(p.data) : []))}
     >
-      <DataTable
-        caption={t`Encrypted notes of the shielded pool`}
-        columns={columns}
-        rows={rows}
-        getRowId={(r) => String(r.index)}
-        {...queryView(answer)}
-        empty={t`The pool has no notes at this position.`}
-      />
-      <div className="rx-pager" role="group" aria-label={t`Chunks of notes`}>
-        <button
-          type="button"
-          className="dh-btn dh-btn--sm"
-          disabled={chunk === 0}
-          onClick={() => {
-            setChunk((c) => Math.max(0, c - 1))
-          }}
-        >
-          {t`Previous chunk`}
-        </button>
-        <button
-          type="button"
-          className="dh-btn dh-btn--sm"
-          disabled={!hasNext}
-          onClick={() => {
-            setChunk((c) => c + 1)
-          }}
-        >
-          {t`Next chunk`}
-        </button>
-      </div>
+      <ScrollList chain={notes}>
+        <DataTable
+          caption={t`Encrypted notes of the shielded pool`}
+          columns={columns}
+          rows={notes.rows}
+          getRowId={notes.getRowId}
+          state={notes.state}
+          error={notes.error}
+          onRetry={notes.onRetry}
+          paging={notes.paging}
+          empty={t`The pool has no notes at this position.`}
+        />
+      </ScrollList>
     </Card>
   )
 }

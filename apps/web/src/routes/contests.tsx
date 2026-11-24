@@ -15,6 +15,7 @@ const contestsSearch = z.object({
   from: zOpt(zIsoDate),
   to: zOpt(zIsoDate),
   sort: zOpt(z.string()),
+  after: zOpt(z.string()),
 })
 
 export const Route = createFileRoute('/contests')({

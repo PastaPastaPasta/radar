@@ -134,9 +134,6 @@ msgstr "区块 {height}"
 msgid "Back to the contract"
 msgstr "返回合约"
 
-msgid "Back to the previous page"
-msgstr "返回上一页"
-
 msgid "Base supply"
 msgstr "基础供应量"
 
@@ -317,12 +314,6 @@ msgstr "保留"
 msgid "Latest transition"
 msgstr "最新状态转换"
 
-msgid "Load more actions"
-msgstr "加载更多操作"
-
-msgid "Load older versions"
-msgstr "加载更早的版本"
-
 msgid "Manage in Bridge"
 msgstr "在 Bridge 中管理"
 
@@ -346,9 +337,6 @@ msgstr "名称"
 
 msgid "Never"
 msgstr "从未"
-
-msgid "Next"
-msgstr "下一页"
 
 msgid "No"
 msgstr "否"
@@ -449,8 +437,8 @@ msgstr "概览"
 msgid "Owner"
 msgstr "所有者"
 
-msgid "Owner and date narrow the rows on this page; Platform Explorer pages the contract’s transitions by time."
-msgstr "所有者和日期只会缩小本页的行；Platform Explorer 按时间对合约的状态转换分页。"
+msgid "Owner and date narrow the rows as they load; Platform Explorer lists the contract’s transitions by time."
+msgstr "所有者和日期会在行加载时逐步筛选；Platform Explorer 按时间列出合约的状态转换。"
 
 msgid "Owner names are unavailable: the Platform SDK didn’t answer."
 msgstr "无法获取所有者名称：Platform SDK 没有响应。"
@@ -487,9 +475,6 @@ msgstr "权重"
 
 msgid "power {power}"
 msgstr "权重 {power}"
-
-msgid "Previous"
-msgstr "上一页"
 
 msgid "Primary key ($id)"
 msgstr "主键（$id）"
@@ -536,17 +521,14 @@ msgstr "修订 {number}"
 msgid "Revision at least"
 msgstr "修订不低于"
 
-msgid "Revision pages"
-msgstr "修订分页"
-
 msgid "Revisions"
 msgstr "修订"
 
 msgid "Revisions recorded by Platform Explorer"
 msgstr "Platform Explorer 记录的修订"
 
-msgid "Rows per page"
-msgstr "每页行数"
+msgid "Rows per load"
+msgstr "每次加载行数"
 
 msgid "Run query"
 msgstr "运行查询"

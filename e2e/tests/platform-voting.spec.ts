@@ -4,6 +4,7 @@ import { pinClockToFixtures } from '../helpers/clock'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { sourceLineOf } from '../helpers/sources'
 import { expect as baseExpect, test } from '../helpers/test'
+import { scrollRowToTop, scrollToEnd } from '../helpers/scroll'
 
 const expect = baseExpect.configure({ timeout: 15_000 })
 
@@ -37,21 +38,26 @@ const onlyUrl = (path: string) => `${path}${path.includes('?') ? '&' : '?'}${ONL
 const rows = (page: Page, card: string) => page.locator(`#${card} tbody tr`)
 
 test.describe('Names', () => {
-  test('lists registered names alphabetically and pages forward and back @NX-41', async ({
+  test('lists registered names alphabetically, more as the reader scrolls, and keeps the place in the address @NX-41', async ({
     page,
   }) => {
     await open(page, '/names', 'Names')
     const list = page.locator('#names-list')
-    await expect(list.locator('a[href^="/name/"]').first()).toBeVisible()
+    const shown = list.locator('tbody tr[data-row-id]')
+    await expect(shown).toHaveCount(25)
+    await expect(page.getByRole('link', { name: 'Next' })).toHaveCount(0)
     const first = await list.locator('a[href^="/name/"]').first().textContent()
-    await page.getByRole('link', { name: 'Next' }).click()
+    await scrollToEnd(page)
+    await expect(shown).toHaveCount(50)
+    const second = await shown.nth(25).getAttribute('data-row-id')
+    await scrollRowToTop(page, `#names-list tbody tr[data-row-id="${second}"]`)
     await expect(page).toHaveURL(/after=/)
+    await expect(shown).toHaveCount(50)
+    await expect(page.locator(`[data-row-id="${second}"]`)).toBeInViewport()
+    await page.goto(page.url())
     await settled(page)
+    await expect(shown.first()).toHaveAttribute('data-row-id', second!)
     await expect(list.locator('a[href^="/name/"]').first()).not.toHaveText(first ?? '')
-    await page.getByRole('link', { name: 'Previous' }).click()
-    await expect(page).not.toHaveURL(/after=/)
-    await settled(page)
-    await expect(list.locator('a[href^="/name/"]').first()).toHaveText(first ?? '')
     await expectAccessible(page)
   })
 

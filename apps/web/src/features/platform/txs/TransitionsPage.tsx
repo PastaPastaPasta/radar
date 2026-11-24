@@ -3,14 +3,13 @@ import { useLingui } from '@lingui/react/macro'
 import { useMemo } from 'react'
 import { peQueries } from '@/data/pe/queries'
 import type { PeTransaction } from '@/data/pe/schemas'
-import { PageFrame, TransitionTable, useNetwork } from '@/features/entity'
+import { PageFrame, ScrollList, TransitionTable, useNetwork, pagePosition } from '@/features/entity'
 import { BATCH_TYPES, type BatchType, type TransitionType } from '@/lib/tx-types'
 import {
   ActiveFilters,
   Card,
   DateRangeFilter,
   Empty,
-  ListModeToggle,
   RangeFilter,
   SegFilter,
   TableTools,
@@ -21,11 +20,10 @@ import { rangeText } from '@/data/pe/blocks-query'
 import { IndexedList } from '../blocks/IndexNeeded'
 import { FilterPanel, TextFilter } from '../blocks/list-chrome'
 import { useListControls } from '../blocks/use-list-controls'
-import { usePagedList } from '../blocks/use-paged-list'
+import { usePeScroll } from '../pe-scroll'
 import { MultiSelect, type MultiSelectOption } from './MultiSelect'
 import { FILTER_TYPES, txsQuery, type TxsSearch } from '@/data/pe/transitions-query'
 
-const LIST_ID = 'platform-txs'
 /** A base58 identifier: what Explorer takes for an owner. */
 const IDENTIFIER = /^[1-9A-HJ-NP-Za-km-z]{42,44}$/
 
@@ -63,19 +61,16 @@ export function TransitionsPage() {
 function TransitionsList() {
   const { t } = useLingui()
   const net = useNetwork()
-  const controls = useListControls<TxsSearch>('/platform/txs', LIST_ID)
-  const { search, mode, limit } = controls
+  const controls = useListControls<TxsSearch>('/platform/txs')
+  const { search } = controls
+  const { limit } = search
   const query = useMemo(() => txsQuery(search), [search])
-  const list = usePagedList<PeTransaction>({
-    net,
-    mode,
-    page: search.page,
+  const list = usePeScroll({
+    listKey: JSON.stringify(query),
+    start: search.page,
     limit,
-    query,
-    resource: 'ptx-list',
-    pageOptions: (page) => peQueries.transactions(net, { ...query, page, limit }),
-    enabled: true,
-    onLoaded: controls.loaded,
+    page: (page) => peQueries.transactions(net, { ...query, page, limit }),
+    getRowId: (r: PeTransaction) => r.hash,
   })
 
   const types = search.type ?? []
@@ -117,7 +112,7 @@ function TransitionsList() {
   }
 
   return (
-    <Card layer="platform" source={list.source}>
+    <Card layer="platform" source={list.stamps[0]}>
       <TableTools>
         <SegFilter
           label={t`Status`}
@@ -159,9 +154,6 @@ function TransitionsList() {
         >
           {desc ? '↓' : '↑'}
         </button>
-        <span className="inline-flex items-center gap-2 whitespace-nowrap">
-          <ListModeToggle listId={LIST_ID} />
-        </span>
       </TableTools>
       <FilterPanel count={active.length}>
         <MultiSelect
@@ -241,31 +233,25 @@ function TransitionsList() {
           {batches.length > 0 ? t`A batch type shows batches only.` : null}
         </ActiveFilters>
       ) : null}
-      <TransitionTable
-        rows={list.rows}
-        state={list.state}
-        error={list.error}
-        onRetry={list.retry}
-        paging={
-          list.paging ?? {
-            kind: 'page',
-            page: search.page,
-            limit,
-            total: list.total,
-            to: controls.link,
+      <ScrollList chain={list} position={pagePosition}>
+        <TransitionTable
+          rows={list.rows}
+          state={list.state}
+          error={list.error}
+          onRetry={list.onRetry}
+          paging={list.paging}
+          empty={
+            <Empty
+              kind={active.length > 0 ? 'no-match' : 'none-yet'}
+              title={
+                active.length > 0
+                  ? t`No state transition matches these filters`
+                  : t`Platform Explorer has no state transitions yet`
+              }
+            />
           }
-        }
-        empty={
-          <Empty
-            kind={active.length > 0 ? 'no-match' : 'none-yet'}
-            title={
-              active.length > 0
-                ? t`No state transition matches these filters`
-                : t`Platform Explorer has no state transitions yet`
-            }
-          />
-        }
-      />
+        />
+      </ScrollList>
     </Card>
   )
 }

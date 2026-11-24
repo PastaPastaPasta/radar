@@ -1,5 +1,9 @@
+import type { QueryKey, UseQueryOptions } from '@tanstack/react-query'
 import { useNavigate, type LinkProps } from '@tanstack/react-router'
+import type { Sourced } from '@/data/envelope'
+import type { Page } from '@/data/page'
 import type { LoadState } from '@/ui'
+import { usePeScroll } from '../pe-scroll'
 
 /** A card's load state for a plain query. */
 export function loadState(query: { isPending: boolean; isError: boolean }): LoadState {
@@ -36,9 +40,24 @@ export const pageTo = (n: number): LinkProps =>
     })) as never,
   }) as LinkProps
 
-/** The pager of a PE child list. */
-export const pePaging = (page: number, total: number | undefined) =>
-  ({ kind: 'page', page, limit: PE_PAGE, total, to: pageTo }) as const
+/**
+ * A PE child list (an identity's transitions, a token's holders) read `PE_PAGE` rows at a time as the reader scrolls,
+ * from the page the address names. `listKey` names the list and its owner.
+ */
+export function usePeChild<Row, K extends QueryKey>(
+  listKey: string,
+  page: number,
+  query: (page: number) => UseQueryOptions<Sourced<Page<Row>>, Error, Sourced<Page<Row>>, K>,
+  getRowId: (row: Row) => string,
+) {
+  return usePeScroll({
+    listKey,
+    start: page,
+    limit: PE_PAGE,
+    page: query,
+    getRowId,
+  })
+}
 
 /** Changes this page's search parameters, keeping the others (and the network and mode). */
 export function useSetSearch() {

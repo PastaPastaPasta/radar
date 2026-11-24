@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { EpochClock } from '../epoch-clock'
 import { JsonView } from '../json-view'
 import { Card } from '../layout'
-import { ListModeToggle, useListMode } from '../list-mode'
 import { DateRangeFilter, RangeFilter, TableTools } from '../table-tools'
 import { Group, Row } from './sections'
 
@@ -63,28 +62,6 @@ function Filters() {
   )
 }
 
-function ListModes() {
-  const a = useListMode('kit-a')
-  return (
-    <>
-      <Card layer="neutral" title="ListModeToggle">
-        <TableTools>
-          <ListModeToggle listId="kit-a" />
-        </TableTools>
-        <p className="m-0 p-3 text-[13px] text-ink-2" data-testid="kit-list-mode">
-          kit-a: {a.mode}, {a.limit} rows. Remembered in this browser under radar.list.kit-a.
-        </p>
-      </Card>
-      <div className="h-4" />
-      <Card layer="neutral" title="A second list keeps its own choice">
-        <TableTools>
-          <ListModeToggle listId="kit-b" />
-        </TableTools>
-      </Card>
-    </>
-  )
-}
-
 function Clocks() {
   const base = useState(() => Date.now())[0]
   const at = (startedHoursAgo: number, endsInHours: number) => ({
@@ -123,7 +100,7 @@ export function SharedToolsSection() {
     <Group
       id="shared"
       title="Shared list and detail tools"
-      description="JsonView for documents and raw state, number and date range filters, the pages or scroll choice, and the epoch clock."
+      description="JsonView for documents and raw state, number and date range filters, and the epoch clock."
     >
       <h3 className="rx-sec__sub mb-2 mt-6 text-[15px] font-semibold">JsonView</h3>
       <div className="grid gap-4 md:grid-cols-2">
@@ -160,8 +137,6 @@ export function SharedToolsSection() {
       </div>
       <h3 className="rx-sec__sub mb-2 mt-8 text-[15px] font-semibold">Range filters</h3>
       <Filters />
-      <h3 className="rx-sec__sub mb-2 mt-8 text-[15px] font-semibold">List mode</h3>
-      <ListModes />
       <h3 className="rx-sec__sub mb-2 mt-8 text-[15px] font-semibold">EpochClock</h3>
       <Clocks />
     </Group>

@@ -3,6 +3,7 @@ import { expectAccessible } from '../helpers/a11y'
 import { settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
 import { networkQuery, withQuery } from '../routes'
+import { scrollRowToTop, scrollToEnd } from '../helpers/scroll'
 
 const DPNS = 'GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec'
 const MAIN = {
@@ -212,24 +213,33 @@ test.describe('documents browser', () => {
       await expectAccessible(page)
     })
 
-    test(`${net}: next and previous page keep their place in the address @NX-22`, async ({
+    test(`${net}: the list scrolls on, and the address keeps the page in view and the ones above it @NX-22`, async ({
       page,
     }) => {
       await go(page, `/contract/${DPNS}/documents/domain`, net)
-      const rows = page.getByRole('table', { name: /Documents of type/ }).locator('tbody tr')
-      const firstCell = () => rows.first().locator('td').first().innerText()
-      await expect(rows.first()).toBeVisible()
-      const first = await firstCell()
-      await page.getByRole('link', { name: 'Next' }).first().click()
-      await settled(page)
-      expect(searchOf(page).get('after')).toBeTruthy()
-      await expect(rows.first()).toBeVisible()
-      await expect.poll(firstCell).not.toBe(first)
-      await page.getByRole('link', { name: 'Previous' }).first().click()
-      await settled(page)
-      expect(searchOf(page).get('after')).toBeNull()
-      await expect.poll(firstCell).toBe(first)
+      const rows = page
+        .getByRole('table', { name: /Documents of type/ })
+        .locator('tbody tr[data-row-id]')
+      await expect(rows).toHaveCount(25)
+      await expect(page.getByRole('link', { name: 'Next' })).toHaveCount(0)
       await expectAccessible(page)
+      const first = await rows.first().getAttribute('data-row-id')
+      await scrollToEnd(page)
+      await expect(rows).toHaveCount(50)
+      const second = await rows.nth(25).getAttribute('data-row-id')
+      await scrollRowToTop(page, `tbody tr[data-row-id="${second}"]`)
+      await expect
+        .poll(() => searchOf(page).get('after'))
+        .toBe(await rows.nth(24).getAttribute('data-row-id'))
+      expect(searchOf(page).get('prev')).toBeNull()
+      await expect(rows).toHaveCount(50)
+      await page.goto(page.url())
+      await expect(rows.first()).toHaveAttribute('data-row-id', second!)
+      await expect(page.locator(`[data-row-id="${first}"]`)).toHaveCount(0)
+      await page.locator('[data-sentinel="start"]').scrollIntoViewIfNeeded()
+      await page.keyboard.press('PageUp')
+      await expect(rows).toHaveCount(50)
+      await expect(rows.first()).toHaveAttribute('data-row-id', first!)
     })
   }
 
@@ -269,7 +279,7 @@ test.describe('document page', () => {
     await expectAccessible(page)
   })
 
-  test('testnet: a document whose type keeps history pages through its revisions @NX-23', async ({
+  test('testnet: a document whose type keeps history lists its revisions, with no pager @NX-23', async ({
     page,
   }) => {
     const path = `/document/${TEST.issueContract}/issue/${TEST.issue}`
@@ -278,18 +288,15 @@ test.describe('document page', () => {
     await expect(items).toHaveCount(3)
     await expect(items.first()).toHaveAttribute('data-revision', '1')
     await expect(items.last()).toHaveAttribute('data-revision', '3')
-    await expect(
-      page.locator('[data-revision-pager]').getByRole('link', { name: 'Next' }),
-    ).toHaveCount(0)
+    await expect(page.locator('#revisions [data-sentinel="end"] [role="status"]')).toHaveText(
+      'All 3 shown.',
+    )
+    await expect(page.getByRole('link', { name: 'Next' })).toHaveCount(0)
     await expectAccessible(page)
 
     await page.goto(withQuery(path, networkQuery('testnet'), 'tab=revisions', 'page=2'))
     await settled(page)
-    await expect(page.getByText('No more revisions.')).toBeVisible()
-    await page.getByRole('link', { name: 'Back to the previous page' }).click()
-    await settled(page)
     await expect(page.locator('[data-revision]')).toHaveCount(3)
-    expect(searchOf(page).get('page')).toBeNull()
   })
 
   test('mainnet: a type that does not keep history says so @NX-23', async ({ page }) => {

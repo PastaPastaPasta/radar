@@ -91,24 +91,3 @@ export function planQuery(input: PlanInput): QueryPlan {
 export function hasMore(returned: number, pageSize: number): boolean {
   return pageSize >= DRIVE_MAX ? returned >= DRIVE_MAX : returned > pageSize
 }
-
-/** The cursor fields of the page after this one. `prev` keeps the cursors of the earlier pages. */
-export function nextCursor(
-  search: Pick<DocumentsSearch, 'after' | 'prev'>,
-  lastId: string,
-): { after: string; prev: string[] | undefined } {
-  const stack = search.after ? [...(search.prev ?? []), search.after] : (search.prev ?? [])
-  return { after: lastId, prev: stack.length > 0 ? stack : undefined }
-}
-
-/** The cursor fields of the page before this one; `undefined` after means the first page. */
-export function prevCursor(search: Pick<DocumentsSearch, 'after' | 'prev'>): {
-  after: string | undefined
-  prev: string[] | undefined
-} | null {
-  if (!search.after) return null
-  const stack = search.prev ?? []
-  const after = stack.at(-1)
-  const rest = stack.slice(0, -1)
-  return { after, prev: rest.length > 0 ? rest : undefined }
-}

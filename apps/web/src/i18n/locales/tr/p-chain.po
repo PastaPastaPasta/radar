@@ -146,9 +146,6 @@ msgstr "Aday sürüm"
 msgid "Choose a range of epochs"
 msgstr "Bir epoch aralığı seçin"
 
-msgid "Chunks of notes"
-msgstr "Not parçaları"
-
 msgid "Commitment"
 msgstr "Taahhüt"
 
@@ -378,9 +375,6 @@ msgstr "Sonraki blok şimdi bekleniyor (yaklaşık her {pace})"
 msgid "Next block expected in about {0}"
 msgstr "Sonraki blok yaklaşık {0} içinde bekleniyor"
 
-msgid "Next chunk"
-msgstr "Sonraki parça"
-
 msgid "Next epoch’s version"
 msgstr "Sonraki epoch’un sürümü"
 
@@ -505,9 +499,6 @@ msgstr "Havuz durumu"
 
 msgid "Prefunded specialised balance"
 msgstr "Ön finanse edilmiş özel bakiye"
-
-msgid "Previous chunk"
-msgstr "Önceki parça"
 
 msgid "Previous epoch"
 msgstr "Önceki epoch"
@@ -691,17 +682,15 @@ msgstr "Havuzda bu nullifier var: notu harcanmış."
 
 #. placeholder {0}: formatInt(total)
 #. placeholder {1}: formatInt(NOTES_CHUNK)
-#. placeholder {2}: formatInt(start)
-msgid "The pool holds {0} notes, served in chunks of {1}. The first {NOTES_SHOWN} of the chunk starting at note {2} are shown."
-msgstr "Havuzda {0} not var; {1}’lik parçalar hâlinde sunuluyor. {2}. nottan başlayan parçanın ilk {NOTES_SHOWN} notu gösteriliyor."
+msgid "The pool holds {0} notes, served in chunks of {1}. The first {NOTES_SHOWN} notes of each chunk are shown, a chunk at a time as you scroll."
+msgstr "Havuzda {0} not var ve {1}’lık parçalar hâlinde sunuluyor. Her parçanın ilk {NOTES_SHOWN} notu gösteriliyor; kaydırdıkça bir parça daha ekleniyor."
 
 msgid "The pool of shielded credits: its balance, the anchors it accepts, its encrypted notes, and whether a nullifier has been spent."
 msgstr "Gizlenmiş kredilerin havuzu: bakiyesi, kabul ettiği çıpalar, şifreli notları ve bir nullifier’ın harcanıp harcanmadığı."
 
 #. placeholder {0}: formatInt(NOTES_CHUNK)
-#. placeholder {1}: formatInt(start)
-msgid "The pool serves its notes in chunks of {0}. The first {NOTES_SHOWN} of the chunk starting at note {1} are shown."
-msgstr "Havuz notlarını {0}’lık parçalar hâlinde sunar. {1}. nottan başlayan parçanın ilk {NOTES_SHOWN} notu gösteriliyor."
+msgid "The pool serves its notes in chunks of {0}. The first {NOTES_SHOWN} notes of each chunk are shown, a chunk at a time as you scroll."
+msgstr "Havuz notlarını {0}’lık parçalar hâlinde sunar. Her parçanın ilk {NOTES_SHOWN} notu gösteriliyor; kaydırdıkça bir parça daha ekleniyor."
 
 #. placeholder {0}: formatInt(pool.blocks)
 msgid "The pool so far over {0} blocks: an estimate until the epoch ends"

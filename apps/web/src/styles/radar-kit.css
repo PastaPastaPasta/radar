@@ -1265,6 +1265,10 @@ button.rx-srcline:hover {
 }
 
 /* Infinite lists: the sentinel loads more as it nears the viewport and says so in a live region. */
+/* A list that keeps its own rows in place as pages come and go: the browser's anchoring would move them twice. */
+.rx-scrolllist {
+  overflow-anchor: none;
+}
 .rx-sentinel {
   display: flex;
   flex: 1 1 auto;

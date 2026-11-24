@@ -1,31 +1,21 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import type { LinkProps } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import { stampOf } from '@/data/envelope'
 import { peQueries } from '@/data/pe/queries'
 import type { PeDocument } from '@/data/pe/schemas'
-import { Entity } from '@/features/entity'
+import { Entity, ScrollList, pagePosition } from '@/features/entity'
 import { isDevnet } from '@/lib/network'
 import { formatInt } from '@/lib/format'
 import { Badge, Card, DataTable, Empty, KeyValue, SourceLine, Time, Unavailable } from '@/ui'
-import { listState, usePeEnabled } from '../contract/contract-data'
+import { usePeEnabled } from '../contract/contract-data'
+import { usePeScroll } from '../pe-scroll'
 import type { DocumentContext } from './DocumentPage'
 
 const PAGE_SIZE = 25
 
-function pageLink(ctx: DocumentContext, page: number): LinkProps {
-  return {
-    to: '/document/$contract/$type/$id',
-    params: { contract: ctx.contract, type: ctx.type, id: ctx.id },
-    search: (s: Record<string, unknown>) => ({
-      ...s,
-      tab: 'provenance',
-      page: page <= 1 ? undefined : page,
-    }),
-  } as LinkProps
-}
+const revisionId = (r: PeDocument) => `${r.revision ?? 'r'}:${r.txHash ?? ''}`
 
 /** Platform Explorer's record of the transition that created or last changed the document, and of its revisions. */
 export function ProvenanceTab({ ctx }: { ctx: DocumentContext }) {
@@ -57,12 +47,14 @@ function Provenance({ ctx }: { ctx: DocumentContext }) {
   const record = useQuery(
     peQueries.document(net, id, { contractId: contract, documentTypeName: type }),
   )
-  const revisions = useQuery(
-    peQueries.documentRevisions(net, id, { page, limit: PAGE_SIZE, order: 'desc' }),
-  )
+  const revisions = usePeScroll({
+    listKey: id,
+    start: page,
+    limit: PAGE_SIZE,
+    page: (n) => peQueries.documentRevisions(net, id, { page: n, limit: PAGE_SIZE, order: 'desc' }),
+    getRowId: revisionId,
+  })
   const doc = record.data?.data ?? null
-  const rows = revisions.data?.data.items ?? []
-  const total = revisions.data?.data.total
   const columns = useMemo<ColumnDef<PeDocument>[]>(
     () => [
       {
@@ -142,26 +134,20 @@ function Provenance({ ctx }: { ctx: DocumentContext }) {
           </>
         )}
       </section>
-      <DataTable
-        caption={t`Revisions recorded by Platform Explorer`}
-        columns={columns}
-        rows={rows}
-        getRowId={(r) => `${r.revision ?? 'r'}:${r.txHash ?? ''}`}
-        state={listState(revisions, rows.length === 0)}
-        error={revisions.error}
-        onRetry={() => {
-          void revisions.refetch()
-        }}
-        empty={<Empty kind="none-yet" title={t`No revisions recorded.`} />}
-        paging={{
-          kind: 'page',
-          page,
-          limit: PAGE_SIZE,
-          ...(total === undefined ? {} : { total }),
-          to: (p) => pageLink(ctx, p),
-        }}
-        {...(revisions.data ? { source: revisions.data } : {})}
-      />
+      <ScrollList chain={revisions} position={pagePosition}>
+        <DataTable
+          caption={t`Revisions recorded by Platform Explorer`}
+          columns={columns}
+          rows={revisions.rows}
+          getRowId={revisionId}
+          state={revisions.state}
+          error={revisions.error}
+          onRetry={revisions.onRetry}
+          empty={<Empty kind="none-yet" title={t`No revisions recorded.`} />}
+          paging={revisions.paging}
+          source={revisions.stamps[0]}
+        />
+      </ScrollList>
     </div>
   )
 }

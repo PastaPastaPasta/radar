@@ -1,14 +1,21 @@
 import { useLingui } from '@lingui/react/macro'
-import { useQuery } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
-import { stampOf } from '@/data/envelope'
 import { useDecentralizedOnly } from '@/data/health'
 import { peQueries } from '@/data/pe/queries'
 import type { PeDataContract, PeDocument, PeTransfer } from '@/data/pe/schemas'
-import { Entity, IdentityRef, TransitionTable, useNetwork } from '@/features/entity'
+import {
+  Entity,
+  IdentityRef,
+  ScrollList,
+  TransitionTable,
+  useNetwork,
+  pagePosition,
+} from '@/features/entity'
 import { Amount, Badge, Card, DataTable, Empty, Time, Unavailable } from '@/ui'
-import { loadState, peChildQuery, pePaging, useSetSearch, type IdentityTabProps } from './common'
+import { peChildQuery, usePeChild, useSetSearch, type IdentityTabProps } from './common'
+
+const transferId = (r: PeTransfer) => `${r.txHash}:${r.recipient ?? ''}`
 
 type Tab = 'transactions' | 'contracts' | 'documents' | 'transfers'
 
@@ -43,24 +50,31 @@ export function HistoryTab({
 function Transactions({ id, page }: { id: string; page: number }) {
   const { t } = useLingui()
   const net = useNetwork()
-  const q = useQuery(peQueries.identityTransactions(net, id, peChildQuery(page)))
+  const list = usePeChild(
+    `identity-tx\u0000${id}`,
+    page,
+    (n) => peQueries.identityTransactions(net, id, peChildQuery(n)),
+    (r) => r.hash,
+  )
   return (
     <Card
       title={t`Transitions`}
       layer="platform"
       id="identity-transactions"
-      source={q.data ? stampOf(q.data) : undefined}
+      source={list.stamps[0]}
     >
-      <TransitionTable
-        rows={q.data?.data.items ?? []}
-        state={loadState(q)}
-        error={q.error}
-        onRetry={() => void q.refetch()}
-        caption={t`Transitions`}
-        columns={['type', 'hash', 'status', 'block', 'gas', 'time']}
-        paging={pePaging(page, q.data?.data.total)}
-        empty={<Empty kind="none-yet" title={t`This identity has sent no transitions.`} />}
-      />
+      <ScrollList chain={list} position={pagePosition}>
+        <TransitionTable
+          rows={list.rows}
+          state={list.state}
+          error={list.error}
+          onRetry={list.onRetry}
+          caption={t`Transitions`}
+          columns={['type', 'hash', 'status', 'block', 'gas', 'time']}
+          paging={list.paging}
+          empty={<Empty kind="none-yet" title={t`This identity has sent no transitions.`} />}
+        />
+      </ScrollList>
     </Card>
   )
 }
@@ -68,7 +82,12 @@ function Transactions({ id, page }: { id: string; page: number }) {
 function Contracts({ id, page }: { id: string; page: number }) {
   const { t } = useLingui()
   const net = useNetwork()
-  const q = useQuery(peQueries.identityDataContracts(net, id, peChildQuery(page)))
+  const list = usePeChild(
+    `identity-contracts\u0000${id}`,
+    page,
+    (n) => peQueries.identityDataContracts(net, id, peChildQuery(n)),
+    (c) => c.identifier,
+  )
   const columns = useMemo<ColumnDef<PeDataContract>[]>(
     () => [
       {
@@ -106,23 +125,20 @@ function Contracts({ id, page }: { id: string; page: number }) {
     [t],
   )
   return (
-    <Card
-      title={t`Contracts`}
-      layer="platform"
-      id="identity-contracts"
-      source={q.data ? stampOf(q.data) : undefined}
-    >
-      <DataTable
-        caption={t`Contracts`}
-        columns={columns}
-        rows={q.data?.data.items ?? []}
-        getRowId={(c) => c.identifier}
-        state={loadState(q)}
-        error={q.error}
-        onRetry={() => void q.refetch()}
-        paging={pePaging(page, q.data?.data.total)}
-        empty={<Empty kind="none-yet" title={t`This identity has created no contracts.`} />}
-      />
+    <Card title={t`Contracts`} layer="platform" id="identity-contracts" source={list.stamps[0]}>
+      <ScrollList chain={list} position={pagePosition}>
+        <DataTable
+          caption={t`Contracts`}
+          columns={columns}
+          rows={list.rows}
+          getRowId={list.getRowId}
+          state={list.state}
+          error={list.error}
+          onRetry={list.onRetry}
+          paging={list.paging}
+          empty={<Empty kind="none-yet" title={t`This identity has created no contracts.`} />}
+        />
+      </ScrollList>
     </Card>
   )
 }
@@ -132,8 +148,11 @@ function Documents({ id, page, type }: { id: string; page: number; type?: string
   const net = useNetwork()
   const setSearch = useSetSearch()
   const [draft, setDraft] = useState(type ?? '')
-  const q = useQuery(
-    peQueries.identityDocuments(net, id, peChildQuery(page, { document_type_name: type })),
+  const list = usePeChild(
+    `identity-docs\u0000${id}\u0000${type ?? ''}`,
+    page,
+    (n) => peQueries.identityDocuments(net, id, peChildQuery(n, { document_type_name: type })),
+    (d) => d.identifier,
   )
   const columns = useMemo<ColumnDef<PeDocument>[]>(
     () => [
@@ -188,12 +207,7 @@ function Documents({ id, page, type }: { id: string; page: number; type?: string
     [t],
   )
   return (
-    <Card
-      title={t`Documents`}
-      layer="platform"
-      id="identity-documents"
-      source={q.data ? stampOf(q.data) : undefined}
-    >
+    <Card title={t`Documents`} layer="platform" id="identity-documents" source={list.stamps[0]}>
       <form
         className="flex flex-wrap items-center gap-2"
         onSubmit={(e) => {
@@ -228,26 +242,28 @@ function Documents({ id, page, type }: { id: string; page: number; type?: string
           </button>
         ) : null}
       </form>
-      <DataTable
-        caption={t`Documents`}
-        columns={columns}
-        rows={q.data?.data.items ?? []}
-        getRowId={(d) => d.identifier}
-        state={loadState(q)}
-        error={q.error}
-        onRetry={() => void q.refetch()}
-        paging={pePaging(page, q.data?.data.total)}
-        empty={
-          <Empty
-            kind="none-yet"
-            title={
-              type
-                ? t`No ${type} documents from this identity.`
-                : t`This identity has created no documents.`
-            }
-          />
-        }
-      />
+      <ScrollList chain={list} position={pagePosition}>
+        <DataTable
+          caption={t`Documents`}
+          columns={columns}
+          rows={list.rows}
+          getRowId={list.getRowId}
+          state={list.state}
+          error={list.error}
+          onRetry={list.onRetry}
+          paging={list.paging}
+          empty={
+            <Empty
+              kind="none-yet"
+              title={
+                type
+                  ? t`No ${type} documents from this identity.`
+                  : t`This identity has created no documents.`
+              }
+            />
+          }
+        />
+      </ScrollList>
     </Card>
   )
 }
@@ -255,7 +271,12 @@ function Documents({ id, page, type }: { id: string; page: number; type?: string
 function Transfers({ id, page }: { id: string; page: number }) {
   const { t } = useLingui()
   const net = useNetwork()
-  const q = useQuery(peQueries.identityTransfers(net, id, peChildQuery(page)))
+  const list = usePeChild(
+    `identity-transfers\u0000${id}`,
+    page,
+    (n) => peQueries.identityTransfers(net, id, peChildQuery(n)),
+    transferId,
+  )
   const columns = useMemo<ColumnDef<PeTransfer>[]>(
     () => [
       {
@@ -297,19 +318,21 @@ function Transfers({ id, page }: { id: string; page: number }) {
       title={t`Credit transfers`}
       layer="platform"
       id="identity-transfers"
-      source={q.data ? stampOf(q.data) : undefined}
+      source={list.stamps[0]}
     >
-      <DataTable
-        caption={t`Credit transfers`}
-        columns={columns}
-        rows={q.data?.data.items ?? []}
-        getRowId={(r) => `${r.txHash}:${r.recipient ?? ''}`}
-        state={loadState(q)}
-        error={q.error}
-        onRetry={() => void q.refetch()}
-        paging={pePaging(page, q.data?.data.total)}
-        empty={<Empty kind="none-yet" title={t`This identity has made no credit transfers.`} />}
-      />
+      <ScrollList chain={list} position={pagePosition}>
+        <DataTable
+          caption={t`Credit transfers`}
+          columns={columns}
+          rows={list.rows}
+          getRowId={list.getRowId}
+          state={list.state}
+          error={list.error}
+          onRetry={list.onRetry}
+          paging={list.paging}
+          empty={<Empty kind="none-yet" title={t`This identity has made no credit transfers.`} />}
+        />
+      </ScrollList>
     </Card>
   )
 }

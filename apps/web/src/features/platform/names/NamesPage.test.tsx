@@ -8,21 +8,20 @@ afterEach(() => {
 })
 
 describe('Names page', () => {
-  it('lists registered names and offers the next page @NX-41', async () => {
+  it('lists registered names and says more load as the reader scrolls @NX-41', async () => {
     renderAt('/names')
     await waitFor(() => {
       expect(document.querySelectorAll('a[href^="/name/"]').length).toBeGreaterThan(5)
     })
-    expect(document.querySelector('a[href*="after="]')).not.toBeNull()
+    expect(await screen.findByText(/shown\. More load as you scroll\./)).toBeInTheDocument()
   })
 
-  it('pages an alphabetical list with Previous and Next, never Newer and Older @NX-41', async () => {
+  it('scrolls an alphabetical list, with no Previous, Next, Newer or Older @NX-41', async () => {
     renderAt('/names')
-    const next = await screen.findByRole('link', { name: 'Next' })
-    expect(next.getAttribute('href')).toContain('after=')
-    expect(screen.getByText('Previous').getAttribute('aria-disabled')).toBe('true')
-    expect(screen.queryByText('Older')).toBeNull()
-    expect(screen.queryByText('Newer')).toBeNull()
+    await screen.findByRole('button', { name: 'Show more' })
+    for (const name of ['Previous', 'Next', 'Newer', 'Older']) {
+      expect(screen.queryByRole('link', { name })).toBeNull()
+    }
   })
 
   it('searches by the homograph-safe form @NX-41', async () => {

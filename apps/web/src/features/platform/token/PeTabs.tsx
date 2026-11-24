@@ -1,17 +1,21 @@
 import { useLingui } from '@lingui/react/macro'
-import { useQuery } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
-import { stampOf } from '@/data/envelope'
 import { useDecentralizedOnly } from '@/data/health'
 import { peQueries } from '@/data/pe/queries'
 import type { PeTokenHolder, PeTokenTransition } from '@/data/pe/schemas'
 import { useHydratedFact } from '@/data/query/batch'
 import { sdkBatchers } from '@/data/sdk/queries'
-import { Entity, IdentityRef, transitionBadgeType } from '@/features/entity'
+import {
+  Entity,
+  IdentityRef,
+  ScrollList,
+  transitionBadgeType,
+  pagePosition,
+} from '@/features/entity'
 import { isDevnet } from '@/lib/network'
 import { Amount, Badge, Card, DataTable, Empty, Time, TypeBadge, Unavailable } from '@/ui'
-import { loadState, peChildQuery, pePaging } from '../identity/common'
+import { peChildQuery, usePeChild } from '../identity/common'
 import { humanize } from '../tx/decoded'
 import { tokenAmountKind, type TokenView } from './use-token'
 
@@ -51,7 +55,12 @@ export function IndexedTab({
 
 function Activity({ token, page }: { token: TokenView; page: number }) {
   const { t } = useLingui()
-  const q = useQuery(peQueries.tokenTransitions(token.net, token.id, peChildQuery(page)))
+  const list = usePeChild(
+    `token-activity\u0000${token.id}`,
+    page,
+    (n) => peQueries.tokenTransitions(token.net, token.id, peChildQuery(n)),
+    (r) => r.stateTransitionHash,
+  )
   const kind = tokenAmountKind(token)
   const columns = useMemo<ColumnDef<PeTokenTransition>[]>(
     () => [
@@ -105,27 +114,24 @@ function Activity({ token, page }: { token: TokenView; page: number }) {
     [t, kind],
   )
   return (
-    <Card
-      title={t`Activity`}
-      layer="platform"
-      id="token-activity"
-      source={q.data ? stampOf(q.data) : undefined}
-    >
-      <DataTable
-        caption={t`Token transitions`}
-        columns={columns}
-        rows={q.data?.data.items ?? []}
-        getRowId={(r) => r.stateTransitionHash}
-        state={loadState(q)}
-        error={q.error}
-        onRetry={() => void q.refetch()}
-        paging={pePaging(page, q.data?.data.total)}
-        rowLink={(r) => ({
-          to: '/platform/tx/$hash',
-          params: { hash: r.stateTransitionHash.toLowerCase() },
-        })}
-        empty={<Empty kind="none-yet" title={t`No transitions have touched this token yet.`} />}
-      />
+    <Card title={t`Activity`} layer="platform" id="token-activity" source={list.stamps[0]}>
+      <ScrollList chain={list} position={pagePosition}>
+        <DataTable
+          caption={t`Token transitions`}
+          columns={columns}
+          rows={list.rows}
+          getRowId={list.getRowId}
+          state={list.state}
+          error={list.error}
+          onRetry={list.onRetry}
+          paging={list.paging}
+          rowLink={(r) => ({
+            to: '/platform/tx/$hash',
+            params: { hash: r.stateTransitionHash.toLowerCase() },
+          })}
+          empty={<Empty kind="none-yet" title={t`No transitions have touched this token yet.`} />}
+        />
+      </ScrollList>
     </Card>
   )
 }
@@ -143,7 +149,12 @@ function HolderBalance({ token, row }: { token: TokenView; row: PeTokenHolder })
 
 function Holders({ token, page }: { token: TokenView; page: number }) {
   const { t } = useLingui()
-  const q = useQuery(peQueries.tokenHolders(token.net, token.id, peChildQuery(page)))
+  const list = usePeChild(
+    `token-holders\u0000${token.id}`,
+    page,
+    (n) => peQueries.tokenHolders(token.net, token.id, peChildQuery(n)),
+    (r) => r.holder.identifier ?? '',
+  )
   const columns = useMemo<ColumnDef<PeTokenHolder>[]>(
     () => [
       {
@@ -167,23 +178,20 @@ function Holders({ token, page }: { token: TokenView; page: number }) {
     [t, token],
   )
   return (
-    <Card
-      title={t`Holders`}
-      layer="platform"
-      id="token-holders"
-      source={q.data ? stampOf(q.data) : undefined}
-    >
-      <DataTable
-        caption={t`Token holders`}
-        columns={columns}
-        rows={q.data?.data.items ?? []}
-        getRowId={(r) => r.holder.identifier ?? ''}
-        state={loadState(q)}
-        error={q.error}
-        onRetry={() => void q.refetch()}
-        paging={pePaging(page, q.data?.data.total)}
-        empty={<Empty kind="none-yet" title={t`Nobody holds this token yet.`} />}
-      />
+    <Card title={t`Holders`} layer="platform" id="token-holders" source={list.stamps[0]}>
+      <ScrollList chain={list} position={pagePosition}>
+        <DataTable
+          caption={t`Token holders`}
+          columns={columns}
+          rows={list.rows}
+          getRowId={list.getRowId}
+          state={list.state}
+          error={list.error}
+          onRetry={list.onRetry}
+          paging={list.paging}
+          empty={<Empty kind="none-yet" title={t`Nobody holds this token yet.`} />}
+        />
+      </ScrollList>
     </Card>
   )
 }

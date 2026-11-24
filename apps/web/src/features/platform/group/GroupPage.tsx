@@ -1,13 +1,21 @@
 import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
-import { useQueries, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { Link, type LinkProps } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
 import { stampOf, type SourceStamp } from '@/data/envelope'
 import { sdkQueries } from '@/data/sdk/queries'
 import type { GroupActionDto, GroupActionStatus, GroupMemberDto } from '@/data/sdk/methods/p-data'
-import { Entity, IdentityRef, PageFrame, useNetwork } from '@/features/entity'
+import {
+  chainStamps,
+  Entity,
+  IdentityRef,
+  PageFrame,
+  ScrollList,
+  useNetwork,
+  usePageChain,
+} from '@/features/entity'
 import { isPlatformId } from '@/lib/base58'
 import { formatInt } from '@/lib/format'
 import {
@@ -19,6 +27,7 @@ import {
   Hash,
   JsonView,
   KeyValue,
+  Pager,
   Skeleton,
   Tabs,
 } from '@/ui'
@@ -200,10 +209,10 @@ function Actions({
 }) {
   const { t } = useLingui()
   const net = useNetwork()
-  const [cursors, setCursors] = useState<Record<string, (string | undefined)[]>>({})
-  const mine = cursors[status] ?? [undefined]
-  const queries = useQueries({
-    queries: mine.map((startAfter) =>
+  const list = usePageChain({
+    listKey: [contract, position, status].join('\u0000'),
+    start: undefined as string | undefined,
+    query: (startAfter) =>
       sdkQueries['group.actions'](net, {
         contractId: contract,
         position,
@@ -211,12 +220,12 @@ function Actions({
         limit: ACTIONS_PAGE,
         ...(startAfter === undefined ? {} : { startAfter }),
       }),
-    ),
+    rows: (p) => p.data,
+    getRowId: (a) => a.id,
+    next: (p) => (p.data.length === ACTIONS_PAGE ? p.data.at(-1)?.id : undefined),
   })
-  const actions = queries.flatMap((q) => q.data?.data ?? [])
-  const first = queries[0]
-  const lastChunk = queries.at(-1)?.data?.data ?? []
-  const stamps: SourceStamp[] = queries.flatMap((q) => (q.data ? [stampOf(q.data)] : []))
+  const actions = list.rows
+  const stamps: SourceStamp[] = chainStamps(list.pages)
   return (
     <Card
       title={t`Actions`}
@@ -243,16 +252,10 @@ function Actions({
         </nav>
       }
     >
-      {first?.isPending ? (
+      {list.state === 'loading' ? (
         <Skeleton shape="row" count={3} />
-      ) : first?.isError && !first.data ? (
-        <ErrorState
-          error={first.error}
-          source="sdk"
-          onRetry={() => {
-            void first.refetch()
-          }}
-        />
+      ) : list.state === 'error' ? (
+        <ErrorState error={list.error} source="sdk" onRetry={list.onRetry} />
       ) : actions.length === 0 ? (
         <Empty
           kind="none-yet"
@@ -263,33 +266,25 @@ function Actions({
           }
         />
       ) : (
-        <div className="grid gap-4">
-          <ul className="grid gap-3" aria-label={t`Actions`}>
-            {actions.map((a) => (
-              <ActionRow
-                key={a.id}
-                contract={contract}
-                position={position}
-                status={status}
-                action={a}
-                required={required}
-              />
-            ))}
-          </ul>
-          {lastChunk.length === ACTIONS_PAGE ? (
-            <button
-              type="button"
-              className="dh-btn dh-btn--sm justify-self-start"
-              onClick={() => {
-                const last = lastChunk[lastChunk.length - 1]
-                if (!last) return
-                setCursors((c) => ({ ...c, [status]: [...(c[status] ?? [undefined]), last.id] }))
-              }}
-            >
-              {t`Load more actions`}
-            </button>
-          ) : null}
-        </div>
+        <ScrollList chain={list}>
+          <div className="grid gap-4">
+            <ul className="grid gap-3" aria-label={t`Actions`}>
+              {actions.map((a) => (
+                <ActionRow
+                  key={a.id}
+                  contract={contract}
+                  position={position}
+                  status={status}
+                  action={a}
+                  required={required}
+                />
+              ))}
+            </ul>
+            <div className="rx-tfoot">
+              <Pager paging={list.paging} shown={actions.length} />
+            </div>
+          </div>
+        </ScrollList>
       )}
     </Card>
   )
@@ -328,7 +323,11 @@ function ActionRow({
   const requiredPower = formatInt(required)
   const signerCount = plural(count, { one: '# signer', other: '# signers' })
   return (
-    <li className="grid gap-2 border-t border-line pt-3" data-action={action.id}>
+    <li
+      className="grid gap-2 border-t border-line pt-3"
+      data-action={action.id}
+      data-row-id={action.id}
+    >
       <div className="flex flex-wrap items-center gap-2">
         <Badge tone="info">{action.eventName}</Badge>
         <Hash value={action.id} />

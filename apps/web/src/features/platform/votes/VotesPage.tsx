@@ -1,7 +1,6 @@
 import { useLingui } from '@lingui/react/macro'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
-import { stampOf } from '@/data/envelope'
 import { useDecentralizedOnly } from '@/data/health'
 import { peQueries } from '@/data/pe/queries'
 import type { PeVote } from '@/data/pe/schemas'
@@ -12,7 +11,9 @@ import {
   PageFrame,
   PageGroupTabs,
   PageLink,
+  ScrollList,
   useNetwork,
+  pagePosition,
 } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
@@ -23,7 +24,6 @@ import {
   DataTable,
   DateRangeFilter,
   Empty,
-  ListModeToggle,
   SearchField,
   SegFilter,
   TableTools,
@@ -34,6 +34,8 @@ import { usePeList, useSetSearch } from '../contest/shared'
 import { classifyIdentityInput, type IdentityInput } from './filter-input'
 
 export type VotesPageSearch = VotesFilters
+
+const voteId = (v: PeVote) => `${v.proTxHash}:${v.timestamp}:${(v.indexValues ?? []).join('/')}`
 
 export function VotesPage({ search }: { search: VotesPageSearch }) {
   const { t } = useLingui()
@@ -90,8 +92,11 @@ function VoteList({ search }: { search: VotesPageSearch }) {
     voter: identityOnly(search.voter),
     towards: identityOnly(search.towards),
   }
-  const list = usePeList('votes', asked, (page, limit) =>
-    peQueries.masternodeVotes(net, peVotesQuery({ ...asked, limit, page })),
+  const list = usePeList(
+    JSON.stringify(peVotesQuery({ ...asked, page: 1 })),
+    asked,
+    (page, limit) => peQueries.masternodeVotes(net, peVotesQuery({ ...asked, limit, page })),
+    voteId,
   )
   const columns = useMemo<ColumnDef<PeVote>[]>(
     () => [
@@ -262,7 +267,6 @@ function VoteList({ search }: { search: VotesPageSearch }) {
             set({ from: r.from, to: r.to })
           }}
         />
-        <ListModeToggle listId="votes" />
       </TableTools>
       {tokens.length > 0 ? (
         <ActiveFilters
@@ -289,18 +293,20 @@ function VoteList({ search }: { search: VotesPageSearch }) {
           }}
         />
       ) : null}
-      <Card layer="platform" id="votes-list" source={list.pages.map(stampOf)}>
-        <DataTable
-          caption={t`Masternode votes`}
-          columns={columns}
-          rows={list.rows}
-          getRowId={(v) => `${v.proTxHash}:${v.timestamp}:${(v.indexValues ?? []).join('/')}`}
-          state={list.state}
-          error={list.error}
-          onRetry={list.onRetry}
-          paging={list.paging}
-          empty={<Empty kind="no-match" title={t`No votes match.`} />}
-        />
+      <Card layer="platform" id="votes-list" source={list.stamps}>
+        <ScrollList chain={list} position={pagePosition}>
+          <DataTable
+            caption={t`Masternode votes`}
+            columns={columns}
+            rows={list.rows}
+            getRowId={voteId}
+            state={list.state}
+            error={list.error}
+            onRetry={list.onRetry}
+            paging={list.paging}
+            empty={<Empty kind="no-match" title={t`No votes match.`} />}
+          />
+        </ScrollList>
       </Card>
     </div>
   )

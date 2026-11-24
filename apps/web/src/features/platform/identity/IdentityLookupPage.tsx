@@ -1,15 +1,22 @@
 import { useLingui } from '@lingui/react/macro'
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { stampOf } from '@/data/envelope'
 import { sdkQueries } from '@/data/sdk/queries'
-import { IdentityRef, PageFrame, useNetwork } from '@/features/entity'
+import {
+  cursorPosition,
+  IdentityRef,
+  PageFrame,
+  ScrollList,
+  useNetwork,
+  usePageChain,
+} from '@/features/entity'
 import { formatAmountText } from '@/lib/units'
-import { Card, Empty, ErrorState, Skeleton } from '@/ui'
-import { loadState, useSetSearch } from './common'
+import { Card, Empty, ErrorState, Pager, Skeleton } from '@/ui'
+import { useSetSearch } from './common'
 import { readKeyHash } from './ids'
-import { keyHashMatchesQuery } from './queries'
+import { keyHashMatchesPage } from './queries'
 
 export function IdentityLookupPage({
   pkh,
@@ -104,8 +111,13 @@ function Matches({ pkh, after }: { pkh: string; after: string | undefined }) {
     })
   }, [found, navigate])
 
-  const shared = useInfiniteQuery({
-    ...keyHashMatchesQuery(net, pkh, after),
+  const shared = usePageChain({
+    listKey: pkh,
+    start: after,
+    query: (cursor: string | undefined) => keyHashMatchesPage(net, pkh, cursor),
+    rows: (p) => p.data,
+    getRowId: (i) => i.id,
+    next: (p) => p.data.at(-1)?.id,
     enabled: unique.data !== undefined && found === undefined,
   })
 
@@ -115,9 +127,8 @@ function Matches({ pkh, after }: { pkh: string; after: string | undefined }) {
   }
   if (found !== undefined) return <p role="status">{t`Opening the identity…`}</p>
 
-  const pages = shared.data?.pages ?? []
-  const rows = pages.flatMap((p) => p.data)
-  const first = pages[0]
+  const { rows } = shared
+  const first = shared.pages.find((p) => p.data)?.data
   return (
     <Card
       title={t`Identities holding this key hash`}
@@ -125,11 +136,9 @@ function Matches({ pkh, after }: { pkh: string; after: string | undefined }) {
       id="identity-key-matches"
       subtitle={t`No single identity owns this hash; these identities share it.`}
       source={first ? stampOf(first) : undefined}
-      state={
-        rows.length === 0 && !shared.isPending && !shared.isError ? 'ready' : loadState(shared)
-      }
+      state={shared.state === 'empty' ? 'ready' : shared.state}
       error={shared.error}
-      onRetry={() => void shared.refetch()}
+      onRetry={shared.onRetry}
     >
       {rows.length === 0 ? (
         <Empty
@@ -138,28 +147,23 @@ function Matches({ pkh, after }: { pkh: string; after: string | undefined }) {
           body={t`Check that it is the HASH160 of the public key, on this network.`}
         />
       ) : (
-        <>
+        <ScrollList chain={shared} position={cursorPosition('after')}>
           <ul className="grid gap-2" data-matches>
             {rows.map((i) => (
-              <li key={i.id} className="flex flex-wrap items-center gap-3">
+              <li key={i.id} className="flex flex-wrap items-center gap-3" data-row-id={i.id}>
                 <IdentityRef id={i.id} />
                 <span className="rx-num">{formatAmountText(i.balance, 'credits')}</span>
               </li>
             ))}
           </ul>
-          {shared.hasNextPage ? (
-            <button
-              type="button"
-              className="dh-btn dh-btn--sm justify-self-start"
-              disabled={shared.isFetchingNextPage}
-              onClick={() => void shared.fetchNextPage()}
-            >
-              {t`Load more`}
-            </button>
+          {shared.paging.hasNext ? (
+            <div className="rx-tfoot">
+              <Pager paging={shared.paging} shown={rows.length} />
+            </div>
           ) : (
             <p className="rx-dim">{t`That is every match.`}</p>
           )}
-        </>
+        </ScrollList>
       )}
     </Card>
   )

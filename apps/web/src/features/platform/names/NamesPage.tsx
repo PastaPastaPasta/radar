@@ -1,17 +1,22 @@
 import { useLingui } from '@lingui/react/macro'
-import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
-import { stampOf } from '@/data/envelope'
 import { namesDocsArgs, NAMES_PAGE, normalizeLabel } from '@/data/query/prefetch/p-vote'
 import type { DocumentDto } from '@/data/sdk/methods'
 import { sdkQueries } from '@/data/sdk/queries'
-import { Entity, IdentityRef, PageFrame, useNetwork } from '@/features/entity'
+import {
+  chainStamps,
+  Entity,
+  IdentityRef,
+  PageFrame,
+  ScrollList,
+  useNetwork,
+  usePageChain,
+  cursorPosition,
+} from '@/features/entity'
 import { Card, DataTable, Empty, Time } from '@/ui'
 import { searchLink } from '../contest/shared'
-import { ListPager } from '../ListPager'
-import { loadState } from '../identity/common'
 
 export interface NamesPageSearch {
   q?: string | undefined
@@ -34,11 +39,15 @@ export function NamesPage({ search }: { search: NamesPageSearch }) {
   const q = (search.q ?? '').trim()
   const safe = normalizeLabel(q)
   const [draft, setDraft] = useState(search.q ?? '')
-  const names = useQuery(sdkQueries['documents.query'](net, namesDocsArgs(q, search.after)))
-  const all = names.data?.data ?? []
-  const rows = all.slice(0, NAMES_PAGE)
-  const hasNext = all.length > NAMES_PAGE
-  const last = rows[rows.length - 1]
+  const names = usePageChain({
+    listKey: q,
+    start: search.after,
+    query: (after: string | undefined) =>
+      sdkQueries['documents.query'](net, namesDocsArgs(q, after)),
+    rows: (p) => p.data.slice(0, NAMES_PAGE),
+    getRowId: (d) => d.id,
+    next: (p) => (p.data.length > NAMES_PAGE ? p.data[NAMES_PAGE - 1]?.id : undefined),
+  })
 
   const columns = useMemo<ColumnDef<DocumentDto>[]>(
     () => [
@@ -114,24 +123,26 @@ export function NamesPage({ search }: { search: NamesPageSearch }) {
             : t`Searching the homograph-safe form ${safe}: DPNS stores o as 0, and i and l as 1.`}
         </p>
       ) : null}
-      <Card layer="platform" id="names-list" source={names.data ? stampOf(names.data) : undefined}>
-        <DataTable
-          caption={t`DPNS names`}
-          columns={columns}
-          rows={rows}
-          getRowId={(d) => d.id}
-          rowLink={(d) => ({ to: '/name/$label', params: { label: labelOfDoc(d) } }) as never}
-          state={loadState(names)}
-          error={names.error}
-          onRetry={() => void names.refetch()}
-          empty={
-            <Empty kind="no-match" title={q ? t`No name starts with ${safe}.` : t`No names yet.`} />
-          }
-        />
-        <ListPager
-          next={hasNext && last ? searchLink({ after: last.id }) : undefined}
-          prev={search.after ? searchLink({ after: undefined }) : undefined}
-        />
+      <Card layer="platform" id="names-list" source={chainStamps(names.pages)}>
+        <ScrollList chain={names} position={cursorPosition('after')}>
+          <DataTable
+            caption={t`DPNS names`}
+            columns={columns}
+            rows={names.rows}
+            getRowId={names.getRowId}
+            rowLink={(d) => ({ to: '/name/$label', params: { label: labelOfDoc(d) } }) as never}
+            state={names.state}
+            error={names.error}
+            onRetry={names.onRetry}
+            paging={names.paging}
+            empty={
+              <Empty
+                kind="no-match"
+                title={q ? t`No name starts with ${safe}.` : t`No names yet.`}
+              />
+            }
+          />
+        </ScrollList>
       </Card>
     </PageFrame>
   )
