@@ -16,14 +16,8 @@ export const HEALTH_PROBE_INTERVAL_MS = 60_000
 /** Hyphen and Radar are read through Workers, where every request counts against a daily allowance. */
 export const WORKER_PROBE_INTERVAL_MS = 5 * 60_000
 
-/** A probe is read again on a page that mounts it after a minute, whatever its polling interval. */
 const probeEvery = (ms: number) =>
-  ({
-    staleTime: HEALTH_PROBE_INTERVAL_MS,
-    gcTime: 5 * 60_000,
-    refetchInterval: ms,
-    retry: false,
-  }) as const
+  ({ staleTime: ms, gcTime: 5 * 60_000, refetchInterval: ms, retry: false }) as const
 
 const probe = probeEvery(HEALTH_PROBE_INTERVAL_MS)
 const workerProbe = probeEvery(WORKER_PROBE_INTERVAL_MS)
