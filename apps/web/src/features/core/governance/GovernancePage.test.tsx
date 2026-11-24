@@ -708,12 +708,10 @@ describe('Proposal page', () => {
     expect(await screen.findByText('Older budget request', { exact: false })).toBeInTheDocument()
     expect(screen.queryByText('No proposal with this hash on this network.')).toBeNull()
     await waitFor(() => expect(document.querySelector('[data-source="hyphen"]')).not.toBeNull())
-    await waitFor(
-      () =>
-        expect(document.querySelector('[data-stale-index]')).toHaveTextContent(
-          'This proposal and its vote history are from Hyphen’s index',
-        ),
-      { timeout: 5_000 },
+    await waitFor(() =>
+      expect(document.querySelector('[data-stale-index]')).toHaveTextContent(
+        'This proposal and its vote history are from Hyphen’s index',
+      ),
     )
     expect(document.querySelector('[data-derived-funding]')).toBeNull()
     expect(screen.getByText('Counted as valid')).toBeInTheDocument()
