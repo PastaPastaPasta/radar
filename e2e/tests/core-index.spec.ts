@@ -676,6 +676,7 @@ test.describe('governance', () => {
     const name = page.locator('tbody[data-proposal] .rx-propname').first()
     const chevron = name.locator('.rx-propname__chevron')
     await expect(chevron).toBeVisible()
+    await settled(page)
     const turn = () => chevron.evaluate((el) => getComputedStyle(el).transform)
     const closed = await turn()
     await name.click()
