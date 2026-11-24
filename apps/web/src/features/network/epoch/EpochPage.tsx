@@ -229,7 +229,7 @@ function EpochProposers({
   }, [info])
   const sorted = useMemo(() => sortRows(all, sort, PROPOSER_SORT_KEYS), [all, sort])
   const columns = useProposerColumns()
-  const { shown, onSort, paging } = useSortedPaging(PAGE, sorted.length)
+  const { shown, onSort, paging } = useSortedPaging(PAGE, sorted.length, sort)
   return (
     <Card
       id="epoch-proposers"

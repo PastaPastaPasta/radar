@@ -31,6 +31,7 @@ import {
   DataTable,
   DateRangeFilter,
   Empty,
+  firstReadPending,
   SearchField,
   SegFilter,
   Stat,
@@ -38,6 +39,7 @@ import {
   TableTools,
   Time,
   Unavailable,
+  useReveal,
   type DataTableProps,
   type LoadState,
 } from '@/ui'
@@ -391,6 +393,7 @@ function SdkContestTable(props: RowTable) {
 /** The contests still open: Platform schedules every one's end in its poll tree, so that list is exact. */
 function OpenContests({ search }: { search: ContestsPageSearch }) {
   const { t } = useLingui()
+  const net = useNetwork()
   const contractId = search.contract ?? DPNS.contractId()
   const type = search.type ?? DPNS.type
   const polls = useUpcomingPolls()
@@ -406,7 +409,24 @@ function OpenContests({ search }: { search: ContestsPageSearch }) {
         endsAt: bucket.timestampMs,
       })),
   )
-  const rows = all.slice((search.page - 1) * search.limit, search.page * search.limit)
+  // `page` belongs to the list of every contest below, so this list always opens at its top. The rows revealed last
+  // read their vote states before the next ones are revealed; these observers share the table's reads, and an enabled
+  // one reports a read as on its way in the very render its row arrives.
+  const [busy, setBusy] = useState(false)
+  const reveal = useReveal({
+    total: all.length,
+    step: search.limit,
+    reset: `${contractId}/${type}`,
+    busy,
+  })
+  const rows = all.slice(0, reveal.count)
+  const reading = useQueries({
+    queries: rows.map((r) =>
+      sdkQueries['voting.contestedResourceVoteState'](net, contestVoteStateArgs(r)),
+    ),
+    combine: firstReadPending,
+  })
+  if (reading !== busy) setBusy(reading)
   return (
     <SdkContestTable
       id="contests-active"
@@ -418,13 +438,7 @@ function OpenContests({ search }: { search: ContestsPageSearch }) {
       error={polls.error}
       onRetry={() => void polls.refetch()}
       source={polls.data ? [stampOf(polls.data)] : []}
-      paging={{
-        kind: 'page',
-        page: search.page,
-        limit: search.limit,
-        total: all.length,
-        to: pageLink,
-      }}
+      paging={reveal.paging}
       empty={<Empty kind="none-yet" title={t`No contest is open.`} />}
     />
   )

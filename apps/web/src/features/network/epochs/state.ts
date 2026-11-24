@@ -1,5 +1,5 @@
 import { useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useReveal } from '@/ui'
 
 /** Sorts a copy of `rows` by a sort value (`-id` descending): ties keep their order, so a re-sort is stable. */
 export function sortRows<Row>(
@@ -19,31 +19,20 @@ export function sortRows<Row>(
 }
 
 /**
- * Show-more paging for a table sorted through the page's `sort` search param: `shown` rows of `rowCount`, with the
- * table's `sort.onChange` (which starts over at the first page) and `paging` props.
+ * Infinite scroll for a table sorted through the page's `sort` search param: `shown` rows of `rowCount`, with the
+ * table's `sort.onChange` (a new sort starts over at the top) and `paging` props.
  */
-export function useSortedPaging(pageSize: number, rowCount: number) {
+export function useSortedPaging(pageSize: number, rowCount: number, sort: string) {
   const navigate = useNavigate()
-  const [shown, setShown] = useState(pageSize)
+  const reveal = useReveal({ total: rowCount, step: pageSize, reset: sort })
   return {
-    shown,
+    shown: reveal.count,
     onSort: (next: string) => {
-      setShown(pageSize)
       void navigate({
         to: '.',
         search: ((prev: Record<string, unknown>) => ({ ...prev, sort: next })) as never,
       })
     },
-    paging:
-      shown < rowCount
-        ? {
-            kind: 'infinite' as const,
-            hasNext: true,
-            fetching: false,
-            fetchNext: () => {
-              setShown((n) => n + pageSize)
-            },
-          }
-        : undefined,
+    paging: reveal.paging,
   }
 }

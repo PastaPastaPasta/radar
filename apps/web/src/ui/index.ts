@@ -3,7 +3,7 @@ export { Card, Section, SectionBand, SectionSources, SourceSection, KeyValue } f
 export type { CardProps, SectionProps, SectionBandProps, KeyValueProps } from './layout'
 export { QueryView } from './query-view'
 export type { QueryViewProps } from './query-view'
-export { queryView, stampsOf, useAfterIdle } from './query-state'
+export { firstReadPending, queryView, stampsOf, useAfterIdle } from './query-state'
 export type { QueryState } from './query-state'
 export { Stat, Stats, Meter, Sparkline } from './stat'
 export type { StatProps, MeterProps, SparklineProps } from './stat'
@@ -42,6 +42,7 @@ export { Tabs } from './tabs'
 export type { TabsProps } from './tabs'
 export { DataTable, NewRowsPill, Pager } from './data-table'
 export type { DataTableProps } from './data-table'
+export { useListPosition, useReveal } from './reveal'
 export {
   TableTools,
   SegFilter,

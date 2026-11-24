@@ -3,7 +3,7 @@ import { useLingui } from '@lingui/react/macro'
 import { Link } from '@tanstack/react-router'
 import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import { coreQueries } from '@/data/core/queries'
 import type { DecodedBlock, DecodedTx } from '@/data/core/types'
 import { stampOf, type SourceStamp, type Sourced } from '@/data/envelope'
@@ -14,7 +14,6 @@ import {
   Amount,
   Card,
   DataTable,
-  type DataTableProps,
   Hash,
   Icon,
   KeyValue,
@@ -23,14 +22,16 @@ import {
   Time,
   TypeBadge,
   ChainLockBadge,
+  useListPosition,
   useMediaQuery,
+  useReveal,
 } from '@/ui'
 import { blockReward, cbTxOf, coinbaseTag, difficultyFromBits, poolOf } from './block-info'
 import { Difficulty } from '../hy-shared/Difficulty'
 import { CbTxRows } from '../tx/Payload'
 import { useFollowTip } from '../follow-tip'
 import { sumOutputs } from '../tx/tx-info'
-import { BlockTxCompact, type BlockTx } from './BlockTxCompact'
+import { BlockTxCompact } from './BlockTxCompact'
 import { CoreBand, CoreBandSkeleton, NotFound, RecordHeader, Section, SectionIndex } from './frame'
 import { useHyphenFit } from '@/data/hyphen/fit'
 import { useIndexHealth } from '@/data/index-health'
@@ -102,13 +103,6 @@ export function BlockPage({ id, page = 1 }: { id: string; page?: number }) {
   )
 }
 
-const pageLink = (id: string, page: number) =>
-  ({
-    to: '/block/$id',
-    params: { id },
-    search: (s: Record<string, unknown>) => ({ ...s, page: page === 1 ? undefined : page }),
-  }) as never
-
 function BlockView({
   block,
   stamp,
@@ -139,7 +133,19 @@ function BlockView({
   const hasNext = tipHeight !== undefined && block.height < tipHeight
   const pages = Math.max(1, Math.ceil(block.txs.length / TXS_PER_PAGE))
   const current = Math.min(Math.max(1, page), pages)
-  const offset = (current - 1) * TXS_PER_PAGE
+  const reveal = useReveal({
+    total: block.txs.length,
+    step: TXS_PER_PAGE,
+    steps: current,
+    reset: block.hash,
+  })
+  const txList = useRef<HTMLDivElement>(null)
+  useListPosition(txList, {
+    at: current,
+    step: TXS_PER_PAGE,
+    count: reveal.count,
+    total: block.txs.length,
+  })
   const quorumCommitments = block.txs.filter((x) => x.type === 'quorum-commitment').length
   const chainwork = work.data?.data?.chainwork
 
@@ -180,22 +186,12 @@ function BlockView({
     [t],
   )
   const rows = useMemo(
-    () => block.txs.slice(offset, offset + TXS_PER_PAGE).map((x, i) => ({ ...x, n: offset + i })),
-    [block.txs, offset],
+    () => block.txs.slice(0, reveal.count).map((x, n) => ({ ...x, n })),
+    [block.txs, reveal.count],
   )
 
   const phone = useMediaQuery('(max-width: 640px)')
   const txCaption = t`Transactions in block ${formatInt(block.height)}`
-  const paging: DataTableProps<BlockTx>['paging'] =
-    pages > 1
-      ? {
-          kind: 'page',
-          page: current,
-          limit: TXS_PER_PAGE,
-          total: block.txs.length,
-          to: (p) => pageLink(String(block.height), p),
-        }
-      : undefined
 
   return (
     <article data-page="/block/$id" data-quiet-copy data-layer="core">
@@ -394,19 +390,22 @@ function BlockView({
           description={plural(block.txs.length, { one: '# transaction', other: '# transactions' })}
         >
           <Card layer="core">
-            {phone ? (
-              <BlockTxCompact rows={rows} caption={txCaption} paging={paging} />
-            ) : (
-              <DataTable
-                caption={txCaption}
-                columns={columns}
-                rows={rows}
-                getRowId={(r) => r.txid}
-                state="ready"
-                paging={paging}
-                rowLink={(r) => ({ to: '/tx/$txid', params: { txid: r.txid } })}
-              />
-            )}
+            <div ref={txList}>
+              {phone ? (
+                <BlockTxCompact rows={rows} caption={txCaption} paging={reveal.paging} />
+              ) : (
+                <DataTable
+                  caption={txCaption}
+                  columns={columns}
+                  rows={rows}
+                  getRowId={(r) => r.txid}
+                  state="ready"
+                  paging={reveal.paging}
+                  virtual
+                  rowLink={(r) => ({ to: '/tx/$txid', params: { txid: r.txid } })}
+                />
+              )}
+            </div>
           </Card>
         </Section>
       </div>

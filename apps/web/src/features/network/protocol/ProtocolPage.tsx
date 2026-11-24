@@ -346,7 +346,7 @@ function VoteTable({ votes }: { votes: VotesQuery }) {
     ],
     [t],
   )
-  const { shown, onSort, paging } = useSortedPaging(PAGE, rows.length)
+  const { shown, onSort, paging } = useSortedPaging(PAGE, rows.length, sort)
   const pages = votes.data?.data.pages ?? 0
   return (
     <Card

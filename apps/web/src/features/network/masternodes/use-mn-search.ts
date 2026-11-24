@@ -1,4 +1,4 @@
-import { useNavigate, useSearch, type LinkProps } from '@tanstack/react-router'
+import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useCallback } from 'react'
 import type { MnFilter } from '@/data/masternodes/filter'
 import type { PlatformFilter } from '@/data/masternodes/platform'
@@ -22,12 +22,6 @@ export interface MnSearchControls {
   /** A page change: a new history entry. */
   page: (page: number) => void
 }
-
-/** A link to another page of `/masternodes` that keeps the rest of the address. */
-export const mnPageLink = (page: number): LinkProps => ({
-  to: '/masternodes',
-  search: ((prev: Record<string, unknown>) => ({ ...prev, page })) as never,
-})
 
 export function useMnSearch(): MnSearchControls {
   const search: MnPageSearch = useSearch({ strict: false })

@@ -24,7 +24,42 @@ const table = (page: Page, name = 'Masternodes') => page.getByRole('table', { na
 const rows = (page: Page, name?: string) => table(page, name).locator('tbody tr[data-index]')
 /** The count and the tokens of the filters in force; nothing is drawn while no filter is. */
 const matches = (page: Page) => page.locator('.rx-activef').first()
-const pager = (page: Page) => page.getByRole('navigation', { name: 'Pagination' })
+/** The infinite pager under a table: how many rows are on the page, and the sentinel that reveals more. */
+const pager = (page: Page) => page.locator('.rx-pager[data-infinite]').first()
+const heading = (page: Page) => page.getByRole('heading', { level: 1 })
+/** Brings the end of the list into view from above, the way a reader scrolling down reaches it, with a wheel turn. */
+async function scrollToEnd(page: Page) {
+  await pager(page).evaluate((el) => {
+    el.scrollIntoView({ block: 'end' })
+  })
+  const view = page.viewportSize()
+  await page.mouse.move((view?.width ?? 400) / 2, (view?.height ?? 800) / 2)
+  await page.mouse.wheel(0, 120)
+}
+const loaded = async (page: Page) =>
+  Number((await pager(page).textContent())?.match(/^([\d,]+) loaded/)?.[1]?.replace(/,/g, ''))
+/**
+ * Scrolls to the end of the list until `count` rows are revealed: a virtualised list measures its rows as they are
+ * drawn, so its end can move on as it nears.
+ */
+async function scrollUntilLoaded(page: Page, count: number) {
+  await expect
+    .poll(async () => {
+      await scrollToEnd(page)
+      return loaded(page)
+    })
+    .toBeGreaterThanOrEqual(count)
+}
+/** The `data-index` of the first row below the sticky bar. */
+const firstInView = (page: Page) =>
+  page.evaluate(() => {
+    const bar =
+      parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--dh-bar-h')) || 0
+    const row = [...document.querySelectorAll<HTMLElement>('tbody tr[data-index]')].find(
+      (r) => r.getBoundingClientRect().bottom > bar,
+    )
+    return Number(row?.dataset.index ?? -1)
+  })
 const PAGE = 100
 const COLUMNS = [
   'ProTx',
@@ -81,7 +116,8 @@ test.describe('masternode list', () => {
     await expect(first).toContainText(/\d+\.\d+\.\d+\.\d+/)
     await expect(first).toContainText(/Answering|No answer|Enabled|PoSe-banned/)
     expect(await rows(page).count(), 'a page of rows').toBeLessThanOrEqual(PAGE)
-    await expect(pager(page)).toContainText(`1–${PAGE} of 2,990`)
+    await expect(pager(page)).toContainText(`${PAGE} loaded`)
+    await expect(heading(page)).toContainText('of 2,990')
     await expect(page.locator('[data-source="dapi"]').first()).toBeVisible()
     await expect(page.locator('[data-source="radar"]').first()).toBeVisible()
     if (!isPhone(info)) {
@@ -153,7 +189,8 @@ test.describe('masternode list', () => {
 
   test('works on testnet with its own list @RA-20', async ({ page }) => {
     await open(page, '/masternodes?network=testnet')
-    await expect(pager(page)).toContainText(`of ${TESTNET.total}`)
+    await expect(heading(page)).toContainText(`of ${TESTNET.total}`)
+    await expect(pager(page)).toContainText(`${PAGE} loaded`)
     await expect(page.locator('[data-source="dapi"]').first()).toBeVisible()
   })
 
@@ -195,7 +232,7 @@ test.describe('masternode list', () => {
     await expect(rows(page)).toHaveCount(1)
     await box.fill('')
     await expect(page).not.toHaveURL(/q=/)
-    await expect(pager(page)).toContainText('of 2,990')
+    await expect(pager(page)).toContainText(`${PAGE} loaded`)
   })
 
   test('filters by type, country, hosting and more, with counts, tokens and a clear button @RA-22', async ({
@@ -227,7 +264,7 @@ test.describe('masternode list', () => {
     await expect(page).not.toHaveURL(/country=/)
     await expect(matches(page)).toContainText(`${MAINNET.unreachable} match`)
     await matches(page).getByRole('button', { name: 'Clear' }).click()
-    await expect(pager(page)).toContainText('of 2,990')
+    await expect(pager(page)).toContainText(`${PAGE} loaded`)
     await expect(matches(page)).toHaveCount(0)
     await expect(page).not.toHaveURL(/reach=/)
     await expectAccessible(page)
@@ -298,24 +335,42 @@ test.describe('masternode list', () => {
     expect(await horizontalOverflow(page)).toBeLessThanOrEqual(0)
   })
 
-  test('keeps filters, search, sort and page in the address through reload, back and forward @RA-24', async ({
+  test('reveals the next hundred as the reader scrolls, and keeps filters, search, sort and the hundred in view in the address @RA-24', async ({
     page,
   }) => {
     await open(page, '/masternodes?sort=protx')
-    await page.getByRole('link', { name: 'Next' }).click()
-    await expect(page).toHaveURL(/page=2/)
-    await expect(pager(page)).toContainText(`${PAGE + 1}–${2 * PAGE} of 2,990`)
+    await expect(page.getByRole('navigation', { name: 'Pagination' })).toHaveCount(0)
+    await scrollUntilLoaded(page, 2 * PAGE)
+    await page.evaluate(() => {
+      window.scrollTo(0, 0)
+    })
+    await expect
+      .poll(
+        async () => {
+          await page.evaluate(() => {
+            window.scrollBy(0, 1500)
+          })
+          return new URL(page.url()).searchParams.get('page')
+        },
+        { timeout: 30_000 },
+      )
+      .toBe('2')
+    expect(new URL(page.url()).searchParams.get('sort')).toBe('protx')
     const url = page.url()
     await page.reload()
     await expect(rows(page).first()).toBeVisible()
     expect(page.url()).toBe(url)
-    await expect(pager(page)).toContainText(`${PAGE + 1}–${2 * PAGE}`)
+    // The offset is put back while the rows are measured; on a phone that can reach the end and reveal the next ones.
+    await expect.poll(() => loaded(page)).toBeGreaterThanOrEqual(2 * PAGE)
 
-    await page.goBack()
-    await expect(page).not.toHaveURL(/page=2/)
-    await expect(pager(page)).toContainText(`1–${PAGE} of`)
-    await page.goForward()
-    await expect(page).toHaveURL(/page=2/)
+    await page.goto('/masternodes?sort=protx&page=3')
+    await expect(pager(page)).toContainText(`${3 * PAGE} loaded`)
+    await expect
+      .poll(async () => {
+        const first = await firstInView(page)
+        return first >= 2 * PAGE - 1 && first < 2 * PAGE + 5
+      })
+      .toBe(true)
 
     await page.goto('/masternodes?type=evo&country=DE&sort=-version&q=a')
     await expect(page.getByRole('heading', { level: 1, name: H1.masternodes })).toBeVisible()
@@ -476,15 +531,15 @@ test.describe('evonodes on Platform', () => {
     await expectAccessible(page)
   })
 
-  test('sorts by estimated monthly earnings first and pages through the evonodes @RA-64', async ({
+  test('sorts by estimated monthly earnings first and reveals more evonodes as the reader scrolls @RA-64', async ({
     page,
   }) => {
     await open(page, path, 'Evonodes')
     await expect(rows(page, 'Evonodes').first()).toContainText('26b8c4')
-    await expect(page.getByRole('navigation', { name: 'Pagination' })).toContainText('1–50 of 371')
-    await page.getByRole('link', { name: 'Next' }).click()
-    await expect(page).toHaveURL(/page=2/)
-    await expect(page.getByRole('navigation', { name: 'Pagination' })).toContainText('51–100')
+    await expect(pager(page)).toContainText('50 loaded')
+    await scrollToEnd(page)
+    await expect(pager(page)).toContainText('100 loaded')
+    await expect(rows(page, 'Evonodes')).toHaveCount(100)
   })
 
   test('filters by those that proposed this epoch and those outside a validator set @RA-64 @PE-22', async ({
@@ -563,7 +618,7 @@ test.describe('Decentralized only mode', () => {
     await open(page, mode('/masternodes'))
     await expect(page.locator('[data-unavailable="mode"]')).toHaveCount(1)
     await expect(page.locator('[data-unavailable="mode"]')).toContainText('Radar’s crawl')
-    await expect(pager(page)).toContainText('of 2,990')
+    await expect(pager(page)).toContainText(`${PAGE} loaded`)
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(
       /^[\d,]+ of 2,990 masternodes are enabled$/,
     )
@@ -630,7 +685,7 @@ test.describe('Decentralized only mode', () => {
 
   test('works on testnet @RA-20', async ({ page }) => {
     await open(page, mode('/masternodes?network=testnet'))
-    await expect(pager(page)).toContainText(`of ${TESTNET.total}`)
+    await expect(heading(page)).toContainText(`of ${TESTNET.total}`)
     await expect(page.locator('[data-unavailable="mode"]')).toHaveCount(1)
   })
 
