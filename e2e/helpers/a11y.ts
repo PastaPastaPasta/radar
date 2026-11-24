@@ -34,6 +34,7 @@ const isAccepted = (rule: string, target: unknown[]) =>
   )
 
 interface AuditedNode {
+  target: unknown[]
   any: { id: string; data?: unknown; relatedNodes?: { target: unknown[] }[] }[]
 }
 
@@ -41,14 +42,34 @@ interface AuditedNode {
  * A target that is large enough but has scrolled part-way under the shell's sticky bar: axe measures
  * what the bar's buttons leave of it. That is a scroll position, not the size of the target.
  */
-const coveredByShellBar = (rule: string, node: AuditedNode) =>
+const coveredByShellBar = (rule: string, node: AuditedNode, underBar: ReadonlySet<string>) =>
   rule === 'target-size' &&
-  node.any.some(
-    (check) =>
-      (check.data as { messageKey?: string } | null)?.messageKey === 'partiallyObscured' &&
-      !!check.relatedNodes?.length &&
-      check.relatedNodes.every((r) => r.target.flat()[0] === 'dashhq-bar'),
-  )
+  (underBar.has(JSON.stringify(node.target)) ||
+    node.any.some(
+      (check) =>
+        (check.data as { messageKey?: string } | null)?.messageKey === 'partiallyObscured' &&
+        !!check.relatedNodes?.length &&
+        check.relatedNodes.every((r) => r.target.flat()[0] === 'dashhq-bar'),
+    ))
+
+/**
+ * The light-DOM targets whose top edge is under the shell's sticky bar: a list that opens at a row
+ * past its first (`?page=2`) leaves the rows above it under the bar, and axe then measures what the bar
+ * leaves of their targets against each other and the bar's links.
+ */
+async function targetsUnderShellBar(page: Page, targets: unknown[][]): Promise<Set<string>> {
+  const selectors = targets.filter((t) => t.length === 1 && typeof t[0] === 'string') as string[][]
+  if (selectors.length === 0) return new Set()
+  const under = await page.evaluate((list) => {
+    const bar = document.querySelector('dashhq-bar')?.getBoundingClientRect()
+    if (!bar || bar.height === 0) return []
+    return list.filter(([selector]) => {
+      const box = document.querySelector(selector!)?.getBoundingClientRect()
+      return !!box && box.top < bar.bottom
+    })
+  }, selectors)
+  return new Set(under.map((t) => JSON.stringify(t)))
+}
 
 /**
  * A figure that rolls in and a row that enters are part-transparent while they move, so an audit
@@ -89,11 +110,17 @@ export async function expectAccessible(page: Page, options: AccessibleOptions = 
   const { violations } = await axe
     .analyze()
     .finally(() => page.emulateMedia({ reducedMotion: null }))
+  const underBar = await targetsUnderShellBar(
+    page,
+    violations.filter((v) => v.id === 'target-size').flatMap((v) => v.nodes.map((n) => n.target)),
+  )
   const blocking = violations
     .filter((v) => v.impact && BLOCKING.has(v.impact))
     .map((v) => ({
       ...v,
-      nodes: v.nodes.filter((n) => !isAccepted(v.id, n.target) && !coveredByShellBar(v.id, n)),
+      nodes: v.nodes.filter(
+        (n) => !isAccepted(v.id, n.target) && !coveredByShellBar(v.id, n, underBar),
+      ),
     }))
     .filter((v) => v.nodes.length > 0)
     .map((v) => ({
