@@ -345,7 +345,11 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
               a.status === 'fulfilled' && a.value.node ? [a.value.node] : [],
             ),
           )
-          if (nodes.size < 2) await fetchLockFrom(net, ctrl.signal, [...nodes], priority)
+          if (nodes.size < 2) {
+            // Past the deadline another lookup would only fail at once; retry soon instead.
+            if (ctrl.signal.aborted) throw abortError()
+            await fetchLockFrom(net, ctrl.signal, [...nodes], priority)
+          }
           lockRefreshedAt.set(net, deps.now())
         } catch {
           // A failed lookup is retried in a few seconds, not on every page.
