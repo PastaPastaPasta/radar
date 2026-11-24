@@ -292,14 +292,14 @@ msgstr "tantos masternodes respondendo quanto há um dia"
 
 #. placeholder {0}: when(p.timeout)
 msgid "At that pace no window locks in before the timeout, {0}."
-msgstr "Neste ritmo nenhuma janela trava antes do prazo final, {0}."
+msgstr "Neste ritmo nenhuma janela é consolidada antes do prazo final, {0}."
 
 #. placeholder {0}: formatInt(p.threshold_min)
 #. placeholder {1}: formatInt(p.window)
 #. placeholder {2}: formatPercent(floor, 1)
 #. placeholder {3}: formatNumber(gap, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 msgid "At that pace no window locks in: even the lowest threshold, {0} of {1} blocks ({2}), is above it. Signalling has to rise by about {3} percentage points."
-msgstr "Neste ritmo nenhuma janela trava: mesmo o limiar mais baixo, {0} de {1} blocos ({2}), está acima. A sinalização precisa subir cerca de {3} pontos percentuais."
+msgstr "Neste ritmo nenhuma janela é consolidada: mesmo o limiar mais baixo, {0} de {1} blocos ({2}), está acima. A sinalização precisa subir cerca de {3} pontos percentuais."
 
 #. placeholder {0}: String(projection.attempt + 1)
 #. placeholder {1}: formatInt(projection.start)
@@ -310,7 +310,7 @@ msgstr "Neste ritmo nenhuma janela trava: mesmo o limiar mais baixo, {0} de {1} 
 #. placeholder {6}: formatInt(projection.activation)
 #. placeholder {7}: at(projection.activation)
 msgid "At that pace window #{0} (blocks {1}–{2}, threshold {3} of {4}) is the first to lock in, about {5}. Core 24 would then activate at block {6}, about {7}."
-msgstr "Neste ritmo a janela nº {0} (blocos {1}–{2}, limiar {3} de {4}) é a primeira a travar, por volta de {5}. O Core 24 seria então ativado no bloco {6}, por volta de {7}."
+msgstr "Neste ritmo a janela nº {0} (blocos {1}–{2}, limiar {3} de {4}) é a primeira a ser consolidada, por volta de {5}. O Core 24 seria então ativado no bloco {6}, por volta de {7}."
 
 msgid "at the earliest"
 msgstr "o mais cedo possível"
@@ -379,7 +379,7 @@ msgid "Can they be reached"
 msgstr "Se podem ser alcançados"
 
 msgid "Can this window lock in?"
-msgstr "Esta janela pode travar?"
+msgstr "Esta janela pode ser consolidada?"
 
 #. placeholder {0}: formatInt(best.height)
 msgid "ChainLock at {0}, reported by one node"
@@ -686,7 +686,7 @@ msgid "Locked to Core block"
 msgstr "Fixado ao bloco Core"
 
 msgid "locks in at today's pace"
-msgstr "trava no ritmo de hoje"
+msgstr "consolida no ritmo de hoje"
 
 msgid "Map of the world with a disc for each place Radar found masternodes. {summary}, {scope}."
 msgstr "Mapa do mundo com um disco para cada local onde o Radar encontrou masternodes. {summary}, {scope}."
@@ -1400,7 +1400,7 @@ msgid "What they run"
 msgstr "O que executam"
 
 msgid "Where Dash Core 24's activation stands: whether this window can lock in, which pools signal, miners' signalling window by window, the falling lock-in threshold and the masternode signal."
-msgstr "Onde está a ativação do Dash Core 24: se esta janela pode travar, quais pools sinalizam, a sinalização dos mineradores janela a janela, o limiar que cai e o sinal dos masternodes."
+msgstr "Onde está a ativação do Dash Core 24: se esta janela pode ser consolidada, quais pools sinalizam, a sinalização dos mineradores janela a janela, o limiar que cai e o sinal dos masternodes."
 
 msgid "Where it stands"
 msgstr "Em que ponto está"
@@ -1437,4 +1437,4 @@ msgstr "Sim, neste ritmo. Faltam {0} blocos sinalizando nos {1} restantes, e a {
 #. placeholder {1}: formatInt(w.threshold)
 #. placeholder {2}: formatInt(w.endHeight + 1)
 msgid "Yes. This window has {0} signalling blocks, at least its threshold of {1}, so Core 24 locks in at block {2}."
-msgstr "Sim. Esta janela tem {0} blocos sinalizando, pelo menos o limiar de {1}, então o Core 24 trava no bloco {2}."
+msgstr "Sim. Esta janela tem {0} blocos sinalizando, pelo menos o limiar de {1}, então o Core 24 é consolidado no bloco {2}."

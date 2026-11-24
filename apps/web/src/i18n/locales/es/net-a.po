@@ -292,14 +292,14 @@ msgstr "tantos masternodes respondiendo como hace un día"
 
 #. placeholder {0}: when(p.timeout)
 msgid "At that pace no window locks in before the timeout, {0}."
-msgstr "A este ritmo ninguna ventana se bloquea antes del plazo límite, {0}."
+msgstr "A este ritmo ninguna ventana se fija antes del plazo límite, {0}."
 
 #. placeholder {0}: formatInt(p.threshold_min)
 #. placeholder {1}: formatInt(p.window)
 #. placeholder {2}: formatPercent(floor, 1)
 #. placeholder {3}: formatNumber(gap, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 msgid "At that pace no window locks in: even the lowest threshold, {0} of {1} blocks ({2}), is above it. Signalling has to rise by about {3} percentage points."
-msgstr "A este ritmo ninguna ventana se bloquea: incluso el umbral más bajo, {0} de {1} bloques ({2}), está por encima. La señalización debe subir unos {3} puntos porcentuales."
+msgstr "A este ritmo ninguna ventana se fija: incluso el umbral más bajo, {0} de {1} bloques ({2}), está por encima. La señalización debe subir unos {3} puntos porcentuales."
 
 #. placeholder {0}: String(projection.attempt + 1)
 #. placeholder {1}: formatInt(projection.start)
@@ -310,7 +310,7 @@ msgstr "A este ritmo ninguna ventana se bloquea: incluso el umbral más bajo, {0
 #. placeholder {6}: formatInt(projection.activation)
 #. placeholder {7}: at(projection.activation)
 msgid "At that pace window #{0} (blocks {1}–{2}, threshold {3} of {4}) is the first to lock in, about {5}. Core 24 would then activate at block {6}, about {7}."
-msgstr "A este ritmo la ventana n.º {0} (bloques {1}–{2}, umbral {3} de {4}) es la primera en bloquearse, hacia el {5}. Core 24 se activaría entonces en el bloque {6}, hacia el {7}."
+msgstr "A este ritmo la ventana n.º {0} (bloques {1}–{2}, umbral {3} de {4}) es la primera en fijarse, hacia el {5}. Core 24 se activaría entonces en el bloque {6}, hacia el {7}."
 
 msgid "at the earliest"
 msgstr "como pronto"
@@ -379,7 +379,7 @@ msgid "Can they be reached"
 msgstr "¿Son accesibles?"
 
 msgid "Can this window lock in?"
-msgstr "¿Puede bloquearse esta ventana?"
+msgstr "¿Puede fijarse esta ventana?"
 
 #. placeholder {0}: formatInt(best.height)
 msgid "ChainLock at {0}, reported by one node"
@@ -686,7 +686,7 @@ msgid "Locked to Core block"
 msgstr "Fijado al bloque Core"
 
 msgid "locks in at today's pace"
-msgstr "se bloquea al ritmo de hoy"
+msgstr "se fija al ritmo de hoy"
 
 msgid "Map of the world with a disc for each place Radar found masternodes. {summary}, {scope}."
 msgstr "Mapa del mundo con un disco por cada lugar donde Radar encontró masternodes. {summary}, {scope}."
@@ -1400,7 +1400,7 @@ msgid "What they run"
 msgstr "Qué ejecutan"
 
 msgid "Where Dash Core 24's activation stands: whether this window can lock in, which pools signal, miners' signalling window by window, the falling lock-in threshold and the masternode signal."
-msgstr "Cómo va la activación de Dash Core 24: si esta ventana puede bloquearse, qué pools señalizan, la señalización de los mineros ventana a ventana, el umbral que baja y la señal de los masternodes."
+msgstr "Cómo va la activación de Dash Core 24: si esta ventana puede fijarse, qué pools señalizan, la señalización de los mineros ventana a ventana, el umbral que baja y la señal de los masternodes."
 
 msgid "Where it stands"
 msgstr "En qué punto está"
@@ -1437,4 +1437,4 @@ msgstr "Sí, a este ritmo. Necesita {0} bloques más que señalicen en los {1} r
 #. placeholder {1}: formatInt(w.threshold)
 #. placeholder {2}: formatInt(w.endHeight + 1)
 msgid "Yes. This window has {0} signalling blocks, at least its threshold of {1}, so Core 24 locks in at block {2}."
-msgstr "Sí. Esta ventana tiene {0} bloques que señalizan, al menos su umbral de {1}, así que Core 24 se bloquea en el bloque {2}."
+msgstr "Sí. Esta ventana tiene {0} bloques que señalizan, al menos su umbral de {1}, así que Core 24 se fija en el bloque {2}."
