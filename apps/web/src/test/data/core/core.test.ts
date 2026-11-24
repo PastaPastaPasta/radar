@@ -74,6 +74,34 @@ describe.each(['mainnet', 'testnet'] as const)('Core façade on %s fixtures', (n
     expect(tip.height).toBe(manifest.tip.height)
   })
 
+  it('shares one tip read between callers that ask at once', async () => {
+    const fresh = setup()
+    const leaving = new AbortController()
+    const first = fresh.core.tip(net)
+    const gone = fresh.core.tip(net, leaving.signal)
+    const third = fresh.core.tip(net)
+    leaving.abort()
+    await expect(gone).rejects.toMatchObject({ kind: 'aborted' })
+    expect((await first).data.height).toBe(manifest.tip.height)
+    expect((await third).data.hash).toBe(manifest.tip.hash)
+    const methods = fresh.transport.calls.map((c) => c.method)
+    expect(methods.filter((m) => m === 'getBlockchainStatus')).toHaveLength(1)
+    expect(methods.filter((m) => m === 'subscribeToBlockHeadersWithChainLocks')).toHaveLength(1)
+    await fresh.core.tip(net)
+    expect(fresh.transport.calls.filter((c) => c.method === 'getBlockchainStatus')).toHaveLength(2)
+  })
+
+  it('keeps no tip from a read that outlived a network reset', async () => {
+    const fresh = setup()
+    const statusCalls = () =>
+      fresh.transport.calls.filter((c) => c.method === 'getBlockchainStatus').length
+    const before = fresh.core.tip(net)
+    fresh.core.forget(net)
+    await before
+    await fresh.core.heightAtTime(net, Date.now() + 86_400_000)
+    expect(statusCalls()).toBe(2)
+  })
+
   it('reports the chain status', async () => {
     const status = await core.status(net)
     expect(status.data.blocks).toBe(manifest.tip.height)

@@ -917,6 +917,24 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
 
   const heldUntil = new Map<string, number>()
 
+  /** One tip read per network at a time: the shell, the page and the index probe all ask for it as a page opens. */
+  const tipFlights = new Map<
+    NetworkId,
+    Promise<Sourced<{ height: number; hash: string; time: number }>>
+  >()
+  async function readTip(net: NetworkId) {
+    const status = await rpc().status(net, {})
+    const height = status.message.chain?.blocksCount ?? 0
+    const hash = reversed(status.message.chain?.bestBlockHash ?? new Uint8Array())
+    // The node that reported the height has its header; another may be a block behind.
+    const { headers } = await readHeaders(net, height, 1, undefined, { prefer: status.node })
+    const header = headers[0]
+    if (!header) {
+      throw invalid('DAPI sent no header for its own tip', status.node)
+    }
+    return dapi({ height, hash, time: header.time }, { node: status.node, height })
+  }
+
   const client: CoreClient & CoreClientHooks = {
     async tip(net: NetworkId, signal?: AbortSignal) {
       if (hyphenStandsIn(net)) {
@@ -931,17 +949,21 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
           )
         }
       }
-      const status = await rpc().status(net, { signal })
-      const height = status.message.chain?.blocksCount ?? 0
-      const hash = reversed(status.message.chain?.bestBlockHash ?? new Uint8Array())
-      // The node that reported the height has its header; another may be a block behind.
-      const { headers } = await readHeaders(net, height, 1, signal, { prefer: status.node })
-      const header = headers[0]
-      if (!header) {
-        throw invalid('DAPI sent no header for its own tip', status.node)
+      let flight = tipFlights.get(net)
+      if (!flight) {
+        flight = readTip(net)
+          .then((tip) => {
+            // A read that outlived a network reset must not put the old network's tip back.
+            if (tipFlights.get(net) === flight) rememberTip(net, tip.data)
+            return tip
+          })
+          .finally(() => {
+            if (tipFlights.get(net) === flight) tipFlights.delete(net)
+          })
+        flight.catch(() => undefined)
+        tipFlights.set(net, flight)
       }
-      rememberTip(net, { height, hash, time: header.time })
-      return dapi({ height, hash, time: header.time }, { node: status.node, height })
+      return raceAbort(flight, signal)
     },
 
     async chainLock(net: NetworkId, signal?: AbortSignal) {
@@ -1355,6 +1377,7 @@ export function createCoreClient(deps: CoreDeps = defaultDeps): CoreClient & Cor
       claims.delete(net)
       lockRefreshedAt.delete(net)
       lockFlights.delete(net)
+      tipFlights.delete(net)
       tipMemo.delete(net)
       seenTips.delete(net)
       for (const key of [...heldUntil.keys()]) if (key.startsWith(`${net}:`)) heldUntil.delete(key)
