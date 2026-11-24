@@ -78,10 +78,12 @@ msgstr "{0} héberge {1} des {noun}, et les trois plus gros fournisseurs en héb
 msgid "{0} masternodes"
 msgstr "{0} masternodes"
 
-#. placeholder {0}: formatInt(o.needed)
-#. placeholder {1}: formatInt(o.remaining ?? 0)
-msgid "{0} more needed in {1} blocks"
-msgstr "{0} de plus requis en {1} blocs"
+#. placeholder {0}: x.pool ?? ''
+#. placeholder {1}: formatInt(x.blocks)
+#. placeholder {2}: formatInt(mined)
+#. placeholder {3}: pct(x.blocks, mined)
+msgid "{0} mined {1} of this window's {2} blocks ({3}) and signalled none."
+msgstr "{0} a miné {1} des {2} blocs de cette fenêtre ({3}) et n’en a signalé aucun."
 
 #. placeholder {0}: formatInt(r.folded)
 msgid "{0} more versions"
@@ -93,12 +95,17 @@ msgstr "{0} doivent signer"
 
 #. placeholder {0}: formatInt(p.healthy)
 #. placeholder {0}: formatInt(q.valid)
-#. placeholder {0}: formatInt(r.threshold)
+#. placeholder {0}: formatInt(r.signalling)
 #. placeholder {1}: formatInt(p.checked)
 #. placeholder {1}: formatInt(p.window)
 #. placeholder {1}: formatInt(q.members)
 msgid "{0} of {1}"
 msgstr "{0} sur {1}"
+
+#. placeholder {0}: formatInt(w.count)
+#. placeholder {1}: formatInt(w.mined)
+msgid "{0} of {1} blocks"
+msgstr "{0} blocs sur {1}"
 
 #. placeholder {0}: formatInt(threshold ?? 0)
 #. placeholder {1}: formatInt(p.window)
@@ -138,6 +145,11 @@ msgstr "{0} des {noun} activés ont répondu à notre handshake sur leur adresse
 #. placeholder {0}: formatPercent(share, 1)
 msgid "{0} of enabled answered"
 msgstr "{0} des activés ont répondu"
+
+#. placeholder {0}: formatInt(w.needed)
+#. placeholder {1}: formatInt(w.remaining)
+msgid "{0} of the {1} left"
+msgstr "{0} des {1} restants"
 
 #. placeholder {0}: formatInt(evo)
 msgid "{0} of them evonodes"
@@ -269,6 +281,10 @@ msgstr "Tous les nœuds"
 msgid "All Platform blocks"
 msgstr "Tous les blocs Platform"
 
+#. placeholder {0}: String(Math.round(doc.block_seconds))
+msgid "An estimate: the share moves as pools switch, and dates assume {0} s a block."
+msgstr "Une estimation : la part change quand des pools basculent, et les dates supposent {0} s par bloc."
+
 msgid "Announce 24"
 msgstr "Announce 24"
 
@@ -281,11 +297,32 @@ msgstr "Autant qu’il y a un jour."
 msgid "as many masternodes answering as a day ago"
 msgstr "autant de masternodes qui répondent qu’il y a un jour"
 
+#. placeholder {0}: formatInt(p.threshold_min)
+#. placeholder {1}: formatInt(p.window)
+#. placeholder {2}: formatPercent(floor, 1)
+#. placeholder {3}: formatNumber((floor - rate) * 100, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+msgid "At that pace no window locks in: even the lowest threshold, {0} of {1} blocks ({2}), is above it. Signalling has to rise by about {3} percentage points."
+msgstr "À ce rythme, aucune fenêtre ne se verrouille : même le seuil le plus bas, {0} blocs sur {1} ({2}), est au-dessus. La signalisation doit augmenter d’environ {3} points de pourcentage."
+
+#. placeholder {0}: String(projection.attempt + 1)
+#. placeholder {1}: formatInt(projection.start)
+#. placeholder {2}: formatInt(projection.end)
+#. placeholder {3}: formatInt(projection.threshold)
+#. placeholder {4}: formatInt(p.window)
+#. placeholder {5}: at(projection.end)
+#. placeholder {6}: formatInt(projection.activation)
+#. placeholder {7}: at(projection.activation)
+msgid "At that pace window #{0} (blocks {1}–{2}, threshold {3} of {4}) is the first to lock in, about {5}. Core 24 would then activate at block {6}, about {7}."
+msgstr "À ce rythme, la fenêtre n° {0} (blocs {1}–{2}, seuil {3} sur {4}) est la première à se verrouiller, vers le {5}. Core 24 s’activerait alors au bloc {6}, vers le {7}."
+
 msgid "at the earliest"
 msgstr "au plus tôt"
 
 msgid "At this pace"
 msgstr "À ce rythme"
+
+msgid "At today's pace"
+msgstr "Au rythme d’aujourd’hui"
 
 #. placeholder {0}: g.llmq
 #. placeholder {1}: formatInt(size)
@@ -317,10 +354,19 @@ msgstr "mises à jour des blocs"
 msgid "Blockchain size"
 msgstr "Taille de la blockchain"
 
+msgid "Blocks"
+msgstr "Blocs"
+
 #. placeholder {0}: formatInt(w.start.height)
 #. placeholder {1}: formatInt(w.end.height)
 msgid "blocks {0}–{1}"
 msgstr "blocs {0}–{1}"
+
+msgid "Blocks and signalling blocks per pool this window"
+msgstr "Blocs et blocs signalant par pool dans cette fenêtre"
+
+msgid "Blocks left"
+msgstr "Blocs restants"
 
 msgid "Builds that aren't releases"
 msgstr "Builds qui ne sont pas des versions publiées"
@@ -328,8 +374,8 @@ msgstr "Builds qui ne sont pas des versions publiées"
 msgid "Can they be reached"
 msgstr "Sont-ils joignables"
 
-msgid "can't reach it any more"
-msgstr "ne peut plus l’atteindre"
+msgid "Can this window lock in?"
+msgstr "Cette fenêtre peut-elle se verrouiller ?"
 
 #. placeholder {0}: formatInt(best.height)
 msgid "ChainLock at {0}, reported by one node"
@@ -635,6 +681,9 @@ msgstr "Verrouillé"
 msgid "Locked to Core block"
 msgstr "Verrouillé au bloc Core"
 
+msgid "locks in at today's pace"
+msgstr "se verrouille au rythme d’aujourd’hui"
+
 msgid "Map of the world with a disc for each place Radar found masternodes. {summary}, {scope}."
 msgstr "Carte du monde avec un disque pour chaque lieu où Radar a trouvé des masternodes. {summary}, {scope}."
 
@@ -725,6 +774,9 @@ msgstr "Nom"
 msgid "needed before any window counts"
 msgstr "requis avant que toute fenêtre compte"
 
+msgid "Needed from the rest"
+msgstr "Nécessaire sur le reste"
+
 #. placeholder {0}: String(minProtocol)
 msgid "needs {0}+"
 msgstr "requiert {0}+"
@@ -743,6 +795,9 @@ msgstr "Taille du réseau. Utilisez les flèches gauche et droite pour parcourir
 
 msgid "Next window that counts"
 msgstr "Prochaine fenêtre qui compte"
+
+msgid "no"
+msgstr "non"
 
 msgid "No {noun} have told us their version yet."
 msgstr "Aucun des {noun} ne nous a encore indiqué sa version."
@@ -777,6 +832,13 @@ msgstr "Aucune transaction dans le mempool pour le moment"
 msgid "No window to show yet."
 msgstr "Aucune fenêtre à afficher pour l’instant."
 
+#. placeholder {0}: formatInt(w.needed)
+#. placeholder {1}: formatInt(w.remaining)
+#. placeholder {2}: formatInt(next)
+#. placeholder {3}: formatInt(p.window)
+msgid "No. It needs {0} more signalling blocks and only {1} are left. The next window decides, at a threshold of {2} of {3}."
+msgstr "Non. Il faut encore {0} blocs signalant et il n’en reste que {1}. La fenêtre suivante décide, avec un seuil de {2} sur {3}."
+
 msgid "Nodes"
 msgstr "Nœuds"
 
@@ -785,6 +847,15 @@ msgstr "aucun n’échoue"
 
 msgid "not a release"
 msgstr "pas une version publiée"
+
+#. placeholder {0}: formatInt(w.needed)
+#. placeholder {1}: formatInt(w.remaining)
+#. placeholder {2}: pct(w.needed, w.remaining)
+#. placeholder {3}: formatPercent(rate, 1)
+#. placeholder {4}: formatInt(w.projected)
+#. placeholder {5}: formatInt(w.threshold)
+msgid "Not at this pace. It needs {0} more signalling blocks in the {1} left, {2} of them. At {3} it ends with about {4} of the {5} it needs."
+msgstr "Pas à ce rythme. Il faut encore {0} blocs signalant sur les {1} restants, soit {2}. À {3}, elle finit avec environ {4} des {5} nécessaires."
 
 msgid "Not checked"
 msgstr "Non vérifié"
@@ -816,6 +887,12 @@ msgstr "maintenant"
 
 msgid "Now"
 msgstr "Maintenant"
+
+#. placeholder {0}: formatInt(p.window)
+#. placeholder {1}: pct(w.threshold, p.window)
+#. placeholder {2}: String(attempt)
+msgid "of {0} ({1}), window #{2}"
+msgstr "sur {0} ({1}), fenêtre n° {2}"
 
 #. placeholder {0}: formatInt(r.mined)
 msgid "of {0} so far"
@@ -863,8 +940,14 @@ msgstr "Notre historique commence {0}, donc cette plage montre moins que demand�
 msgid "Our reading disagrees with our dashd's."
 msgstr "Notre lecture diffère de celle de notre dashd."
 
+msgid "out of reach"
+msgstr "hors d’atteinte"
+
 msgid "Over time"
 msgstr "Dans le temps"
+
+msgid "partly"
+msgstr "en partie"
 
 msgid "Pass every check"
 msgstr "Réussissent tous les contrôles"
@@ -904,6 +987,12 @@ msgstr "mises à jour de Platform"
 
 msgid "Platform's latest transitions and blocks need Platform Explorer"
 msgstr "Les dernières transitions et les derniers blocs de Platform nécessitent Platform Explorer"
+
+msgid "Pool"
+msgstr "Pool"
+
+msgid "Pools signalling"
+msgstr "Pools qui signalent"
 
 msgid "PoSe-banned"
 msgstr "Banni par PoSe"
@@ -1066,6 +1155,9 @@ msgstr "Blocs signalant jusqu’ici"
 msgid "Signalling share and threshold for {0} windows"
 msgstr "Part de signalisation et seuil pour {0} fenêtres"
 
+msgid "Signalling so far"
+msgstr "Signalé jusqu’ici"
+
 #. placeholder {0}: formatInt(d.since)
 msgid "since block {0}"
 msgstr "depuis le bloc {0}"
@@ -1181,9 +1273,6 @@ msgstr "Il n’y a pas de délai d’expiration sur ce réseau."
 msgid "This reading is stale."
 msgstr "Cette lecture est périmée."
 
-msgid "This window"
-msgstr "Cette fenêtre"
-
 #. placeholder {0}: String((w.attempt ?? 0) + 1)
 msgid "This window (attempt {0}), block by block"
 msgstr "Cette fenêtre (tentative {0}), bloc par bloc"
@@ -1200,14 +1289,28 @@ msgstr "Seuil"
 msgid "Threshold {0}; at this pace the window ends with {1}."
 msgstr "Seuil de {0} ; à ce rythme, la fenêtre se termine avec {1}."
 
-msgid "threshold reached"
-msgstr "seuil atteint"
-
 msgid "Thresholds by window"
 msgstr "Seuils par fenêtre"
 
 msgid "Time range"
 msgstr "Plage de temps"
+
+#. placeholder {0}: formatInt(w.endHeight)
+#. placeholder {1}: at(w.endHeight)
+msgid "to block {0}, about {1}"
+msgstr "jusqu’au bloc {0}, vers le {1}"
+
+#. placeholder {0}: formatInt(pace.blocks)
+#. placeholder {1}: formatInt(pace.signalled)
+#. placeholder {2}: formatPercent(rate, 1)
+msgid "Today's pace is the last {0} blocks': {1} signalled ({2})."
+msgstr "Le rythme d’aujourd’hui est celui des {0} derniers blocs : {1} ont signalé ({2})."
+
+#. placeholder {0}: formatInt(pace.signalled)
+#. placeholder {1}: formatInt(pace.blocks)
+#. placeholder {2}: formatPercent(rate, 1)
+msgid "Today's pace is this window's so far: {0} of {1} blocks signalled ({2})."
+msgstr "Le rythme d’aujourd’hui est celui de cette fenêtre jusqu’ici : {0} blocs sur {1} ont signalé ({2})."
 
 msgid "Tor"
 msgstr "Tor"
@@ -1238,6 +1341,9 @@ msgstr "Inconnu"
 
 msgid "unknown version"
 msgstr "version inconnue"
+
+msgid "Untagged"
+msgstr "Sans tag"
 
 msgid "Updated"
 msgstr "Mis à jour"
@@ -1286,8 +1392,8 @@ msgstr "Ce qu’ils gagnent"
 msgid "What they run"
 msgstr "Ce qu’ils exécutent"
 
-msgid "Where Dash Core 24's activation stands: the masternode signal, miners' signalling window by window, the lock-in threshold and when the next window opens."
-msgstr "Où en est l’activation de Dash Core 24 : le signal des masternodes, la signalisation des mineurs fenêtre par fenêtre, le seuil de verrouillage et l’ouverture de la prochaine fenêtre."
+msgid "Where Dash Core 24's activation stands: whether this window can lock in, which pools signal, miners' signalling window by window, the falling lock-in threshold and the masternode signal."
+msgstr "Où en est l’activation de Dash Core 24 : si cette fenêtre peut se verrouiller, quels pools signalent, la signalisation des mineurs fenêtre par fenêtre, le seuil qui baisse et le signal des masternodes."
 
 msgid "Where it stands"
 msgstr "Où en est-on"
@@ -1299,8 +1405,29 @@ msgstr "Quels nœuds"
 msgid "Which quorum signs depends on the request and on which quorums are active then (a new one forms about every day), so here are the {0} active now, the one that would sign now first."
 msgstr "Le quorum qui signe dépend de la requête et des quorums actifs à ce moment-là (un nouveau se forme environ chaque jour) ; voici donc les {0} actifs maintenant, celui qui signerait maintenant en premier."
 
+#. placeholder {0}: formatInt(mined)
+msgid "Who mined this window's {0} blocks and how many of them signalled. Best effort: we go by the tag in each block's coinbase, which is whatever the miner wrote, and some blocks carry none."
+msgstr "Qui a miné les {0} blocs de cette fenêtre et combien ont signalé. Au mieux : nous nous fions au tag dans la coinbase de chaque bloc, qui est ce que le mineur y a écrit, et certains blocs n’en ont pas."
+
 msgid "Window"
 msgstr "Fenêtre"
 
 msgid "would sign now"
 msgstr "signerait maintenant"
+
+msgid "yes"
+msgstr "oui"
+
+#. placeholder {0}: formatInt(w.needed)
+#. placeholder {1}: formatInt(w.remaining)
+#. placeholder {2}: formatPercent(rate, 1)
+#. placeholder {3}: formatInt(w.projected)
+#. placeholder {4}: formatInt(w.threshold)
+msgid "Yes, at this pace. It needs {0} more signalling blocks in the {1} left, and at {2} it ends with about {3} of the {4} it needs."
+msgstr "Oui, à ce rythme. Il faut encore {0} blocs signalant sur les {1} restants, et à {2} elle finit avec environ {3} des {4} nécessaires."
+
+#. placeholder {0}: formatInt(w.count)
+#. placeholder {1}: formatInt(w.threshold)
+#. placeholder {2}: formatInt(w.endHeight + 1)
+msgid "Yes. This window has {0} signalling blocks, at least its threshold of {1}, so Core 24 locks in at block {2}."
+msgstr "Oui. Cette fenêtre a {0} blocs signalant, au moins son seuil de {1}, donc Core 24 se verrouille au bloc {2}."

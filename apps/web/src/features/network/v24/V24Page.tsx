@@ -8,7 +8,9 @@ import { PageFrame, PageLink, useNetwork, usePageClaim } from '@/features/entity
 import { isDevnet } from '@/lib/network'
 import { Empty, ErrorState, Skeleton, Unavailable, useNow } from '@/ui'
 import { ActivationNotes, HowItWorks } from './HowItWorks'
+import { LockInSection } from './LockInSection'
 import { MinersSection } from './MinersSection'
+import { PoolsSection } from './PoolsSection'
 import { SignalSection } from './SignalSection'
 import { StatusSection } from './StatusSection'
 import { ThresholdsSection } from './ThresholdsSection'
@@ -24,7 +26,7 @@ export function V24Page() {
       title={t`Core 24 activation`}
       eyebrow={t`Network`}
       layer="network"
-      lede={t`Where Dash Core 24's activation stands: the masternode signal, miners' signalling window by window, the lock-in threshold and when the next window opens.`}
+      lede={t`Where Dash Core 24's activation stands: whether this window can lock in, which pools signal, miners' signalling window by window, the falling lock-in threshold and the masternode signal.`}
     >
       <Tracker />
     </PageFrame>
@@ -117,6 +119,8 @@ function Readings({
       ) : null}
       <ActivationNotes d={d} />
       <StatusSection doc={doc} d={d} stamp={stamp} />
+      <LockInSection doc={doc} d={d} stamp={stamp} />
+      <PoolsSection d={d} stamp={stamp} />
       <SignalSection d={d} stamp={stamp} />
       <MinersSection doc={doc} d={d} stamp={stamp} />
       <ThresholdsSection doc={doc} d={d} stamp={stamp} />

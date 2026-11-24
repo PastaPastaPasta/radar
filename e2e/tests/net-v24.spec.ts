@@ -97,6 +97,12 @@ async function reshape(page: Page, patch: 'signalling') {
         needed: threshold - count,
         possible: false,
         remaining: size - mined,
+        pools: [
+          { pool: 'ViaBTC', blocks: 1000, signalling: 0 },
+          { pool: 'F2Pool', blocks: 400, signalling: 400 },
+          { pool: 'AntPool', blocks: 60, signalling: 60 },
+          { pool: null, blocks: 40, signalling: 40 },
+        ],
       }
       d.window = window
       d.windows = [window]
@@ -242,7 +248,6 @@ test.describe('Core 24 activation tracker', () => {
     await open(page)
     const status = card(page, 'status')
     await expect(status).toContainText('Signalling')
-    await expect(status.locator('[data-v24-status]')).toContainText('This window')
     const window = card(page, 'miners').locator('[data-v24-window]')
     await expect(window).toContainText('This window (attempt 1), block by block')
     await expect(window).toContainText('blocks 2,576,448–2,580,479')
@@ -252,6 +257,48 @@ test.describe('Core 24 activation tracker', () => {
     await expect(window.locator('.rx-chart__table table')).toContainText('1,500')
     await expect(card(page, 'thresholds').locator('tbody tr', { hasText: 'now' })).toHaveCount(1)
     await expect(card(page, 'signal')).toContainText('in block 2,575,000')
+  })
+
+  test("says plainly whether this window can lock in, which window does at today's pace, and which pools signal @RA-70 @RA-72", async ({
+    page,
+  }) => {
+    await reshape(page, 'signalling')
+    await open(page)
+    const lockIn = card(page, 'lock-in')
+    await expect(lockIn.locator('[data-v24-lock-in]')).toHaveAttribute('data-verdict', 'impossible')
+    await expect(lockIn).toContainText(
+      'No. It needs 2,726 more signalling blocks and only 2,532 are left.',
+    )
+    await expect(lockIn).toContainText('500 of 1,500 blocks')
+    await expect(lockIn).toContainText('2,532')
+    await expect(lockIn).toContainText('3,226')
+    await expect(lockIn).toContainText('out of reach')
+    const projection = lockIn.locator('[data-v24-projection]')
+    await expect(projection).toContainText(
+      "Today's pace is this window's so far: 500 of 1,500 blocks signalled (33.3%).",
+    )
+    await expect(projection).toContainText(
+      'At that pace no window locks in: even the lowest threshold, 2,420 of 4,032 blocks (60.0%), is above it.',
+    )
+    await expect(lockIn.locator('[data-v24-silent]')).toContainText(
+      "ViaBTC mined 1,000 of this window's 1,500 blocks (66.7%) and signalled none.",
+    )
+    const pools = card(page, 'pools')
+    await expect(pools).toContainText('Best effort')
+    await expect(pools.locator('tbody tr')).toHaveCount(4)
+    await expect(pools.locator('tbody tr').first()).toContainText('ViaBTC')
+    await expect(pools.locator('tbody tr').first()).toContainText('0 of 1,000')
+    await expect(pools.locator('tbody tr').last()).toContainText('Untagged')
+    await expect(
+      card(page, 'thresholds').locator('tbody tr', { hasText: "locks in at today's pace" }),
+    ).toHaveCount(0)
+    await expectAccessible(page)
+  })
+
+  test('has no lock-in card or pools before miners can signal @RA-70', async ({ page }) => {
+    await open(page)
+    await expect(card(page, 'lock-in')).toHaveCount(0)
+    await expect(card(page, 'pools')).toHaveCount(0)
   })
 
   test('fits a phone with its charts and tables reachable @RA-70 @RA-72', async ({

@@ -217,3 +217,139 @@ export function thresholdRows(d: RadarActivationDeployment, pace: number): Thres
     }
   })
 }
+
+/** The signalling share the outlook goes by: this window's once it has a day of blocks, else the last day's. */
+export interface Pace {
+  signalled: number
+  blocks: number
+  basis: 'window' | 'recent'
+}
+
+export function todaysPace(d: RadarActivationDeployment): Pace | undefined {
+  const w = d.window
+  if (d.state === 'started' && w && w.mined > 0 && w.mined >= d.recent.blocks) {
+    return { signalled: w.count, blocks: w.mined, basis: 'window' }
+  }
+  return d.recent.blocks > 0
+    ? { signalled: d.recent.count, blocks: d.recent.blocks, basis: 'recent' }
+    : undefined
+}
+
+export const rateOf = (p: Pace): number => p.signalled / p.blocks
+
+export type Verdict = 'reached' | 'on-track' | 'needs-more' | 'impossible'
+
+export interface WindowOutlook {
+  verdict: Verdict
+  count: number
+  mined: number
+  remaining: number
+  threshold: number
+  needed: number
+  /** Where `rate` leads by the window's last block. */
+  projected: number
+  endHeight: number
+}
+
+/** Whether the window being counted can still lock in, and whether it does at `rate`. */
+export function windowOutlook(
+  d: RadarActivationDeployment,
+  rate: number,
+): WindowOutlook | undefined {
+  const w = d.window
+  if (d.state !== 'started' || w?.threshold == null) return undefined
+  const size = d.params.window
+  const remaining = size - w.mined
+  const needed = Math.max(0, w.threshold - w.count)
+  const projected = Math.min(size, Math.floor(w.count + rate * remaining))
+  const verdict: Verdict =
+    needed === 0
+      ? 'reached'
+      : needed > remaining
+        ? 'impossible'
+        : projected >= w.threshold
+          ? 'on-track'
+          : 'needs-more'
+  return {
+    verdict,
+    count: w.count,
+    mined: w.mined,
+    remaining,
+    threshold: w.threshold,
+    needed,
+    projected,
+    endHeight: w.start.height + size - 1,
+  }
+}
+
+export interface LockInProjection {
+  attempt: number
+  threshold: number
+  start: number
+  end: number
+  /** First block of the window after it, locked in. */
+  lockIn: number
+  /** First block of the window after that, active. */
+  activation: number
+}
+
+/** A height's time in ms at the recent pace from the tip. */
+export const estimateMs = (doc: RadarActivation, height: number): number =>
+  doc.tip.time + (height - doc.tip.height) * doc.block_seconds * 1000
+
+/**
+ * The first window that locks in if miners keep signalling at `rate`: the one being counted (by where its
+ * pace leads), then each to come at that share of its blocks against its falling threshold. Null when no
+ * window does before the timeout; undefined when no window is to be counted.
+ */
+export function projectLockIn(
+  doc: RadarActivation,
+  d: RadarActivationDeployment,
+  rate: number,
+): LockInProjection | null | undefined {
+  const p = d.params
+  const o = d.outlook
+  const thresholdAt = (a: number) =>
+    d.schedule[Math.min(a, d.schedule.length - 1)]?.threshold ?? p.threshold_min
+  const at = (attempt: number, start: number): LockInProjection => ({
+    attempt,
+    threshold: thresholdAt(attempt),
+    start,
+    end: start + p.window - 1,
+    lockIn: start + p.window,
+    activation: start + 2 * p.window,
+  })
+  let attempt: number
+  let start: number
+  const now = windowOutlook(d, rate)
+  if (now && d.window?.attempt != null) {
+    if (now.verdict === 'reached' || now.verdict === 'on-track') {
+      return at(d.window.attempt, d.window.start.height)
+    }
+    attempt = d.window.attempt + 1
+    start = d.window.start.height + p.window
+  } else if (
+    (o.phase === 'waiting_for_window' || o.phase === 'waiting_for_signal') &&
+    o.earliest_start
+  ) {
+    attempt = 0
+    start = o.earliest_start.height
+  } else {
+    return undefined
+  }
+  if (d.schedule.length === 0) return undefined
+  for (;;) {
+    const w = at(attempt, start)
+    if (Math.floor(rate * p.window) >= w.threshold) return w
+    if (p.timeout != null && estimateMs(doc, w.end) >= p.timeout) return null
+    if (w.threshold <= p.threshold_min) return null
+    attempt++
+    start += p.window
+  }
+}
+
+export type PoolRow = NonNullable<NonNullable<RadarActivationDeployment['window']>['pools']>[number]
+
+/** The pools in the window that don't signal at all, the most blocks first. */
+export const silentPools = (pools: readonly PoolRow[]): PoolRow[] =>
+  pools.filter((x) => x.pool !== null && x.blocks > 0 && x.signalling === 0)

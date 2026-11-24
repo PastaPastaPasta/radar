@@ -6,7 +6,14 @@ import type { RadarActivation, RadarActivationDeployment } from '@/data/radar/sc
 import { formatInt } from '@/lib/format'
 import { Badge, Card, DataTable } from '@/ui'
 import { share, when } from './v24-format'
-import { isDecided, thresholdRows, type ThresholdRow } from './v24-math'
+import {
+  isDecided,
+  projectLockIn,
+  rateOf,
+  thresholdRows,
+  todaysPace,
+  type ThresholdRow,
+} from './v24-math'
 
 /** The lock-in threshold of every window, each with the time it starts (an estimate while to come) and its count. */
 export function ThresholdsSection({
@@ -21,6 +28,10 @@ export function ThresholdsSection({
   const { t } = useLingui()
   const p = d.params
   const rows = useMemo(() => thresholdRows(d, doc.block_seconds), [d, doc.block_seconds])
+  const lockIn = useMemo(() => {
+    const pace = todaysPace(d)
+    return pace && !isDecided(d) ? projectLockIn(doc, d, rateOf(pace))?.attempt : undefined
+  }, [doc, d])
   const columns = useMemo<ColumnDef<ThresholdRow>[]>(
     () => [
       {
@@ -34,6 +45,14 @@ export function ThresholdsSection({
                 {' '}
                 <Badge tone="info" size="sm">
                   {t`now`}
+                </Badge>
+              </>
+            ) : null}
+            {r.attempt === lockIn ? (
+              <>
+                {' '}
+                <Badge tone="success" size="sm">
+                  {t`locks in at today's pace`}
                 </Badge>
               </>
             ) : null}
@@ -79,7 +98,7 @@ export function ThresholdsSection({
         meta: { align: 'end', numeric: true, phone: 'secondary' },
       },
     ],
-    [t, p.window],
+    [t, p.window, lockIn],
   )
   return (
     <Card
