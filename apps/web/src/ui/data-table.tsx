@@ -9,7 +9,7 @@ import {
   type Header,
   type SortingState,
 } from '@tanstack/react-table'
-import { useWindowVirtualizer } from '@tanstack/react-virtual'
+import { useWindowVirtualizer, type Virtualizer } from '@tanstack/react-virtual'
 import {
   useCallback,
   useEffect,
@@ -357,12 +357,28 @@ export function DataTable<Row>({
     }
   }, [virtual])
 
+  const drawn = useRef<Virtualizer<Window, Element> | null>(null)
+  const average = useRef({ seen: 0, size: 0 })
   const virtualizer = useWindowVirtualizer({
     count: virtual ? modelRows.length : 0,
-    estimateSize: () => (dense ? DENSE_ROW_HEIGHT : ROW_HEIGHT),
+    // Rows not drawn yet are guessed at the drawn rows' average, so a list of phone cards, several table rows tall
+    // each, is about as long before it is drawn as after: a restored offset or a deep link then lands on its row.
+    estimateSize: () => {
+      const sizes = drawn.current?.itemSizeCache
+      if (!sizes || sizes.size === 0) return dense ? DENSE_ROW_HEIGHT : ROW_HEIGHT
+      if (sizes.size !== average.current.seen) {
+        let sum = 0
+        for (const size of sizes.values()) sum += size
+        average.current = { seen: sizes.size, size: sum / sizes.size }
+      }
+      return average.current.size
+    },
     overscan: 12,
     scrollMargin,
     initialRect: { width: 1200, height: 900 },
+  })
+  useLayoutEffect(() => {
+    drawn.current = virtualizer
   })
   const virtualItems = virtual ? virtualizer.getVirtualItems() : []
   const visible = virtual
