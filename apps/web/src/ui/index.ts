@@ -42,7 +42,7 @@ export { Tabs } from './tabs'
 export type { TabsProps } from './tabs'
 export { DataTable, NewRowsPill, Pager } from './data-table'
 export type { DataTableProps } from './data-table'
-export { useListPosition, useReveal } from './reveal'
+export { useListPosition, useReveal } from './data-table'
 export {
   TableTools,
   SegFilter,

@@ -5,7 +5,7 @@ import { useRef, useState } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { DataTable } from './data-table'
 import { barInset } from './infinite'
-import { useListPosition, useReveal } from './reveal'
+import { useListPosition, useReveal } from './data-table'
 import { renderInRouter } from './test-utils'
 
 interface Row {
