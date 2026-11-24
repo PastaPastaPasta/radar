@@ -1,6 +1,7 @@
 import { useRouter } from '@tanstack/react-router'
 import { useEffect, useRef, useState, type RefObject } from 'react'
 import type { DataTableProps } from './data-table'
+import { barInset } from './infinite'
 
 type InfinitePaging = Extract<NonNullable<DataTableProps<unknown>['paging']>, { kind: 'infinite' }>
 
@@ -66,12 +67,6 @@ export function useReveal({
           }
         : undefined,
   }
-}
-
-/** The sticky bar's height, which rows under it are hidden by. */
-function barInset(): number {
-  const bar = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--dh-bar-h'))
-  return Number.isFinite(bar) ? bar : 0
 }
 
 const indexOf = (el: Element) => Number((el as HTMLElement).dataset.index)

@@ -4,6 +4,7 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { useRef, useState } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { DataTable } from './data-table'
+import { barInset } from './infinite'
 import { useListPosition, useReveal } from './reveal'
 import { renderInRouter } from './test-utils'
 
@@ -163,7 +164,7 @@ describe('useListPosition', () => {
       this: HTMLElement,
     ) {
       const index = Number(this.dataset.index ?? -1)
-      const top = index >= 10 && scrollBy.mock.calls.length > 0 ? 0 : index * 40
+      const top = index >= 10 && scrollBy.mock.calls.length > 0 ? barInset() : index * 40
       return {
         top,
         bottom: top + 40,
@@ -181,6 +182,6 @@ describe('useListPosition', () => {
       await new Promise((r) => requestAnimationFrame(r))
       await new Promise((r) => requestAnimationFrame(r))
     })
-    expect(scrollBy).toHaveBeenCalledWith(0, 400)
+    expect(scrollBy).toHaveBeenCalledWith(0, 400 - barInset())
   })
 })
