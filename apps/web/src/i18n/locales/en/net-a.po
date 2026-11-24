@@ -86,7 +86,11 @@ msgid "{0} must sign"
 msgstr "{0} must sign"
 
 #. placeholder {0}: formatInt(w.threshold)
-#. placeholder {0}: share(needed, 1)
+msgid "{0} needed"
+msgstr "{0} needed"
+
+#. placeholder {0}: formatPercent(needed, 0)
+msgctxt "share of blocks"
 msgid "{0} needed"
 msgstr "{0} needed"
 
@@ -179,12 +183,12 @@ msgid "{0}, {1}{2}"
 msgstr "{0}, {1}{2}"
 
 #. placeholder {0}: s.name
-#. placeholder {1}: share(s.blocks, mined)
+#. placeholder {1}: pct(s.blocks, mined)
 msgid "{0}: {1}, not signalling"
 msgstr "{0}: {1}, not signalling"
 
 #. placeholder {0}: s.name
-#. placeholder {1}: share(s.blocks, mined)
+#. placeholder {1}: pct(s.blocks, mined)
 msgid "{0}: {1}, signalling"
 msgstr "{0}: {1}, signalling"
 

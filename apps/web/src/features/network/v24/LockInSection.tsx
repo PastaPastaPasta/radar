@@ -5,7 +5,7 @@ import { formatInt, formatNumber, formatPercent } from '@/lib/format'
 import { Card } from '@/ui'
 import { Figure, FigureGrid } from '../nodes/parts'
 import { InfoTip } from './InfoTip'
-import { day, when } from './v24-format'
+import { day, pinAt, when } from './v24-format'
 import {
   estimateMs,
   locksIn,
@@ -70,7 +70,7 @@ export function LockInSection({
     >
       <div className="grid gap-5" data-v24-lock-in data-verdict={w.verdict}>
         <p className="rx-v24-answer">
-          <span className={`dh-badge dh-badge--dot dh-badge--${tone} rx-v24-verdict`}>{chip}</span>
+          <span className={`dh-pill dh-pill--dot dh-pill--${tone} rx-v24-verdict`}>{chip}</span>
           <span>{line}</span>
         </p>
         <WindowBar w={w} size={p.window} />
@@ -93,7 +93,7 @@ export function LockInSection({
           <Figure
             label={t`Needed from the rest`}
             value={w.needed > w.remaining ? t`out of reach` : pct(w.needed, w.remaining)}
-            tone={tone === 'good' ? 'good' : 'warn'}
+            tone={tone}
             note={t`${formatInt(w.needed)} of ${formatInt(w.remaining)}`}
           />
         </FigureGrid>
@@ -113,7 +113,6 @@ function WindowBar({ w, size }: { w: WindowOutlook; size: number }) {
   const x = (n: number) => `${(Math.min(size, Math.max(0, n)) / size) * 100}%`
   const lost = w.mined - w.count
   const projected = Math.max(w.count, Math.min(w.projected, size - lost))
-  const right = w.threshold / size > 0.5
   return (
     <figure className="rx-v24-wbar" data-v24-window-bar>
       <div
@@ -121,11 +120,7 @@ function WindowBar({ w, size }: { w: WindowOutlook; size: number }) {
         role="img"
         aria-label={t`This window's ${formatInt(size)} blocks: ${formatInt(w.count)} signalled, ${formatInt(lost)} did not and ${formatInt(w.remaining)} are left. ${formatInt(w.threshold)} must signal; at today's pace about ${formatInt(projected)} do.`}
       >
-        <span
-          className="rx-v24-bar__mlabel"
-          style={right ? { right: `calc(100% - ${x(w.threshold)})` } : { left: x(w.threshold) }}
-          aria-hidden="true"
-        >
+        <span className="rx-v24-bar__mlabel" style={pinAt(w.threshold / size)} aria-hidden="true">
           {t`${formatInt(w.threshold)} needed`}
         </span>
         <div className="rx-v24-bar__track" aria-hidden="true">
@@ -144,15 +139,7 @@ function WindowBar({ w, size }: { w: WindowOutlook; size: number }) {
         {w.remaining > 0 ? (
           <>
             <b className="rx-v24-bar__pace" style={{ left: x(projected) }} aria-hidden="true" />
-            <span
-              className="rx-v24-bar__plabel"
-              style={
-                projected / size > 0.5
-                  ? { right: `calc(100% - ${x(projected)})` }
-                  : { left: x(projected) }
-              }
-              aria-hidden="true"
-            >
+            <span className="rx-v24-bar__plabel" style={pinAt(projected / size)} aria-hidden="true">
               {t`about ${formatInt(projected)} at today's pace`}
             </span>
           </>

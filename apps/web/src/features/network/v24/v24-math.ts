@@ -357,7 +357,3 @@ export const locksIn = (x: LockInProjection | NoLockIn | undefined): x is LockIn
   x !== undefined && !('never' in x)
 
 export type PoolRow = NonNullable<NonNullable<RadarActivationDeployment['window']>['pools']>[number]
-
-/** The pools in the window that don't signal at all, the most blocks first. */
-export const silentPools = (pools: readonly PoolRow[]): PoolRow[] =>
-  pools.filter((x) => x.pool !== null && x.blocks > 0 && x.signalling === 0)

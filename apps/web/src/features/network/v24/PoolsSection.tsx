@@ -3,11 +3,13 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import type { SourceStamp } from '@/data/envelope'
 import type { RadarActivationDeployment } from '@/data/radar/schemas'
-import { formatInt } from '@/lib/format'
+import { formatInt, formatPercent } from '@/lib/format'
 import { Badge, Card, DataTable } from '@/ui'
 import { InfoTip } from './InfoTip'
-import { share } from './v24-format'
+import { pinAt } from './v24-format'
 import type { PoolRow } from './v24-math'
+
+const pct = (n: number, of: number) => formatPercent(of > 0 ? n / of : 0, 1)
 
 interface Segment {
   key: string
@@ -54,7 +56,7 @@ export function PoolsSection({ d, stamp }: { d: RadarActivationDeployment; stamp
         cell: ({ row: { original: r } }) => (
           <>
             <b>{formatInt(r.blocks)}</b>{' '}
-            <small className="text-[var(--dh-ink-2)]">{share(r.blocks, mined)}</small>
+            <small className="text-[var(--dh-ink-2)]">{pct(r.blocks, mined)}</small>
           </>
         ),
         meta: { align: 'end', numeric: true, phone: 'primary' },
@@ -82,8 +84,8 @@ export function PoolsSection({ d, stamp }: { d: RadarActivationDeployment; stamp
   const needed = w.threshold == null ? undefined : w.threshold / d.params.window
   const say = (s: Segment) =>
     s.on
-      ? t`${s.name}: ${share(s.blocks, mined)}, signalling`
-      : t`${s.name}: ${share(s.blocks, mined)}, not signalling`
+      ? t`${s.name}: ${pct(s.blocks, mined)}, signalling`
+      : t`${s.name}: ${pct(s.blocks, mined)}, not signalling`
   return (
     <Card
       level="section"
@@ -110,12 +112,8 @@ export function PoolsSection({ d, stamp }: { d: RadarActivationDeployment; stamp
             aria-label={`${t`Share of this window's blocks by pool`}: ${segments.map(say).join('; ')}`}
           >
             {needed !== undefined ? (
-              <span
-                className="rx-v24-bar__mlabel"
-                style={{ right: `${100 - needed * 100}%` }}
-                aria-hidden="true"
-              >
-                {t`${share(needed, 1)} needed`}
+              <span className="rx-v24-bar__mlabel" style={pinAt(needed)} aria-hidden="true">
+                {t({ message: `${formatPercent(needed, 0)} needed`, context: 'share of blocks' })}
               </span>
             ) : null}
             <div className="rx-v24-pools" aria-hidden="true">
@@ -130,7 +128,7 @@ export function PoolsSection({ d, stamp }: { d: RadarActivationDeployment; stamp
                 >
                   <span className="rx-v24-seg">
                     <span className="rx-v24-seg__name">{s.name}</span>{' '}
-                    <span>{share(s.blocks, mined)}</span>
+                    <span>{pct(s.blocks, mined)}</span>
                     {s === blocker ? (
                       <span className="rx-v24-seg__not"> · {t`not signalling`}</span>
                     ) : null}
@@ -149,11 +147,11 @@ export function PoolsSection({ d, stamp }: { d: RadarActivationDeployment; stamp
           <ul className="rx-legend" aria-hidden="true">
             <li>
               <span className="rx-sw rx-v24-yes" />
-              {t`Signalling`} <b>{share(yes, mined)}</b>
+              {t`Signalling`} <b>{pct(yes, mined)}</b>
             </li>
             <li>
               <span className="rx-sw rx-v24-no" />
-              {t`Not signalling`} <b>{share(mined - yes, mined)}</b>
+              {t`Not signalling`} <b>{pct(mined - yes, mined)}</b>
             </li>
           </ul>
         </figure>

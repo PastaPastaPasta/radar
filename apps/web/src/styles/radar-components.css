@@ -3076,7 +3076,7 @@ html[data-scroll-gutter] {
   font-size: 16px;
   line-height: 1.4;
 }
-.dh-badge.rx-v24-verdict {
+.dh-pill.rx-v24-verdict {
   height: 30px;
   padding: 0 12px;
   gap: 7px;
@@ -3084,7 +3084,7 @@ html[data-scroll-gutter] {
   font-size: 15px;
   font-weight: var(--dh-w-strong);
 }
-.dh-badge.rx-v24-verdict::before {
+.dh-pill.rx-v24-verdict::before {
   width: 8px;
   height: 8px;
 }
@@ -3188,6 +3188,9 @@ html[data-scroll-gutter] {
   display: flex;
   align-items: center;
   overflow: hidden;
+}
+.rx-v24-pools > .rx-v24-yes + .rx-v24-no {
+  margin-left: 4px;
 }
 .rx-v24-seg {
   padding: 0 7px;

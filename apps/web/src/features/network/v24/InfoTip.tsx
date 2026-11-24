@@ -12,6 +12,7 @@ export function InfoTip({ label, children }: { label: string; children: ReactNod
       <Popover.Portal>
         <Popover.Content
           className="rx-hc rx-hc--pop rx-v24-tip"
+          aria-label={label}
           data-layer="network"
           sideOffset={6}
           collisionPadding={12}
