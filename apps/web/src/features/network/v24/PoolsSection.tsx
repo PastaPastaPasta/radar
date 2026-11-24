@@ -6,10 +6,8 @@ import type { RadarActivationDeployment } from '@/data/radar/schemas'
 import { formatInt, formatPercent } from '@/lib/format'
 import { Badge, Card, DataTable } from '@/ui'
 import { InfoTip } from './InfoTip'
-import { pinAt } from './v24-format'
+import { pct, pinAt } from './v24-format'
 import type { PoolRow } from './v24-math'
-
-const pct = (n: number, of: number) => formatPercent(of > 0 ? n / of : 0, 1)
 
 interface Segment {
   key: string

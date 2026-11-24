@@ -5,7 +5,7 @@ import { formatInt, formatNumber, formatPercent } from '@/lib/format'
 import { Card } from '@/ui'
 import { Figure, FigureGrid } from '../nodes/parts'
 import { InfoTip } from './InfoTip'
-import { day, pinAt, when } from './v24-format'
+import { day, pct, pinAt, when } from './v24-format'
 import {
   estimateMs,
   locksIn,
@@ -17,8 +17,6 @@ import {
   type Verdict,
   type WindowOutlook,
 } from './v24-math'
-
-const pct = (n: number, of: number) => formatPercent(of > 0 ? n / of : 0, 1)
 
 const VERDICT_TONE: Record<Verdict, 'good' | 'warn' | 'bad'> = {
   reached: 'good',
@@ -52,10 +50,11 @@ export function LockInSection({
     'needs-more': t`Not on pace`,
     impossible: t`Out of reach`,
   }[w.verdict]
+  const needsShare = t`Needs ${pct(w.needed, w.remaining)} of the blocks left; signalling runs at ${formatPercent(rate, 1)}.`
   const line = {
     reached: t`Core 24 locks in at block ${formatInt(w.endHeight + 1)}.`,
-    'on-track': t`Needs ${pct(w.needed, w.remaining)} of the blocks left; signalling runs at ${formatPercent(rate, 1)}.`,
-    'needs-more': t`Needs ${pct(w.needed, w.remaining)} of the blocks left; signalling runs at ${formatPercent(rate, 1)}.`,
+    'on-track': needsShare,
+    'needs-more': needsShare,
     impossible: t`Needs ${formatInt(w.needed)} more signalling blocks; only ${formatInt(w.remaining)} are left.`,
   }[w.verdict]
   const tone = VERDICT_TONE[w.verdict]

@@ -1,4 +1,4 @@
-import { formatDate } from '@/lib/format'
+import { formatDate, formatPercent } from '@/lib/format'
 
 /** "10 Nov 2026, 14:28 UTC" for a time in ms. */
 export const when = (ms: number | null | undefined): string =>
@@ -12,6 +12,8 @@ export const pinAt = (ratio: number): { left: string; transform: string } => {
   const r = Math.min(1, Math.max(0, ratio)) * 100
   return { left: `${String(r)}%`, transform: `translateX(-${String(r)}%)` }
 }
+
+export const pct = (n: number, of: number): string => formatPercent(of > 0 ? n / of : 0, 1)
 
 export const share = (n: number, of: number): string =>
   `${String(Math.round((n / of) * 1000) / 10)}%`

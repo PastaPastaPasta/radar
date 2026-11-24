@@ -3100,8 +3100,10 @@ html[data-scroll-gutter] {
   position: relative;
   height: 28px;
   border-radius: 6px;
-  background: var(--rx-track);
   overflow: hidden;
+}
+.rx-v24-bar__track {
+  background: var(--rx-track);
 }
 .rx-v24-bar__track > i {
   position: absolute;
@@ -3155,31 +3157,27 @@ html[data-scroll-gutter] {
   margin-left: -1px;
   border-left: 2px dotted var(--dh-ink-2);
 }
-.rx-v24-bar__plabel {
-  position: absolute;
-  bottom: 0;
-  padding: 0 6px;
-  font-size: 12.5px;
-  line-height: 16px;
-  white-space: nowrap;
-  color: var(--dh-ink-2);
-  font-variant-numeric: tabular-nums;
-}
+.rx-v24-bar__plabel,
 .rx-v24-bar__mlabel {
   position: absolute;
-  top: 0;
   padding: 0 6px;
   font-size: 12.5px;
-  font-weight: var(--dh-w-strong);
   line-height: 16px;
   white-space: nowrap;
-  color: var(--dh-ink);
   font-variant-numeric: tabular-nums;
+}
+.rx-v24-bar__plabel {
+  bottom: 0;
+  color: var(--dh-ink-2);
+}
+.rx-v24-bar__mlabel {
+  top: 0;
+  font-weight: var(--dh-w-strong);
+  color: var(--dh-ink);
 }
 .rx-v24-pools {
   display: flex;
   gap: 2px;
-  background: transparent;
 }
 .rx-v24-pools > span {
   flex-basis: 0;
