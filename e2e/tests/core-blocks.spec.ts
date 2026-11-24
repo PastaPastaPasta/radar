@@ -10,7 +10,7 @@ const PREVIOUS_HASH = '0000000000000027cf3cde6fa7d6361587cd5ac4f211ceb6b7bfaf1ba
 const TESTNET_TIP = 1589232
 
 /** Rows below the recorded window (the newest 20 blocks) come from here, so a test can scroll as far as it likes. */
-async function synthesizeOlderRows(page: Page) {
+async function synthesizeOlderRows(page: Page, newest = TIP) {
   await page.addInitScript((tip: number) => {
     const w = window as unknown as {
       __radarCore?: Record<string, (...args: unknown[]) => Promise<unknown>>
@@ -46,7 +46,7 @@ async function synthesizeOlderRows(page: Page) {
         }
       },
     })
-  }, TIP)
+  }, newest)
 }
 
 test.describe('Blocks list', () => {
@@ -121,6 +121,40 @@ test.describe('Blocks list', () => {
     )
     expect(reads.every((h) => h <= from && h > from - 20)).toBe(true)
     await expect(page.getByRole('button', { name: /newest/ })).toBeVisible()
+  })
+
+  test('keeps the same list while the reader scrolls a page with other parameters, such as testnet @HY-04', async ({
+    page,
+  }) => {
+    await synthesizeOlderRows(page, TESTNET_TIP)
+    await page.goto('/blocks?network=testnet')
+    const rows = page.locator('#blocks tbody tr[data-row-id]')
+    await expect(rows).toHaveCount(20)
+    await page.locator('#blocks table').evaluate((el) => {
+      el.setAttribute('data-test-mark', 'kept')
+    })
+    await page.evaluate(() => {
+      window.scrollTo(0, document.body.scrollHeight)
+    })
+    await page.mouse.wheel(0, 120)
+    await expect(rows).toHaveCount(40)
+    await expect(page.locator('#blocks table[data-test-mark="kept"]')).toHaveCount(1)
+    await expect(page).toHaveURL(/network=testnet/)
+    await expect(page).toHaveURL(/from=\d+/)
+  })
+
+  test('keeps the list when the reader scrolls a little at the top @HY-04', async ({ page }) => {
+    await page.goto('/blocks')
+    const rows = page.locator('#blocks tbody tr[data-row-id]')
+    await expect(rows).toHaveCount(20)
+    await page.locator('#blocks table').evaluate((el) => {
+      el.setAttribute('data-test-mark', 'kept')
+    })
+    await page.mouse.wheel(0, 30)
+    await page.waitForTimeout(600)
+    await page.mouse.wheel(0, -30)
+    await page.waitForTimeout(600)
+    await expect(page.locator('#blocks table[data-test-mark="kept"]')).toHaveCount(1)
   })
 
   test('keeps at most eight pages of rows on the page however far the reader scrolls @HY-04', async ({

@@ -1,9 +1,9 @@
-import { createFileRoute, useRouter, useRouterState } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { z } from 'zod'
 import { zIsoDate } from '@/app/search'
 import { prefetchForRoute, routeNetwork } from '@/data/query'
-import { BlocksPage, listWrites } from '@/features/core'
+import { BlocksPage } from '@/features/core'
 
 const blocksSearch = z.object({
   date: zIsoDate.optional().catch(undefined),
@@ -37,12 +37,8 @@ function BlocksRoute() {
   const search = Route.useSearch()
   const { date, from, size } = search
   const router = useRouter()
-  // The list writes the first block in view into `from` as the reader scrolls (the router hears of it); those writes
-  // carry the list's own mark and are not navigations, so the list keeps the place it opened at.
-  const href = useRouterState({ select: (s) => s.location.pathname + s.location.searchStr })
-  const [opened, setOpened] = useState(from)
-  if (from !== opened && href !== listWrites.href) setOpened(from)
-  // A link to the page already open is no change to the router; it still starts the list over.
+  // The list notes the reader's place in the URL without telling the router, so a link to the address the router
+  // last saw looks like no change to it; such a navigation still starts the list over.
   const [restart, setRestart] = useState(0)
   useEffect(
     () =>
@@ -54,9 +50,9 @@ function BlocksRoute() {
   const key = [
     search.network ?? search.net ?? '',
     date ?? '',
-    opened ?? '',
+    from ?? '',
     size ?? '',
     restart,
   ].join('|')
-  return <BlocksPage key={key} date={date} from={opened} size={size} />
+  return <BlocksPage key={key} date={date} from={from} size={size} />
 }

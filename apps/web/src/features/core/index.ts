@@ -1,6 +1,5 @@
 export { BlockPage } from './block/BlockPage'
 export { BlocksPage } from './blocks/BlocksPage'
-export { listWrites } from './blocks/scroll-pages'
 export { TxPage } from './tx/TxPage'
 export { AddressPage } from './address/AddressPage'
 export { MempoolPage } from './mempool/MempoolPage'

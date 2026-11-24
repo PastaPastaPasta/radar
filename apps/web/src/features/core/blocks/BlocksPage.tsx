@@ -24,8 +24,12 @@ import {
   InfiniteSentinel,
   barInset,
   firstVisibleRow,
+  replaceUrlQuietly,
+  scrollQuietly,
+  useOwnScrollAnchoring,
   useScrollAnchor,
   useScrolledUp,
+  useTopInView,
 } from '@/ui/infinite'
 import { CoreBand, RecordHeader, Section } from '../block/frame'
 import { BlocksClaim } from '../claims'
@@ -45,13 +49,7 @@ import {
   windowOf,
   type Window,
 } from './blocks-range'
-import {
-  type RowSource,
-  type ScrollPage,
-  listWrites,
-  useScrollPages,
-  withBestLock,
-} from './scroll-pages'
+import { type RowSource, type ScrollPage, useScrollPages, withBestLock } from './scroll-pages'
 
 /** Height ranges for the rows shown, from the DAPI tip and, for a day, the heights where that day begins and ends. */
 function useRange(date: string | undefined) {
@@ -398,13 +396,14 @@ function useScrollPosition(
   useEffect(() => {
     if (restored.current || !list.current || !(hasRow || (ready && settled))) return
     const row = list.current.querySelector<HTMLElement>(`[data-row-id="${from}"]`)
-    if (row) window.scrollBy(0, row.getBoundingClientRect().top - barInset())
+    if (row) scrollQuietly(row.getBoundingClientRect().top - barInset())
     restored.current = true
   }, [hasRow, ready, settled, from, list])
   const latest = useRef({ ceiling, ready })
   useEffect(() => {
     latest.current = { ceiling, ready }
   })
+  const rewrite = useRef<(() => void) | undefined>(undefined)
   useEffect(() => {
     let frame = 0
     let written = from
@@ -415,25 +414,30 @@ function useScrollPosition(
       if (!el || !now.ready || !restored.current || window.location.pathname !== '/blocks') return
       const first = firstVisibleRow(el, barInset())
       const height = first ? Number(first.id) : undefined
-      if (height === undefined || !Number.isFinite(height) || height === written) return
+      if (height === undefined || !Number.isFinite(height)) return
+      // The tip itself is the page without `from`; once newer blocks arrive, the same row needs its height.
+      const value = height >= now.ceiling ? undefined : height
+      if (value === written) return
       const url = new URL(window.location.href)
-      if (height >= now.ceiling) url.searchParams.delete('from')
-      else url.searchParams.set('from', String(height))
-      written = height
-      listWrites.href = url.pathname + url.search
+      if (value === undefined) url.searchParams.delete('from')
+      else url.searchParams.set('from', String(value))
+      written = value
       const state = (history.state as Record<string, unknown> | null) ?? {}
-      history.replaceState({ ...state, radarBlocksRow: height }, '', url)
+      replaceUrlQuietly(url, { ...state, radarBlocksRow: height })
     }
     const onScroll = () => {
       cancelAnimationFrame(frame)
       frame = requestAnimationFrame(write)
     }
+    rewrite.current = onScroll
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => {
       cancelAnimationFrame(frame)
       window.removeEventListener('scroll', onScroll)
     }
   }, [list, from])
+  // A new tip turns the row in view from "the tip" into a named height, without the reader scrolling.
+  useEffect(() => rewrite.current?.(), [ceiling])
 }
 
 /** The `from` the URL holds now: the list writes it as the reader scrolls, so the router's copy may be older. */
@@ -515,11 +519,19 @@ export function BlocksPage({
     setAnchor(range.ceiling)
     setView({ lo: 0, hi: 0, follow: true })
   }
-  // While the reader is at the newest page it follows the tip: a page that fills gives way to the next, and a tip that
-  // ran more than a page ahead (a tab back from sleep) starts the list again at the tip.
+  const topInView = useTopInView(listRef)
+  // While the reader sits at the top of the newest page it follows the tip: a page that fills gives way to the next,
+  // and a tip that ran more than a page ahead (a tab back from sleep) starts the list again at the tip. A reader further
+  // down keeps their rows; the pill offers the newer blocks instead.
   if (ready && view.follow && view.lo !== tipPage) {
-    if (tipPage >= view.lo - 1) {
-      setView({ ...view, lo: tipPage, hi: Math.min(view.hi, tipPage + MAX_RENDERED_PAGES - 1) })
+    if (!topInView) {
+      setView({ ...view, follow: false })
+    } else if (tipPage >= view.lo - 1) {
+      setView({
+        ...view,
+        lo: tipPage,
+        hi: Math.max(tipPage, Math.min(view.hi, tipPage + MAX_RENDERED_PAGES - 1)),
+      })
     } else {
       reanchor()
     }
@@ -583,18 +595,14 @@ export function BlocksPage({
     `${shownRows[0]?.height ?? ''}:${shownRows.length}`,
     view.follow,
   )
-  // The jump leaves `from` out of the URL, which the route takes as a fresh start at the tip; the view moves to the top
-  // of the list first, so the newest blocks open where the reader is looking.
+  // The newest blocks are a fresh start at the tip: the view moves to the top of the list, then the page opens anew.
   const jumpToNewest = () => {
     resetAnchor()
-    listRef.current?.scrollIntoView({ block: 'start' })
-    globalThis.scrollBy(0, -barInset())
-    const url = new URL(globalThis.location.href)
-    url.searchParams.delete('from')
-    const state = (history.state as Record<string, unknown> | null) ?? {}
-    history.replaceState({ ...state, radarBlocksRow: undefined }, '', url)
-    reanchor()
+    const top = listRef.current?.getBoundingClientRect().top
+    if (top !== undefined) scrollQuietly(top - barInset())
+    void navigate(link({}) as never)
   }
+  useOwnScrollAnchoring()
   useScrollPosition(listRef, {
     from,
     ceiling: range.ceiling,
@@ -659,7 +667,7 @@ export function BlocksPage({
 
   const stamp = page.stamp
   const noBlocks = window === null && range.state === 'ready' && !pageSource.waiting
-  const shownEmpty = window !== null && !early && !named && page.settled && rows.length === 0
+  const shownEmpty = window !== null && !early && !named && page.settled && shownRows.length === 0
   // A named page read before the tip may name a height above it; that read's failure is not the page's.
   const state =
     range.state === 'error' || (page.failed && !named)
@@ -776,7 +784,7 @@ export function BlocksPage({
             </div>
           ) : null}
           <div ref={listRef} className="rx-scrolllist" tabIndex={-1}>
-            {moreAbove && topPage?.failed ? (
+            {topPage?.failed && topPage.k < 0 ? (
               <p className="rx-note" role="status" data-nav="newer-failed">
                 {t`The newer blocks could not be loaded.`}{' '}
                 <button
@@ -848,7 +856,7 @@ export function BlocksPage({
                 />
               )}
             </Card>
-            {ready && (moreBelow || loadingBelow) ? (
+            {ready && (moreBelow || loadingBelow || bottomPage?.failed === true) ? (
               bottomPage?.failed ? (
                 <p className="rx-note" role="status" data-nav="older-failed">
                   {t`The older blocks could not be loaded.`}{' '}

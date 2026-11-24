@@ -80,6 +80,26 @@ export function InfiniteSentinel({
   )
 }
 
+let quietUntil = 0
+
+/** Scrolls the window on the list's own account (keeping the reader's place), which is not the reader engaging. */
+export function scrollQuietly(dy: number): void {
+  if (Math.abs(dy) < 1) return
+  quietUntil = performance.now() + 150
+  window.scrollBy(0, dy)
+}
+
+const quiet = () => performance.now() < quietUntil
+
+/**
+ * Rewrites the current history entry's URL without telling the router. The router's own history wraps
+ * `history.replaceState` and treats every call as a navigation (a load, its scroll restoration, a new route match);
+ * a list that only notes where the reader is must not cause one. Back, reload and links still read the real URL.
+ */
+export function replaceUrlQuietly(url: URL | string, state: unknown): void {
+  History.prototype.replaceState.call(window.history, state, '', url)
+}
+
 /** The sticky bar's height: rows under it are not in view. */
 export function barInset(): number {
   if (typeof document === 'undefined') return 64
@@ -144,7 +164,7 @@ export function useScrollAnchor(
     const row = el.querySelector<HTMLElement>(`[data-row-id="${CSS.escape(was.id)}"]`)
     if (!row) return
     const moved = row.getBoundingClientRect().top - was.top
-    if (Math.abs(moved) >= 1) window.scrollBy(0, moved)
+    scrollQuietly(moved)
     anchor.current = { id: was.id, top: row.getBoundingClientRect().top }
   }, [container, version])
   return () => {
@@ -157,10 +177,12 @@ export function useScrolledUp(): boolean {
   const [up, setUp] = useState(false)
   useEffect(() => {
     if (up) return
-    let last = window.scrollY
+    // Upward movement counts from the lowest point reached, so a slow scroll up adds up.
+    let low = window.scrollY
     const onScroll = () => {
-      if (window.scrollY < last - 4) setUp(true)
-      last = window.scrollY
+      const y = window.scrollY
+      if (quiet() || y > low) low = y
+      else if (low - y > 4) setUp(true)
     }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -181,7 +203,7 @@ export function useEngaged(): boolean {
     if (engaged) return
     const start = window.scrollY
     const on = (e: Event) => {
-      if (e.type === 'scroll' && Math.abs(window.scrollY - start) < 2) return
+      if (e.type === 'scroll' && (quiet() || Math.abs(window.scrollY - start) < 2)) return
       setEngaged(true)
     }
     for (const type of ENGAGING) window.addEventListener(type, on, { passive: true })
@@ -190,4 +212,41 @@ export function useEngaged(): boolean {
     }
   }, [engaged])
   return engaged
+}
+
+/** Whether the top of `list` is in view or just above it, kept up to date as the reader scrolls. */
+export function useTopInView(list: RefObject<HTMLElement | null>, slack = 200): boolean {
+  const [near, setNear] = useState(true)
+  useEffect(() => {
+    let frame = 0
+    const check = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(() => {
+        const el = list.current
+        if (el) setNear(el.getBoundingClientRect().top >= -slack)
+      })
+    }
+    check()
+    window.addEventListener('scroll', check, { passive: true })
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', check)
+    }
+  }, [list, slack])
+  return near
+}
+
+/**
+ * Turns off the browser's own scroll anchoring while a list that keeps the reader's place itself is on the page:
+ * anchoring is the scroller's setting, and left on it would pick some other element and move the view twice.
+ */
+export function useOwnScrollAnchoring(): void {
+  useEffect(() => {
+    const root = document.documentElement
+    const was = root.style.overflowAnchor
+    root.style.overflowAnchor = 'none'
+    return () => {
+      root.style.overflowAnchor = was
+    }
+  }, [])
 }

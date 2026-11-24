@@ -1,4 +1,5 @@
 import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
 import { coreQueries } from '@/data/core/queries'
 import type { BlockRow } from '@/data/core/types'
 import { stampOf, type SourceStamp } from '@/data/envelope'
@@ -54,6 +55,12 @@ export function useScrollPages(opts: {
 }): ScrollPage[] {
   const { net, source, base, ceiling, floor, size, lo, hi } = opts
   const client = useQueryClient()
+  // Where each Insight page ended, kept here because pages scrolled out of the window stop being observed and may leave
+  // the cache, while the pages under them still start from there.
+  const [bottoms, setBottoms] = useState<Record<string, number>>({})
+  // The newest page's read changes with each block; its last rows stay on screen until the next read lands.
+  const [held, setHeld] = useState<Record<string, BlockRow[]>>({})
+  const chain = (k: number) => `${base?.top ?? ''}:${k}`
   const wanted: { k: number; span: Span }[] = []
   if (base) {
     for (let k = lo; k <= Math.min(hi, -1); k++) {
@@ -76,7 +83,9 @@ export function useScrollPages(opts: {
         const landed = client.getQueryData<{ rows: BlockRow[] }>(
           insQueries.blocksPage(net, { top: span.top, count: span.count }).queryKey,
         )
-        bottom = landed && landed.rows.length > 0 ? lowestOf(landed.rows) : undefined
+        bottom =
+          bottoms[chain(k)] ??
+          (landed && landed.rows.length > 0 ? lowestOf(landed.rows) : undefined)
       } else {
         bottom = span.top - span.count + 1
       }
@@ -87,60 +96,70 @@ export function useScrollPages(opts: {
     enabled: source === 'insight' && base !== null && (lo < 0 || hi > 0),
   })
   const results = useQueries({
-    queries: wanted.map(({ span }) => {
-      const bottom = span.top - span.count + 1
-      // The newest page grows a block at a time, so its read changes; it keeps showing what it had until the next lands.
-      const samePage = (prev: unknown, prevQuery?: { queryKey: readonly unknown[] }) => {
-        const q = prevQuery?.queryKey.at(-1) as
-          { from?: number; top?: number; count?: number } | undefined
-        const prevTop = q?.from ?? q?.top
-        return q?.count !== undefined && prevTop !== undefined && prevTop - q.count + 1 === bottom
-          ? prev
-          : undefined
-      }
-      return source === 'insight'
-        ? {
-            ...insQueries.blocksPage(net, { top: span.top, count: span.count }),
-            placeholderData: samePage as never,
-          }
-        : {
-            ...coreQueries.blockRows(net, {
-              fromHeight: span.top,
-              count: span.count,
-              ...(source === 'hyphen' ? { via: 'index' as const } : {}),
-            }),
-            placeholderData: samePage as never,
-          }
-    }),
+    queries: wanted.map(({ span }) =>
+      source === 'insight'
+        ? insQueries.blocksPage(net, { top: span.top, count: span.count })
+        : coreQueries.blockRows(net, {
+            fromHeight: span.top,
+            count: span.count,
+            ...(source === 'hyphen' ? { via: 'index' as const } : {}),
+          }),
+    ),
   })
+  const landed = wanted.map(({ k, span }, i) => {
+    const data = results[i]!.data as unknown
+    const rows =
+      data === undefined
+        ? undefined
+        : source === 'insight'
+          ? (data as { rows: BlockRow[] }).rows
+          : (data as { data: BlockRow[] }).data
+    return { k, span, rows }
+  })
+  const landedKey = landed.map((p) => `${p.k}:${p.span.top}:${p.rows?.length ?? '-'}`).join(',')
+  const [seenKey, setSeenKey] = useState('')
+  if (landedKey !== seenKey) {
+    setSeenKey(landedKey)
+    const nextBottoms: Record<string, number> = {}
+    const nextHeld: Record<string, BlockRow[]> = {}
+    for (const p of landed) {
+      if (!p.rows) continue
+      const lowest = lowestOf(p.rows)
+      if (source === 'insight' && lowest !== undefined) nextBottoms[chain(p.k)] = lowest
+      nextHeld[chain(p.k)] = p.rows
+    }
+    setBottoms((b) => ({ ...b, ...nextBottoms }))
+    setHeld((h) => ({ ...h, ...nextHeld }))
+  }
   const best = lock.data?.data
   return wanted.map(({ k, span }, i) => {
     const r = results[i]!
     const data = r.data as unknown
-    const rows =
-      source === 'insight'
-        ? withBestLock((data as { rows: BlockRow[] } | undefined)?.rows ?? [], best)
-        : ((data as { data: BlockRow[] } | undefined)?.data ?? [])
+    const own = landed[i]!.rows
+    // Only the newest page (k < 0, still filling) shows what it held while its next read is on its way.
+    const shown = own ?? (k < 0 ? (held[chain(k)] ?? []) : [])
+    const rows = source === 'insight' ? withBestLock(shown, best) : shown
     const stamp =
       data === undefined
         ? undefined
         : source === 'insight'
           ? stampOf((data as { list: Parameters<typeof stampOf>[0] }).list)
           : stampOf(data as Parameters<typeof stampOf>[0])
+    // An Insight page above page 0 that came back short would leave a gap above the next page; it counts as failed so
+    // the reader is offered a retry rather than missing blocks.
+    const shortAbove =
+      source === 'insight' &&
+      k < 0 &&
+      own !== undefined &&
+      (lowestOf(own) ?? Infinity) > span.top - span.count + 1
     return {
       k,
       span,
       rows,
-      settled: r.isSuccess && !r.isPlaceholderData,
-      failed: r.isError && r.data === undefined,
+      settled: r.isSuccess && !shortAbove,
+      failed: (r.isError && r.data === undefined) || shortAbove,
       stamp,
       refetch: () => void r.refetch(),
     }
   })
 }
-
-/**
- * The address the scrolling list last wrote for itself (path and query). The router hears of those writes; one that
- * matches is the list keeping its place, not a navigation, so the route does not start the list over.
- */
-export const listWrites: { href?: string } = {}

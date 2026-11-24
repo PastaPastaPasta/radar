@@ -1298,10 +1298,6 @@ button.rx-srcline:hover {
 .rx-jump > * {
   box-shadow: var(--dh-shadow-pop);
 }
-/* The scrolling list keeps the reader's rows in place itself; the browser's own anchoring would move them twice. */
-.rx-scrolllist {
-  overflow-anchor: none;
-}
 .rx-scrolllist:focus {
   outline: none;
 }
