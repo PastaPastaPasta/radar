@@ -3,7 +3,7 @@ import { expectAccessible } from '../helpers/a11y'
 import { settled } from '../helpers/settled'
 import { expect, test } from '../helpers/test'
 import { networkQuery, withQuery } from '../routes'
-import { scrollRowToTop, scrollToEnd } from '../helpers/scroll'
+import { scrollRowToTop, scrollToEnd, scrollUpAtTop } from '../helpers/scroll'
 
 const DPNS = 'GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec'
 const MAIN = {
@@ -236,8 +236,7 @@ test.describe('documents browser', () => {
       await page.goto(page.url())
       await expect(rows.first()).toHaveAttribute('data-row-id', second!)
       await expect(page.locator(`[data-row-id="${first}"]`)).toHaveCount(0)
-      await page.locator('[data-sentinel="start"]').scrollIntoViewIfNeeded()
-      await page.keyboard.press('PageUp')
+      await scrollUpAtTop(page)
       await expect(rows).toHaveCount(50)
       await expect(rows.first()).toHaveAttribute('data-row-id', first!)
     })

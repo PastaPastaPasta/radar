@@ -58,6 +58,7 @@ export function RichListCompact({
               onNear={fetchNext}
               enabled={hasNext && !fetching && !failed}
               loading={fetching}
+              version={rows.length}
               status={
                 fetching
                   ? t`Loading more…`

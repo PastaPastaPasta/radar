@@ -3,7 +3,12 @@ import { expectAccessible } from '../helpers/a11y'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect as baseExpect, test } from '../helpers/test'
 import { netIds } from '../routes/fixtures'
-import { scrollRowToTop, scrollToEnd, synthesizePeBlockPages } from '../helpers/scroll'
+import {
+  scrollRowToTop,
+  scrollToEnd,
+  scrollUpAtTop,
+  synthesizePeBlockPages,
+} from '../helpers/scroll'
 
 const expect = baseExpect.configure({ timeout: 20_000 })
 
@@ -135,6 +140,7 @@ test.describe('Platform blocks list', () => {
   test('opens at the page the address names, and loads the page above as the reader scrolls up @PE-10', async ({
     page,
   }) => {
+    await synthesizePeBlockPages(page)
     await page.goto('/platform/blocks')
     const shown = page.locator('table tbody tr[data-row-id]')
     await expect(shown).toHaveCount(25)
@@ -143,8 +149,7 @@ test.describe('Platform blocks list', () => {
     await expect(shown).toHaveCount(25)
     await expect(page.locator(`[data-row-id="${newest}"]`)).toHaveCount(0)
     const first = await shown.first().getAttribute('data-row-id')
-    await page.locator('[data-sentinel="start"]').scrollIntoViewIfNeeded()
-    await page.keyboard.press('PageUp')
+    await scrollUpAtTop(page)
     await expect(shown.first()).toHaveAttribute('data-row-id', newest!)
     expect(await shown.count()).toBeGreaterThan(25)
     await expect(page.locator(`[data-row-id="${first}"]`)).toBeInViewport()

@@ -68,7 +68,11 @@ function Revisions({ ctx }: { ctx: DocumentContext }) {
             })}
           </ol>
           <div className="rx-tfoot">
-            <Pager paging={list.paging} shown={list.rows.length} />
+            <Pager
+              paging={list.paging}
+              shown={list.rows.length}
+              last={list.rows.at(-1)?.atMs.toString()}
+            />
           </div>
           {stamps.length > 0 ? <SourceLine stamp={stamps} /> : null}
         </div>

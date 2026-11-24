@@ -26,6 +26,20 @@ export async function scrollNearEnd(page: Page, scope: string): Promise<void> {
 }
 
 /**
+ * Scrolls down a little and back up, the way a reader reaches for the rows above a list opened part-way down: the list
+ * reads the page above only after a scroll up.
+ */
+export async function scrollUpAtTop(page: Page): Promise<void> {
+  await page.evaluate(() => {
+    window.scrollBy(0, 300)
+  })
+  await page.waitForFunction(() => window.scrollY > 0)
+  await page.evaluate(() => {
+    window.scrollBy(0, -200)
+  })
+}
+
+/**
  * Scrolls until the row sits at the top of the view, just under the sticky bar, so it is the first row the list sees
  * there and writes to the address. The view is made short first, so a list that has just loaded its second page does
  * not find its end near enough to ask for a third, which no recording holds.

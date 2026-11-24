@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider, queryOptions } from '@tanstack/react-query'
-import { act, render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { usePageChain } from './page-chain'
 
 vi.mock('./network', () => ({ useNetwork: () => 'mainnet' }))
@@ -15,7 +15,9 @@ function List({
   earlier,
   asked,
   maxPages,
+  hold,
 }: {
+  hold?: Promise<void>
   all: string[] | (() => string[])
   start?: string | undefined
   earlier?: (string | undefined)[]
@@ -29,11 +31,12 @@ function List({
     query: (cursor: string | undefined) =>
       queryOptions({
         queryKey: ['voters', cursor ?? 'first'],
-        queryFn: () => {
+        queryFn: async () => {
           asked.push(cursor)
+          if (cursor && hold) await hold
           const list = typeof all === 'function' ? all() : all
           const from = cursor ? list.indexOf(cursor) + 1 : 0
-          return Promise.resolve(list.slice(from, from + PAGE + 1))
+          return list.slice(from, from + PAGE + 1)
         },
       }),
     rows: (page) => page.slice(0, PAGE),
@@ -92,10 +95,6 @@ function setup(props: Omit<Parameters<typeof List>[0], 'asked'>) {
 
 const shown = () => Array.from(document.querySelectorAll('li'), (li) => li.textContent)
 
-afterEach(() => {
-  vi.unstubAllGlobals()
-})
-
 describe('usePageChain', () => {
   it('reads each page after the last row of the one before, one page at a time', async () => {
     const user = userEvent.setup()
@@ -108,6 +107,21 @@ describe('usePageChain', () => {
     expect(await screen.findByText('end')).toBeInTheDocument()
     expect(shown()).toEqual(ids(12))
     expect(asked).toEqual([undefined, 'v5', 'v10'])
+  })
+
+  it('does not say the list has ended while its next page is still on its way', async () => {
+    const user = userEvent.setup()
+    let release: () => void = () => undefined
+    const hold = new Promise<void>((resolve) => {
+      release = resolve
+    })
+    setup({ all: ids(12), hold })
+    expect(await screen.findByText('v5')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'more' }))
+    expect(screen.getByRole('button', { name: 'more' })).toBeDisabled()
+    expect(screen.queryByText('end')).toBeNull()
+    release()
+    expect(await screen.findByText('v10')).toBeInTheDocument()
   })
 
   it('opens at the cursor the address names, without reading the pages above it', async () => {
@@ -179,33 +193,5 @@ describe('usePageChain', () => {
     expect(await screen.findByText('v1')).toBeInTheDocument()
     expect(shown()).toEqual(ids(5))
     expect(screen.queryByRole('button', { name: 'start' })).toBeNull()
-  })
-
-  it('waits for the reader’s wheel, not a scroll the page made, before loading a page already in view', async () => {
-    const observed: { cb: IntersectionObserverCallback }[] = []
-    vi.stubGlobal(
-      'IntersectionObserver',
-      class {
-        constructor(cb: IntersectionObserverCallback) {
-          observed.push({ cb })
-        }
-        observe = vi.fn()
-        disconnect = vi.fn()
-      },
-    )
-    const user = userEvent.setup()
-    const { asked } = setup({ all: ids(12) })
-    expect(await screen.findByText('v5')).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'more' }))
-    expect(asked).toEqual([undefined])
-    act(() => {
-      window.dispatchEvent(new Event('scroll'))
-    })
-    expect(asked).toEqual([undefined])
-    act(() => {
-      window.dispatchEvent(new Event('wheel'))
-    })
-    expect(await screen.findByText('v10')).toBeInTheDocument()
-    expect(asked).toEqual([undefined, 'v5'])
   })
 })

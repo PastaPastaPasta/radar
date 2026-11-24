@@ -586,6 +586,7 @@ test.describe('Chain state', () => {
   test('shows the pool, its most recent anchor and its anchors with a copy control on each hash @NX-58', async ({
     page,
   }) => {
+    await synthesizeShieldedChunks(page)
     await open(page, '/shielded', 'Shielded pool')
     const pool = card(page, 'pool')
     await expect(pool.locator('[data-amount]').first()).toBeVisible()
@@ -635,6 +636,7 @@ test.describe('Chain state', () => {
   test('draws the shield and unshield history for the range in the address @NX-58', async ({
     page,
   }) => {
+    await synthesizeShieldedChunks(page)
     await open(page, '/shielded', 'Shielded pool')
     const history = card(page, 'chart-shielded')
     await history.scrollIntoViewIfNeeded()

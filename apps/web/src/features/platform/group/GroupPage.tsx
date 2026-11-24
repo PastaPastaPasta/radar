@@ -281,7 +281,7 @@ function Actions({
               ))}
             </ul>
             <div className="rx-tfoot">
-              <Pager paging={list.paging} shown={actions.length} />
+              <Pager paging={list.paging} shown={actions.length} last={actions.at(-1)?.id} />
             </div>
           </div>
         </ScrollList>

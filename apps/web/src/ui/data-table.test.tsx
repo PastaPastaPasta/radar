@@ -404,6 +404,45 @@ describe('DataTable paging', () => {
     expect(asks).toBe(2)
   })
 
+  it('keeps loading a list that drops its first rows as it adds new ones, though the count stays the same', async () => {
+    const user = userEvent.setup()
+    const NEXT: Row[] = [...ROWS.slice(1), { id: 'd', height: 0, txs: 5, city: 'Rome' }]
+    function Capped() {
+      const [fetching, setFetching] = useState(false)
+      const [rows, setRows] = useState(ROWS)
+      return (
+        <>
+          <button
+            type="button"
+            onClick={() => {
+              setRows(NEXT)
+              setFetching(false)
+            }}
+          >
+            finish
+          </button>
+          <Harness
+            rows={rows}
+            paging={{
+              kind: 'infinite',
+              hasNext: true,
+              fetching,
+              fetchNext: () => {
+                setFetching(true)
+              },
+            }}
+          />
+        </>
+      )
+    }
+    await renderInRouter(<Capped />)
+    await user.click(screen.getByRole('button', { name: 'Show more' }))
+    await user.click(screen.getByRole('button', { name: 'finish' }))
+    expect(await screen.findByText('Rome')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Try again' })).toBeNull()
+    expect(screen.getByRole('button', { name: 'Show more' })).toBeInTheDocument()
+  })
+
   it('does not count a refetch it did not ask for as a failed load', async () => {
     const user = userEvent.setup()
     function Polling() {

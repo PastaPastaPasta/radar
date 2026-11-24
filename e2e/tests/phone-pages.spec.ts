@@ -185,6 +185,8 @@ test.describe('Blocks per load', () => {
 })
 
 test.describe('every route on a phone', () => {
+  // The check scrolls to the foot of each page, which lists answer by reading their next page; only the layout counts.
+  test.use({ allowFixtureMisses: true })
   for (const route of ROUTE_CASES) {
     const net = casesNets(route)[0]!
     test(`${net} ${route.path} fits a phone: no sideways scroll, cards for tables, nothing under the navigation @X-08`, async ({

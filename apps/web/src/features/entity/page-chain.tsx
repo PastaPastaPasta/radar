@@ -9,15 +9,19 @@ import {
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode, type RefObject } from 'react'
 import { stampOf, type Sourced, type SourceStamp } from '@/data/envelope'
 import type { LoadState } from '@/ui'
-import { InfiniteSentinel, NEAR_MARGIN, firstVisibleRow, observerAvailable } from '@/ui/infinite'
+import {
+  InfiniteSentinel,
+  barInset,
+  firstVisibleRow,
+  replaceUrlQuietly,
+  useScrollAnchor,
+  useScrolledUp,
+} from '@/ui/infinite'
 import { keepPreviousOnNetwork } from './keep-previous'
 import { useNetwork } from './network'
 
 /** Pages a scrolling list keeps on the page; the ones it drops are read again (from the cache) as the reader returns. */
 export const MAX_LIST_PAGES = 8
-
-/** The sticky bar's height: rows under it are not in view. */
-const BAR_INSET = 64
 
 export interface PageChainOptions<P, Param, Row, K extends QueryKey> {
   /** Everything the list is read with but its network and position: a new value starts it again at `start`. */
@@ -56,7 +60,7 @@ export interface PageChain<P, Param, Row> {
   state: LoadState
   error: unknown
   onRetry: () => void
-  /** Reads the next page now, whether or not the reader has scrolled: for a page the view needs. */
+  /** Reads the next page now, for a page the view needs whether or not the reader scrolls to it. */
   readOn: () => void
   /** DataTable's `paging`: loads the next page as the reader nears the end. */
   paging: {
@@ -72,8 +76,6 @@ export interface PageChain<P, Param, Row> {
   restart: (() => void) | undefined
   /** The page each shown row came from, and the pages above it. */
   paramOf: (rowId: string) => { param: Param; earlier: Param[] } | undefined
-  /** The list's identity: its network and `listKey`. */
-  listId: string
   /** Changes whenever rows are added or dropped. */
   version: string
 }
@@ -87,51 +89,6 @@ interface Chain<Param> {
   hi: number
   /** Pages read on in a row because a filter hid every row they held. */
   skipped: number
-}
-
-/**
- * Until the reader turns a wheel, drags a finger or presses a key, a sentinel already in view on arrival does not load:
- * a list whose first page is short would otherwise read its second before anyone asked, and a scroll the page makes by
- * itself (restoring a position, jumping to an anchor) is not the reader asking. Where there is no IntersectionObserver
- * the sentinel is a button, so nothing waits.
- */
-function useReaderMoved(): boolean {
-  const [moved, setMoved] = useState(() => !observerAvailable())
-  useEffect(() => {
-    if (moved) return
-    const events = ['wheel', 'touchmove', 'keydown'] as const
-    const on = () => {
-      setMoved(true)
-    }
-    for (const e of events) window.addEventListener(e, on, { passive: true })
-    return () => {
-      for (const e of events) window.removeEventListener(e, on)
-    }
-  }, [moved])
-  return moved
-}
-
-/**
- * `load`, held back until the reader has moved (see `useReaderMoved`): a call before then is made once they do, so a
- * sentinel already in view on arrival still loads as soon as the reader scrolls.
- */
-function useOnceReaderMoves(load: () => void): () => void {
-  const moved = useReaderMoved()
-  const wanted = useRef(false)
-  const latest = useRef(load)
-  useLayoutEffect(() => {
-    latest.current = load
-  })
-  useEffect(() => {
-    if (moved && wanted.current) {
-      wanted.current = false
-      latest.current()
-    }
-  }, [moved])
-  return () => {
-    if (moved) latest.current()
-    else wanted.current = true
-  }
 }
 
 /** Pages in a row a browser-side filter may hide entirely before the list says nothing matched. */
@@ -164,8 +121,7 @@ export function usePageChain<P, Param, Row, K extends QueryKey>(
     }
   }
   const [stored, setChain] = useState<Chain<Param>>(fresh)
-  // The address names another place: the list moves there, unless it holds that page already, as it does when the
-  // list wrote the address itself (replaceState reaches the router, so the search changes under it).
+  // The address names another place: the list moves there, unless it holds that page already.
   const chain: Chain<Param> =
     stored.key !== key
       ? fresh()
@@ -250,7 +206,6 @@ export function usePageChain<P, Param, Row, K extends QueryKey>(
     }
     setChain((c) => (same(c) ? advance(c, 0) : c))
   }
-  const fetchNext = useOnceReaderMoves(readOn)
 
   const fetchPrev = () => {
     if (busy || !first) return
@@ -307,8 +262,9 @@ export function usePageChain<P, Param, Row, K extends QueryKey>(
     },
     paging: {
       kind: 'infinite',
-      hasNext: last?.failed === true || nextParam !== undefined,
-      fetchNext,
+      // Until the last page lands, whether another follows is unknown: the list still has more, not its end.
+      hasNext: last?.failed === true || last?.pending === true || nextParam !== undefined,
+      fetchNext: readOn,
       fetching: pages.length > 1 && last?.pending === true,
       failed: last?.failed === true,
     },
@@ -325,47 +281,13 @@ export function usePageChain<P, Param, Row, K extends QueryKey>(
         ? undefined
         : { param: chain.params[i] as Param, earlier: chain.params.slice(0, i) }
     },
-    listId: key,
     version: `${chain.key}:${chain.lo}:${chain.hi}:${rows.length}`,
   }
 }
 
-/** Keeps the row at the top of the view where it is when rows are added or dropped above it. */
-function useKeepRowInPlace(container: RefObject<HTMLElement | null>, version: string): void {
-  const anchor = useRef<{ id: string; top: number } | null>(null)
-  useEffect(() => {
-    let frame = 0
-    const record = () => {
-      cancelAnimationFrame(frame)
-      frame = requestAnimationFrame(() => {
-        anchor.current = container.current ? firstVisibleRow(container.current, BAR_INSET) : null
-      })
-    }
-    record()
-    window.addEventListener('scroll', record, { passive: true })
-    return () => {
-      cancelAnimationFrame(frame)
-      window.removeEventListener('scroll', record)
-    }
-  }, [container])
-  useLayoutEffect(() => {
-    const el = container.current
-    if (!el) return
-    const was = anchor.current
-    const row = was && el.querySelector<HTMLElement>(`[data-row-id="${CSS.escape(was.id)}"]`)
-    if (was && row) {
-      const moved = row.getBoundingClientRect().top - was.top
-      if (Math.abs(moved) >= 1) window.scrollBy(0, moved)
-    }
-    // Rows that arrive with no scroll since (the first page, a page loaded below) are what the next change is held to.
-    anchor.current = firstVisibleRow(el, BAR_INSET)
-  }, [container, version])
-}
-
 /**
- * Writes the page or cursor of the first row in view to the address with `replaceState`, keeping the router's history
- * state, so a reload or Back opens the list where the reader was. The router hears it and passes the new place back,
- * which `usePageChain` already holds, so the list keeps its rows.
+ * Writes the page or cursor of the first row in view to the address without the router, keeping its history state, so
+ * a reload or Back opens the list where the reader was while the list keeps its rows.
  */
 function useWritePosition<Param>(
   container: RefObject<HTMLElement | null>,
@@ -385,7 +307,7 @@ function useWritePosition<Param>(
       const el = container.current
       const { paramOf: of, write: put } = latest.current
       if (!el || !put) return
-      const row = firstVisibleRow(el, BAR_INSET)
+      const row = firstVisibleRow(el, barInset())
       if (!row) return
       const found = of(row.id)
       if (!found) return
@@ -394,7 +316,7 @@ function useWritePosition<Param>(
       if (url.href === window.location.href || url.href === written) return
       written = url.href
       const state = (history.state as Record<string, unknown> | null) ?? {}
-      history.replaceState(state, '', url)
+      replaceUrlQuietly(url, state)
     }
     const onScroll = () => {
       cancelAnimationFrame(frame)
@@ -409,55 +331,6 @@ function useWritePosition<Param>(
 }
 
 /**
- * Waits until the reader has scrolled away from the top of a list that opened part-way down, or scrolls up at it: the
- * earlier pages load then, not as soon as the list opens with its first row already in view.
- */
-function useArmedAbove(ref: RefObject<HTMLElement | null>, has: boolean, listId: string): boolean {
-  const [armedFor, setArmedFor] = useState<string | undefined>(() =>
-    observerAvailable() ? undefined : listId,
-  )
-  const armed = armedFor === listId
-  useEffect(() => {
-    if (armed || !has) return
-    const away = Number.parseInt(NEAR_MARGIN, 10)
-    let touchY: number | undefined
-    const arm = () => {
-      setArmedFor(listId)
-    }
-    const onScroll = () => {
-      const el = ref.current
-      if (el && el.getBoundingClientRect().bottom < -away) arm()
-    }
-    const onWheel = (e: WheelEvent) => {
-      if (e.deltaY < 0) arm()
-    }
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowUp' || e.key === 'PageUp' || e.key === 'Home') arm()
-    }
-    const onTouchStart = (e: TouchEvent) => {
-      touchY = e.touches[0]?.clientY
-    }
-    const onTouchMove = (e: TouchEvent) => {
-      const y = e.touches[0]?.clientY
-      if (touchY !== undefined && y !== undefined && y > touchY) arm()
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('wheel', onWheel, { passive: true })
-    window.addEventListener('keydown', onKey)
-    window.addEventListener('touchstart', onTouchStart, { passive: true })
-    window.addEventListener('touchmove', onTouchMove, { passive: true })
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('wheel', onWheel)
-      window.removeEventListener('keydown', onKey)
-      window.removeEventListener('touchstart', onTouchStart)
-      window.removeEventListener('touchmove', onTouchMove)
-    }
-  }, [armed, has, ref, listId])
-  return armed || !observerAvailable()
-}
-
-/**
  * Wraps a list read through `usePageChain`: the pages above the first one shown load as the reader scrolls up to them,
  * the rows in view stay put as pages are added or dropped, and `position` writes where the reader is to the address.
  */
@@ -466,10 +339,7 @@ export function ScrollList<Param>({
   position,
   children,
 }: {
-  chain: Pick<
-    PageChain<unknown, Param, unknown>,
-    'before' | 'restart' | 'paramOf' | 'listId' | 'version'
-  >
+  chain: Pick<PageChain<unknown, Param, unknown>, 'before' | 'restart' | 'paramOf' | 'version'>
   /** Puts the page or cursor of the row at the top of the view in the address. */
   position?: (url: URL, param: Param, earlier: Param[]) => void
   children: ReactNode
@@ -477,10 +347,9 @@ export function ScrollList<Param>({
   const { t } = useLingui()
   const { before } = chain
   const ref = useRef<HTMLDivElement>(null)
-  const top = useRef<HTMLDivElement>(null)
-  useKeepRowInPlace(ref, chain.version)
+  useScrollAnchor(ref, chain.version)
   useWritePosition(ref, chain.paramOf, position)
-  const armed = useArmedAbove(top, before.has, chain.listId)
+  const scrolledUp = useScrolledUp()
   const { restart } = chain
   return (
     <div ref={ref} className="rx-scrolllist" data-scroll-list>
@@ -492,16 +361,16 @@ export function ScrollList<Param>({
           </button>
         </div>
       ) : before.has ? (
-        <div ref={top}>
-          <InfiniteSentinel
-            edge="start"
-            onNear={before.load}
-            enabled={armed && !before.loading}
-            loading={before.loading}
-            status={before.loading ? t`Loading earlier rows…` : ''}
-            fallbackLabel={t`Show earlier rows`}
-          />
-        </div>
+        <InfiniteSentinel
+          edge="start"
+          onNear={before.load}
+          enabled={!before.loading}
+          auto={scrolledUp}
+          version={chain.version}
+          loading={before.loading}
+          status={before.loading ? t`Loading earlier rows…` : ''}
+          fallbackLabel={t`Show earlier rows`}
+        />
       ) : restart ? (
         <div className="rx-pager" data-list-start>
           <button
@@ -512,7 +381,7 @@ export function ScrollList<Param>({
               if (position) {
                 const url = new URL(window.location.href)
                 position(url, undefined as Param, [])
-                history.replaceState(history.state as unknown, '', url)
+                replaceUrlQuietly(url, history.state)
               }
               ref.current?.scrollIntoView({ block: 'start' })
             }}

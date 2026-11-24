@@ -158,7 +158,7 @@ function Matches({ pkh, after }: { pkh: string; after: string | undefined }) {
           </ul>
           {shared.paging.hasNext ? (
             <div className="rx-tfoot">
-              <Pager paging={shared.paging} shown={rows.length} />
+              <Pager paging={shared.paging} shown={rows.length} last={rows.at(-1)?.id} />
             </div>
           ) : (
             <p className="rx-dim">{t`That is every match.`}</p>
