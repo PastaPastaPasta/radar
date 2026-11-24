@@ -338,6 +338,16 @@ test.describe('Core 24 activation tracker', () => {
       'data-pool',
       'ViaBTC',
     )
+    // Segments and the "needed" tick share one scale: green ends at the signalling share of the bar (1,350 of 1,500).
+    const poolBar = card(page, 'pools').locator('.rx-v24-pools')
+    const [bar, lastGreen, blocker] = await Promise.all([
+      poolBar.boundingBox(),
+      poolBar.locator('.rx-v24-yes').last().boundingBox(),
+      poolBar.locator('[data-blocker]').boundingBox(),
+    ])
+    const share = bar!.x + 0.9 * bar!.width
+    expect(Math.abs(lastGreen!.x + lastGreen!.width - share)).toBeLessThanOrEqual(0.5)
+    expect(Math.abs(blocker!.x - share)).toBeLessThanOrEqual(0.5)
   })
 
   test('has no lock-in card or pools before miners can signal @RA-70', async ({ page }) => {

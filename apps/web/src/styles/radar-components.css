@@ -3177,18 +3177,27 @@ html[data-scroll-gutter] {
 }
 .rx-v24-pools {
   display: flex;
-  gap: 2px;
 }
 .rx-v24-pools > span {
   flex-basis: 0;
-  min-width: 3px;
+  min-width: 0;
   container-type: inline-size;
   display: flex;
   align-items: center;
   overflow: hidden;
 }
+/* Separators are drawn over the segments, so the segments keep the scale of the "needed" tick. */
+.rx-v24-pools > span + span {
+  box-shadow: inset 2px 0 0 var(--rx-ground, var(--dh-page));
+}
 .rx-v24-pools > .rx-v24-yes + .rx-v24-no {
-  margin-left: 4px;
+  box-shadow: inset 4px 0 0 var(--rx-ground, var(--dh-page));
+}
+.rx-v24-pools > span + span .rx-v24-seg {
+  padding-left: 9px;
+}
+.rx-v24-pools > .rx-v24-yes + .rx-v24-no .rx-v24-seg {
+  padding-left: 11px;
 }
 .rx-v24-seg {
   padding: 0 7px;
