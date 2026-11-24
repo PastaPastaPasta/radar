@@ -2,7 +2,20 @@ import { describe, expect, it } from 'vitest'
 import { RadarActivationSchema, v24Pending } from '@/data/radar/schemas'
 import mainnet from '@/test/fixtures/http/radar/mainnet/activation.json'
 import testnet from '@/test/fixtures/http/radar/testnet/activation.json'
-import { milestones, thresholdRows, v24Of, windowProgress, windowSlots } from './v24-math'
+import signalling from './signalling.fixture.json'
+import {
+  estimateMs,
+  milestones,
+  projectLockIn,
+  rateOf,
+  silentPools,
+  thresholdRows,
+  todaysPace,
+  v24Of,
+  windowOutlook,
+  windowProgress,
+  windowSlots,
+} from './v24-math'
 
 const mainnetDoc = RadarActivationSchema.parse(mainnet.body)
 const testnetDoc = RadarActivationSchema.parse(testnet.body)
@@ -95,5 +108,91 @@ describe('v24Pending', () => {
   it('is false without the document or a v24 deployment', () => {
     expect(v24Pending(undefined, 0)).toBe(false)
     expect(v24Pending({ ...mainnetDoc, deployments: [] }, 0)).toBe(false)
+  })
+})
+
+describe('the lock-in outlook (mainnet at block 2,577,670)', () => {
+  const doc = RadarActivationSchema.parse(signalling)
+  const d = v24Of(doc)!
+
+  it("goes by this window's share once it has a day of blocks", () => {
+    const pace = todaysPace(d)!
+    expect(pace).toEqual({ signalled: 688, blocks: 1223, basis: 'window' })
+    expect(todaysPace({ ...d, window: { ...d.window!, mined: 100, count: 60 } })).toEqual({
+      signalled: 329,
+      blocks: 576,
+      basis: 'recent',
+    })
+  })
+
+  it('says this window needs 2,538 of the 2,809 blocks left, more than it gets at 56%', () => {
+    const w = windowOutlook(d, rateOf(todaysPace(d)!))!
+    expect(w).toMatchObject({
+      verdict: 'needs-more',
+      count: 688,
+      mined: 1223,
+      remaining: 2809,
+      threshold: 3226,
+      needed: 2538,
+      projected: 2268,
+      endHeight: 2_580_479,
+    })
+    expect(windowOutlook(d, 0.95)!.verdict).toBe('on-track')
+    expect(windowOutlook({ ...d, window: { ...d.window!, count: 400 } }, 1)!.verdict).toBe(
+      'impossible',
+    )
+    expect(windowOutlook({ ...d, window: { ...d.window!, count: 3226 } }, 0)!.verdict).toBe(
+      'reached',
+    )
+  })
+
+  it('finds no window that locks in at 56%, under the 60% floor', () => {
+    expect(projectLockIn(doc, d, 688 / 1223)).toEqual({ never: 'floor' })
+  })
+
+  it('finds the first window whose threshold the rate clears', () => {
+    // 0.7 × 4032 = 2822: short of 2,831 (attempt 7), enough for 2,710 (attempt 8).
+    const p = projectLockIn(doc, d, 0.7)
+    expect(p).toEqual({
+      attempt: 8,
+      threshold: 2710,
+      start: 2_576_448 + 8 * 4032,
+      end: 2_576_448 + 9 * 4032 - 1,
+      lockIn: 2_576_448 + 9 * 4032,
+      activation: 2_576_448 + 10 * 4032,
+    })
+    // 0.6 × 4032 rounds down to 2,419, one short of the floor.
+    expect(projectLockIn(doc, d, 0.6)).toEqual({ never: 'floor' })
+    expect(projectLockIn(doc, d, 0.61)).toMatchObject({ attempt: 10 })
+    expect(projectLockIn(doc, d, 0.95)).toMatchObject({ attempt: 0 })
+    expect(projectLockIn(doc, d, 0.8)).toMatchObject({ attempt: 1 })
+  })
+
+  it('stops at the timeout, the current window included', () => {
+    const soon = (ms: number) => ({ ...d, params: { ...d.params, timeout: ms } })
+    // The window being counted ends past the timeout: it fails, so none locks in.
+    expect(projectLockIn(doc, soon(estimateMs(doc, 2_580_479)), 0.7)).toEqual({ never: 'timeout' })
+    // At 70% the ninth window would; a timeout two windows on comes first.
+    expect(projectLockIn(doc, soon(estimateMs(doc, 2_580_479 + 2 * 4032)), 0.7)).toEqual({
+      never: 'timeout',
+    })
+  })
+
+  it('ends on a schedule that never falls', () => {
+    const flat = {
+      ...d,
+      schedule: [{ attempt: 0, threshold: 3226 }],
+      params: { ...d.params, timeout: null },
+    }
+    expect(projectLockIn(doc, flat, 0.7)).toEqual({ never: 'floor' })
+  })
+
+  it('dates heights to come at the recent pace', () => {
+    expect(estimateMs(doc, 2_577_670)).toBe(1_795_530_762_000)
+    expect(estimateMs(doc, 2_577_680)).toBe(1_795_530_762_000 + 1_571_000)
+  })
+
+  it('names the pools that signal none of their blocks', () => {
+    expect(silentPools(d.window!.pools!).map((x) => x.pool)).toEqual(['ViaBTC'])
   })
 })

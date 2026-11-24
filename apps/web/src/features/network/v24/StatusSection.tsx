@@ -83,7 +83,7 @@ export function StatusSection({
       value={known ? <Badge tone={STATE_TONE[known]}>{stateLabel[known]}</Badge> : d.state}
       note={d.since ? t`since block ${formatInt(d.since)}` : t`start time ${when(p.start_time)}`}
     />,
-    d.state === 'defined' || d.state === 'started' ? (
+    d.state === 'defined' || (d.state === 'started' && o.phase !== 'signalling') ? (
       <Figure
         key="threshold"
         label={t`Lock-in threshold`}
@@ -95,21 +95,7 @@ export function StatusSection({
         }
       />
     ) : null,
-    o.phase === 'signalling' && w ? (
-      <Figure
-        key="window"
-        label={t`This window`}
-        value={`${formatInt(w.count)} / ${formatInt(w.threshold ?? 0)}`}
-        tone={!o.needed ? 'good' : o.possible ? undefined : 'warn'}
-        note={
-          !o.needed
-            ? t`threshold reached`
-            : o.possible
-              ? t`${formatInt(o.needed)} more needed in ${formatInt(o.remaining ?? 0)} blocks`
-              : t`can't reach it any more`
-        }
-      />
-    ) : o.earliest_start ? (
+    o.phase === 'signalling' ? null : o.earliest_start ? (
       <Figure
         key="window"
         label={t`Next window that counts`}

@@ -27,6 +27,10 @@ const ActivationWindowSchema = z
     possible: z.boolean().nullish(),
     reached: z.boolean().nullish(),
     remaining: z.number().nullish(),
+    /** Blocks and signalling blocks per pool the coinbase tag names (null: untagged). Best effort; only while counting. */
+    pools: z
+      .array(z.object({ pool: z.string().nullable(), blocks: z.number(), signalling: z.number() }))
+      .nullish(),
   })
   .catchall(z.unknown())
 

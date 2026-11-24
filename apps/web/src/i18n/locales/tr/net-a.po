@@ -78,11 +78,6 @@ msgstr "{noun} içindeki {1} payı {0} barındırıyor; en büyük üç sağlay�
 msgid "{0} masternodes"
 msgstr "{0} masternode"
 
-#. placeholder {0}: formatInt(o.needed)
-#. placeholder {1}: formatInt(o.remaining ?? 0)
-msgid "{0} more needed in {1} blocks"
-msgstr "{1} blokta {0} daha gerekli"
-
 #. placeholder {0}: formatInt(r.folded)
 msgid "{0} more versions"
 msgstr "{0} sürüm daha"
@@ -93,12 +88,17 @@ msgstr "{0} imzalamalı"
 
 #. placeholder {0}: formatInt(p.healthy)
 #. placeholder {0}: formatInt(q.valid)
-#. placeholder {0}: formatInt(r.threshold)
+#. placeholder {0}: formatInt(r.signalling)
 #. placeholder {1}: formatInt(p.checked)
 #. placeholder {1}: formatInt(p.window)
 #. placeholder {1}: formatInt(q.members)
 msgid "{0} of {1}"
 msgstr "{0} / {1}"
+
+#. placeholder {0}: formatInt(w.count)
+#. placeholder {1}: formatInt(w.mined)
+msgid "{0} of {1} blocks"
+msgstr "{1} bloğun {0} tanesi"
 
 #. placeholder {0}: formatInt(threshold ?? 0)
 #. placeholder {1}: formatInt(p.window)
@@ -138,6 +138,11 @@ msgstr "Etkin {noun} içinde {0} oranı, kayıtlı adresinde el sıkışmamıza 
 #. placeholder {0}: formatPercent(share, 1)
 msgid "{0} of enabled answered"
 msgstr "Etkin olanların {0} oranı yanıt verdi"
+
+#. placeholder {0}: formatInt(w.needed)
+#. placeholder {1}: formatInt(w.remaining)
+msgid "{0} of the {1} left"
+msgstr "kalan {1} bloğun {0} tanesi"
 
 #. placeholder {0}: formatInt(evo)
 msgid "{0} of them evonodes"
@@ -269,6 +274,10 @@ msgstr "Tüm düğümler"
 msgid "All Platform blocks"
 msgstr "Tüm Platform blokları"
 
+#. placeholder {0}: String(Math.round(doc.block_seconds))
+msgid "An estimate: the share moves as pools switch, and dates assume {0} s a block."
+msgstr "Bir tahmin: havuzlar geçiş yaptıkça pay değişir ve tarihler blok başına {0} sn varsayar."
+
 msgid "Announce 24"
 msgstr "Announce 24"
 
@@ -281,11 +290,36 @@ msgstr "Bir gün öncekiyle aynı sayıda."
 msgid "as many masternodes answering as a day ago"
 msgstr "yanıt veren masternode sayısı bir gün öncekiyle aynı"
 
+#. placeholder {0}: when(p.timeout)
+msgid "At that pace no window locks in before the timeout, {0}."
+msgstr "Bu hızda zaman aşımından ({0}) önce hiçbir pencere kilitlenmez."
+
+#. placeholder {0}: formatInt(p.threshold_min)
+#. placeholder {1}: formatInt(p.window)
+#. placeholder {2}: formatPercent(floor, 1)
+#. placeholder {3}: formatNumber(gap, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+msgid "At that pace no window locks in: even the lowest threshold, {0} of {1} blocks ({2}), is above it. Signalling has to rise by about {3} percentage points."
+msgstr "Bu hızda hiçbir pencere kilitlenmez: en düşük eşik bile, {1} bloğun {0} tanesi ({2}), bunun üstünde. Sinyalin yaklaşık {3} yüzde puanı artması gerekir."
+
+#. placeholder {0}: String(projection.attempt + 1)
+#. placeholder {1}: formatInt(projection.start)
+#. placeholder {2}: formatInt(projection.end)
+#. placeholder {3}: formatInt(projection.threshold)
+#. placeholder {4}: formatInt(p.window)
+#. placeholder {5}: at(projection.end)
+#. placeholder {6}: formatInt(projection.activation)
+#. placeholder {7}: at(projection.activation)
+msgid "At that pace window #{0} (blocks {1}–{2}, threshold {3} of {4}) is the first to lock in, about {5}. Core 24 would then activate at block {6}, about {7}."
+msgstr "Bu hızda ilk kilitlenen pencere #{0} olur (bloklar {1}–{2}, eşik {4} içinde {3}), yaklaşık {5}. Core 24 ardından {6}. blokta, yaklaşık {7} etkinleşir."
+
 msgid "at the earliest"
 msgstr "en erken"
 
 msgid "At this pace"
 msgstr "Bu hızla"
+
+msgid "At today's pace"
+msgstr "Bugünkü hızla"
 
 #. placeholder {0}: g.llmq
 #. placeholder {1}: formatInt(size)
@@ -317,10 +351,26 @@ msgstr "blok güncellemeleri"
 msgid "Blockchain size"
 msgstr "Blok zinciri boyutu"
 
+msgid "Blocks"
+msgstr "Bloklar"
+
 #. placeholder {0}: formatInt(w.start.height)
 #. placeholder {1}: formatInt(w.end.height)
 msgid "blocks {0}–{1}"
 msgstr "{0}–{1} arası bloklar"
+
+msgid "Blocks and signalling blocks per pool this window"
+msgstr "Bu pencerede havuz başına bloklar ve sinyal veren bloklar"
+
+msgid "Blocks left"
+msgstr "Kalan bloklar"
+
+#. placeholder {0}: x.pool ?? ''
+#. placeholder {1}: formatInt(x.blocks)
+#. placeholder {2}: formatInt(mined)
+#. placeholder {3}: pct(x.blocks, mined)
+msgid "Blocks tagged {0}: {1} of this window's {2} ({3}), none of them signalling."
+msgstr "{0} etiketli bloklar: bu penceredeki {2} bloğun {1} tanesi ({3}), hiçbiri sinyal vermiyor."
 
 msgid "Builds that aren't releases"
 msgstr "Sürüm olmayan derlemeler"
@@ -328,8 +378,8 @@ msgstr "Sürüm olmayan derlemeler"
 msgid "Can they be reached"
 msgstr "Erişilebiliyorlar mı"
 
-msgid "can't reach it any more"
-msgstr "artık ulaşılamaz"
+msgid "Can this window lock in?"
+msgstr "Bu pencere kilitlenebilir mi?"
 
 #. placeholder {0}: formatInt(best.height)
 msgid "ChainLock at {0}, reported by one node"
@@ -635,6 +685,9 @@ msgstr "Kilitlendi"
 msgid "Locked to Core block"
 msgstr "Kilitlendiği Core bloğu"
 
+msgid "locks in at today's pace"
+msgstr "bugünkü hızla kilitlenir"
+
 msgid "Map of the world with a disc for each place Radar found masternodes. {summary}, {scope}."
 msgstr "Radar’ın masternode bulduğu her yer için bir daire içeren dünya haritası. {summary}, {scope}."
 
@@ -725,6 +778,9 @@ msgstr "Ad"
 msgid "needed before any window counts"
 msgstr "herhangi bir pencere sayılmadan önce gerekli"
 
+msgid "Needed from the rest"
+msgstr "Kalandan gereken"
+
 #. placeholder {0}: String(minProtocol)
 msgid "needs {0}+"
 msgstr "{0}+ gerekir"
@@ -744,6 +800,9 @@ msgstr "Ağ boyutu. Noktalar arasında gezinmek için sol ve sağ ok tuşların�
 msgid "Next window that counts"
 msgstr "Sayılacak sonraki pencere"
 
+msgid "no"
+msgstr "hayır"
+
 msgid "No {noun} have told us their version yet."
 msgstr "Henüz hiçbir {noun} bize sürümünü bildirmedi."
 
@@ -755,6 +814,9 @@ msgstr "bu hafta yanıt yok"
 
 msgid "No answer this week"
 msgstr "Bu hafta yanıt yok"
+
+msgid "no blocks in this window yet"
+msgstr "bu pencerede henüz blok yok"
 
 msgid "No Core 24 deployment in the data."
 msgstr "Verilerde Core 24 dağıtımı yok."
@@ -777,6 +839,13 @@ msgstr "Şu anda mempool’da işlem yok"
 msgid "No window to show yet."
 msgstr "Henüz gösterilecek pencere yok."
 
+#. placeholder {0}: formatInt(w.needed)
+#. placeholder {1}: formatInt(w.remaining)
+#. placeholder {2}: formatInt(next)
+#. placeholder {3}: formatInt(p.window)
+msgid "No. It needs {0} more signalling blocks and only {1} are left. The next chance is the next window, at a threshold of {2} of {3}."
+msgstr "Hayır. {0} sinyal veren blok daha gerekiyor ve yalnızca {1} blok kaldı. Sonraki şans, {3} içinde {2} eşiğiyle bir sonraki pencere."
+
 msgid "Nodes"
 msgstr "Düğümler"
 
@@ -785,6 +854,15 @@ msgstr "hiçbiri başarısız değil"
 
 msgid "not a release"
 msgstr "sürüm değil"
+
+#. placeholder {0}: formatInt(w.needed)
+#. placeholder {1}: formatInt(w.remaining)
+#. placeholder {2}: pct(w.needed, w.remaining)
+#. placeholder {3}: formatPercent(rate, 1)
+#. placeholder {4}: formatInt(w.projected)
+#. placeholder {5}: formatInt(w.threshold)
+msgid "Not at this pace. It needs {0} more signalling blocks in the {1} left, {2} of them. At {3} it ends with about {4} of the {5} it needs."
+msgstr "Bu hızla olmaz. Kalan {1} bloğun {0} tanesinin daha, yani {2}, sinyal vermesi gerekiyor. {3} ile pencere gereken {5} bloğa karşı yaklaşık {4} ile biter."
 
 msgid "Not checked"
 msgstr "Kontrol edilmedi"
@@ -816,6 +894,12 @@ msgstr "şimdi"
 
 msgid "Now"
 msgstr "Şimdi"
+
+#. placeholder {0}: formatInt(p.window)
+#. placeholder {1}: pct(w.threshold, p.window)
+#. placeholder {2}: String(attempt)
+msgid "of {0} ({1}), window #{2}"
+msgstr "{0} içinde ({1}), pencere #{2}"
 
 #. placeholder {0}: formatInt(r.mined)
 msgid "of {0} so far"
@@ -863,8 +947,14 @@ msgstr "Geçmişimiz {0} tarihinde başlıyor, bu yüzden bu aralık istenenden 
 msgid "Our reading disagrees with our dashd's."
 msgstr "Okumamız dashd’mizinkiyle uyuşmuyor."
 
+msgid "out of reach"
+msgstr "ulaşılamaz"
+
 msgid "Over time"
 msgstr "Zaman içinde"
+
+msgid "partly"
+msgstr "kısmen"
 
 msgid "Pass every check"
 msgstr "Her kontrolü geçenler"
@@ -904,6 +994,12 @@ msgstr "Platform güncellemeleri"
 
 msgid "Platform's latest transitions and blocks need Platform Explorer"
 msgstr "Platform’un son geçişleri ve blokları Platform Explorer gerektirir"
+
+msgid "Pool"
+msgstr "Havuz"
+
+msgid "Pools signalling"
+msgstr "Sinyal veren havuzlar"
 
 msgid "PoSe-banned"
 msgstr "PoSe tarafından yasaklı"
@@ -1066,6 +1162,9 @@ msgstr "Şimdiye kadar sinyal veren bloklar"
 msgid "Signalling share and threshold for {0} windows"
 msgstr "{0} pencere için sinyal payı ve eşik"
 
+msgid "Signalling so far"
+msgstr "Şimdiye kadarki sinyal"
+
 #. placeholder {0}: formatInt(d.since)
 msgid "since block {0}"
 msgstr "{0}. bloktan beri"
@@ -1181,9 +1280,6 @@ msgstr "Bu ağda zaman aşımı yok."
 msgid "This reading is stale."
 msgstr "Bu okuma güncel değil."
 
-msgid "This window"
-msgstr "Bu pencere"
-
 #. placeholder {0}: String((w.attempt ?? 0) + 1)
 msgid "This window (attempt {0}), block by block"
 msgstr "Bu pencere ({0}. deneme), blok blok"
@@ -1200,14 +1296,28 @@ msgstr "Eşik"
 msgid "Threshold {0}; at this pace the window ends with {1}."
 msgstr "Eşik {0}; bu hızla pencere {1} ile biter."
 
-msgid "threshold reached"
-msgstr "eşiğe ulaşıldı"
-
 msgid "Thresholds by window"
 msgstr "Pencereye göre eşikler"
 
 msgid "Time range"
 msgstr "Zaman aralığı"
+
+#. placeholder {0}: formatInt(w.endHeight)
+#. placeholder {1}: at(w.endHeight)
+msgid "to block {0}, about {1}"
+msgstr "{0}. bloğa kadar, yaklaşık {1}"
+
+#. placeholder {0}: formatInt(pace.blocks)
+#. placeholder {1}: formatInt(pace.signalled)
+#. placeholder {2}: formatPercent(rate, 1)
+msgid "Today's pace is the last {0} blocks': {1} signalled ({2})."
+msgstr "Bugünkü hız son {0} bloğa göre: {1} tanesi sinyal verdi ({2})."
+
+#. placeholder {0}: formatInt(pace.signalled)
+#. placeholder {1}: formatInt(pace.blocks)
+#. placeholder {2}: formatPercent(rate, 1)
+msgid "Today's pace is this window's so far: {0} of {1} blocks signalled ({2})."
+msgstr "Bugünkü hız bu pencerenin şimdiye kadarkine göre: {1} bloğun {0} tanesi sinyal verdi ({2})."
 
 msgid "Tor"
 msgstr "Tor"
@@ -1238,6 +1348,9 @@ msgstr "Bilinmiyor"
 
 msgid "unknown version"
 msgstr "bilinmeyen sürüm"
+
+msgid "Untagged"
+msgstr "Etiketsiz"
 
 msgid "Updated"
 msgstr "Güncellendi"
@@ -1286,8 +1399,8 @@ msgstr "Ne kazanıyorlar"
 msgid "What they run"
 msgstr "Ne çalıştırıyorlar"
 
-msgid "Where Dash Core 24's activation stands: the masternode signal, miners' signalling window by window, the lock-in threshold and when the next window opens."
-msgstr "Dash Core 24 etkinleştirmesinin durumu: masternode sinyali, madencilerin pencere pencere sinyali, kilitlenme eşiği ve sonraki pencerenin ne zaman açılacağı."
+msgid "Where Dash Core 24's activation stands: whether this window can lock in, which pools signal, miners' signalling window by window, the falling lock-in threshold and the masternode signal."
+msgstr "Dash Core 24 etkinleşmesi nerede: bu pencere kilitlenebilir mi, hangi havuzlar sinyal veriyor, pencere pencere madenci sinyalleri, düşen kilitlenme eşiği ve masternode sinyali."
 
 msgid "Where it stands"
 msgstr "Durumu"
@@ -1299,8 +1412,29 @@ msgstr "Hangi düğümler"
 msgid "Which quorum signs depends on the request and on which quorums are active then (a new one forms about every day), so here are the {0} active now, the one that would sign now first."
 msgstr "Hangi quorum’un imzalayacağı isteğe ve o sırada hangi quorum’ların etkin olduğuna bağlıdır (yaklaşık her gün yenisi oluşur); bu yüzden şu anda etkin olan {0} quorum burada, önce şimdi imzalayacak olan."
 
+#. placeholder {0}: formatInt(mined)
+msgid "Who mined this window's {0} blocks and how many of them signalled. Best effort: we go by the tag in each block's coinbase, which is whatever the miner wrote, and some blocks carry none."
+msgstr "Bu penceredeki {0} bloğu kimin ürettiği ve kaçının sinyal verdiği. En iyi tahmin: her bloğun coinbase'indeki etikete, yani madencinin yazdığına bakıyoruz; bazı bloklarda etiket yok."
+
 msgid "Window"
 msgstr "Pencere"
 
 msgid "would sign now"
 msgstr "şimdi imzalar"
+
+msgid "yes"
+msgstr "evet"
+
+#. placeholder {0}: formatInt(w.needed)
+#. placeholder {1}: formatInt(w.remaining)
+#. placeholder {2}: formatPercent(rate, 1)
+#. placeholder {3}: formatInt(w.projected)
+#. placeholder {4}: formatInt(w.threshold)
+msgid "Yes, at this pace. It needs {0} more signalling blocks in the {1} left, and at {2} it ends with about {3} of the {4} it needs."
+msgstr "Evet, bu hızla. Kalan {1} blokta {0} sinyal veren blok daha gerekiyor ve {2} ile pencere gereken {4} bloğa karşı yaklaşık {3} ile biter."
+
+#. placeholder {0}: formatInt(w.count)
+#. placeholder {1}: formatInt(w.threshold)
+#. placeholder {2}: formatInt(w.endHeight + 1)
+msgid "Yes. This window has {0} signalling blocks, at least its threshold of {1}, so Core 24 locks in at block {2}."
+msgstr "Evet. Bu pencerede {0} sinyal veren blok var, en az {1} eşiği kadar, bu yüzden Core 24 {2}. blokta kilitlenir."

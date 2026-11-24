@@ -19,6 +19,8 @@ const POOL_TAGS: readonly (readonly [RegExp, string])[] = [
   [/suprnova/i, 'Suprnova'],
   [/coinmine/i, 'Coinmine'],
   [/p2pool/i, 'P2Pool'],
+  [/mining-dutch/i, 'Mining-Dutch'],
+  [/powerpool/i, 'PowerPool'],
   [/dash\.org|dashpool|dash pool/i, 'Dash pool'],
 ]
 
