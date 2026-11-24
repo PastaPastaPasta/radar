@@ -1,4 +1,5 @@
 import { useLingui } from '@lingui/react/macro'
+import { useRouter } from '@tanstack/react-router'
 import {
   useQueries,
   useQuery,
@@ -36,6 +37,8 @@ export interface PageChainOptions<P, Param, Row, K extends QueryKey> {
   getRowId: (row: Row) => string
   /** The page after this one, or undefined at the end. */
   next: (page: P, param: Param) => Param | undefined
+  /** The list's first page, when it is not `undefined` (a cursor list's first page has no cursor). */
+  first?: Param
   /** The page before the list's first, for a list that opened part-way down (page numbers). */
   prev?: (param: Param) => Param | undefined
   /** The first page when it came with something else, so it is not read again. */
@@ -73,8 +76,8 @@ export interface PageChain<P, Param, Row> {
   }
   /** Pages above the first one shown: dropped as the list grew, or before the page the address named. */
   before: { has: boolean; load: () => void; loading: boolean; failed: boolean }
-  /** Starts the list again from its first page, for a cursor list opened part-way down. */
-  restart: (() => void) | undefined
+  /** Starts the list again from its first page, for a cursor list opened part-way down; gives that page. */
+  restart: (() => Param) | undefined
   /** The page each shown row came from, and the pages above it. */
   paramOf: (rowId: string) => { param: Param; earlier: Param[] } | undefined
   /** Changes whenever rows are added or dropped. */
@@ -245,9 +248,10 @@ export function usePageChain<P, Param, Row, K extends QueryKey>(
           : 'empty'
   // A cursor list opened part-way down knows nothing of the pages above it, so it offers its start instead.
   const restart =
-    !hasPrev && prev === undefined && chain.params[chain.lo] !== undefined
+    !hasPrev && prev === undefined && idOf(chain.params[chain.lo]) !== idOf(opts.first)
       ? () => {
-          setChain({ key, start, params: [undefined as Param], lo: 0, hi: 0, skipped: 0 })
+          setChain({ key, start, params: [opts.first as Param], lo: 0, hi: 0, skipped: 0 })
+          return opts.first as Param
         }
       : undefined
 
@@ -299,15 +303,19 @@ function useWritePosition<Param>(
   useLayoutEffect(() => {
     latest.current = { paramOf, write }
   })
+  const router = useRouter()
   const on = write !== undefined
   useEffect(() => {
     if (!on) return
     let frame = 0
     let written: string | undefined
+    // Once the router starts another navigation the address is the next page's, until that one settles here.
+    let leaving = false
+    let path = window.location.pathname
     const save = () => {
       const el = container.current
       const { paramOf: of, write: put } = latest.current
-      if (!el || !put) return
+      if (leaving || !el || !put || window.location.pathname !== path) return
       const row = firstVisibleRow(el, barInset())
       if (!row) return
       const found = of(row.id)
@@ -324,11 +332,25 @@ function useWritePosition<Param>(
       frame = requestAnimationFrame(save)
     }
     window.addEventListener('scroll', onScroll, { passive: true })
+    const stopOnLeave = router.subscribe('onBeforeNavigate', () => {
+      leaving = true
+      cancelAnimationFrame(frame)
+    })
+    // A navigation that kept this list may have written the router's older search over the place: note it again.
+    const resumeOnSettle = router.subscribe('onResolved', () => {
+      if (!container.current?.isConnected) return
+      leaving = false
+      path = window.location.pathname
+      written = undefined
+      onScroll()
+    })
     return () => {
       cancelAnimationFrame(frame)
       window.removeEventListener('scroll', onScroll)
+      stopOnLeave()
+      resumeOnSettle()
     }
-  }, [container, on])
+  }, [container, on, router])
 }
 
 /**
@@ -378,10 +400,10 @@ export function ScrollList<Param>({
             type="button"
             className="dh-btn dh-btn--sm"
             onClick={() => {
-              restart()
+              const first = restart()
               if (position) {
                 const url = new URL(window.location.href)
-                position(url, undefined as Param, [])
+                position(url, first, [])
                 replaceUrlQuietly(url, history.state)
               }
               // The list's own move to its start, not the reader scrolling on to the next page.

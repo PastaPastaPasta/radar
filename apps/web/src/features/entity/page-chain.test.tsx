@@ -194,4 +194,55 @@ describe('usePageChain', () => {
     expect(shown()).toEqual(ids(5))
     expect(screen.queryByRole('button', { name: 'start' })).toBeNull()
   })
+
+  it('does not offer the start to a list whose first page is a number, while it is there', async () => {
+    const user = userEvent.setup()
+    function Chunks({ start }: { start: number }) {
+      const list = usePageChain({
+        listKey: 'chunks',
+        start,
+        first: 0,
+        query: (chunk: number) =>
+          queryOptions({
+            queryKey: ['chunks', chunk],
+            queryFn: () => Promise.resolve(ids(PAGE).map((id) => `${chunk}-${id}`)),
+          }),
+        rows: (page) => page,
+        getRowId: (id) => id,
+        next: (_, chunk) => (chunk < 3 ? chunk + 1 : undefined),
+      })
+      return (
+        <div>
+          <ul>
+            {list.rows.map((id) => (
+              <li key={id}>{id}</li>
+            ))}
+          </ul>
+          {list.restart ? (
+            <button type="button" onClick={list.restart}>
+              start
+            </button>
+          ) : null}
+        </div>
+      )
+    }
+    const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+    const view = render(
+      <QueryClientProvider client={client}>
+        <Chunks start={0} />
+      </QueryClientProvider>,
+    )
+    expect(await screen.findByText('0-v1')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'start' })).toBeNull()
+    view.unmount()
+    render(
+      <QueryClientProvider client={client}>
+        <Chunks start={2} />
+      </QueryClientProvider>,
+    )
+    expect(await screen.findByText('2-v1')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'start' }))
+    expect(await screen.findByText('0-v1')).toBeInTheDocument()
+    expect(screen.queryByText('2-v1')).toBeNull()
+  })
 })

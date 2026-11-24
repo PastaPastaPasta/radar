@@ -200,6 +200,7 @@ function Notes() {
   const notes = usePageChain({
     listKey: 'notes',
     start: 0,
+    first: 0,
     query: (chunk: number) =>
       sdkQueries['shielded.encryptedNotes'](net, {
         startIndex: chunk * NOTES_CHUNK,

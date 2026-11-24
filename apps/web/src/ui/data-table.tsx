@@ -197,7 +197,7 @@ function InfinitePager({
           onNear={more}
           enabled={paging.hasNext && !paging.fetching && !failed}
           loading={paging.fetching}
-          version={shown}
+          version={`${shown}:${last}`}
           status={
             paging.fetching
               ? t`Loading more…`
