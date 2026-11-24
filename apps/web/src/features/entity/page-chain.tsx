@@ -309,9 +309,10 @@ function useWritePosition<Param>(
     if (!on) return
     let frame = 0
     let written: string | undefined
-    // Once the router starts another navigation the address is the next page's, until that one settles here.
-    let leaving = false
-    let path = window.location.pathname
+    // Once the router starts another navigation the address is the next page's, until that one settles here; a list
+    // that mounts while one is pending waits for it too.
+    let leaving = router.state.status === 'pending'
+    let path = router.state.resolvedLocation?.pathname ?? window.location.pathname
     const save = () => {
       const el = container.current
       const { paramOf: of, write: put } = latest.current
