@@ -2,7 +2,7 @@ import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { useSearch } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useDecentralizedOnly } from '@/data/health'
 import { peQueries } from '@/data/pe/queries'
 import type { ShieldedNoteDto } from '@/data/sdk/methods/p-chain'
@@ -20,12 +20,14 @@ import {
   Empty,
   ErrorState,
   Hash,
+  Pager,
   Skeleton,
   Stat,
   Stats,
   queryView,
   stampsOf,
   useAfterIdle,
+  useReveal,
 } from '@/ui'
 import { useLookupForm } from '../quorums/lookup-form'
 import { ShieldedChart } from './ShieldedChart'
@@ -279,9 +281,9 @@ function Anchors() {
   const { t } = useLingui()
   const net = useNetwork()
   const ready = useAfterIdle()
-  const [shown, setShown] = useState(ANCHORS_SHOWN)
   const anchors = useQuery({ ...sdkQueries['shielded.anchors'](net, NONE), enabled: ready })
   const list = anchors.data?.data ?? []
+  const reveal = useReveal({ total: list.length, step: ANCHORS_SHOWN })
   return (
     <Card
       id="anchors"
@@ -301,22 +303,16 @@ function Anchors() {
         ) : (
           <div className="grid gap-2">
             <ol className="grid gap-1" data-anchors>
-              {list.slice(0, shown).map((a) => (
+              {list.slice(0, reveal.count).map((a) => (
                 <li key={a}>
                   <Hash value={a} display="wrap" phoneShort />
                 </li>
               ))}
             </ol>
-            {shown < list.length ? (
-              <button
-                type="button"
-                className="dh-btn dh-btn--sm"
-                onClick={() => {
-                  setShown((n) => n + ANCHORS_SHOWN)
-                }}
-              >
-                {t`Show more`}
-              </button>
+            {reveal.paging ? (
+              <div className="rx-tfoot">
+                <Pager paging={reveal.paging} shown={reveal.count} />
+              </div>
             ) : null}
           </div>
         )

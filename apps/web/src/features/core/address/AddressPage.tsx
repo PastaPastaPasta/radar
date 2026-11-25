@@ -25,6 +25,7 @@ import {
   Time,
   Unavailable,
   useMediaQuery,
+  useReveal,
 } from '@/ui'
 import { deferred } from '@/ui/deferred'
 import { HyphenGate, StaleIndexNotice } from '../hy-shared/HyphenGate'
@@ -482,9 +483,9 @@ const UTXO_PAGE = 25
 
 function UtxoCard({ query }: { query: UseQueryResult<Sourced<HyPage<HyUtxo>>> }) {
   const { t } = useLingui()
-  const [shown, setShown] = useState(UTXO_PAGE)
   const all = query.data?.data.items ?? []
-  const rows = all.slice(0, shown)
+  const reveal = useReveal({ total: all.length, step: UTXO_PAGE })
+  const rows = all.slice(0, reveal.count)
   const total = query.data?.data.total
   const pending = all.filter((u) => u.height == null).length
   const columns = useMemo<ColumnDef<HyUtxo>[]>(
@@ -560,16 +561,7 @@ function UtxoCard({ query }: { query: UseQueryResult<Sourced<HyPage<HyUtxo>>> })
         error={query.error}
         onRetry={() => void query.refetch()}
         empty={<Empty kind="none-yet" title={t`No unspent outputs.`} />}
-        paging={
-          all.length > UTXO_PAGE
-            ? {
-                kind: 'infinite',
-                hasNext: all.length > rows.length,
-                fetchNext: () => setShown((n) => n + UTXO_PAGE),
-                fetching: false,
-              }
-            : undefined
-        }
+        paging={reveal.paging}
       />
     </Card>
   )

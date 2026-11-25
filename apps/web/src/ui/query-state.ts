@@ -36,6 +36,10 @@ export function stampsOf(...answers: (Sourced<unknown> | undefined)[]): SourceSt
   return answers.flatMap((a) => (a ? [stampOf(a)] : []))
 }
 
+/** Whether any of `queries` is still on its first read: no answer yet and one on its way. */
+export const firstReadPending = (queries: readonly { isFetching: boolean; data: unknown }[]) =>
+  queries.some((q) => q.isFetching && q.data === undefined)
+
 /** True once the browser has had an idle moment after first paint, so loading the SDK never competes with it (§3.3). */
 export function useAfterIdle(): boolean {
   const [idle, setIdle] = useState(false)

@@ -583,7 +583,7 @@ test.describe('Chain state', () => {
     await expect(card(page, 'prefunded').locator('[data-source]')).toHaveCount(0)
   })
 
-  test('shows the pool, its most recent anchor and its anchors with a copy control on each hash @NX-58', async ({
+  test('shows the pool, its most recent anchor and its anchors, revealed as the reader scrolls, with a copy control on each hash @NX-58', async ({
     page,
   }) => {
     await synthesizeShieldedChunks(page)
@@ -594,11 +594,14 @@ test.describe('Chain state', () => {
     await expectProved(pool)
     const anchors = card(page, 'anchors')
     await anchors.scrollIntoViewIfNeeded()
-    await expect(anchors.locator('[data-anchors] li')).toHaveCount(10)
-    await expect(anchors.locator('[data-anchors] [data-copy]')).toHaveCount(10)
-    await anchors.getByRole('button', { name: 'Show more' }).click()
-    expect(await anchors.locator('[data-anchors] li').count()).toBeGreaterThan(10)
+    const items = anchors.locator('[data-anchors] li')
+    await expect(items.first()).toBeVisible()
+    // Audited at rest: the wheel below leaves the phone header in its scrolled state for a moment.
     await audit(page)
+    await anchors.locator('.rx-pager[data-infinite]').hover()
+    await page.mouse.wheel(0, 120)
+    await expect.poll(() => items.count()).toBeGreaterThan(10)
+    await expect(anchors.locator('[data-anchors] li:not(:has([data-copy]))')).toHaveCount(0)
   })
 
   test('lists encrypted notes a chunk at a time as the reader scrolls, with a copy control on every hash @NX-58', async ({

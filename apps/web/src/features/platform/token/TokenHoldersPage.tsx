@@ -2,7 +2,7 @@ import { useLingui } from '@lingui/react/macro'
 import { useQueries, useQueryClient, type UseQueryResult } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { stampOf, type SourceStamp, type Sourced } from '@/data/envelope'
 import { useDecentralizedOnly } from '@/data/health'
 import { sdkBatchers } from '@/data/sdk/queries'
@@ -16,12 +16,20 @@ import {
 } from '@/features/entity'
 import { isPlatformId } from '@/lib/base58'
 import { wellKnownIdentities } from '@/lib/well-known'
-import { Amount, Card, DataTable, Empty, LinkOut } from '@/ui'
-import { pageTo } from '../identity/common'
+import {
+  Amount,
+  Card,
+  DataTable,
+  Empty,
+  firstReadPending,
+  LinkOut,
+  useListPosition,
+  useReveal,
+} from '@/ui'
 import { resolveIdentityText } from './identity-input'
 import { tokenAmountKind, useToken, type TokenView } from './use-token'
 
-/** Identities shown on one page: one `tokens.balances` call holds all of them. */
+/** Identities revealed at a time: one `tokens.balances` call holds all of them. */
 const HOLDERS_PAGE = 25
 const MAX_IDS = 100
 
@@ -259,9 +267,17 @@ function HoldersTable({ token, ids, page }: { token: TokenView; ids: string[]; p
   const { t } = useLingui()
   const net = useNetwork()
   const navigate = useNavigate()
-  const lastPage = Math.max(1, Math.ceil(ids.length / HOLDERS_PAGE))
-  const current = Math.min(page, lastPage)
-  const shown = ids.slice((current - 1) * HOLDERS_PAGE, current * HOLDERS_PAGE)
+  const [busy, setBusy] = useState(false)
+  const reveal = useReveal({
+    total: ids.length,
+    step: HOLDERS_PAGE,
+    steps: page,
+    reset: token.id,
+    busy,
+  })
+  const shown = ids.slice(0, reveal.count)
+  const list = useRef<HTMLDivElement>(null)
+  useListPosition(list, { at: page, step: HOLDERS_PAGE, count: reveal.count, total: ids.length })
 
   const balances = useQueries({
     queries: shown.map((identityId) => ({
@@ -269,6 +285,8 @@ function HoldersTable({ token, ids, page }: { token: TokenView; ids: string[]; p
       enabled: isPlatformId(identityId),
     })),
   })
+  const loading = firstReadPending(balances)
+  if (loading !== busy) setBusy(loading)
   const rows: HolderRow[] = shown.map((id, i) => ({ id, balance: balances[i]! }))
   const stamps: SourceStamp[] = balances.flatMap((b) => (b.data ? [stampOf(b.data)] : []))
 
@@ -324,25 +342,23 @@ function HoldersTable({ token, ids, page }: { token: TokenView; ids: string[]; p
       id="token-holders-table"
       source={stamps.length > 0 ? stamps : undefined}
     >
-      <DataTable
-        caption={t`Balances of the chosen identities`}
-        columns={columns}
-        rows={rows}
-        getRowId={(r) => r.id}
-        state={ids.length === 0 ? 'empty' : 'ready'}
-        paging={
-          ids.length > HOLDERS_PAGE
-            ? { kind: 'page', page: current, limit: HOLDERS_PAGE, total: ids.length, to: pageTo }
-            : undefined
-        }
-        empty={
-          <Empty
-            kind="none-yet"
-            title={t`No identities chosen yet`}
-            body={t`Add identity IDs or DPNS names above to see their balances of this token.`}
-          />
-        }
-      />
+      <div ref={list}>
+        <DataTable
+          caption={t`Balances of the chosen identities`}
+          columns={columns}
+          rows={rows}
+          getRowId={(r) => r.id}
+          state={ids.length === 0 ? 'empty' : 'ready'}
+          paging={reveal.paging}
+          empty={
+            <Empty
+              kind="none-yet"
+              title={t`No identities chosen yet`}
+              body={t`Add identity IDs or DPNS names above to see their balances of this token.`}
+            />
+          }
+        />
+      </div>
     </Card>
   )
 }

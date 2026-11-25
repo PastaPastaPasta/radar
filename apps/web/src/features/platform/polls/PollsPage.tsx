@@ -1,7 +1,7 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { stampOf } from '@/data/envelope'
 import {
   customPollsArgs,
@@ -15,8 +15,18 @@ import type { VotePollDto } from '@/data/sdk/methods'
 import { sdkQueries } from '@/data/sdk/queries'
 import { Entity, PageFrame, PageGroupTabs, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
-import { Card, DataTable, DateRangeFilter, Empty, SegFilter, TableTools, Time } from '@/ui'
-import { pageLink, useSetSearch } from '../contest/shared'
+import {
+  Card,
+  DataTable,
+  DateRangeFilter,
+  Empty,
+  SegFilter,
+  TableTools,
+  Time,
+  useListPosition,
+  useReveal,
+} from '@/ui'
+import { useSetSearch } from '../contest/shared'
 import { loadState } from '../identity/common'
 
 export type PollRange = '24h' | '7d' | '30d' | '90d' | 'upcoming' | 'custom'
@@ -75,7 +85,20 @@ export function PollsPage({ search }: { search: PollsPageSearch }) {
       )
     return search.dir === 'desc' ? rows.reverse() : rows
   }, [buckets, search.range, search.dir, now])
-  const rows = all.slice((search.page - 1) * POLLS_PAGE, search.page * POLLS_PAGE)
+  const reveal = useReveal({
+    total: all.length,
+    step: POLLS_PAGE,
+    steps: search.page,
+    reset: JSON.stringify([search.range, search.from, search.to, search.dir]),
+  })
+  const rows = all.slice(0, reveal.count)
+  const list = useRef<HTMLDivElement>(null)
+  useListPosition(list, {
+    at: search.page,
+    step: POLLS_PAGE,
+    count: reveal.count,
+    total: all.length,
+  })
   const capped = (buckets?.length ?? 0) >= POLL_BUCKETS
 
   const columns = useMemo<ColumnDef<PollRow>[]>(
@@ -159,27 +182,23 @@ export function PollsPage({ search }: { search: PollsPageSearch }) {
         />
       </TableTools>
       <Card layer="platform" id="polls-list" source={polls.data ? stampOf(polls.data) : undefined}>
-        <DataTable
-          caption={t`Vote polls`}
-          columns={columns}
-          rows={rows}
-          getRowId={(r) => r.key}
-          rowLink={(r) => {
-            const c = pollContest(r.poll)
-            return { to: '/contest/$label', params: { label: c.id }, search: c.search } as never
-          }}
-          state={loadState(polls)}
-          error={polls.error}
-          onRetry={() => void polls.refetch()}
-          paging={{
-            kind: 'page',
-            page: search.page,
-            limit: POLLS_PAGE,
-            total: all.length,
-            to: pageLink,
-          }}
-          empty={<Empty kind="none-yet" title={t`No vote polls end in this range.`} />}
-        />
+        <div ref={list}>
+          <DataTable
+            caption={t`Vote polls`}
+            columns={columns}
+            rows={rows}
+            getRowId={(r) => r.key}
+            rowLink={(r) => {
+              const c = pollContest(r.poll)
+              return { to: '/contest/$label', params: { label: c.id }, search: c.search } as never
+            }}
+            state={loadState(polls)}
+            error={polls.error}
+            onRetry={() => void polls.refetch()}
+            paging={reveal.paging}
+            empty={<Empty kind="none-yet" title={t`No vote polls end in this range.`} />}
+          />
+        </div>
         {capped ? (
           <p className="rx-dim">
             {t`Showing the first ${formatInt(POLL_BUCKETS)} end dates Platform returned.`}

@@ -11,7 +11,16 @@ import { sdkQueries } from '@/data/sdk/queries'
 import { Entity, useNetwork } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
-import { Amount, Card, DataTable, Time, queryView, stampsOf, useAfterIdle } from '@/ui'
+import {
+  Amount,
+  Card,
+  DataTable,
+  firstReadPending,
+  Time,
+  queryView,
+  stampsOf,
+  useAfterIdle,
+} from '@/ui'
 import { formatMultiplier } from './CurrentEpoch'
 import { epochLengthMs } from '@/lib/epoch-length'
 
@@ -167,6 +176,9 @@ export function RangeTable({ from, to }: { from?: number | undefined; to?: numbe
   )
   const pending = infos.some((q) => q.data === undefined && !q.isError)
   const failed = infos.find((q) => q.isError && q.data === undefined)
+  // A chunk loaded by scrolling holds the next one back until its Explorer reads are in too, so one chunk of reads runs
+  // at a time; the first chunk's are not a load the reader asked for, so they never show as one.
+  const reading = pending || (loaded > 1 && firstReadPending([...infos, ...details]))
   const moreChunks = loaded < chunks.length
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -272,9 +284,11 @@ export function RangeTable({ from, to }: { from?: number | undefined; to?: numbe
             ? {
                 kind: 'infinite',
                 hasNext: true,
-                fetching: pending,
+                fetching: reading,
+                failed: failed !== undefined,
                 fetchNext: () => {
-                  setLoaded((n) => n + 1)
+                  if (failed) void failed.refetch()
+                  else setLoaded((n) => n + 1)
                 },
               }
             : undefined

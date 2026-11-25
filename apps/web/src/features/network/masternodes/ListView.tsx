@@ -1,6 +1,6 @@
 import { Trans, useLingui } from '@lingui/react/macro'
 import { Link } from '@tanstack/react-router'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import { filterMnRows, type MnFilter } from '@/data/masternodes/filter'
 import { mnCsvColumns, mnCsvName } from '@/data/masternodes/export'
 import { toCsv } from '@/data/masternodes/csv'
@@ -8,7 +8,7 @@ import type { MnRow, MnRows } from '@/data/masternodes/rows'
 import { sortMnRows } from '@/data/masternodes/sort'
 import { useNetwork } from '@/features/entity'
 import type { NetworkId } from '@/lib/network'
-import { DataTable, Empty } from '@/ui'
+import { DataTable, Empty, useListPosition, useReveal } from '@/ui'
 import type { SourceStamp } from '@/data/envelope'
 import { MAINNET_BLOCK_MS, useMnColumns } from './columns'
 import { downloadText } from './download'
@@ -16,7 +16,7 @@ import { FilterBar, sortOptionsOf } from './FilterBar'
 import { filterFields } from './filter-fields'
 import { StatusBar } from './StatusBar'
 import { useRestoreScroll } from './use-scroll-restore'
-import { mnPageLink, type MnPageSearch, type MnSearchControls } from './use-mn-search'
+import type { MnPageSearch, MnSearchControls } from './use-mn-search'
 
 export const PAGE_SIZE = 100
 
@@ -93,12 +93,21 @@ export function ListView({ data, controls, matches, stamps }: ListViewProps) {
     blockMs: net === 'mainnet' ? MAINNET_BLOCK_MS : undefined,
     onEvoFilter,
   })
-  const pages = Math.max(1, Math.ceil(matches.length / PAGE_SIZE))
-  const page = Math.min(search.page, pages)
-  const shown = useMemo(
-    () => matches.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
-    [matches, page],
-  )
+  const reveal = useReveal({
+    total: matches.length,
+    step: PAGE_SIZE,
+    steps: search.page,
+    reset: choicesKey(search),
+  })
+  const shown = useMemo(() => matches.slice(0, reveal.count), [matches, reveal.count])
+  const list = useRef<HTMLDivElement>(null)
+  useListPosition(list, {
+    at: search.page,
+    step: PAGE_SIZE,
+    count: reveal.count,
+    total: matches.length,
+    restores: true,
+  })
   useRestoreScroll(shown.length > 0)
   const sortOptions = useMemo(() => sortOptionsOf(columns), [columns])
 
@@ -112,7 +121,7 @@ export function ListView({ data, controls, matches, stamps }: ListViewProps) {
         controls={controls}
         sortOptions={sortOptions}
       />
-      <div className="min-[1024px]:overflow-x-auto min-[1024px]:[&_th]:static">
+      <div ref={list} className="min-[1024px]:overflow-x-auto min-[1024px]:[&_th]:static">
         <DataTable
           caption={t`Masternodes`}
           columns={columns}
@@ -133,17 +142,7 @@ export function ListView({ data, controls, matches, stamps }: ListViewProps) {
               controls.sort({ sort })
             },
           }}
-          paging={
-            pages > 1
-              ? {
-                  kind: 'page',
-                  page,
-                  limit: PAGE_SIZE,
-                  total: matches.length,
-                  to: mnPageLink,
-                }
-              : undefined
-          }
+          paging={reveal.paging}
           virtual
           dense
           onCellFilter={(column, value) => {
@@ -156,6 +155,9 @@ export function ListView({ data, controls, matches, stamps }: ListViewProps) {
     </div>
   )
 }
+
+/** The reader's filters and sort, without the page: a change starts the list over at its top. */
+const choicesKey = (search: MnPageSearch): string => JSON.stringify({ ...search, page: 1 })
 
 /** The filter a click on a cell of `column` asks for. */
 export function cellFilter(column: string, value: string): Partial<MnFilter> {

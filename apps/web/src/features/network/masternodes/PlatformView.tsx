@@ -1,6 +1,6 @@
 import { useLingui } from '@lingui/react/macro'
 import { useQueries, useQuery, type UseQueryResult } from '@tanstack/react-query'
-import { useMemo } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { stampOf, type Sourced, type SourceStamp } from '@/data/envelope'
 import {
   buildEvoRows,
@@ -20,19 +20,21 @@ import {
   ActiveFilters,
   DataTable,
   Empty,
+  firstReadPending,
   SearchField,
   SegFilter,
   TableTools,
   Unavailable,
+  useListPosition,
+  useReveal,
 } from '@/ui'
 import { useDebouncedQuery } from '../debounced-query'
 import { useEvoColumns } from './evo-columns'
 import { SortPicker, sortOptionsOf } from './FilterBar'
-import { mnPageLink, type MnSearchControls } from './use-mn-search'
+import type { MnSearchControls } from './use-mn-search'
 
+/** Evonodes revealed at a time, each step with its own SDK call for their blocks proposed (at most 100 a call). */
 const EVO_PAGE_SIZE = 50
-/** One SDK call proves at most this many evonodes. */
-const SDK_BATCH = 100
 
 export interface PlatformViewProps {
   data: MnRows
@@ -44,6 +46,12 @@ export interface PlatformViewProps {
 
 const validatorRecords = (results: readonly UseQueryResult<Sourced<PeValidator | null>>[]) => ({
   items: results.flatMap((r) => (r.data?.data ? [r.data.data] : [])),
+  pending: firstReadPending(results),
+})
+
+const proposedOf = (results: readonly UseQueryResult<Sourced<Map<string, bigint>>>[]) => ({
+  results,
+  pending: firstReadPending(results),
 })
 
 export function PlatformView({ data, net, controls, indexers }: PlatformViewProps) {
@@ -73,22 +81,50 @@ export function PlatformView({ data, net, controls, indexers }: PlatformViewProp
     () => sortEvoRows(filterEvoRows(base, { q: search.q, pf: search.pf, candidate }), search.sort),
     [base, search.q, search.pf, search.sort, candidate],
   )
-  const pages = Math.max(1, Math.ceil(matching.length / EVO_PAGE_SIZE))
-  const page = Math.min(search.page, pages)
-  const window = useMemo(
-    () => matching.slice((page - 1) * EVO_PAGE_SIZE, page * EVO_PAGE_SIZE),
-    [matching, page],
-  )
+  const [busy, setBusy] = useState(false)
+  const reveal = useReveal({
+    total: matching.length,
+    step: EVO_PAGE_SIZE,
+    // The count stops at the list's end, so a page past it never asks for more steps than there are rows.
+    steps: search.page,
+    reset: JSON.stringify([search.q, search.pf, search.sort]),
+    busy,
+  })
+  const window = useMemo(() => matching.slice(0, reveal.count), [matching, reveal.count])
+  const list = useRef<HTMLDivElement>(null)
+  useListPosition(list, {
+    at: search.page,
+    step: EVO_PAGE_SIZE,
+    count: reveal.count,
+    total: matching.length,
+  })
 
   const epoch = tip.data?.data.epoch.number
-  const asked = useMemo(() => window.map((e) => e.protx).slice(0, SDK_BATCH), [window])
-  const blocks = useQuery({
-    ...sdkQueries['epoch.evonodesProposedBlocksByIds'](net, {
-      epoch: epoch ?? 0,
-      proTxHashes: asked,
-    }),
-    enabled: epoch !== undefined && asked.length > 0,
+  const chunks = useMemo(() => {
+    const out: string[][] = []
+    for (let i = 0; i < window.length; i += EVO_PAGE_SIZE)
+      out.push(window.slice(i, i + EVO_PAGE_SIZE).map((e) => e.protx))
+    return out
+  }, [window])
+  const proposed = useQueries({
+    queries: chunks.map((proTxHashes) => ({
+      ...sdkQueries['epoch.evonodesProposedBlocksByIds'](net, { epoch: epoch ?? 0, proTxHashes }),
+      enabled: epoch !== undefined,
+    })),
+    combine: proposedOf,
   })
+  const blocks = useMemo(() => {
+    const asked = new Set<string>()
+    const counts = new Map<string, bigint>()
+    const stamps: SourceStamp[] = []
+    proposed.results.forEach((r, i) => {
+      if (!r.data) return
+      for (const protx of chunks[i] ?? []) asked.add(protx)
+      for (const [protx, n] of r.data.data) counts.set(protx, n)
+      stamps.push(stampOf(r.data))
+    })
+    return { asked, counts, stamps }
+  }, [proposed.results, chunks])
   // A queued evonode is not in the active validators' list; its totals come from Platform Explorer's own record of it.
   const unlisted = useMemo(
     () => (validators.data ? window.filter((e) => !e.validator).map((e) => e.protx) : []),
@@ -106,18 +142,20 @@ export function PlatformView({ data, net, controls, indexers }: PlatformViewProp
           platform: platform.data?.data,
           validators: validators.data?.data.items,
           records: records.items,
-          ...(blocks.data ? { proposed: { asked: new Set(asked), counts: blocks.data.data } } : {}),
+          ...(blocks.asked.size > 0 ? { proposed: blocks } : {}),
         },
       ),
-    [blocks.data, window, asked, platform.data, validators.data, records.items],
+    [blocks, window, platform.data, validators.data, records.items],
   )
+  const loading = proposed.pending || records.pending
+  if (loading !== busy) setBusy(loading)
 
   const columns = useEvoColumns({ indexers })
   const stamps: SourceStamp[] = [
     ...(data.dapi ? [data.dapi] : []),
     ...(platform.data ? [stampOf(platform.data)] : []),
     ...(validators.data ? [stampOf(validators.data)] : []),
-    ...(blocks.data ? [stampOf(blocks.data)] : []),
+    ...blocks.stamps,
   ]
   const filters: { id: PlatformFilter; label: string }[] = [
     { id: 'all', label: t`All` },
@@ -175,42 +213,34 @@ export function PlatformView({ data, net, controls, indexers }: PlatformViewProp
           title={t`Blocks proposed in total, the last block, rewards and the validator set need Radar and Platform Explorer`}
         />
       )}
-      <DataTable
-        caption={t`Evonodes`}
-        columns={columns}
-        rows={shown}
-        getRowId={(e) => e.protx}
-        rowLink={(e) =>
-          ({ to: '/mn/$protx', params: { protx: e.protx }, search: { tab: 'platform' } }) as never
-        }
-        state={shown.length === 0 ? 'empty' : 'ready'}
-        empty={
-          <Empty
-            kind="no-match"
-            title={t`No evonodes match`}
-            body={t`Clear the filter or search for something else.`}
-          />
-        }
-        sort={{
-          value: search.sort,
-          onChange: (sort) => {
-            controls.sort({ sort })
-          },
-        }}
-        paging={
-          pages > 1
-            ? {
-                kind: 'page',
-                page,
-                limit: EVO_PAGE_SIZE,
-                total: matching.length,
-                to: mnPageLink,
-              }
-            : undefined
-        }
-        phone="cards"
-        source={stamps}
-      />
+      <div ref={list}>
+        <DataTable
+          caption={t`Evonodes`}
+          columns={columns}
+          rows={shown}
+          getRowId={(e) => e.protx}
+          rowLink={(e) =>
+            ({ to: '/mn/$protx', params: { protx: e.protx }, search: { tab: 'platform' } }) as never
+          }
+          state={shown.length === 0 ? 'empty' : 'ready'}
+          empty={
+            <Empty
+              kind="no-match"
+              title={t`No evonodes match`}
+              body={t`Clear the filter or search for something else.`}
+            />
+          }
+          sort={{
+            value: search.sort,
+            onChange: (sort) => {
+              controls.sort({ sort })
+            },
+          }}
+          paging={reveal.paging}
+          phone="cards"
+          source={stamps}
+        />
+      </div>
     </div>
   )
 }
