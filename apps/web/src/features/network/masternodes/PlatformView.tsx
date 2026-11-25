@@ -85,8 +85,8 @@ export function PlatformView({ data, net, controls, indexers }: PlatformViewProp
   const reveal = useReveal({
     total: matching.length,
     step: EVO_PAGE_SIZE,
-    // A page past the end would ask for every step's proposed blocks at once.
-    steps: Math.min(search.page, Math.ceil(matching.length / EVO_PAGE_SIZE)),
+    // The count stops at the list's end, so a page past it never asks for more steps than there are rows.
+    steps: search.page,
     reset: JSON.stringify([search.q, search.pf, search.sort]),
     busy,
   })

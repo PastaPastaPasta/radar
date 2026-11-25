@@ -39,8 +39,9 @@ interface AuditedNode {
 }
 
 /**
- * A target that is large enough but has scrolled part-way under the shell's sticky bar: axe measures
- * what the bar's buttons leave of it. That is a scroll position, not the size of the target.
+ * A target that has scrolled part-way or wholly under the shell's sticky bar: axe measures what the
+ * bar leaves of it, and its spacing against the bar's links. That is a scroll position, not the
+ * target: the same targets further down the page are audited in full.
  */
 const coveredByShellBar = (rule: string, node: AuditedNode, underBar: ReadonlySet<string>) =>
   rule === 'target-size' &&

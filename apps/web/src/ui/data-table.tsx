@@ -800,10 +800,20 @@ const indexOf = (el: Element) => Number((el as HTMLElement).dataset.index)
 /** The step, from 1, that row `index` of the list is revealed in. */
 const stepOf = (index: number, step: number) => Math.floor(index / step) + 1
 
-/** The position in the whole list of the first row below the sticky bar. */
+/** The height of the list's table header where it sticks under the bar and covers the rows beneath it, else 0. */
+function stuckHead(container: HTMLElement): number {
+  const head = container.querySelector('thead')
+  const cell = head?.querySelector('th:last-child')
+  if (!head || !cell) return 0
+  const style = getComputedStyle(cell)
+  return style.position === 'sticky' && style.top !== 'auto' ? head.offsetHeight : 0
+}
+
+/** The position in the whole list of the first row below the sticky bar and the header stuck under it. */
 function firstInView(container: HTMLElement, inset: number): number | undefined {
+  const top = inset + stuckHead(container)
   const row = [...container.querySelectorAll<HTMLElement>('[data-index]')].find(
-    (r) => r.getBoundingClientRect().bottom > inset,
+    (r) => r.getBoundingClientRect().bottom > top,
   )
   return row ? indexOf(row) : undefined
 }
@@ -825,10 +835,7 @@ function withParam(search: string, name: string, value: string | undefined): str
  */
 function distanceTo(container: HTMLElement, index: number, inset: number): number | null {
   const row = container.querySelector<HTMLElement>(`[data-index="${index}"]`)
-  if (row) {
-    const head = row.closest('table')?.querySelector('thead')
-    return row.getBoundingClientRect().top - inset - (head?.offsetHeight ?? 0)
-  }
+  if (row) return row.getBoundingClientRect().top - inset - stuckHead(container)
   const drawn = [...container.querySelectorAll<HTMLElement>('[data-index]')]
   const before = drawn.filter((el) => indexOf(el) < index).at(-1)
   if (before) return before.getBoundingClientRect().bottom - inset
