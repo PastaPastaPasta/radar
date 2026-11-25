@@ -31,9 +31,12 @@ export function BlockTxCompact({
   const list = useRef<HTMLOListElement>(null)
   const [open, setOpen] = useState<ReadonlySet<string>>(() => new Set())
   const [scrollMargin, setScrollMargin] = useState(0)
+  // Content above the list can change height after it mounts (a notice, another block), which moves where it starts.
   useLayoutEffect(() => {
-    if (list.current) setScrollMargin(list.current.getBoundingClientRect().top + window.scrollY)
-  }, [])
+    if (!list.current) return
+    const top = Math.round(list.current.getBoundingClientRect().top + window.scrollY)
+    if (top !== scrollMargin) setScrollMargin(top)
+  })
   const virtualizer = useWindowVirtualizer({
     count: rows.length,
     estimateSize: () => LINE_HEIGHT,

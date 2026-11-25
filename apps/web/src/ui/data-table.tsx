@@ -30,7 +30,7 @@ import { reportsAttr, stampsOfInput, useSectionSource } from './section-source'
 import { AmountDensity } from './units-context'
 import { Empty, ErrorState, SourceLine } from './states'
 import type { LoadState } from './types'
-import { barInset, InfiniteSentinel } from './infinite'
+import { barInset, InfiniteSentinel, replaceUrlQuietly, scrollQuietly } from './infinite'
 
 export interface DataTableProps<Row> {
   columns: ColumnDef<Row>[]
@@ -894,6 +894,11 @@ export function useListPosition(
     const finish = () => {
       release()
       placed.current = true
+      // The entry now holds this step, so Back to it keeps the reader's own scroll rather than placing it again.
+      if (router.state.status === 'idle' && container.current?.isConnected) {
+        const state = (history.state as Record<string, unknown> | null) ?? {}
+        replaceUrlQuietly(window.location.href, { ...state, radarListPage: at })
+      }
     }
     const move = () => {
       const el = container.current
@@ -909,18 +914,19 @@ export function useListPosition(
         if (++still >= STABLE_FRAMES) return finish()
       } else {
         still = 0
-        window.scrollBy(0, by)
+        // The list's own move, not the reader scrolling on to the next step.
+        scrollQuietly(by)
       }
       frame = requestAnimationFrame(move)
     }
     for (const type of INPUT_EVENTS) window.addEventListener(type, finish, { passive: true })
     frame = requestAnimationFrame(move)
     return release
-  }, [container, present, target, total, returning, step, at])
+  }, [container, present, target, total, returning, step, at, router])
   useEffect(() => {
     let frame = 0
     let written = at
-    const path = window.location.pathname
+    let path = window.location.pathname
     const write = () => {
       const el = container.current
       // While a navigation away is on its way the address is already the next page's.
@@ -934,16 +940,25 @@ export function useListPosition(
       const { pathname, search, hash } = window.location
       const url = `${pathname}${withParam(search, param, page > 1 ? String(page) : undefined)}${hash}`
       const state = (history.state as Record<string, unknown> | null) ?? {}
-      History.prototype.replaceState.call(history, { ...state, radarListPage: page }, '', url)
+      replaceUrlQuietly(url, { ...state, radarListPage: page })
     }
     const onScroll = () => {
       cancelAnimationFrame(frame)
       frame = requestAnimationFrame(write)
     }
     window.addEventListener('scroll', onScroll, { passive: true })
+    // A navigation that kept this list (another block, a tab, a removed holder) may have put back an older address:
+    // the list notes its place again on the page it is now on.
+    const resumeOnSettle = router.subscribe('onResolved', () => {
+      if (!container.current?.isConnected) return
+      path = window.location.pathname
+      written = Number.NaN
+      onScroll()
+    })
     return () => {
       cancelAnimationFrame(frame)
       window.removeEventListener('scroll', onScroll)
+      resumeOnSettle()
     }
   }, [container, at, step, param, router])
 }

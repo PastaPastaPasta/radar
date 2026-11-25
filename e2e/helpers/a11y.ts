@@ -53,19 +53,24 @@ const coveredByShellBar = (rule: string, node: AuditedNode, underBar: ReadonlySe
     ))
 
 /**
- * The light-DOM targets whose top edge is under the shell's sticky bar: a list that opens at a row
- * past its first (`?page=2`) leaves the rows above it under the bar, and axe then measures what the bar
- * leaves of their targets against each other and the bar's links.
+ * The page's targets that sit part-way or wholly under the shell's sticky bar: a list that opens at a
+ * row past its first (`?page=2`) leaves the rows above it under the bar, and axe then measures what
+ * the bar leaves of their targets against each other and the bar's links. The bar's own controls,
+ * slotted ones included, are never exempt, and the same targets further down the page are still
+ * audited at their full size.
  */
 async function targetsUnderShellBar(page: Page, targets: unknown[][]): Promise<Set<string>> {
   const selectors = targets.filter((t) => t.length === 1 && typeof t[0] === 'string') as string[][]
   if (selectors.length === 0) return new Set()
   const under = await page.evaluate((list) => {
-    const bar = document.querySelector('dashhq-bar')?.getBoundingClientRect()
-    if (!bar || bar.height === 0) return []
+    const host = document.querySelector('dashhq-bar')
+    const bar = host?.getBoundingClientRect()
+    if (!host || !bar || bar.height === 0) return []
     return list.filter(([selector]) => {
-      const box = document.querySelector(selector!)?.getBoundingClientRect()
-      return !!box && box.top < bar.bottom
+      const el = document.querySelector(selector!)
+      if (!el || host.contains(el)) return false
+      const box = el.getBoundingClientRect()
+      return box.top < bar.bottom && box.bottom > bar.top
     })
   }, selectors)
   return new Set(under.map((t) => JSON.stringify(t)))
