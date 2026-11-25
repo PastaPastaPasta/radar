@@ -5,6 +5,7 @@ import { horizontalOverflow, settled } from '../helpers/settled'
 import { answerAsLeftList } from '../helpers/fixtures'
 import { expect, test } from '../helpers/test'
 import { expectReports, sourceLineOf } from '../helpers/sources'
+import { scrollRowToTop, scrollToEnd } from '../helpers/scroll'
 
 const MAINNET = {
   regular: '219edddca6b0973d4b9fd24ae62d9b8a8c4addd0d1c44de577e1ef127f37fb32',
@@ -245,22 +246,26 @@ test.describe('masternode page', () => {
     await expect(page.getByRole('button', { name: 'Check now' })).toBeEnabled()
   })
 
-  test('pages through the payments, keeping the place in the address @RA-35', async ({ page }) => {
+  test('loads older payments as the reader scrolls, keeping the place in the address @RA-35', async ({
+    page,
+  }) => {
     await openTab(page, MAINNET.regular, 'payments')
     const table = page.getByRole('table', { name: 'Recent payments to this masternode' })
     await expect(table).toBeVisible()
-    const first = await table.getByRole('row').count()
-    expect(first).toBeGreaterThan(5)
-    await expect(page.locator('[data-payments-pager]')).toContainText('25 of 454 shown')
+    const rows = table.locator('tbody tr[data-row-id]')
+    await expect(rows).toHaveCount(25)
+    await expect(page.locator('#payments')).toContainText('25 loaded')
     await expect(page.locator('#payments')).toContainText(
       /454 payments, 545\.86555754\sDASH in total; indexed blocks 1,047,200 to 2,569,999/,
     )
+    await expect(page.getByRole('button', { name: 'Show more' })).toHaveCount(0)
 
-    await page.getByRole('button', { name: 'Show more' }).click()
-
+    await scrollToEnd(page)
+    await expect(rows).toHaveCount(50)
+    await expect(page.locator('#payments')).toContainText('50 loaded')
+    await scrollRowToTop(page, '#payments tbody tr[data-row-id]:nth-child(26)')
     await expect(page).toHaveURL(/before=2517727/)
-    await expect.poll(() => table.getByRole('row').count()).toBeGreaterThan(first)
-    await expect(page.locator('[data-payments-pager]')).toContainText('of 454 shown')
+    await expect(rows).toHaveCount(50)
     await expect(page.locator('[role="alert"], .rx-empty--error')).toHaveCount(0)
   })
 
@@ -268,8 +273,13 @@ test.describe('masternode page', () => {
     page,
   }) => {
     await openTab(page, MAINNET.regular, 'payments', '&before=2517727')
-
-    await expect(page.locator('[data-payments-pager]')).toContainText('50 of 454 shown')
+    const rows = page.locator('#payments tbody tr[data-row-id]')
+    await expect(rows).toHaveCount(25)
+    await expect(page.locator('#payments [data-row-id="2517727"]')).toHaveCount(0)
+    await page.getByRole('button', { name: 'Back to the start of the list' }).click()
+    await expect(page.locator('#payments [data-row-id="2517727"]')).toHaveCount(1)
+    await expect(rows).toHaveCount(25)
+    await expect(page).not.toHaveURL(/before=/)
   })
 
   test('lists the version and registration history and Hyphen’s special transactions @RA-34 @HY-11', async ({

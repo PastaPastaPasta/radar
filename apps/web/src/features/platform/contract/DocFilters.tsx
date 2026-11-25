@@ -151,7 +151,7 @@ export function DocFilters({ indices, schema, initial, limits, onRun, onClear }:
           </select>
         </label>
         <label className="grid gap-1">
-          <span className="text-ink-2">{t`Rows per page`}</span>
+          <span className="text-ink-2">{t`Rows per load`}</span>
           <select
             className="dh-select dh-select--sm"
             value={limit}

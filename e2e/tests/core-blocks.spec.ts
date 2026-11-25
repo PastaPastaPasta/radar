@@ -129,6 +129,8 @@ test.describe('Blocks list', () => {
       .getByRole('link', { name: 'Core' })
       .click()
     await expect(page.locator(`a[href="/block/${TIP}"]`).first()).toBeVisible()
+    await expect(rows).toHaveCount(20)
+    expect(await page.evaluate(() => window.scrollY)).toBeLessThan(50)
     await expect(page).not.toHaveURL(/from=/)
     expect(await page.evaluate(() => (window as { sameDocument?: boolean }).sameDocument)).toBe(
       true,

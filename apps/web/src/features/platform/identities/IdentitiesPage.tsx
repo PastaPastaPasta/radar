@@ -1,17 +1,17 @@
 import type { MessageDescriptor } from '@lingui/core'
 import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
-import { useQueries, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useCallback, useMemo, useState } from 'react'
-import { stampOf, type SourceStamp } from '@/data/envelope'
 import { useDecentralizedOnly } from '@/data/health'
 import { peQueries } from '@/data/pe/queries'
 import type { PeIdentity } from '@/data/pe/schemas'
 import { sdkQueries } from '@/data/sdk/queries'
-import { IdentityRef, PageFrame, useNetwork } from '@/features/entity'
-import { nameLabel, pageTo } from '../identity/common'
+import { IdentityRef, PageFrame, ScrollList, useNetwork, pagePosition } from '@/features/entity'
+import { nameLabel } from '../identity/common'
+import { usePeScroll } from '../pe-scroll'
 import { readIdentityInput } from '../identity/ids'
 import { formatInt } from '@/lib/format'
 import {
@@ -22,13 +22,11 @@ import {
   DataTable,
   DateRangeFilter,
   Empty,
-  ListModeToggle,
   RangeFilter,
   SegFilter,
   TableTools,
   Time,
   Unavailable,
-  useListMode,
 } from '@/ui'
 import {
   IDENTITY_TYPES,
@@ -37,8 +35,6 @@ import {
   rangeText,
   type IdentitiesFilters,
 } from './params'
-
-const DEFAULT_LIMIT = 25
 
 export function IdentitiesPage({ search }: { search: IdentitiesFilters }) {
   const { t } = useLingui()
@@ -89,26 +85,15 @@ function IdentityList({ search }: { search: IdentitiesFilters }) {
   )
   const net = useNetwork()
   const setFilters = useSetFilters()
-  const listMode = useListMode('identities')
-  const limit = search.limit !== DEFAULT_LIMIT ? search.limit : listMode.limit
-  const filters: IdentitiesFilters = { ...search, limit }
-  const scroll = listMode.mode === 'scroll'
-  const [pagesShown, setPagesShown] = useState(1)
-
-  const queries = useQueries({
-    queries: Array.from({ length: scroll ? pagesShown : 1 }, (_, i) =>
-      peQueries.identities(net, peIdentitiesQuery(filters, scroll ? i + 1 : search.page)),
-    ),
+  const list = usePeScroll({
+    listKey: [JSON.stringify(peIdentitiesQuery(search, 1)), search.from, search.to].join('\u0000'),
+    start: search.page,
+    limit: search.limit,
+    page: (page) => peQueries.identities(net, peIdentitiesQuery(search, page)),
+    getRowId: (r: PeIdentity) => r.identifier,
+    keep: (r) => inDateRange(r, search.from, search.to),
   })
-  const pages = queries.map((q) => q.data).filter((p) => p !== undefined)
-  const rows = useMemo(
-    () => pages.flatMap((p) => p.data.items).filter((r) => inDateRange(r, search.from, search.to)),
-    [pages, search.from, search.to],
-  )
-  const first = queries[0]
-  const last = queries[queries.length - 1]
-  const total = pages[0]?.data.total
-  const stamps: SourceStamp[] = pages.map(stampOf)
+  const { rows, total, stamps } = list
 
   const columns = useMemo<ColumnDef<PeIdentity>[]>(
     () => [
@@ -241,7 +226,6 @@ function IdentityList({ search }: { search: IdentitiesFilters }) {
             setFilters({ from: r.from, to: r.to })
           }}
         />
-        <ListModeToggle listId="identities" />
       </TableTools>
       {tokens.length > 0 ? (
         <ActiveFilters
@@ -260,41 +244,30 @@ function IdentityList({ search }: { search: IdentitiesFilters }) {
             })
           }}
         >
-          {search.from || search.to
-            ? t`The dates narrow the identities on the page being shown.`
-            : null}
+          {search.from || search.to ? t`The dates narrow the identities as they load.` : null}
         </ActiveFilters>
       ) : null}
       <Card layer="platform" id="identities-list" source={stamps.length > 0 ? stamps : undefined}>
-        <DataTable
-          caption={t`Identities`}
-          columns={columns}
-          rows={rows}
-          getRowId={(r) => r.identifier}
-          rowLink={(r) => ({ to: '/identity/$id', params: { id: r.identifier } }) as never}
-          state={first?.isPending ? 'loading' : first?.isError && !first.data ? 'error' : 'ready'}
-          error={first?.error}
-          onRetry={() => void first?.refetch()}
-          sort={{
-            value: search.sort,
-            onChange: (sort) => {
-              setFilters({ sort })
-            },
-          }}
-          paging={
-            scroll
-              ? {
-                  kind: 'infinite',
-                  hasNext: (last?.data?.data.items.length ?? 0) >= limit,
-                  fetchNext: () => {
-                    setPagesShown((n) => n + 1)
-                  },
-                  fetching: last?.isFetching === true && last.data === undefined,
-                }
-              : { kind: 'page', page: search.page, limit, total, to: pageTo }
-          }
-          empty={<Empty kind="no-match" title={t`No identities match.`} />}
-        />
+        <ScrollList chain={list} position={pagePosition}>
+          <DataTable
+            caption={t`Identities`}
+            columns={columns}
+            rows={rows}
+            getRowId={list.getRowId}
+            rowLink={(r) => ({ to: '/identity/$id', params: { id: r.identifier } }) as never}
+            state={list.state}
+            error={list.error}
+            onRetry={list.onRetry}
+            sort={{
+              value: search.sort,
+              onChange: (sort) => {
+                setFilters({ sort })
+              },
+            }}
+            paging={list.paging}
+            empty={<Empty kind="no-match" title={t`No identities match.`} />}
+          />
+        </ScrollList>
       </Card>
     </div>
   )

@@ -1,14 +1,15 @@
-import { useQueries, useQuery, type UseQueryOptions } from '@tanstack/react-query'
+import { useQuery, type QueryKey, type UseQueryOptions } from '@tanstack/react-query'
 import { useNavigate, type LinkProps } from '@tanstack/react-router'
-import { useState } from 'react'
 import type { Page } from '@/data/page'
-import type { QueryKeyOf } from '@/data/query/keys'
 import type { Sourced } from '@/data/envelope'
 import type { VotePollsByEndDateDto } from '@/data/sdk/methods'
 import { sdkQueries } from '@/data/sdk/queries'
 import { upcomingPollsArgs, type ContestKey } from '@/data/query/prefetch/p-vote'
 import { useNetwork } from '@/features/entity'
-import { useListMode, type DataTableProps, type LoadState } from '@/ui'
+import { usePeScroll } from '../pe-scroll'
+
+/** Rows per page of the lists Platform reads by cursor: each page asks for one more, to know whether another follows. */
+export const CURSOR_PAGE = 25
 
 const pollKey = (contractId: string, type: string, index: string, values: readonly unknown[]) =>
   `${contractId}|${type}|${index}|${values.map(String).join('\u0000')}`
@@ -35,8 +36,6 @@ export function useUpcomingPolls() {
   const net = useNetwork()
   return useQuery(sdkQueries['voting.votePollsByEndDate'](net, upcomingPollsArgs()))
 }
-
-const DEFAULT_LIMIT = 25
 
 /** A link to the same page with `patch` applied to its search. */
 export function searchLink(patch: Record<string, unknown>): LinkProps {
@@ -66,67 +65,23 @@ export function useSetSearch() {
 }
 
 /**
- * How a PE list is shown, as the list mode says: pages, or one list that grows by a page at a time. The limit is the
- * search's unless it is the default, then the one the list remembers.
+ * A Platform Explorer list as a table reads it: page after page as the reader scrolls, from the page the address names.
+ * `queryFor` builds the query for one page; `listKey` names everything else the list is read with.
  */
-function usePeListMode(listId: string, searchLimit: number) {
-  const listMode = useListMode(listId)
-  const [pagesShown, setPagesShown] = useState(1)
-  const scroll = listMode.mode === 'scroll'
-  return {
-    scroll,
-    limit: searchLimit !== DEFAULT_LIMIT ? searchLimit : listMode.limit,
-    /** How many pages to ask for: one in page mode. */
-    count: scroll ? pagesShown : 1,
-    more: () => {
-      setPagesShown((n) => n + 1)
-    },
-  }
-}
-
-/**
- * A Platform Explorer list as a table reads it: the page asked for, or in scroll mode every page so far. `queryFor`
- * builds the query for one page at the limit in force.
- */
-export function usePeList<T>(
-  listId: string,
+export function usePeList<T, K extends QueryKey>(
+  listKey: string,
   search: { page: number; limit: number },
   queryFor: (
     page: number,
     limit: number,
-  ) => UseQueryOptions<Sourced<Page<T>>, Error, Sourced<Page<T>>, QueryKeyOf<'pe'>>,
+  ) => UseQueryOptions<Sourced<Page<T>>, Error, Sourced<Page<T>>, K>,
+  getRowId: (row: T) => string,
 ) {
-  const mode = usePeListMode(listId, search.limit)
-  const queries = useQueries({
-    queries: Array.from({ length: mode.count }, (_, i) =>
-      queryFor(mode.scroll ? i + 1 : search.page, mode.limit),
-    ),
+  return usePeScroll({
+    listKey,
+    start: search.page,
+    limit: search.limit,
+    page: (page) => queryFor(page, search.limit),
+    getRowId,
   })
-  const pages = queries.map((q) => q.data).filter((p) => p !== undefined)
-  const rows = pages.flatMap((p) => p.data.items)
-  const total = pages[0]?.data.total
-  const first = queries[0]
-  const last = queries[queries.length - 1]
-  const paging: DataTableProps<T>['paging'] = mode.scroll
-    ? {
-        kind: 'infinite',
-        hasNext: (last?.data?.data.items.length ?? 0) >= mode.limit,
-        fetchNext: mode.more,
-        fetching: last?.isFetching === true && last.data === undefined,
-      }
-    : { kind: 'page', page: search.page, limit: mode.limit, total, to: pageLink }
-  const state: LoadState = first?.isPending
-    ? 'loading'
-    : first?.isError && !first.data
-      ? 'error'
-      : 'ready'
-  return {
-    pages,
-    rows,
-    total,
-    paging,
-    state,
-    error: first?.error,
-    onRetry: () => void first?.refetch(),
-  }
 }

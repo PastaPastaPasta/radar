@@ -1,17 +1,17 @@
 import { useLingui } from '@lingui/react/macro'
-import { useQueries } from '@tanstack/react-query'
 import { Link, useNavigate, type LinkProps } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
-import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
-import type { SourceStamp } from '@/data/envelope'
+import { useMemo, useState, type FormEvent } from 'react'
 import { peQueries } from '@/data/pe/queries'
 import type { PeDataContract } from '@/data/pe/schemas'
 import {
   Entity,
   IdentityRef,
   PageFrame,
+  ScrollList,
   useIdentityNamesFailed,
   useNetwork,
+  pagePosition,
 } from '@/features/entity'
 import { isPlatformId } from '@/lib/base58'
 import { formatInt } from '@/lib/format'
@@ -24,14 +24,13 @@ import {
   DateRangeFilter,
   Empty,
   Icon,
-  ListModeToggle,
   RangeFilter,
   SegFilter,
   Time,
   Unavailable,
-  useListMode,
 } from '@/ui'
 import { usePeEnabled } from '../contract/contract-data'
+import { usePeScroll } from '../pe-scroll'
 import { peParams, rangeText, type ContractsSearch } from './contracts-query'
 
 export interface ContractsPageProps {
@@ -131,22 +130,6 @@ function OpenById() {
   )
 }
 
-function useLimit(urlLimit: number): { limit: number; mode: 'pages' | 'scroll' } {
-  const navigate = useNavigate()
-  const list = useListMode('contracts')
-  const seen = useRef(list.limit)
-  useEffect(() => {
-    if (seen.current === list.limit) return
-    seen.current = list.limit
-    void navigate({
-      to: '/contracts',
-      search: (s: Record<string, unknown>) => ({ ...s, limit: undefined, page: undefined }),
-      replace: true,
-    } as never)
-  }, [list.limit, navigate])
-  return { limit: urlLimit !== 25 ? urlLimit : list.limit, mode: list.mode }
-}
-
 function AllContracts({ search }: { search: ContractsSearch }) {
   const { t } = useLingui()
   const net = useNetwork()
@@ -177,32 +160,18 @@ function ContractTable({
 }) {
   const { t } = useLingui()
   const navigate = useNavigate()
-  const { limit, mode } = useLimit(search.limit)
-  const [loaded, setLoaded] = useState(1)
-  const pages = mode === 'scroll' ? loaded : 1
-  const queries = useQueries({
-    queries: Array.from({ length: pages }, (_, i) =>
-      peQueries.dataContracts(
-        net,
-        peParams(search, mode === 'scroll' ? i + 1 : search.page, limit),
-      ),
-    ),
+  const { limit } = search
+  const list = usePeScroll({
+    listKey: JSON.stringify(peParams(search, 1, limit)),
+    start: search.page,
+    limit,
+    page: (page) => peQueries.dataContracts(net, peParams(search, page, limit)),
+    getRowId: (r: PeDataContract) => r.identifier,
   })
-  const rows = queries.flatMap((q) => q.data?.data.items ?? [])
-  const first = queries[0]
-  const last = queries.at(-1)
-  const total = first?.data?.data.total
-  const stamps: SourceStamp[] = first?.data ? [first.data] : []
+  const { rows } = list
   const namesFailed = useIdentityNamesFailed(
     rows.flatMap((r) => (r.owner?.identifier ? [r.owner.identifier] : [])),
   )
-  const state = first?.isPending
-    ? 'loading'
-    : first?.isError && !first.data
-      ? 'error'
-      : rows.length === 0
-        ? 'empty'
-        : 'ready'
 
   const columns = useMemo<ColumnDef<PeDataContract>[]>(
     () => [
@@ -261,14 +230,12 @@ function ContractTable({
     ],
     [t],
   )
-  const to = (page: number) => patchLink({ page: page <= 1 ? undefined : page })
   const change = (patch: Record<string, unknown>) => {
     void navigate({
       to: '/contracts',
       search: (s: Record<string, unknown>) => ({ ...s, page: undefined, ...patch }),
       replace: true,
     } as never)
-    setLoaded(1)
   }
   const [ownerDraft, setOwnerDraft] = useState(search.owner ?? '')
   const filtered =
@@ -360,46 +327,28 @@ function ContractTable({
             {t`Clear filters`}
           </Link>
         ) : null}
-        <ListModeToggle listId="contracts" />
       </div>
-      <DataTable
-        caption={t`Data contracts`}
-        columns={columns}
-        rows={rows}
-        getRowId={(r) => r.identifier}
-        state={state}
-        error={first?.error}
-        onRetry={() => {
-          void first?.refetch()
-        }}
-        empty={<Empty kind="no-match" title={t`No contracts match.`} />}
-        sort={{
-          value: search.sort,
-          onChange: (sort) => {
-            change({ sort: sort === '-created' ? undefined : sort })
-          },
-        }}
-        rowLink={(r) => ({ to: '/contract/$id', params: { id: r.identifier } }) as never}
-        paging={
-          mode === 'scroll'
-            ? {
-                kind: 'infinite',
-                hasNext: total === undefined ? rows.length >= pages * limit : rows.length < total,
-                fetchNext: () => {
-                  setLoaded((n) => n + 1)
-                },
-                fetching: last?.isFetching === true,
-              }
-            : {
-                kind: 'page',
-                page: search.page,
-                limit,
-                ...(total === undefined ? {} : { total }),
-                to,
-              }
-        }
-        source={stamps}
-      />
+      <ScrollList chain={list} position={pagePosition}>
+        <DataTable
+          caption={t`Data contracts`}
+          columns={columns}
+          rows={rows}
+          getRowId={list.getRowId}
+          state={list.state}
+          error={list.error}
+          onRetry={list.onRetry}
+          empty={<Empty kind="no-match" title={t`No contracts match.`} />}
+          sort={{
+            value: search.sort,
+            onChange: (sort) => {
+              change({ sort: sort === '-created' ? undefined : sort })
+            },
+          }}
+          rowLink={(r) => ({ to: '/contract/$id', params: { id: r.identifier } }) as never}
+          paging={list.paging}
+          source={list.stamps.slice(0, 1)}
+        />
+      </ScrollList>
       {namesFailed ? (
         <p className="rx-errrow" data-names-unavailable>
           <Icon name="alert" />

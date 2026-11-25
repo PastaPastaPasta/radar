@@ -146,9 +146,6 @@ msgstr "Версия-кандидат"
 msgid "Choose a range of epochs"
 msgstr "Выбрать диапазон эпох"
 
-msgid "Chunks of notes"
-msgstr "Блоки записей"
-
 msgid "Commitment"
 msgstr "Обязательство"
 
@@ -378,9 +375,6 @@ msgstr "Следующий блок ожидается сейчас (приме�
 msgid "Next block expected in about {0}"
 msgstr "Следующий блок ожидается примерно через {0}"
 
-msgid "Next chunk"
-msgstr "Следующий блок"
-
 msgid "Next epoch’s version"
 msgstr "Версия следующей эпохи"
 
@@ -505,9 +499,6 @@ msgstr "Состояние пула"
 
 msgid "Prefunded specialised balance"
 msgstr "Предоплаченный специализированный баланс"
-
-msgid "Previous chunk"
-msgstr "Предыдущий блок"
 
 msgid "Previous epoch"
 msgstr "Предыдущая эпоха"
@@ -691,17 +682,15 @@ msgstr "В пуле есть этот нуллификатор: его запи�
 
 #. placeholder {0}: formatInt(total)
 #. placeholder {1}: formatInt(NOTES_CHUNK)
-#. placeholder {2}: formatInt(start)
-msgid "The pool holds {0} notes, served in chunks of {1}. The first {NOTES_SHOWN} of the chunk starting at note {2} are shown."
-msgstr "В пуле {0} записей, они отдаются блоками по {1}. Показаны первые {NOTES_SHOWN} из блока, начинающегося с записи {2}."
+msgid "The pool holds {0} notes, served in chunks of {1}. The first {NOTES_SHOWN} notes of each chunk are shown, a chunk at a time as you scroll."
+msgstr "В пуле {0} записей, их отдают блоками по {1}. Показаны первые {NOTES_SHOWN} записей каждого блока, по блоку за раз при прокрутке."
 
 msgid "The pool of shielded credits: its balance, the anchors it accepts, its encrypted notes, and whether a nullifier has been spent."
 msgstr "Пул защищённых кредитов: его баланс, принимаемые им якоря, зашифрованные записи и то, потрачен ли нуллификатор."
 
 #. placeholder {0}: formatInt(NOTES_CHUNK)
-#. placeholder {1}: formatInt(start)
-msgid "The pool serves its notes in chunks of {0}. The first {NOTES_SHOWN} of the chunk starting at note {1} are shown."
-msgstr "Пул отдаёт записи блоками по {0}. Показаны первые {NOTES_SHOWN} из блока, начинающегося с записи {1}."
+msgid "The pool serves its notes in chunks of {0}. The first {NOTES_SHOWN} notes of each chunk are shown, a chunk at a time as you scroll."
+msgstr "Пул отдаёт записи блоками по {0}. Показаны первые {NOTES_SHOWN} записей каждого блока, по блоку за раз при прокрутке."
 
 #. placeholder {0}: formatInt(pool.blocks)
 msgid "The pool so far over {0} blocks: an estimate until the epoch ends"

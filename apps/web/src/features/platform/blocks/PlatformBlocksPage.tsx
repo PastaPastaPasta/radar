@@ -3,14 +3,19 @@ import { useQuery } from '@tanstack/react-query'
 import { useCallback, useMemo } from 'react'
 import { peQueries } from '@/data/pe/queries'
 import type { PeBlockSummary } from '@/data/pe/schemas'
-import { PageFrame, PlatformBlockTable, useNetwork } from '@/features/entity'
+import {
+  PageFrame,
+  PlatformBlockTable,
+  ScrollList,
+  useNetwork,
+  pagePosition,
+} from '@/features/entity'
 import {
   ActiveFilters,
   Card,
   DateRangeFilter,
   Empty,
   ErrorState,
-  ListModeToggle,
   RangeFilter,
   SegFilter,
   TableTools,
@@ -26,10 +31,9 @@ import {
 import { IndexedList } from './IndexNeeded'
 import { FilterPanel, TextFilter } from './list-chrome'
 import { useEpochOf } from './use-epoch-of'
+import { usePeScroll } from '../pe-scroll'
 import { useListControls } from './use-list-controls'
-import { usePagedList } from './use-paged-list'
 
-const LIST_ID = 'platform-blocks'
 export function PlatformBlocksPage() {
   const { t } = useLingui()
   return (
@@ -50,8 +54,9 @@ export function PlatformBlocksPage() {
 function BlocksList() {
   const { t } = useLingui()
   const net = useNetwork()
-  const controls = useListControls<BlocksSearch>('/platform/blocks', LIST_ID)
-  const { search, mode, limit } = controls
+  const controls = useListControls<BlocksSearch>('/platform/blocks')
+  const { search } = controls
+  const { limit } = search
   const both = needsUpperHeight(search)
 
   const upper = useQuery({
@@ -66,16 +71,13 @@ function BlocksList() {
     both && upper.isSuccess ? (upper.data.data.items[0]?.header.height ?? 0) : undefined
   const query = useMemo(() => blocksQuery(search, upperHeight), [search, upperHeight])
 
-  const list = usePagedList<PeBlockSummary>({
-    net,
-    mode,
-    page: search.page,
+  const list = usePeScroll({
+    listKey: JSON.stringify(query),
+    start: search.page,
     limit,
-    query,
-    resource: 'pblock-list',
-    pageOptions: (page) => peQueries.blocks(net, { ...query, page, limit }),
+    page: (page) => peQueries.blocks(net, { ...query, page, limit }),
+    getRowId: (r: PeBlockSummary) => String(r.header.height),
     enabled: !both || upperHeight !== undefined,
-    onLoaded: controls.loaded,
   })
   const { epochOf: epochByHeight, stamp: epochStamp, missing: epochMissing } = useEpochOf()
   const epochOf = useCallback(
@@ -100,10 +102,7 @@ function BlocksList() {
   }
   const desc = search.sort !== 'height'
 
-  const stamps = [
-    ...(list.source ? [list.source] : []),
-    ...(epochByHeight && epochStamp ? [epochStamp] : []),
-  ]
+  const stamps = [...list.stamps, ...(epochByHeight && epochStamp ? [epochStamp] : [])]
   const phrase = list.total ?? list.rows.length
 
   return (
@@ -120,9 +119,6 @@ function BlocksList() {
             { id: 'old', label: t({ message: 'Oldest first', context: 'list of blocks' }) },
           ]}
         />
-        <span className="inline-flex items-center gap-2 whitespace-nowrap">
-          <ListModeToggle listId={LIST_ID} />
-        </span>
       </TableTools>
       <FilterPanel count={active.length}>
         <RangeFilter
@@ -200,32 +196,26 @@ function BlocksList() {
           onRetry={() => void epochMissing.refetch()}
         />
       ) : null}
-      <PlatformBlockTable
-        rows={list.rows}
-        state={list.state}
-        error={list.error}
-        onRetry={list.retry}
-        epochOf={epochByHeight ? epochOf : undefined}
-        paging={
-          list.paging ?? {
-            kind: 'page',
-            page: search.page,
-            limit,
-            total: list.total,
-            to: controls.link,
+      <ScrollList chain={list} position={pagePosition}>
+        <PlatformBlockTable
+          rows={list.rows}
+          state={list.state}
+          error={list.error}
+          onRetry={list.onRetry}
+          epochOf={epochByHeight ? epochOf : undefined}
+          paging={list.paging}
+          empty={
+            <Empty
+              kind={active.length > 0 ? 'no-match' : 'none-yet'}
+              title={
+                active.length > 0
+                  ? t`No block matches these filters`
+                  : t`Platform Explorer has no blocks yet`
+              }
+            />
           }
-        }
-        empty={
-          <Empty
-            kind={active.length > 0 ? 'no-match' : 'none-yet'}
-            title={
-              active.length > 0
-                ? t`No block matches these filters`
-                : t`Platform Explorer has no blocks yet`
-            }
-          />
-        }
-      />
+        />
+      </ScrollList>
     </Card>
   )
 }

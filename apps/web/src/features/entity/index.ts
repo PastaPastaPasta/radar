@@ -53,3 +53,5 @@ export type { TransitionColumn, TransitionTableProps } from './platform/transiti
 export { PlatformBlockTable } from './platform/block-table'
 export type { PlatformBlockColumn, PlatformBlockTableProps } from './platform/block-table'
 export { transitionBadgeType } from './platform/transition-type'
+export { chainStamps, cursorPosition, pagePosition, ScrollList, usePageChain } from './page-chain'
+export type { PageChain } from './page-chain'

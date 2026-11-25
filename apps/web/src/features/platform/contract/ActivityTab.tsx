@@ -1,14 +1,14 @@
 import { useLingui } from '@lingui/react/macro'
-import { useQuery } from '@tanstack/react-query'
 import { Link, useNavigate, type LinkProps } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo, type FormEvent } from 'react'
 import { peQueries } from '@/data/pe/queries'
 import type { PeContractTransaction, PeDocument, PeTransaction } from '@/data/pe/schemas'
-import { IdentityRef, TransitionTable } from '@/features/entity'
+import { IdentityRef, ScrollList, TransitionTable, pagePosition } from '@/features/entity'
 import { isDevnet } from '@/lib/network'
 import { Badge, Card, DataTable, DateRangeFilter, Empty, Hash, Time, Unavailable } from '@/ui'
-import { listState, typeNames, usePeEnabled } from './contract-data'
+import { usePeScroll } from '../pe-scroll'
+import { typeNames, usePeEnabled } from './contract-data'
 import type { ContractContext } from './contract-context'
 
 const PAGE_SIZE = 25
@@ -27,14 +27,6 @@ function searchLink(id: string, patch: Partial<Search>): LinkProps {
     to: '/contract/$id',
     params: { id },
     search: (s: Record<string, unknown>) => ({ ...s, page: undefined, ...patch }),
-  } as LinkProps
-}
-
-function pageLink(id: string, page: number): LinkProps {
-  return {
-    to: '/contract/$id',
-    params: { id },
-    search: (s: Record<string, unknown>) => ({ ...s, page: page <= 1 ? undefined : page }),
   } as LinkProps
 }
 
@@ -151,42 +143,34 @@ const asTransition = (r: PeContractTransaction): PeTransaction => ({
 function TransactionsView({ ctx }: { ctx: ContractContext }) {
   const { t } = useLingui()
   const { net, id, search } = ctx
-  const query = useQuery(
-    peQueries.dataContractTransactions(net, id, {
-      page: search.page,
-      limit: PAGE_SIZE,
-      order: 'desc',
-    }),
-  )
-  const all = query.data?.data.items ?? []
-  const rows = all
-    .filter((r) => (search.owner ? r.owner?.identifier === search.owner : true))
-    .filter((r) => (search.from ? r.timestamp >= Date.parse(startOf(search.from)) : true))
-    .filter((r) => (search.to ? r.timestamp <= Date.parse(endOf(search.to)) : true))
-    .map(asTransition)
-  const total = query.data?.data.total
+  const list = usePeScroll({
+    listKey: [id, 'transitions', search.owner, search.from, search.to].join('\u0000'),
+    start: search.page,
+    limit: PAGE_SIZE,
+    page: (page) =>
+      peQueries.dataContractTransactions(net, id, { page, limit: PAGE_SIZE, order: 'desc' }),
+    getRowId: (r: PeContractTransaction) => r.hash,
+    keep: (r) =>
+      (!search.owner || r.owner?.identifier === search.owner) &&
+      (!search.from || r.timestamp >= Date.parse(startOf(search.from))) &&
+      (!search.to || r.timestamp <= Date.parse(endOf(search.to))),
+  })
   return (
     <div className="grid gap-3">
-      <p className="text-ink-2">{t`Owner and date narrow the rows on this page; Platform Explorer pages the contract’s transitions by time.`}</p>
-      <TransitionTable
-        rows={rows}
-        state={listState(query, rows.length === 0)}
-        error={query.error}
-        onRetry={() => {
-          void query.refetch()
-        }}
-        columns={['type', 'hash', 'status', 'gas', 'owner', 'time']}
-        caption={t`Transitions on this contract`}
-        empty={<Empty kind="no-match" title={t`No transitions match.`} />}
-        paging={{
-          kind: 'page',
-          page: search.page,
-          limit: PAGE_SIZE,
-          ...(total === undefined ? {} : { total }),
-          to: (p) => pageLink(id, p),
-        }}
-        {...(query.data ? { source: query.data } : {})}
-      />
+      <p className="text-ink-2">{t`Owner and date narrow the rows as they load; Platform Explorer lists the contract’s transitions by time.`}</p>
+      <ScrollList chain={list} position={pagePosition}>
+        <TransitionTable
+          rows={list.rows.map(asTransition)}
+          state={list.state}
+          error={list.error}
+          onRetry={list.onRetry}
+          columns={['type', 'hash', 'status', 'gas', 'owner', 'time']}
+          caption={t`Transitions on this contract`}
+          empty={<Empty kind="no-match" title={t`No transitions match.`} />}
+          paging={list.paging}
+          source={list.stamps[0]}
+        />
+      </ScrollList>
     </div>
   )
 }
@@ -194,20 +178,22 @@ function TransactionsView({ ctx }: { ctx: ContractContext }) {
 function DocumentsView({ ctx }: { ctx: ContractContext }) {
   const { t } = useLingui()
   const { net, id, search } = ctx
-  const query = useQuery(
-    peQueries.dataContractDocuments(net, id, {
-      page: search.page,
-      limit: PAGE_SIZE,
-      order: 'desc',
-      document_type_name: search.type,
-      owner: search.owner,
-      revision_min: search.rev === undefined ? undefined : String(search.rev),
-      timestamp_start: search.from ? startOf(search.from) : undefined,
-      timestamp_end: search.to ? endOf(search.to) : undefined,
-    }),
-  )
-  const rows = query.data?.data.items ?? []
-  const total = query.data?.data.total
+  const filters = {
+    limit: PAGE_SIZE,
+    order: 'desc',
+    document_type_name: search.type,
+    owner: search.owner,
+    revision_min: search.rev === undefined ? undefined : String(search.rev),
+    timestamp_start: search.from ? startOf(search.from) : undefined,
+    timestamp_end: search.to ? endOf(search.to) : undefined,
+  }
+  const list = usePeScroll({
+    listKey: [id, 'documents', JSON.stringify(filters)].join('\u0000'),
+    start: search.page,
+    limit: PAGE_SIZE,
+    page: (page) => peQueries.dataContractDocuments(net, id, { page, ...filters }),
+    getRowId: (r: PeDocument) => r.identifier,
+  })
   const columns = useMemo<ColumnDef<PeDocument>[]>(
     () => [
       {
@@ -258,32 +244,26 @@ function DocumentsView({ ctx }: { ctx: ContractContext }) {
     [t],
   )
   return (
-    <DataTable
-      caption={t`Documents of this contract`}
-      columns={columns}
-      rows={rows}
-      getRowId={(r) => r.identifier}
-      state={listState(query, rows.length === 0)}
-      error={query.error}
-      onRetry={() => {
-        void query.refetch()
-      }}
-      empty={<Empty kind="no-match" title={t`No documents match.`} />}
-      rowLink={(r) =>
-        ({
-          to: '/document/$contract/$type/$id',
-          params: { contract: id, type: r.documentTypeName ?? 'unknown', id: r.identifier },
-        }) as never
-      }
-      paging={{
-        kind: 'page',
-        page: search.page,
-        limit: PAGE_SIZE,
-        ...(total === undefined ? {} : { total }),
-        to: (p) => pageLink(id, p),
-      }}
-      {...(query.data ? { source: query.data } : {})}
-    />
+    <ScrollList chain={list} position={pagePosition}>
+      <DataTable
+        caption={t`Documents of this contract`}
+        columns={columns}
+        rows={list.rows}
+        getRowId={list.getRowId}
+        state={list.state}
+        error={list.error}
+        onRetry={list.onRetry}
+        empty={<Empty kind="no-match" title={t`No documents match.`} />}
+        rowLink={(r) =>
+          ({
+            to: '/document/$contract/$type/$id',
+            params: { contract: id, type: r.documentTypeName ?? 'unknown', id: r.identifier },
+          }) as never
+        }
+        paging={list.paging}
+        source={list.stamps[0]}
+      />
+    </ScrollList>
   )
 }
 

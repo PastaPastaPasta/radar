@@ -160,25 +160,28 @@ function CellContent<Row>({
 function InfinitePager({
   paging,
   shown,
+  last,
 }: {
   paging: Extract<NonNullable<DataTableProps<unknown>['paging']>, { kind: 'infinite' }>
   shown: number
+  last?: string | undefined
 }) {
   // A load this pager asked for that ends without a single new row is treated as failed, so a broken source is not
-  // asked again and again. Refetches it did not start (a poll, a background refresh) never count.
-  const [asked, setAsked] = useState<number | null>(null)
+  // asked again and again. Refetches it did not start (a poll, a background refresh) never count. A list that keeps
+  // only its last pages drops one as it adds one, so a new last row counts as progress too.
+  const [asked, setAsked] = useState<{ shown: number; last: string | undefined } | null>(null)
   const [stalled, setStalled] = useState(false)
   const [wasFetching, setWasFetching] = useState(paging.fetching)
   if (paging.fetching !== wasFetching) {
     setWasFetching(paging.fetching)
     if (!paging.fetching && asked !== null) {
-      setStalled(shown <= asked)
+      setStalled(shown <= asked.shown && last === asked.last)
       setAsked(null)
     }
   }
   const failed = paging.failed === true || stalled
   const more = () => {
-    setAsked(shown)
+    setAsked({ shown, last })
     setStalled(false)
     paging.fetchNext()
   }
@@ -194,7 +197,7 @@ function InfinitePager({
           onNear={more}
           enabled={paging.hasNext && !paging.fetching && !failed}
           loading={paging.fetching}
-          version={shown}
+          version={`${shown}:${last}`}
           status={
             paging.fetching
               ? t`Loading more…`
@@ -222,12 +225,15 @@ function InfinitePager({
 export function Pager({
   paging,
   shown,
+  last,
 }: {
   paging: NonNullable<DataTableProps<unknown>['paging']>
   shown: number
+  /** The last row's id, for a list that drops its first pages as it grows. */
+  last?: string | undefined
 }) {
   if (paging.kind === 'infinite') {
-    return <InfinitePager paging={paging} shown={shown} />
+    return <InfinitePager paging={paging} shown={shown} last={last} />
   }
   const link = (props: LinkProps | undefined, label: string, rel: 'next' | 'prev') =>
     props ? (
@@ -681,7 +687,9 @@ export function DataTable<Row>({
       {showFoot ? (
         <div className="rx-tfoot">
           {stamps.length > 0 ? <SourceLine stamp={stamps} compact /> : null}
-          {paging && isReady ? <Pager paging={paging} shown={modelRows.length} /> : null}
+          {paging && isReady ? (
+            <Pager paging={paging} shown={modelRows.length} last={modelRows.at(-1)?.id} />
+          ) : null}
         </div>
       ) : null}
     </AmountDensity>

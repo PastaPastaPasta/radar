@@ -151,15 +151,16 @@ describe('Shielded pool', () => {
     expect(anchors.querySelectorAll('[data-anchors] [data-copy]')).toHaveLength(10)
   })
 
-  it('pages the notes by chunk @NX-58', async () => {
+  it('adds the next chunk’s notes below the first’s @NX-58', async () => {
     const user = userEvent.setup()
     renderAt('/shielded')
     const notes = await card('notes')
     await waitFor(() => expect(within(notes).getAllByRole('row')).toHaveLength(11))
-    expect(notes).toHaveTextContent('starting at note 0')
-    expect(within(notes).getByRole('button', { name: 'Previous chunk' })).toBeDisabled()
-    await user.click(within(notes).getByRole('button', { name: 'Next chunk' }))
-    await waitFor(() => expect(notes).toHaveTextContent('starting at note 2,048'))
+    expect(notes).toHaveTextContent('The first 10 notes of each chunk are shown')
+    expect(within(notes).queryByRole('button', { name: /chunk/ })).toBeNull()
+    await user.click(within(notes).getByRole('button', { name: 'Show more' }))
+    await waitFor(() => expect(within(notes).getAllByRole('row')).toHaveLength(21))
+    expect(within(notes).getByRole('cell', { name: '2,048' })).toBeInTheDocument()
   })
 
   it('looks a nullifier up: spent, then not a nullifier @NX-58', async () => {

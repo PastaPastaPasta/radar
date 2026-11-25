@@ -30,7 +30,7 @@ export interface DocumentPageProps {
   contract: string
   type: string
   id: string
-  search: { tab: DocumentTab; page: number }
+  search: { tab: DocumentTab; page: number; from?: number | undefined }
 }
 
 export interface DocumentContext {
@@ -42,6 +42,8 @@ export interface DocumentContext {
   stamp: SourceStamp
   keepsHistory: boolean
   page: number
+  /** The time the revisions list continues after. */
+  from: number | undefined
 }
 
 export function DocumentPage({ contract, type, id, search }: DocumentPageProps) {
@@ -113,6 +115,7 @@ export function DocumentPage({ contract, type, id, search }: DocumentPageProps) 
                   ? typeKeepsHistory(contractQuery.data.data, type)
                   : false,
                 page: search.page,
+                from: search.from,
               }}
               tab={search.tab}
               knowsContract={!!contractQuery.data?.data}
@@ -132,6 +135,7 @@ function tabLink(ctx: DocumentContext, tab: DocumentTab): LinkProps {
       ...s,
       tab: tab === 'data' ? undefined : tab,
       page: undefined,
+      from: undefined,
     }),
   } as LinkProps
 }

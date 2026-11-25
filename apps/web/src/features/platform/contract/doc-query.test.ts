@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { hasMore, homographSafe, nextCursor, planQuery, prevCursor } from './doc-query'
+import { hasMore, homographSafe, planQuery } from './doc-query'
 import { DPNS, recordedContract } from './test-contracts'
 import type { WhereClause } from '@/lib/search-schemas'
 
@@ -65,20 +65,6 @@ describe('planning a documents query', () => {
 })
 
 describe('cursor pages', () => {
-  it('walks forward keeping each earlier cursor, and back the same way', () => {
-    const page1 = {}
-    const to2 = nextCursor(page1, 'A')
-    expect(to2).toEqual({ after: 'A', prev: undefined })
-    const to3 = nextCursor(to2, 'B')
-    expect(to3).toEqual({ after: 'B', prev: ['A'] })
-    const to4 = nextCursor(to3, 'C')
-    expect(to4).toEqual({ after: 'C', prev: ['A', 'B'] })
-    expect(prevCursor(to4)).toEqual({ after: 'B', prev: ['A'] })
-    expect(prevCursor({ after: 'B', prev: ['A'] })).toEqual({ after: 'A', prev: undefined })
-    expect(prevCursor({ after: 'A' })).toEqual({ after: undefined, prev: undefined })
-    expect(prevCursor({})).toBeNull()
-  })
-
   it('knows a next page exists from the extra row, or a full 100', () => {
     expect(hasMore(26, 25)).toBe(true)
     expect(hasMore(25, 25)).toBe(false)

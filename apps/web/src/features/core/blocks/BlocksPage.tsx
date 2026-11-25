@@ -446,8 +446,11 @@ function useScrollPosition(
       leaving = true
       cancelAnimationFrame(frame)
     })
+    // A navigation that kept this list may have written the router's older search over the place: note it again.
     const resumeOnSettle = router.subscribe('onResolved', () => {
       leaving = false
+      written = currentFrom()
+      onScroll()
     })
     return () => {
       cancelAnimationFrame(frame)

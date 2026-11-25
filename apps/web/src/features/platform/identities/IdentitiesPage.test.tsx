@@ -64,20 +64,15 @@ describe('Identity list @PE-14', () => {
     expect(screen.getByText('Type: Masternode')).toBeInTheDocument()
   })
 
-  it('remembers scrolling as the way to read the list, and loads the next page on request @PE-14', async () => {
+  it('scrolls, with no pages to choose, and loads the next page at the end of the list @PE-14', async () => {
     const user = userEvent.setup()
+    localStorage.setItem('radar.list.identities', JSON.stringify({ mode: 'pages', limit: 10 }))
     renderAt('/identities')
     await waitFor(() => {
       expect(rows().length).toBe(25)
     })
-    await user.click(
-      within(screen.getByRole('group', { name: 'List view' })).getByRole('button', {
-        name: 'Scroll',
-      }),
-    )
-    expect(JSON.parse(localStorage.getItem('radar.list.identities') ?? '{}')).toMatchObject({
-      mode: 'scroll',
-    })
+    expect(screen.queryByRole('group', { name: 'List view' })).toBeNull()
+    expect(screen.queryByRole('link', { name: /Next|Older/ })).toBeNull()
     await user.click(await screen.findByRole('button', { name: 'Show more' }))
     await waitFor(() => {
       expect(rows().length).toBe(50)

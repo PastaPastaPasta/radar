@@ -13,7 +13,16 @@ import {
   type ContestsFilters,
 } from '@/data/query/prefetch/p-vote'
 import { sdkQueries } from '@/data/sdk/queries'
-import { Entity, PageFrame, PageGroupTabs, useNetwork } from '@/features/entity'
+import {
+  chainStamps,
+  Entity,
+  PageFrame,
+  PageGroupTabs,
+  ScrollList,
+  usePageChain,
+  useNetwork,
+  cursorPosition,
+} from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import {
   ActiveFilters,
@@ -22,7 +31,6 @@ import {
   DataTable,
   DateRangeFilter,
   Empty,
-  ListModeToggle,
   SearchField,
   SegFilter,
   Stat,
@@ -33,12 +41,14 @@ import {
   type DataTableProps,
   type LoadState,
 } from '@/ui'
-import { CURSOR_PAGE, CursorPages } from '../contest/CursorPages'
 import { loadState } from '../identity/common'
-import { pageLink, usePeList, useSetSearch, useUpcomingPolls } from '../contest/shared'
+import { CURSOR_PAGE, pageLink, usePeList, useSetSearch, useUpcomingPolls } from '../contest/shared'
 import { TallyText } from '../contest/Tally'
 
-export type ContestsPageSearch = ContestsFilters
+export type ContestsPageSearch = ContestsFilters & {
+  /** The name the list of every DPNS contest continues after. */
+  after?: string | undefined
+}
 
 const lastValue = (values: readonly (string | null)[]): string =>
   values.findLast((v) => v !== null) ?? ''
@@ -184,7 +194,6 @@ function Filters({ search }: { search: ContestsPageSearch }) {
                 },
               ]}
             />
-            <ListModeToggle listId="contests" />
           </>
         )}
       </TableTools>
@@ -425,59 +434,59 @@ function OpenContests({ search }: { search: ContestsPageSearch }) {
 function AllDpnsContests({ search }: { search: ContestsPageSearch }) {
   const { t } = useLingui()
   const net = useNetwork()
+  const list = usePageChain({
+    listKey: 'dpns-contests',
+    start: search.after,
+    query: (cursor: string | undefined) =>
+      sdkQueries['group.contestedResources'](net, {
+        contractId: DPNS.contractId(),
+        type: DPNS.type,
+        index: DPNS.index,
+        prefix: [DPNS.tld],
+        limit: CURSOR_PAGE + 1,
+        ...(cursor ? { startAt: cursor, startAtIncluded: false } : {}),
+      }),
+    rows: (q) => q.data.slice(0, CURSOR_PAGE),
+    getRowId: (label) => label,
+    next: (q) => (q.data.length > CURSOR_PAGE ? q.data[CURSOR_PAGE - 1] : undefined),
+  })
+  const rows: SdkRow[] = list.rows.map((label) => ({
+    key: label,
+    contractId: DPNS.contractId(),
+    type: DPNS.type,
+    index: DPNS.index,
+    indexValues: [DPNS.tld, label],
+  }))
   return (
-    <CursorPages
-      target={search.page}
-      cursor={undefined}
-      cursorOf={(label: string) => label}
-      queryFor={(cursor) =>
-        sdkQueries['group.contestedResources'](net, {
-          contractId: DPNS.contractId(),
-          type: DPNS.type,
-          index: DPNS.index,
-          prefix: [DPNS.tld],
-          limit: CURSOR_PAGE + 1,
-          ...(cursor ? { startAt: cursor, startAtIncluded: false } : {}),
-        })
-      }
-      render={(q) => {
-        const labels = q.data?.data ?? []
-        const rows: SdkRow[] = labels.slice(0, CURSOR_PAGE).map((label) => ({
-          key: label,
-          contractId: DPNS.contractId(),
-          type: DPNS.type,
-          index: DPNS.index,
-          indexValues: [DPNS.tld, label],
-        }))
-        return (
-          <SdkContestTable
-            id="contests-sdk-all"
-            title={t`All name contests`}
-            subtitle={t`Every contest Platform still holds, in name order. A contest’s end time is shown while it is open.`}
-            caption={t`All name contests`}
-            rows={rows}
-            state={loadState(q)}
-            error={q.error}
-            onRetry={() => void q.refetch()}
-            source={q.data ? [stampOf(q.data)] : []}
-            paging={{
-              kind: 'cursor',
-              ...(labels.length > CURSOR_PAGE ? { next: pageLink(search.page + 1) } : {}),
-              ...(search.page > 1 ? { prev: pageLink(search.page - 1) } : {}),
-            }}
-            empty={<Empty kind="none-yet" title={t`No contests on record.`} />}
-          />
-        )
-      }}
-    />
+    <ScrollList chain={list} position={cursorPosition('after')}>
+      <SdkContestTable
+        id="contests-sdk-all"
+        title={t`All name contests`}
+        subtitle={t`Every contest Platform still holds, in name order. A contest’s end time is shown while it is open.`}
+        caption={t`All name contests`}
+        rows={rows}
+        state={list.state}
+        error={list.error}
+        onRetry={list.onRetry}
+        source={chainStamps(list.pages)}
+        paging={list.paging}
+        empty={<Empty kind="none-yet" title={t`No contests on record.`} />}
+      />
+    </ScrollList>
   )
 }
+
+const contestId = (r: PeContestedResource) =>
+  `${r.dataContractIdentifier ?? ''}/${(r.resourceValue ?? []).join('/')}`
 
 function AllContests({ search }: { search: ContestsPageSearch }) {
   const { t } = useLingui()
   const net = useNetwork()
-  const list = usePeList('contests', search, (page, limit) =>
-    peQueries.contestedResources(net, peContestsQuery({ ...search, limit }, page)),
+  const list = usePeList(
+    JSON.stringify(peContestsQuery(search, 1)),
+    search,
+    (page, limit) => peQueries.contestedResources(net, peContestsQuery({ ...search, limit }, page)),
+    contestId,
   )
   const columns = useMemo<ColumnDef<PeContestedResource>[]>(
     () => [
@@ -590,28 +599,31 @@ function AllContests({ search }: { search: ContestsPageSearch }) {
         id="contests-all"
         title={t`All contests`}
         subtitle={t`From Platform Explorer’s index: every contest that has been held, with its vote count.`}
-        source={list.pages.map(stampOf)}
+        source={list.stamps}
       >
-        <DataTable
-          caption={t`All contests`}
-          columns={columns}
-          rows={list.rows}
-          getRowId={(r) => `${r.dataContractIdentifier ?? ''}/${(r.resourceValue ?? []).join('/')}`}
-          rowLink={(r) => {
-            const c = contestLink(
-              r.resourceValue ?? [],
-              r.dataContractIdentifier,
-              r.documentTypeName,
-              r.indexName,
-            )
-            return { to: '/contest/$label', params: { label: c.id }, search: c.search } as never
-          }}
-          state={list.state}
-          error={list.error}
-          onRetry={list.onRetry}
-          paging={list.paging}
-          empty={<Empty kind="no-match" title={t`No contests match.`} />}
-        />
+        {/* `page` also places the open contests above, so the list does not write it back as it scrolls. */}
+        <ScrollList chain={list}>
+          <DataTable
+            caption={t`All contests`}
+            columns={columns}
+            rows={list.rows}
+            getRowId={contestId}
+            rowLink={(r) => {
+              const c = contestLink(
+                r.resourceValue ?? [],
+                r.dataContractIdentifier,
+                r.documentTypeName,
+                r.indexName,
+              )
+              return { to: '/contest/$label', params: { label: c.id }, search: c.search } as never
+            }}
+            state={list.state}
+            error={list.error}
+            onRetry={list.onRetry}
+            paging={list.paging}
+            empty={<Empty kind="no-match" title={t`No contests match.`} />}
+          />
+        </ScrollList>
       </Card>
     </>
   )

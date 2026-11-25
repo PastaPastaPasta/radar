@@ -3,6 +3,12 @@ import { expectAccessible } from '../helpers/a11y'
 import { horizontalOverflow, settled } from '../helpers/settled'
 import { expect as baseExpect, test } from '../helpers/test'
 import { netIds } from '../routes/fixtures'
+import {
+  scrollRowToTop,
+  scrollToEnd,
+  scrollUpAtTop,
+  synthesizePeBlockPages,
+} from '../helpers/scroll'
 
 const expect = baseExpect.configure({ timeout: 20_000 })
 
@@ -111,12 +117,60 @@ test.describe('Platform blocks list', () => {
     await expect(page).not.toHaveURL(/proposer=/)
   })
 
-  test('pages through the list with the address holding the page @PE-10', async ({ page }) => {
+  test('loads the next page as the reader scrolls, and keeps the page in view in the address @PE-10', async ({
+    page,
+  }) => {
+    await synthesizePeBlockPages(page)
     await page.goto('/platform/blocks')
-    await expect(rows(page, '/platform/block/').first()).toBeVisible()
-    await page.getByRole('link', { name: /^Next/ }).first().click()
+    const shown = page.locator('table tbody tr[data-row-id]')
+    await expect(shown).toHaveCount(25)
+    await expect(page.getByRole('navigation', { name: 'Pagination' })).toHaveCount(0)
+    await scrollToEnd(page)
+    // Page 2 was recorded after page 1, so rows that moved down onto it in between are shown once.
+    await expect.poll(() => shown.count()).toBeGreaterThan(25)
+    const loaded = await shown.count()
+    const second = await shown.nth(25).getAttribute('data-row-id')
+    await scrollRowToTop(page, `table tbody tr[data-row-id="${second}"]`)
     await expect(page).toHaveURL(/page=2/)
-    await expect(rows(page, '/platform/block/').first()).toBeVisible()
+    await expect(shown).toHaveCount(loaded)
+    await expect(page.locator(`[data-row-id="${second}"]`)).toBeInViewport()
+    await expectAccessible(page)
+  })
+
+  test('opens at the page the address names, and loads the page above as the reader scrolls up @PE-10', async ({
+    page,
+  }) => {
+    await synthesizePeBlockPages(page)
+    await page.goto('/platform/blocks')
+    const shown = page.locator('table tbody tr[data-row-id]')
+    await expect(shown).toHaveCount(25)
+    const newest = await shown.first().getAttribute('data-row-id')
+    await page.goto('/platform/blocks?page=2')
+    await expect(shown).toHaveCount(25)
+    await expect(page.locator(`[data-row-id="${newest}"]`)).toHaveCount(0)
+    const first = await shown.first().getAttribute('data-row-id')
+    await scrollUpAtTop(page)
+    await expect(shown.first()).toHaveAttribute('data-row-id', newest!)
+    expect(await shown.count()).toBeGreaterThan(25)
+    await expect(page.locator(`[data-row-id="${first}"]`)).toBeInViewport()
+  })
+
+  test('keeps at most eight pages of rows however far the reader scrolls @PE-10', async ({
+    page,
+  }) => {
+    await synthesizePeBlockPages(page)
+    await page.goto('/platform/blocks')
+    const shown = page.locator('table tbody tr[data-row-id]')
+    await expect(shown).toHaveCount(25)
+    const newest = await shown.first().getAttribute('data-row-id')
+    for (let i = 0; i < 10; i++) {
+      const before = await shown.last().getAttribute('data-row-id')
+      await scrollToEnd(page)
+      await expect(shown.last()).not.toHaveAttribute('data-row-id', before!)
+    }
+    expect(await shown.count()).toBeLessThanOrEqual(200)
+    await expect(page.locator(`[data-row-id="${newest}"]`)).toHaveCount(0)
+    await expect(page.locator('[data-sentinel="start"]')).toBeAttached()
   })
 
   test('works on testnet @PE-10', async ({ page }) => {
@@ -247,42 +301,26 @@ test.describe('State transitions list', () => {
   })
 })
 
-test.describe('Scroll or pages', () => {
-  test('appends the next page in scroll mode and remembers the choice across a reload @PE-38', async ({
+test.describe('Lists that scroll', () => {
+  test('offers no pages or page size, and an old stored choice of pages changes nothing @PE-38', async ({
     page,
   }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem('radar.list.platform-txs', JSON.stringify({ mode: 'pages', limit: 10 }))
+    })
     await page.goto('/platform/txs')
-    await expect(rows(page, '/platform/tx/').first()).toBeVisible()
-    await page.getByRole('button', { name: 'Scroll' }).click()
-    const end = page.locator('[data-sentinel="end"]')
-    await expect(end).toBeAttached()
-    const before = await rows(page, '/platform/tx/').count()
-    await end.scrollIntoViewIfNeeded()
-    await page.mouse.wheel(0, 120)
-    await expect.poll(() => rows(page, '/platform/tx/').count()).toBeGreaterThan(before)
-    await page.reload()
-    await expect(page.getByRole('button', { name: 'Scroll', pressed: true })).toBeVisible()
-    await expect(end).toBeAttached()
-    await page.getByRole('button', { name: 'Pages' }).click()
-    await expect(page.getByRole('button', { name: 'Pages', pressed: true })).toBeVisible()
+    const shown = page.locator('table tbody tr[data-row-id]')
+    await expect(shown).toHaveCount(25)
+    await expect(page.getByRole('group', { name: 'List view' })).toHaveCount(0)
+    await expect(page.getByLabel('Rows per page')).toHaveCount(0)
+    await expect(page.getByRole('navigation', { name: 'Pagination' })).toHaveCount(0)
+    await scrollToEnd(page)
+    await expect.poll(() => shown.count()).toBeGreaterThan(25)
   })
 
-  test('changes the page size and remembers it @PE-38', async ({ page }) => {
-    await page.goto('/platform/txs')
-    await expect(rows(page, '/platform/tx/').first()).toBeVisible()
-    await page.getByLabel('Rows per page').selectOption('10')
+  test('reads as many rows a load as the address asks for @PE-38', async ({ page }) => {
+    await page.goto('/platform/txs?limit=10')
     await expect.poll(() => rows(page, '/platform/tx/').count()).toBe(10)
-    await page.reload()
-    await expect(page.getByLabel('Rows per page')).toHaveValue('10')
-    await page.getByLabel('Rows per page').selectOption('25')
-  })
-
-  test('keeps the same choice on the blocks list @PE-38', async ({ page }) => {
-    await page.goto('/platform/blocks')
-    await expect(rows(page, '/platform/block/').first()).toBeVisible()
-    await page.getByRole('button', { name: 'Scroll' }).click()
-    await expect(page.locator('[data-sentinel="end"]')).toBeAttached()
-    await page.getByRole('button', { name: 'Pages' }).click()
   })
 })
 

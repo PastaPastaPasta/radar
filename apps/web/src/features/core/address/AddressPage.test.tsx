@@ -314,7 +314,7 @@ describe('Address page', () => {
     expect(alert).toHaveTextContent('The next transactions could not be loaded')
     expect(screen.getByText('25 loaded')).toBeInTheDocument()
     fail = false
-    await user.click(within(alert).getByRole('button', { name: 'Try again' }))
+    await user.click(screen.getByRole('button', { name: 'Try again' }))
     await waitFor(() => expect(screen.getByText('50 loaded')).toBeInTheDocument())
     expect(screen.queryByRole('alert')).toBeNull()
   })

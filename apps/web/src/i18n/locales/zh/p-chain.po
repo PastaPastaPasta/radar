@@ -146,9 +146,6 @@ msgstr "候选版本"
 msgid "Choose a range of epochs"
 msgstr "选择纪元范围"
 
-msgid "Chunks of notes"
-msgstr "笔记分块"
-
 msgid "Commitment"
 msgstr "承诺"
 
@@ -378,9 +375,6 @@ msgstr "下一个区块随时产生（约每 {pace} 一个）"
 msgid "Next block expected in about {0}"
 msgstr "预计约 {0} 后产生下一个区块"
 
-msgid "Next chunk"
-msgstr "下一分块"
-
 msgid "Next epoch’s version"
 msgstr "下一纪元的版本"
 
@@ -505,9 +499,6 @@ msgstr "池状态"
 
 msgid "Prefunded specialised balance"
 msgstr "预存专用余额"
-
-msgid "Previous chunk"
-msgstr "上一分块"
 
 msgid "Previous epoch"
 msgstr "上一纪元"
@@ -691,17 +682,15 @@ msgstr "池中有这个 nullifier：对应的票据已被花费。"
 
 #. placeholder {0}: formatInt(total)
 #. placeholder {1}: formatInt(NOTES_CHUNK)
-#. placeholder {2}: formatInt(start)
-msgid "The pool holds {0} notes, served in chunks of {1}. The first {NOTES_SHOWN} of the chunk starting at note {2} are shown."
-msgstr "池中有 {0} 条票据，按每 {1} 条一块提供。显示从票据 {2} 开始的分块中的前 {NOTES_SHOWN} 条。"
+msgid "The pool holds {0} notes, served in chunks of {1}. The first {NOTES_SHOWN} notes of each chunk are shown, a chunk at a time as you scroll."
+msgstr "池中有 {0} 条票据，按每 {1} 条一块提供。显示每块的前 {NOTES_SHOWN} 条，滚动时逐块加载。"
 
 msgid "The pool of shielded credits: its balance, the anchors it accepts, its encrypted notes, and whether a nullifier has been spent."
 msgstr "隐私积分池：其余额、接受的锚点、加密票据，以及某个 nullifier 是否已被花费。"
 
 #. placeholder {0}: formatInt(NOTES_CHUNK)
-#. placeholder {1}: formatInt(start)
-msgid "The pool serves its notes in chunks of {0}. The first {NOTES_SHOWN} of the chunk starting at note {1} are shown."
-msgstr "池按每 {0} 条一块提供票据。显示从票据 {1} 开始的分块中的前 {NOTES_SHOWN} 条。"
+msgid "The pool serves its notes in chunks of {0}. The first {NOTES_SHOWN} notes of each chunk are shown, a chunk at a time as you scroll."
+msgstr "池按每 {0} 条一块提供票据。显示每块的前 {NOTES_SHOWN} 条，滚动时逐块加载。"
 
 #. placeholder {0}: formatInt(pool.blocks)
 msgid "The pool so far over {0} blocks: an estimate until the epoch ends"

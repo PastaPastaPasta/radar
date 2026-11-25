@@ -19,12 +19,17 @@ import {
 import type { ContestVoteStateDto } from '@/data/sdk/methods/p-vote'
 import { sdkQueries } from '@/data/sdk/queries'
 import {
+  chainStamps,
   Entity,
   IdentityRef,
   PageFrame,
   PageLink,
+  ScrollList,
   useIdentityNames,
   useNetwork,
+  usePageChain,
+  cursorPosition,
+  pagePosition,
 } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import {
@@ -42,8 +47,8 @@ import {
   Unavailable,
 } from '@/ui'
 import { loadState } from '../identity/common'
-import { CURSOR_PAGE, CursorPages } from './CursorPages'
-import { endOf, pageLink, pollEnds, useSetSearch, useUpcomingPolls } from './shared'
+import { usePeScroll } from '../pe-scroll'
+import { CURSOR_PAGE, endOf, pollEnds, useSetSearch, useUpcomingPolls } from './shared'
 import { TallyBar, totalVotes, useTallySlices } from './Tally'
 
 export interface ContestPageSearch {
@@ -53,6 +58,8 @@ export interface ContestPageSearch {
   tab: 'tally' | 'votes' | 'raw'
   towards?: string | undefined
   page: number
+  /** The voter the list of a contender's voters continues after. */
+  after?: string | undefined
 }
 
 const TABS: ContestPageSearch['tab'][] = ['tally', 'votes', 'raw']
@@ -132,6 +139,7 @@ export function ContestPage({ label, search }: { label: string; search: ContestP
                   ...prev,
                   tab: tab === 'tally' ? undefined : tab,
                   page: undefined,
+                  after: undefined,
                 })) as never,
               }) as never
             }
@@ -285,7 +293,7 @@ function TallyTab({
           />
         ) : null}
       </Card>
-      <VotersCard ref_={ref_} state={state} picked={picked} page={search.page} />
+      <VotersCard ref_={ref_} state={state} picked={picked} after={search.after} />
     </>
   )
 }
@@ -294,29 +302,16 @@ function VotersCard({
   ref_,
   state,
   picked,
-  page,
+  after,
 }: {
   ref_: ContestRef
   state: ContestVoteStateDto
   picked: string | undefined
-  page: number
+  after: string | undefined
 }) {
   const { t } = useLingui()
-  const net = useNetwork()
   const setSearch = useSetSearch()
   const names = useIdentityNames(state.contenders.map((c) => c.identityId))
-  const columns = useMemo<ColumnDef<{ id: string }>[]>(
-    () => [
-      {
-        id: 'voter',
-        header: t`Voter`,
-        cell: ({ row }) => <Entity kind="identity" id={row.original.id} identicon />,
-        enableSorting: false,
-        meta: { phone: 'title' },
-      },
-    ],
-    [t],
-  )
   return (
     <Card
       layer="platform"
@@ -332,7 +327,7 @@ function VotersCard({
             label={t`Contender`}
             value={picked}
             onChange={(id) => {
-              setSearch({ towards: id })
+              setSearch({ towards: id, after: undefined })
             }}
             options={state.contenders.map((c) => ({
               id: c.identityId,
@@ -340,47 +335,69 @@ function VotersCard({
               count: c.voteTally ?? 0,
             }))}
           />
-          <CursorPages
-            key={picked}
-            target={page}
-            cursor={undefined}
-            queryFor={(cursor) =>
-              sdkQueries['voting.contestedResourceVotersForIdentity'](net, {
-                ...contestVoteStateArgs(ref_),
-                contestantId: picked,
-                limit: CURSOR_PAGE + 1,
-                ...(cursor ? { startAfter: cursor } : {}),
-              })
-            }
-            cursorOf={(id) => id}
-            render={(q) => {
-              const all = q.data?.data ?? []
-              const rows = all.slice(0, CURSOR_PAGE).map((id) => ({ id }))
-              return (
-                <DataTable
-                  caption={t`Voters`}
-                  columns={columns}
-                  rows={rows}
-                  getRowId={(r) => r.id}
-                  state={loadState(q)}
-                  error={q.error}
-                  onRetry={() => void q.refetch()}
-                  source={q.data ? stampOf(q.data) : undefined}
-                  paging={{
-                    kind: 'cursor',
-                    ...(all.length > CURSOR_PAGE ? { next: pageLink(page + 1) } : {}),
-                    ...(page > 1 ? { prev: pageLink(page - 1) } : {}),
-                  }}
-                  empty={<Empty kind="none-yet" title={t`No votes for this contender.`} />}
-                />
-              )
-            }}
-          />
+          <Voters key={picked} ref_={ref_} picked={picked} after={after} />
         </>
       )}
     </Card>
   )
 }
+
+function Voters({
+  ref_,
+  picked,
+  after,
+}: {
+  ref_: ContestRef
+  picked: string
+  after: string | undefined
+}) {
+  const { t } = useLingui()
+  const net = useNetwork()
+  const list = usePageChain({
+    listKey: [ref_.contractId, ref_.type, ref_.index, ...ref_.indexValues, picked].join('\u0000'),
+    start: after,
+    query: (cursor: string | undefined) =>
+      sdkQueries['voting.contestedResourceVotersForIdentity'](net, {
+        ...contestVoteStateArgs(ref_),
+        contestantId: picked,
+        limit: CURSOR_PAGE + 1,
+        ...(cursor ? { startAfter: cursor } : {}),
+      }),
+    rows: (q) => q.data.slice(0, CURSOR_PAGE),
+    getRowId: (id) => id,
+    next: (q) => (q.data.length > CURSOR_PAGE ? q.data[CURSOR_PAGE - 1] : undefined),
+  })
+  const columns = useMemo<ColumnDef<{ id: string }>[]>(
+    () => [
+      {
+        id: 'voter',
+        header: t`Voter`,
+        cell: ({ row }) => <Entity kind="identity" id={row.original.id} identicon />,
+        enableSorting: false,
+        meta: { phone: 'title' },
+      },
+    ],
+    [t],
+  )
+  return (
+    <ScrollList chain={list} position={cursorPosition('after')}>
+      <DataTable
+        caption={t`Voters`}
+        columns={columns}
+        rows={list.rows.map((id) => ({ id }))}
+        getRowId={(r) => r.id}
+        state={list.state}
+        error={list.error}
+        onRetry={list.onRetry}
+        source={chainStamps(list.pages)}
+        paging={list.paging}
+        empty={<Empty kind="none-yet" title={t`No votes for this contender.`} />}
+      />
+    </ScrollList>
+  )
+}
+
+const voteId = (v: PeVote) => `${v.proTxHash}:${v.timestamp}`
 
 function VotesTab({
   ref_,
@@ -404,16 +421,15 @@ function VotesTab({
         : choice === 'lock'
           ? VOTE_CHOICE.lock
           : VOTE_CHOICE.towards
-  const votes = useQuery(
-    peQueries.contestedResourceVotes(
-      net,
-      ref_.indexValues,
-      peContestVotesQuery(search.page, choiceNo),
-    ),
-  )
-  const items = votes.data?.data.items ?? []
-  const rows =
-    choiceNo === VOTE_CHOICE.towards ? items.filter((v) => v.towardsIdentity === choice) : items
+  const votes = usePeScroll({
+    listKey: [...ref_.indexValues, choice].join('\u0000'),
+    start: search.page,
+    limit: PE_CONTEST_VOTES_PAGE,
+    page: (page) =>
+      peQueries.contestedResourceVotes(net, ref_.indexValues, peContestVotesQuery(page, choiceNo)),
+    getRowId: voteId,
+    keep: (v) => choiceNo !== VOTE_CHOICE.towards || v.towardsIdentity === choice,
+  })
   const columns = useMemo<ColumnDef<PeVote>[]>(
     () => [
       {
@@ -463,7 +479,7 @@ function VotesTab({
       id="contest-votes"
       title={t`Votes`}
       subtitle={t`Every masternode vote on this contest, from Platform Explorer’s index.`}
-      source={votes.data ? stampOf(votes.data) : undefined}
+      source={votes.stamps[0]}
     >
       <SegFilter
         label={t`Choice`}
@@ -481,23 +497,19 @@ function VotesTab({
           { id: 'lock', label: t`Lock` },
         ]}
       />
-      <DataTable
-        caption={t`Votes`}
-        columns={columns}
-        rows={rows}
-        getRowId={(v) => `${v.proTxHash}:${v.timestamp}`}
-        state={loadState(votes)}
-        error={votes.error}
-        onRetry={() => void votes.refetch()}
-        paging={{
-          kind: 'page',
-          page: search.page,
-          limit: PE_CONTEST_VOTES_PAGE,
-          total: votes.data?.data.total,
-          to: pageLink,
-        }}
-        empty={<Empty kind="none-yet" title={t`No votes on record.`} />}
-      />
+      <ScrollList chain={votes} position={pagePosition}>
+        <DataTable
+          caption={t`Votes`}
+          columns={columns}
+          rows={votes.rows}
+          getRowId={votes.getRowId}
+          state={votes.state}
+          error={votes.error}
+          onRetry={votes.onRetry}
+          paging={votes.paging}
+          empty={<Empty kind="none-yet" title={t`No votes on record.`} />}
+        />
+      </ScrollList>
     </Card>
   )
 }

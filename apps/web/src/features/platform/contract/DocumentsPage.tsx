@@ -1,30 +1,28 @@
 import { useLingui } from '@lingui/react/macro'
-import { useQuery } from '@tanstack/react-query'
-import { Link, useNavigate, type LinkProps } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import { stampOf } from '@/data/envelope'
 import { sdkQueries } from '@/data/sdk/queries'
-import type { DocumentDto } from '@/data/sdk/methods'
-import { IdentityRef, PageFrame, useNetwork } from '@/features/entity'
+import type { DocumentDto, DocumentsQueryArgs } from '@/data/sdk/methods'
+import {
+  chainStamps,
+  IdentityRef,
+  PageFrame,
+  ScrollList,
+  useNetwork,
+  usePageChain,
+} from '@/features/entity'
 import { isPlatformId } from '@/lib/base58'
-import { encodeWhere } from '@/lib/search-schemas'
+import { encodeWhere, escapeListItem } from '@/lib/search-schemas'
 import { systemContract } from '@/lib/well-known'
 import { Card, DataTable, Empty, ErrorState, Hash, Skeleton, Time } from '@/ui'
-import { listState, propertyNames, useContract } from './contract-data'
+import { propertyNames, useContract } from './contract-data'
 import { DocFilters, type FilterValues } from './DocFilters'
 import { filterIndices } from './doc-filters'
-import {
-  DRIVE_MAX,
-  hasMore,
-  nextCursor,
-  planQuery,
-  prevCursor,
-  type DocumentsSearch,
-} from './doc-query'
+import { DRIVE_MAX, hasMore, planQuery, type DocumentsSearch } from './doc-query'
 import { cellText } from './cell-text'
 import { SdkGate } from './SdkGate'
-import { ListPager } from '../ListPager'
 
 export interface DocumentsPageProps {
   id: string
@@ -34,14 +32,6 @@ export interface DocumentsPageProps {
 
 const PAGE_SIZES = [10, 25, 50, 100] as const
 const MAX_PROPERTY_COLUMNS = 3
-
-function documentsLink(id: string, type: string, patch: Partial<DocumentsSearch>): LinkProps {
-  return {
-    to: '/contract/$id/documents/$type',
-    params: { id, type },
-    search: (s: Record<string, unknown>) => ({ ...s, ...patch }),
-  } as LinkProps
-}
 
 export function DocumentsPage({ id, type, search }: DocumentsPageProps) {
   const { t } = useLingui()
@@ -123,6 +113,21 @@ interface BrowserProps {
   contractStamp: ReturnType<typeof stampOf>
 }
 
+function withCursor(args: DocumentsQueryArgs, after: string | undefined): DocumentsQueryArgs {
+  const rest = { ...args }
+  delete rest.startAfter
+  return after ? { ...rest, startAfter: after } : rest
+}
+
+/** Writes the cursor of the page in view as `after`, and the cursors of the pages above it as `prev`. */
+function documentsPosition(url: URL, after: string | undefined, earlier: (string | undefined)[]) {
+  const stack = earlier.filter((c): c is string => c !== undefined)
+  if (after === undefined) url.searchParams.delete('after')
+  else url.searchParams.set('after', after)
+  if (stack.length === 0) url.searchParams.delete('prev')
+  else url.searchParams.set('prev', stack.map(escapeListItem).join(','))
+}
+
 function Browser({ id, type, schema, indices, search, contractStamp }: BrowserProps) {
   const { t } = useLingui()
   const net = useNetwork()
@@ -139,16 +144,20 @@ function Browser({ id, type, schema, indices, search, contractStamp }: BrowserPr
       }),
     [id, type, indices, schema, search],
   )
-  const query = useQuery({
-    ...sdkQueries['documents.query'](net, plan.args ?? { contractId: id, type }),
-    enabled: plan.args !== undefined,
+  const { args } = plan
+  const list = usePageChain({
+    listKey: JSON.stringify({ ...args, startAfter: undefined }),
+    start: search.after,
+    earlier: search.after ? [undefined, ...(search.prev ?? [])] : undefined,
+    query: (after: string | undefined) =>
+      sdkQueries['documents.query'](net, withCursor(args ?? { contractId: id, type }, after)),
+    rows: (p) => p.data.slice(0, search.limit),
+    getRowId: (r) => r.id,
+    next: (p) =>
+      hasMore(p.data.length, search.limit) ? p.data.slice(0, search.limit).at(-1)?.id : undefined,
+    enabled: args !== undefined,
   })
-  const returned = query.data?.data ?? []
-  const more = hasMore(returned.length, search.limit)
-  const rows = returned.slice(0, search.limit)
-  const last = rows.at(-1)
-  const nextSearch = last ? nextCursor(search, last.id) : null
-  const prevSearch = prevCursor(search)
+  const firstFailed = list.state === 'error'
   const columns = useDocumentColumns(schema)
 
   const run = (values: FilterValues) => {
@@ -166,7 +175,6 @@ function Browser({ id, type, schema, indices, search, contractStamp }: BrowserPr
     } as never)
   }
   const filterKey = `${encodeWhere(search.where ?? [])}|${(search.order ?? []).join(',')}|${search.limit}`
-  const state = plan.args === undefined ? 'empty' : listState(query, rows.length === 0)
 
   return (
     <div className="grid gap-4">
@@ -205,42 +213,32 @@ function Browser({ id, type, schema, indices, search, contractStamp }: BrowserPr
           ) : null}
         </div>
       </Card>
-      <Card
-        title={t`Documents`}
-        layer="platform"
-        id="results"
-        source={query.data ? stampOf(query.data) : undefined}
-      >
+      <Card title={t`Documents`} layer="platform" id="results" source={chainStamps(list.pages)}>
         {plan.problems.length > 0 ? (
           <Empty
             kind="no-match"
             title={t`Won’t run`}
             body={t`Change or clear the filters to see more.`}
           />
-        ) : query.isError && !query.data ? (
+        ) : firstFailed ? (
           <div className="grid gap-3">
-            <ErrorState
-              error={query.error}
-              source="sdk"
-              onRetry={() => {
-                void query.refetch()
-              }}
-            />
+            <ErrorState error={list.error} source="sdk" onRetry={list.onRetry} />
             <pre
               className="overflow-x-auto whitespace-pre-wrap break-words rounded p-3 font-mono"
               data-platform-error
             >
-              {query.error instanceof Error ? query.error.message : String(query.error)}
+              {list.error instanceof Error ? list.error.message : String(list.error)}
             </pre>
           </div>
         ) : (
-          <>
+          <ScrollList chain={list} position={documentsPosition}>
             <DataTable
               caption={t`Documents of type ${type}`}
               columns={columns}
-              rows={rows}
-              getRowId={(r) => r.id}
-              state={state}
+              rows={list.rows}
+              getRowId={list.getRowId}
+              state={args === undefined ? 'empty' : list.state}
+              paging={list.paging}
               empty={
                 <Empty
                   kind={search.where?.length || search.after ? 'no-match' : 'none-yet'}
@@ -258,21 +256,8 @@ function Browser({ id, type, schema, indices, search, contractStamp }: BrowserPr
                   params: { contract: id, type, id: r.id },
                 }) as never
               }
-              {...(query.data ? { source: stampOf(query.data) } : {})}
             />
-            <ListPager
-              next={
-                more && nextSearch
-                  ? documentsLink(id, type, { after: nextSearch.after, prev: nextSearch.prev })
-                  : undefined
-              }
-              prev={
-                prevSearch
-                  ? documentsLink(id, type, { after: prevSearch.after, prev: prevSearch.prev })
-                  : undefined
-              }
-            />
-          </>
+          </ScrollList>
         )}
         {search.limit >= DRIVE_MAX ? (
           <p className="mt-2 text-ink-2">{t`Platform answers at most ${DRIVE_MAX} documents at a time.`}</p>

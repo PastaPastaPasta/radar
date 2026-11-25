@@ -5,6 +5,7 @@ import { Entity } from '@/features/entity'
 import { formatInt, formatPercent } from '@/lib/format'
 import { shareOf } from './concentration'
 import { Amount, Empty, ErrorState, Skeleton, type LoadState } from '@/ui'
+import { InfiniteSentinel } from '@/ui/infinite'
 import { useSectionSource } from '@/ui/section-source'
 
 export interface RichListCompactProps {
@@ -12,7 +13,7 @@ export interface RichListCompactProps {
   state: LoadState
   error?: unknown
   onRetry?: () => void
-  paging: { hasNext: boolean; fetching: boolean; fetchNext: () => void }
+  paging: { hasNext: boolean; fetching: boolean; fetchNext: () => void; failed?: boolean }
   source?: SourceStamp
   summaryId: string
   /** The duffs each row's share is of; undefined while it is still being read. */
@@ -28,7 +29,7 @@ export function RichListCompact({
   state,
   error,
   onRetry,
-  paging: { hasNext, fetching, fetchNext },
+  paging: { hasNext, fetching, fetchNext, failed = false },
   source,
   summaryId,
   total,
@@ -48,16 +49,26 @@ export function RichListCompact({
       <div className="rx-tfoot">
         <div className="rx-pager">
           <span>{t`${formatInt(rows.length)} loaded`}</span>
-          {hasNext ? (
-            <button
-              type="button"
-              className="dh-btn dh-btn--sm"
-              disabled={fetching}
-              onClick={fetchNext}
-            >
-              {t`Show more`}
+          {failed && hasNext && !fetching ? (
+            <button type="button" className="dh-btn dh-btn--sm" onClick={fetchNext}>
+              {t`Try again`}
             </button>
-          ) : null}
+          ) : (
+            <InfiniteSentinel
+              onNear={fetchNext}
+              enabled={hasNext && !fetching && !failed}
+              loading={fetching}
+              version={rows.length}
+              status={
+                fetching
+                  ? t`Loading more…`
+                  : hasNext
+                    ? t`${formatInt(rows.length)} shown. More load as you scroll.`
+                    : t`All ${formatInt(rows.length)} shown.`
+              }
+              fallbackLabel={t`Show more`}
+            />
+          )}
           <a
             className="rx-go rx-go--up"
             href={`#${summaryId}`}

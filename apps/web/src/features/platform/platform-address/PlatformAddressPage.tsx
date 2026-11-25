@@ -4,7 +4,14 @@ import { stampOf, type SourceStamp } from '@/data/envelope'
 import { useDecentralizedOnly } from '@/data/health'
 import { peQueries } from '@/data/pe/queries'
 import { sdkQueries } from '@/data/sdk/queries'
-import { PageFrame, PageLink, TransitionTable, useNetwork } from '@/features/entity'
+import {
+  PageFrame,
+  PageLink,
+  ScrollList,
+  TransitionTable,
+  useNetwork,
+  pagePosition,
+} from '@/features/entity'
 import { decodePlatformAddress, PLATFORM_HRP } from '@/lib/bech32'
 import { formatInt } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
@@ -19,7 +26,7 @@ import {
   Skeleton,
   Unavailable,
 } from '@/ui'
-import { loadState, peChildQuery, pePaging } from '../identity/common'
+import { peChildQuery, usePeChild } from '../identity/common'
 
 export function PlatformAddressPage({ addr, page = 1 }: { addr: string; page?: number }) {
   const { t } = useLingui()
@@ -158,10 +165,6 @@ function Transitions({ addr, page }: { addr: string; page: number }) {
   const { t } = useLingui()
   const net = useNetwork()
   const decentralized = useDecentralizedOnly()
-  const q = useQuery({
-    ...peQueries.platformAddressTransitions(net, addr, peChildQuery(page)),
-    enabled: !decentralized && !isDevnet(net),
-  })
   if (decentralized) {
     return (
       <Unavailable
@@ -173,23 +176,32 @@ function Transitions({ addr, page }: { addr: string; page: number }) {
   if (isDevnet(net)) {
     return <Empty kind="unsupported-network" title={t`Platform Explorer doesn't index devnets`} />
   }
+  return <TransitionList addr={addr} page={page} />
+}
+
+function TransitionList({ addr, page }: { addr: string; page: number }) {
+  const { t } = useLingui()
+  const net = useNetwork()
+  const list = usePeChild(
+    `paddr-transitions\u0000${addr}`,
+    page,
+    (n) => peQueries.platformAddressTransitions(net, addr, peChildQuery(n)),
+    (r) => r.hash,
+  )
   return (
-    <Card
-      title={t`Transitions`}
-      layer="platform"
-      id="paddr-transitions"
-      source={q.data ? stampOf(q.data) : undefined}
-    >
-      <TransitionTable
-        rows={q.data?.data.items ?? []}
-        state={loadState(q)}
-        error={q.error}
-        onRetry={() => void q.refetch()}
-        caption={t`Transitions of this address`}
-        columns={['type', 'hash', 'status', 'block', 'gas', 'time']}
-        paging={pePaging(page, q.data?.data.total)}
-        empty={<Empty kind="none-yet" title={t`No transitions involve this address.`} />}
-      />
+    <Card title={t`Transitions`} layer="platform" id="paddr-transitions" source={list.stamps[0]}>
+      <ScrollList chain={list} position={pagePosition}>
+        <TransitionTable
+          rows={list.rows}
+          state={list.state}
+          error={list.error}
+          onRetry={list.onRetry}
+          caption={t`Transitions of this address`}
+          columns={['type', 'hash', 'status', 'block', 'gas', 'time']}
+          paging={list.paging}
+          empty={<Empty kind="none-yet" title={t`No transitions involve this address.`} />}
+        />
+      </ScrollList>
     </Card>
   )
 }

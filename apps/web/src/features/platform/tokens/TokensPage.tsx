@@ -1,5 +1,5 @@
 import { useLingui } from '@lingui/react/macro'
-import { useQuery } from '@tanstack/react-query'
+import { useQueries, useQuery } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useCallback, useMemo, useState } from 'react'
@@ -8,7 +8,14 @@ import { useDecentralizedOnly } from '@/data/health'
 import { peQueries } from '@/data/pe/queries'
 import type { PeToken } from '@/data/pe/schemas'
 import { sdkQueries } from '@/data/sdk/queries'
-import { Entity, IdentityRef, PageFrame, useNetwork } from '@/features/entity'
+import {
+  Entity,
+  IdentityRef,
+  PageFrame,
+  ScrollList,
+  useNetwork,
+  pagePosition,
+} from '@/features/entity'
 import { isPlatformId } from '@/lib/base58'
 import { formatInt } from '@/lib/format'
 import { isDevnet } from '@/lib/network'
@@ -20,7 +27,6 @@ import {
   DataTable,
   Empty,
   ErrorState,
-  ListModeToggle,
   SegFilter,
   TableTools,
   Unavailable,
@@ -28,16 +34,10 @@ import {
 import { FilterPanel, TextFilter } from '../blocks/list-chrome'
 import { BOARD_PAGE, rankDesc } from '../home/rank'
 import { useListControls } from '../blocks/use-list-controls'
-import { usePagedList } from '../blocks/use-paged-list'
+import { usePeScroll } from '../pe-scroll'
 import { ByContractForm } from '../token/ByContractForm'
 import { localizationsOf, pickLocalization } from '../token/token-config'
-import {
-  NEWEST_FIRST,
-  textFilter,
-  tokensQuery,
-  TOKENS_LIST_ID,
-  type TokensSearch,
-} from './token-list'
+import { NEWEST_FIRST, textFilter, tokensQuery, type TokensSearch } from './token-list'
 
 const TRENDING_SHOWN = 5
 
@@ -185,28 +185,44 @@ function Trending() {
 function TokenList() {
   const { t } = useLingui()
   const net = useNetwork()
-  const controls = useListControls<TokensSearch>('/tokens', TOKENS_LIST_ID)
-  const { search, mode, limit } = controls
+  const controls = useListControls<TokensSearch>('/tokens')
+  const { search } = controls
+  const { limit } = search
   const nameOf = useNameOf()
   const query = useMemo(() => tokensQuery(search), [search])
 
-  const list = usePagedList<PeToken>({
-    net,
-    mode,
-    page: search.page,
+  const list = usePeScroll({
+    listKey: JSON.stringify(query),
+    start: search.page,
     limit,
-    query,
-    resource: 'token-list',
-    pageOptions: (page) => peQueries.tokens(net, { ...query, page, limit }),
-    enabled: true,
-    onLoaded: controls.loaded,
+    page: (page) => peQueries.tokens(net, { ...query, page, limit }),
+    getRowId: (r: PeToken) => r.identifier,
   })
 
-  const ids = useMemo(() => list.rows.map((r) => r.identifier), [list.rows])
-  const prices = useQuery({
-    ...sdkQueries['tokens.directPurchasePrices'](net, { tokenIds: ids }),
-    enabled: ids.length > 0 && ids.length <= 100,
+  // Each page's prices are one read, so a page that scrolls back into view asks for nothing new.
+  const priceReads = useQueries({
+    queries: list.pages.map((p) => {
+      const tokenIds = p.data?.data.items.map((r) => r.identifier) ?? []
+      return {
+        ...sdkQueries['tokens.directPurchasePrices'](net, { tokenIds }),
+        enabled: tokenIds.length > 0 && tokenIds.length <= 100,
+      }
+    }),
   })
+  const prices = useMemo(() => {
+    const of = new Map<string, { pending: boolean; price: bigint | undefined }>()
+    list.pages.forEach((p, i) => {
+      const read = priceReads[i]
+      for (const r of p.data?.data.items ?? []) {
+        of.set(r.identifier, {
+          pending: read?.isPending === true,
+          price: read?.data?.data.get(r.identifier)?.currentPrice,
+        })
+      }
+    })
+    return of
+  }, [list.pages, priceReads])
+  const priceFailed = priceReads.find((q) => q.isError && !q.data)
 
   const columns = useMemo<ColumnDef<PeToken>[]>(
     () => [
@@ -248,9 +264,9 @@ function TokenList() {
         id: 'price',
         header: t`Price`,
         cell: ({ row }) => {
-          if (prices.isPending) return '…'
-          const price = prices.data?.data.get(row.original.identifier)
-          return price ? <Amount value={price.currentPrice} kind="credits" /> : '—'
+          const read = prices.get(row.original.identifier)
+          if (!read || read.pending) return '…'
+          return read.price !== undefined ? <Amount value={read.price} kind="credits" /> : '—'
         },
         meta: { numeric: true, phone: 'secondary' },
       },
@@ -274,7 +290,7 @@ function TokenList() {
         meta: { phone: 'hidden' },
       },
     ],
-    [t, net, nameOf, prices.isPending, prices.data],
+    [t, net, nameOf, prices],
   )
 
   const active = [
@@ -285,8 +301,8 @@ function TokenList() {
       : []),
   ]
   const stamps: SourceStamp[] = [
-    ...(list.source ? [list.source] : []),
-    ...(prices.data ? [stampOf(prices.data)] : []),
+    ...list.stamps.slice(0, 1),
+    ...priceReads.flatMap((q) => (q.data ? [stampOf(q.data)] : [])),
   ]
   const newest = search.sort === NEWEST_FIRST
 
@@ -304,9 +320,6 @@ function TokenList() {
             { id: 'new', label: t({ message: 'Newest first', context: 'list of tokens' }) },
           ]}
         />
-        <span className="inline-flex items-center gap-2 whitespace-nowrap">
-          <ListModeToggle listId={TOKENS_LIST_ID} />
-        </span>
       </TableTools>
       <FilterPanel count={active.length}>
         <TextFilter
@@ -357,43 +370,37 @@ function TokenList() {
           }}
         />
       ) : null}
-      {prices.isError && !prices.data ? (
+      {priceFailed ? (
         <ErrorState
-          error={prices.error}
+          error={priceFailed.error}
           source="sdk"
           compact
-          onRetry={() => void prices.refetch()}
+          onRetry={() => void priceFailed.refetch()}
         />
       ) : null}
-      <DataTable
-        caption={t`Tokens`}
-        columns={columns}
-        rows={list.rows}
-        getRowId={(r) => r.identifier}
-        state={list.state}
-        error={list.error}
-        onRetry={list.retry}
-        paging={
-          list.paging ?? {
-            kind: 'page',
-            page: search.page,
-            limit,
-            total: list.total,
-            to: controls.link,
+      <ScrollList chain={list} position={pagePosition}>
+        <DataTable
+          caption={t`Tokens`}
+          columns={columns}
+          rows={list.rows}
+          getRowId={list.getRowId}
+          state={list.state}
+          error={list.error}
+          onRetry={list.onRetry}
+          paging={list.paging}
+          rowLink={(r) => ({ to: '/token/$id', params: { id: r.identifier } })}
+          empty={
+            <Empty
+              kind={active.length > 0 ? 'no-match' : 'none-yet'}
+              title={
+                active.length > 0
+                  ? t`No token matches these filters`
+                  : t`Platform Explorer has no tokens yet`
+              }
+            />
           }
-        }
-        rowLink={(r) => ({ to: '/token/$id', params: { id: r.identifier } })}
-        empty={
-          <Empty
-            kind={active.length > 0 ? 'no-match' : 'none-yet'}
-            title={
-              active.length > 0
-                ? t`No token matches these filters`
-                : t`Platform Explorer has no tokens yet`
-            }
-          />
-        }
-      />
+        />
+      </ScrollList>
     </Card>
   )
 }

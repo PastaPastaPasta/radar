@@ -1,13 +1,13 @@
 import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { Link, useNavigate, type LinkProps } from '@tanstack/react-router'
-import { useQueries } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
-import { useMemo, useState } from 'react'
-import { stampOf, type SourceStamp } from '@/data/envelope'
+import { useEffect, useMemo } from 'react'
+import type { SourceStamp } from '@/data/envelope'
 import { sdkQueries } from '@/data/sdk/queries'
 import type { ContractFullDto } from '@/data/sdk/methods'
 import type { ContractVersionDto } from '@/data/sdk/methods/p-data'
+import { chainStamps, usePageChain } from '@/features/entity'
 import { formatInt } from '@/lib/format'
 import { Badge, Card, DataTable, Empty, Skeleton, Time } from '@/ui'
 import type { ContractContext } from './contract-context'
@@ -17,6 +17,7 @@ import { diffJson, pointerOf, type Change } from './version-diff'
 /** Platform answers at most this many versions in one read. */
 const HISTORY_CHUNK = 10
 const MAX_CHANGES = 200
+const MAX_HISTORY_READS = 50
 
 /** What a version consists of, for comparing two of them. */
 function comparable(contract: ContractFullDto): Record<string, unknown> {
@@ -154,34 +155,37 @@ function Diff({ ctx, versions }: { ctx: ContractContext; versions: ContractVersi
 function Versions({ ctx }: { ctx: ContractContext }) {
   const { t } = useLingui()
   const { net, id, search } = ctx
-  const [cursors, setCursors] = useState<(number | undefined)[]>([undefined])
-  const queries = useQueries({
-    queries: cursors.map((startAtMs) =>
+  // `startAtMs` is inclusive here, so each read starts a millisecond after the last version of the one before.
+  const list = usePageChain({
+    listKey: id,
+    start: undefined as number | undefined,
+    query: (startAtMs) =>
       sdkQueries['contracts.getHistory'](net, {
         id,
         limit: HISTORY_CHUNK,
         ...(startAtMs === undefined ? {} : { startAtMs }),
       }),
-    ),
+    rows: (p) => p.data,
+    getRowId: (v) => String(v.atMs),
+    next: (p) => {
+      const last = p.data.at(-1)
+      return p.data.length === HISTORY_CHUNK && last ? last.atMs + 1 : undefined
+    },
+    // Comparing two versions needs both on hand, and a contract has few enough to keep them all.
+    maxPages: MAX_HISTORY_READS,
   })
-  const versions = queries.flatMap((q) => q.data?.data ?? [])
-  const last = queries.at(-1)
-  const lastChunk = last?.data?.data ?? []
-  const more = lastChunk.length === HISTORY_CHUNK
+  const versions = list.rows
+  const more = list.paging.hasNext
   const missing = [search.rev, search.base].some(
     (v) => v !== undefined && !versions.some((x) => x.contract.version === v),
   )
-  const settled = last?.isSuccess === true
-  const next = lastChunk.length === 0 ? undefined : lastChunk[lastChunk.length - 1]!.atMs + 1
-  if (missing && more && settled && next !== undefined && !cursors.includes(next)) {
-    setCursors([...cursors, next])
-  }
+  const { readOn } = list
+  const lookFurther = missing && more && !list.paging.fetching && !list.paging.failed
+  useEffect(() => {
+    if (lookFurther) readOn()
+  }, [lookFurther, readOn, versions.length])
 
-  const stamps: SourceStamp[] = [
-    ctx.stamp,
-    ...queries.flatMap((q) => (q.data ? [stampOf(q.data)] : [])),
-  ]
-  const failed = queries.find((q) => q.isError && !q.data)
+  const stamps: SourceStamp[] = [ctx.stamp, ...chainStamps(list.pages)]
   const wantedVersion = search.rev
   const currentVersion = ctx.contract.version
   const columns = useMemo<ColumnDef<ContractVersionDto>[]>(
@@ -234,13 +238,11 @@ function Versions({ ctx }: { ctx: ContractContext }) {
       layer="platform"
       source={stamps}
       id="history"
-      state={queries[0]?.isPending ? 'loading' : failed ? 'error' : 'ready'}
-      error={failed?.error}
-      onRetry={() => {
-        void failed?.refetch()
-      }}
+      state={list.state === 'loading' ? 'loading' : list.state === 'error' ? 'error' : 'ready'}
+      error={list.error}
+      onRetry={list.onRetry}
     >
-      {queries[0]?.isPending ? (
+      {list.state === 'loading' ? (
         <Skeleton shape="row" count={3} />
       ) : (
         <div className="grid gap-4">
@@ -250,19 +252,8 @@ function Versions({ ctx }: { ctx: ContractContext }) {
             rows={versions}
             getRowId={(v) => String(v.atMs)}
             state="ready"
+            paging={list.paging}
           />
-          {more ? (
-            <button
-              type="button"
-              className="dh-btn dh-btn--sm justify-self-start"
-              disabled={!settled}
-              onClick={() => {
-                setCursors((c) => [...c, lastChunk[lastChunk.length - 1]!.atMs + 1])
-              }}
-            >
-              {t`Load older versions`}
-            </button>
-          ) : null}
           {wantedVersion === undefined ? (
             <p className="text-ink-2">{t`Choose a version to see what it changed.`}</p>
           ) : missing && more ? (

@@ -1,44 +1,40 @@
-import { infiniteQueryOptions } from '@tanstack/react-query'
+import { queryOptions } from '@tanstack/react-query'
 import { dataClass, viewKeys } from '@/data/query'
 import { sdk } from '@/data/sdk'
 import type { NetworkId } from '@/lib/network'
 
 const VOTES_PAGE = 25
 
-/** Contested-resource votes the identity cast, a page at a time; each page starts after the last vote of the one before. */
-export const identityVotesQuery = (net: NetworkId, identityId: string) =>
-  infiniteQueryOptions({
-    queryKey: viewKeys(net, 'identity-votes', { identityId }),
-    initialPageParam: undefined as string | undefined,
-    queryFn: ({ pageParam, signal }) =>
+/** One page of the contested-resource votes the identity cast: the page after the vote `after`, or the first. */
+export const identityVotesPage = (net: NetworkId, identityId: string, after: string | undefined) =>
+  queryOptions({
+    queryKey: viewKeys(net, 'identity-votes', { identityId, after }),
+    queryFn: ({ signal }) =>
       sdk.call(
         net,
         'voting.contestedResourceIdentityVotes',
-        pageParam === undefined
+        after === undefined
           ? { identityId, limit: VOTES_PAGE }
-          : { identityId, limit: VOTES_PAGE, startAtVoteId: pageParam, startAtIncluded: false },
+          : { identityId, limit: VOTES_PAGE, startAtVoteId: after, startAtIncluded: false },
         signal,
       ),
-    getNextPageParam: (last) =>
-      last.data.length >= VOTES_PAGE ? last.data[last.data.length - 1]?.voteId : undefined,
     ...dataClass('live'),
   })
 
-/**
- * The identities that share a public key hash. A page starts after the last identity of the one before; the first
- * page starts after `after` when the address names one. An empty page is the end.
- */
-export const keyHashMatchesQuery = (net: NetworkId, pkh: string, after: string | undefined) =>
-  infiniteQueryOptions({
+/** The vote the page after this one starts after, or undefined at the end. */
+export const nextVotesCursor = (page: { data: { voteId: string }[] }): string | undefined =>
+  page.data.length >= VOTES_PAGE ? page.data[page.data.length - 1]?.voteId : undefined
+
+/** One page of the identities that share a public key hash, after the identity `after` or from the start. */
+export const keyHashMatchesPage = (net: NetworkId, pkh: string, after: string | undefined) =>
+  queryOptions({
     queryKey: viewKeys(net, 'identity-key-matches', { pkh, after }),
-    initialPageParam: after,
-    queryFn: ({ pageParam, signal }) =>
+    queryFn: ({ signal }) =>
       sdk.call(
         net,
         'identities.byNonUniquePublicKeyHash',
-        pageParam === undefined ? { pkh } : { pkh, startAfter: pageParam },
+        after === undefined ? { pkh } : { pkh, startAfter: after },
         signal,
       ),
-    getNextPageParam: (last) => last.data[last.data.length - 1]?.id,
     ...dataClass('structural'),
   })
