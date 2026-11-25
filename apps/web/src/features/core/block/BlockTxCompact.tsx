@@ -33,10 +33,19 @@ export function BlockTxCompact({
   const [scrollMargin, setScrollMargin] = useState(0)
   // Content above the list can change height after it mounts (a notice, another block), which moves where it starts.
   useLayoutEffect(() => {
-    if (!list.current) return
-    const top = Math.round(list.current.getBoundingClientRect().top + window.scrollY)
-    if (top !== scrollMargin) setScrollMargin(top)
-  })
+    const el = list.current
+    if (!el) return
+    const measure = () => {
+      setScrollMargin(Math.round(el.getBoundingClientRect().top + window.scrollY))
+    }
+    measure()
+    if (typeof ResizeObserver === 'undefined') return
+    const observer = new ResizeObserver(measure)
+    observer.observe(document.body)
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
   const virtualizer = useWindowVirtualizer({
     count: rows.length,
     estimateSize: () => LINE_HEIGHT,
