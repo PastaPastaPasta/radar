@@ -120,7 +120,7 @@ function Readings({
       <ActivationNotes d={d} />
       <StatusSection doc={doc} d={d} stamp={stamp} />
       <LockInSection doc={doc} d={d} stamp={stamp} />
-      <PoolsSection d={d} stamp={stamp} />
+      <PoolsSection doc={doc} d={d} stamp={stamp} />
       <SignalSection d={d} stamp={stamp} />
       <MinersSection doc={doc} d={d} stamp={stamp} />
       <ThresholdsSection doc={doc} d={d} stamp={stamp} />

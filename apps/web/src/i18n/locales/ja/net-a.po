@@ -53,6 +53,11 @@ msgstr "{0, plural, other {# 社}}"
 msgid "{0, plural, one {That’s # fewer than a day ago.} other {That’s # fewer than a day ago.}}"
 msgstr "{0, plural, other {1日前より # 件少なくなっています。}}"
 
+#. placeholder {0}: span.name
+#. placeholder {1}: pct(span.blocks, mined)
+msgid "{0} {1} in all"
+msgstr "{0} 合計 {1}"
+
 #. placeholder {0}: formatPercent(goodShare, 0)
 msgid "{0} A or B"
 msgstr "{0} が A か B"
@@ -201,6 +206,12 @@ msgstr "{0}：{1}、シグナルなし"
 
 #. placeholder {0}: s.name
 #. placeholder {1}: pct(s.blocks, mined)
+#. placeholder {2}: formatInt(s.since)
+msgid "{0}: {1}, not signalling before block {2}"
+msgstr "{0}: {1}、ブロック {2} より前はシグナルなし"
+
+#. placeholder {0}: s.name
+#. placeholder {1}: pct(s.blocks, mined)
 msgid "{0}: {1}, signalling"
 msgstr "{0}：{1}、シグナル発信中"
 
@@ -216,6 +227,9 @@ msgstr "{diff, plural, other {1日前より # 件多くなっています。}}"
 msgid "{passing} pass every check"
 msgstr "{passing} がすべてのチェックに合格"
 
+msgid "{signalled} of {blocks} this window"
+msgstr "このウィンドウで {blocks} 中 {signalled}"
+
 msgid "{silent, plural, one {# didn't answer} other {# didn't answer}}"
 msgstr "{silent, plural, other {# が応答なし}}"
 
@@ -224,6 +238,11 @@ msgstr "<0.1%"
 
 msgid "<0>{count}</0> masternodes answered the last crawl"
 msgstr "<0>{count}</0> 件のマスターノードが直近のクロールに応答しました"
+
+#. placeholder {0}: formatInt(streak)
+#. placeholder {1}: aboutBlocks(streak, doc.block_seconds)
+msgid "<0>Every block since <1/> has signalled:</0> the last {0}, about {1}."
+msgstr "<0><1/> 以降のすべてのブロックがシグナルしています：</0>直近 {0} ブロック、約 {1}。"
 
 msgid "1 y"
 msgstr "1年"
@@ -323,6 +342,10 @@ msgstr "応答あり"
 msgid "As many as a day ago."
 msgstr "1日前と同じ数です。"
 
+#. placeholder {0}: ago(trend.streak)
+msgid "at block <0/> (about {0} ago) · {signalled} of {blocks} this window"
+msgstr "ブロック <0/>（約 {0} 前）· このウィンドウで {blocks} 中 {signalled}"
+
 #. placeholder {0}: when(p.timeout)
 msgid "At that pace no window locks in before the timeout, {0}."
 msgstr "このペースではタイムアウト（{0}）までにロックインするウィンドウはありません。"
@@ -362,6 +385,9 @@ msgstr "今日のペースではロックインするウィンドウはありま
 #. placeholder {1}: at(projection.end)
 msgid "At today's pace window #{0} locks in, about {1}."
 msgstr "今日のペースではウィンドウ #{0} がロックインします（{1} ごろ）。"
+
+msgid "before it switched"
+msgstr "切り替え前"
 
 #. placeholder {0}: g.llmq
 #. placeholder {1}: formatInt(size)
@@ -598,6 +624,10 @@ msgstr "推定"
 msgid "Estimated from the difficulty"
 msgstr "難易度からの推定値"
 
+#. placeholder {0}: ago(trend.streak)
+msgid "every block since <0/> (about {0} ago) · {signalled} of {blocks} this window"
+msgstr "ブロック <0/> 以降のすべてのブロック（約 {0} 前）· このウィンドウで {blocks} 中 {signalled}"
+
 msgid "Every Dash node that answers a crawl: what they run, where they are hosted and whether they can be reached."
 msgstr "クロールに応答するすべての Dash ノード：実行内容、ホスティング先、到達できるかどうか。"
 
@@ -673,6 +703,18 @@ msgstr "Hyphen のインデックスはまだ確認中です。"
 
 msgid "I2P"
 msgstr "I2P"
+
+#. placeholder {0}: at(outlook.endHeight)
+msgid "If every pool keeps signalling as it does now ({share} of blocks), this window ends with about {ends} of the {needs} it needs and locks Core 24 in, about {0}."
+msgstr "各プールが今のままシグナルを続けると（ブロックの {share}）、このウィンドウは必要な {needs} のうち約 {ends} で終わり、Core 24 がロックインします（{0} 頃）。"
+
+msgid "If every pool keeps signalling as it does now ({share} of blocks), this window ends with about {ends} of the {needs} it needs, and no window locks in at that share."
+msgstr "各プールが今のままシグナルを続けると（ブロックの {share}）、このウィンドウは必要な {needs} のうち約 {ends} で終わり、この割合ではどのウィンドウもロックインしません。"
+
+#. placeholder {0}: String(lock.attempt + 1)
+#. placeholder {1}: at(lock.end)
+msgid "If every pool keeps signalling as it does now ({share} of blocks), this window ends with about {ends} of the {needs} it needs; window #{0} would lock in, about {1}."
+msgstr "各プールが今のままシグナルを続けると（ブロックの {share}）、このウィンドウは必要な {needs} のうち約 {ends} で終わります。ウィンドウ #{0} がロックインする見込みです（{1} 頃）。"
 
 msgid "In all {addresses} addresses answered; a node reachable on several networks counts at each."
 msgstr "合計で {addresses} 件のアドレスが応答しました。複数のネットワークで到達可能なノードは、それぞれで数えられます。"
@@ -925,6 +967,9 @@ msgstr "シグナルなし"
 msgid "Not signalling"
 msgstr "シグナルなし"
 
+msgid "Not signalling, from pools that since switched"
+msgstr "シグナルなし（その後切り替えたプール）"
+
 msgid "Not started"
 msgstr "未開始"
 
@@ -942,6 +987,9 @@ msgstr "今"
 
 msgid "Now"
 msgstr "現在"
+
+msgid "now signalling"
+msgstr "現在シグナル中"
 
 #. placeholder {0}: formatInt(r.mined)
 msgid "of {0} so far"
@@ -997,6 +1045,9 @@ msgstr "到達不可"
 
 msgid "Over time"
 msgstr "推移"
+
+msgid "partly"
+msgstr "一部"
 
 msgid "Pending transactions"
 msgstr "保留中のトランザクション"
@@ -1060,6 +1111,9 @@ msgstr "クォーラム"
 
 msgid "Quorums that would sign the Core 24 signal"
 msgstr "Core 24 のシグナルに署名するクォーラム"
+
+msgid "Radar counts each pool's blocks, not where they fall. A pool reads as now signalling when every block since the window's last one that didn't has signalled, and at its own rate of misses it would have missed several of them. A pool that stopped mining or changed its tag reads the same way."
+msgstr "Radar は各プールのブロック数を数えますが、その位置は数えません。ウィンドウ内で最後にシグナルしなかったブロック以降のすべてのブロックがシグナルし、そのプール自身のシグナルなしの割合なら、その中で複数をシグナルなしにしていたはずの場合に「現在シグナル中」とします。マイニングをやめたプールやタグを変えたプールも同じように表示されます。"
 
 msgid "Radar doesn't crawl devnets, so there is nothing to map."
 msgstr "Radar は devnet をクロールしないため、地図に表示するものがありません。"
@@ -1228,6 +1282,9 @@ msgstr "開始"
 
 msgid "Status"
 msgstr "ステータス"
+
+msgid "stopped signalling"
+msgstr "シグナル停止"
 
 msgid "Supply and blockchain size are not shown until it catches up."
 msgstr "インデックスが追いつくまで、供給量とブロックチェーンのサイズは表示されません。"

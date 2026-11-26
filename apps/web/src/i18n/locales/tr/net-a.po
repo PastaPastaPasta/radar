@@ -53,6 +53,11 @@ msgstr "{0, plural, one {# sağlayıcı} other {# sağlayıcı}}"
 msgid "{0, plural, one {That’s # fewer than a day ago.} other {That’s # fewer than a day ago.}}"
 msgstr "{0, plural, one {Bir gün öncekinden # eksik.} other {Bir gün öncekinden # eksik.}}"
 
+#. placeholder {0}: span.name
+#. placeholder {1}: pct(span.blocks, mined)
+msgid "{0} {1} in all"
+msgstr "{0} toplam {1}"
+
 #. placeholder {0}: formatPercent(goodShare, 0)
 msgid "{0} A or B"
 msgstr "{0} A veya B"
@@ -201,6 +206,12 @@ msgstr "{0}: {1}, sinyal vermiyor"
 
 #. placeholder {0}: s.name
 #. placeholder {1}: pct(s.blocks, mined)
+#. placeholder {2}: formatInt(s.since)
+msgid "{0}: {1}, not signalling before block {2}"
+msgstr "{0}: {1}, {2} numaralı bloktan önce sinyal vermiyordu"
+
+#. placeholder {0}: s.name
+#. placeholder {1}: pct(s.blocks, mined)
 msgid "{0}: {1}, signalling"
 msgstr "{0}: {1}, sinyal veriyor"
 
@@ -216,6 +227,9 @@ msgstr "{diff, plural, one {Bir gün öncekinden # fazla.} other {Bir gün önce
 msgid "{passing} pass every check"
 msgstr "{passing} tüm denetimlerden geçiyor"
 
+msgid "{signalled} of {blocks} this window"
+msgstr "bu pencerede {blocks} bloğun {signalled} tanesi"
+
 msgid "{silent, plural, one {# didn't answer} other {# didn't answer}}"
 msgstr "{silent, plural, one {# yanıt vermedi} other {# yanıt vermedi}}"
 
@@ -224,6 +238,11 @@ msgstr "<%0,1"
 
 msgid "<0>{count}</0> masternodes answered the last crawl"
 msgstr "<0>{count}</0> masternode son taramaya yanıt verdi"
+
+#. placeholder {0}: formatInt(streak)
+#. placeholder {1}: aboutBlocks(streak, doc.block_seconds)
+msgid "<0>Every block since <1/> has signalled:</0> the last {0}, about {1}."
+msgstr "<0><1/> numaralı bloktan bu yana her blok sinyal verdi:</0> son {0} blok, yaklaşık {1}."
 
 msgid "1 y"
 msgstr "1 yıl"
@@ -323,6 +342,10 @@ msgstr "Yanıt verdi"
 msgid "As many as a day ago."
 msgstr "Bir gün öncekiyle aynı sayıda."
 
+#. placeholder {0}: ago(trend.streak)
+msgid "at block <0/> (about {0} ago) · {signalled} of {blocks} this window"
+msgstr "<0/> numaralı blokta (yaklaşık {0} önce) · bu pencerede {blocks} bloğun {signalled} tanesi"
+
 #. placeholder {0}: when(p.timeout)
 msgid "At that pace no window locks in before the timeout, {0}."
 msgstr "Bu hızda zaman aşımından ({0}) önce hiçbir pencere kilitlenmez."
@@ -362,6 +385,9 @@ msgstr "Bugünkü hızla hiçbir pencere kilitlenmez: en düşük eşik bile {0}
 #. placeholder {1}: at(projection.end)
 msgid "At today's pace window #{0} locks in, about {1}."
 msgstr "Bugünkü hızla #{0} numaralı pencere kilitlenir, yaklaşık {1}."
+
+msgid "before it switched"
+msgstr "geçişten önce"
 
 #. placeholder {0}: g.llmq
 #. placeholder {1}: formatInt(size)
@@ -598,6 +624,10 @@ msgstr "tahmin"
 msgid "Estimated from the difficulty"
 msgstr "Zorluktan tahmin edildi"
 
+#. placeholder {0}: ago(trend.streak)
+msgid "every block since <0/> (about {0} ago) · {signalled} of {blocks} this window"
+msgstr "<0/> numaralı bloktan beri her blok (yaklaşık {0} önce) · bu pencerede {blocks} bloğun {signalled} tanesi"
+
 msgid "Every Dash node that answers a crawl: what they run, where they are hosted and whether they can be reached."
 msgstr "Taramaya yanıt veren her Dash düğümü: ne çalıştırdıkları, nerede barındırıldıkları ve erişilebilir olup olmadıkları."
 
@@ -673,6 +703,18 @@ msgstr "Hyphen’in dizini hâlâ denetleniyor."
 
 msgid "I2P"
 msgstr "I2P"
+
+#. placeholder {0}: at(outlook.endHeight)
+msgid "If every pool keeps signalling as it does now ({share} of blocks), this window ends with about {ends} of the {needs} it needs and locks Core 24 in, about {0}."
+msgstr "Her havuz şimdiki gibi sinyal vermeye devam ederse (blokların {share} kadarı), bu pencere gereken {needs} bloğun yaklaşık {ends} tanesiyle biter ve Core 24'ü kilitler, yaklaşık {0}."
+
+msgid "If every pool keeps signalling as it does now ({share} of blocks), this window ends with about {ends} of the {needs} it needs, and no window locks in at that share."
+msgstr "Her havuz şimdiki gibi sinyal vermeye devam ederse (blokların {share} kadarı), bu pencere gereken {needs} bloğun yaklaşık {ends} tanesiyle biter ve bu oranla hiçbir pencere kilitlenmez."
+
+#. placeholder {0}: String(lock.attempt + 1)
+#. placeholder {1}: at(lock.end)
+msgid "If every pool keeps signalling as it does now ({share} of blocks), this window ends with about {ends} of the {needs} it needs; window #{0} would lock in, about {1}."
+msgstr "Her havuz şimdiki gibi sinyal vermeye devam ederse (blokların {share} kadarı), bu pencere gereken {needs} bloğun yaklaşık {ends} tanesiyle biter; #{0} numaralı pencere kilitlenir, yaklaşık {1}."
 
 msgid "In all {addresses} addresses answered; a node reachable on several networks counts at each."
 msgstr "Toplamda {addresses} adres yanıt verdi; birkaç ağda erişilebilen bir düğüm her birinde sayılır."
@@ -925,6 +967,9 @@ msgstr "sinyal vermiyor"
 msgid "Not signalling"
 msgstr "Sinyal vermiyor"
 
+msgid "Not signalling, from pools that since switched"
+msgstr "Sinyalsiz, sonradan geçiş yapan havuzlardan"
+
 msgid "Not started"
 msgstr "Başlamadı"
 
@@ -942,6 +987,9 @@ msgstr "şimdi"
 
 msgid "Now"
 msgstr "Şimdi"
+
+msgid "now signalling"
+msgstr "artık sinyal veriyor"
 
 #. placeholder {0}: formatInt(r.mined)
 msgid "of {0} so far"
@@ -997,6 +1045,9 @@ msgstr "Ulaşılamaz"
 
 msgid "Over time"
 msgstr "Zaman içinde"
+
+msgid "partly"
+msgstr "kısmen"
 
 msgid "Pending transactions"
 msgstr "Bekleyen işlemler"
@@ -1060,6 +1111,9 @@ msgstr "Quorum"
 
 msgid "Quorums that would sign the Core 24 signal"
 msgstr "Core 24 sinyalini imzalayacak quorum’lar"
+
+msgid "Radar counts each pool's blocks, not where they fall. A pool reads as now signalling when every block since the window's last one that didn't has signalled, and at its own rate of misses it would have missed several of them. A pool that stopped mining or changed its tag reads the same way."
+msgstr "Radar her havuzun bloklarını sayar, yerlerini değil. Penceredeki sinyalsiz son bloktan bu yana her blok sinyal verdiyse ve havuz kendi sinyalsiz blok oranıyla bunların birkaçını kaçırmış olacaksa havuz artık sinyal veriyor sayılır. Madenciliği bırakan ya da etiketini değiştiren bir havuz da aynı görünür."
 
 msgid "Radar doesn't crawl devnets, so there is nothing to map."
 msgstr "Radar devnet’leri taramadığı için haritalanacak bir şey yok."
@@ -1228,6 +1282,9 @@ msgstr "Başlangıç"
 
 msgid "Status"
 msgstr "Durum"
+
+msgid "stopped signalling"
+msgstr "sinyali bıraktı"
 
 msgid "Supply and blockchain size are not shown until it catches up."
 msgstr "İndeks yetişene kadar dolaşımdaki arz ve blokzincir boyutu gösterilmez."

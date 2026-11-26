@@ -3205,6 +3205,58 @@ html[data-scroll-gutter] {
 .rx-v24-pools > .rx-v24-yes + .rx-v24-no .rx-v24-seg {
   padding-left: 11px;
 }
+/* A pool's blocks from before it switched to signalling: its colour, faded and striped as history. */
+.rx-v24-no.rx-v24-was {
+  background:
+    repeating-linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--dh-warn) 30%, transparent) 0 3px,
+      transparent 3px 9px
+    ),
+    color-mix(in srgb, var(--dh-warn) 40%, var(--rx-ground, var(--dh-page)));
+}
+.rx-v24-was .rx-v24-seg {
+  color: var(--dh-ink);
+}
+/* A bracket under a pool's signalling and non-signalling segments, with its whole share aligned to its outer end, so it stays inside the bar. */
+.rx-v24-spans {
+  position: relative;
+  height: 28px;
+}
+.rx-v24-spans > span {
+  position: absolute;
+}
+.rx-v24-spans > span:first-child {
+  top: 4px;
+  height: 6px;
+  border: 1.5px solid var(--dh-ink-2);
+  border-top: 0;
+  border-radius: 0 0 3px 3px;
+}
+.rx-v24-spans > span + span {
+  top: 13px;
+  font-size: 12.5px;
+  line-height: 14px;
+  white-space: nowrap;
+  color: var(--dh-ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.rx-v24-status {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 8px;
+}
+.rx-v24-status > small {
+  color: var(--dh-ink-2);
+  font-variant-numeric: tabular-nums;
+}
+/* Block links set in running text: underlined, as colour alone doesn't set them apart (over the table's links). */
+.rx-v24-status a:not(.rx-chip):not(.dh-btn),
+[data-v24-pools-now] a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 .rx-v24-seg {
   padding: 0 7px;
   overflow: hidden;

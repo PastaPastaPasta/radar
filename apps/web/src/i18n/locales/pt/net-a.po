@@ -53,6 +53,11 @@ msgstr "{0, plural, one {# provedor} other {# provedores}}"
 msgid "{0, plural, one {That’s # fewer than a day ago.} other {That’s # fewer than a day ago.}}"
 msgstr "{0, plural, one {É # a menos do que há um dia.} other {São # a menos do que há um dia.}}"
 
+#. placeholder {0}: span.name
+#. placeholder {1}: pct(span.blocks, mined)
+msgid "{0} {1} in all"
+msgstr "{0} {1} no total"
+
 #. placeholder {0}: formatPercent(goodShare, 0)
 msgid "{0} A or B"
 msgstr "{0} A ou B"
@@ -201,6 +206,12 @@ msgstr "{0}: {1}, não sinaliza"
 
 #. placeholder {0}: s.name
 #. placeholder {1}: pct(s.blocks, mined)
+#. placeholder {2}: formatInt(s.since)
+msgid "{0}: {1}, not signalling before block {2}"
+msgstr "{0}: {1}, não sinalizava antes do bloco {2}"
+
+#. placeholder {0}: s.name
+#. placeholder {1}: pct(s.blocks, mined)
 msgid "{0}: {1}, signalling"
 msgstr "{0}: {1}, sinaliza"
 
@@ -216,6 +227,9 @@ msgstr "{diff, plural, one {É # a mais do que há um dia.} other {São # a mais
 msgid "{passing} pass every check"
 msgstr "{passing} passam em todas as verificações"
 
+msgid "{signalled} of {blocks} this window"
+msgstr "{signalled} de {blocks} nesta janela"
+
 msgid "{silent, plural, one {# didn't answer} other {# didn't answer}}"
 msgstr "{silent, plural, one {# não respondeu} other {# não responderam}}"
 
@@ -224,6 +238,11 @@ msgstr "<0,1%"
 
 msgid "<0>{count}</0> masternodes answered the last crawl"
 msgstr "<0>{count}</0> masternodes responderam ao último rastreio"
+
+#. placeholder {0}: formatInt(streak)
+#. placeholder {1}: aboutBlocks(streak, doc.block_seconds)
+msgid "<0>Every block since <1/> has signalled:</0> the last {0}, about {1}."
+msgstr "<0>Todos os blocos desde o <1/> sinalizaram:</0> os últimos {0}, cerca de {1}."
 
 msgid "1 y"
 msgstr "1 a"
@@ -323,6 +342,10 @@ msgstr "Respondeu"
 msgid "As many as a day ago."
 msgstr "Tantos quanto há um dia."
 
+#. placeholder {0}: ago(trend.streak)
+msgid "at block <0/> (about {0} ago) · {signalled} of {blocks} this window"
+msgstr "no bloco <0/> (há cerca de {0}) · {signalled} de {blocks} nesta janela"
+
 #. placeholder {0}: when(p.timeout)
 msgid "At that pace no window locks in before the timeout, {0}."
 msgstr "Neste ritmo nenhuma janela é consolidada antes do prazo final, {0}."
@@ -362,6 +385,9 @@ msgstr "No ritmo de hoje nenhuma janela é consolidada: mesmo o limiar mais baix
 #. placeholder {1}: at(projection.end)
 msgid "At today's pace window #{0} locks in, about {1}."
 msgstr "No ritmo de hoje a janela #{0} é consolidada, por volta de {1}."
+
+msgid "before it switched"
+msgstr "antes da mudança"
 
 #. placeholder {0}: g.llmq
 #. placeholder {1}: formatInt(size)
@@ -598,6 +624,10 @@ msgstr "estimativa"
 msgid "Estimated from the difficulty"
 msgstr "Estimada a partir da dificuldade"
 
+#. placeholder {0}: ago(trend.streak)
+msgid "every block since <0/> (about {0} ago) · {signalled} of {blocks} this window"
+msgstr "todos os blocos desde o <0/> (há cerca de {0}) · {signalled} de {blocks} nesta janela"
+
 msgid "Every Dash node that answers a crawl: what they run, where they are hosted and whether they can be reached."
 msgstr "Todos os nós Dash que respondem a um rastreio: o que executam, onde estão alojados e se podem ser alcançados."
 
@@ -673,6 +703,18 @@ msgstr "O índice do Hyphen ainda está a ser verificado."
 
 msgid "I2P"
 msgstr "I2P"
+
+#. placeholder {0}: at(outlook.endHeight)
+msgid "If every pool keeps signalling as it does now ({share} of blocks), this window ends with about {ends} of the {needs} it needs and locks Core 24 in, about {0}."
+msgstr "Se cada pool continuar sinalizando como agora ({share} dos blocos), esta janela termina com cerca de {ends} dos {needs} necessários e consolida o Core 24, por volta de {0}."
+
+msgid "If every pool keeps signalling as it does now ({share} of blocks), this window ends with about {ends} of the {needs} it needs, and no window locks in at that share."
+msgstr "Se cada pool continuar sinalizando como agora ({share} dos blocos), esta janela termina com cerca de {ends} dos {needs} necessários, e nenhuma janela é consolidada com essa parcela."
+
+#. placeholder {0}: String(lock.attempt + 1)
+#. placeholder {1}: at(lock.end)
+msgid "If every pool keeps signalling as it does now ({share} of blocks), this window ends with about {ends} of the {needs} it needs; window #{0} would lock in, about {1}."
+msgstr "Se cada pool continuar sinalizando como agora ({share} dos blocos), esta janela termina com cerca de {ends} dos {needs} necessários; a janela nº {0} seria consolidada, por volta de {1}."
 
 msgid "In all {addresses} addresses answered; a node reachable on several networks counts at each."
 msgstr "No total, {addresses} endereços responderam; um nó alcançável em várias redes conta em cada uma."
@@ -925,6 +967,9 @@ msgstr "não sinaliza"
 msgid "Not signalling"
 msgstr "Não sinaliza"
 
+msgid "Not signalling, from pools that since switched"
+msgstr "Sem sinalizar, de pools que já mudaram"
+
 msgid "Not started"
 msgstr "Não iniciado"
 
@@ -942,6 +987,9 @@ msgstr "agora"
 
 msgid "Now"
 msgstr "Agora"
+
+msgid "now signalling"
+msgstr "agora sinaliza"
 
 #. placeholder {0}: formatInt(r.mined)
 msgid "of {0} so far"
@@ -997,6 +1045,9 @@ msgstr "Inalcançável"
 
 msgid "Over time"
 msgstr "Ao longo do tempo"
+
+msgid "partly"
+msgstr "em parte"
 
 msgid "Pending transactions"
 msgstr "Transações pendentes"
@@ -1060,6 +1111,9 @@ msgstr "Quórum"
 
 msgid "Quorums that would sign the Core 24 signal"
 msgstr "Quóruns que assinariam o sinal do Core 24"
+
+msgid "Radar counts each pool's blocks, not where they fall. A pool reads as now signalling when every block since the window's last one that didn't has signalled, and at its own rate of misses it would have missed several of them. A pool that stopped mining or changed its tag reads the same way."
+msgstr "O Radar conta os blocos de cada pool, não sua posição. Um pool aparece como sinalizando agora quando todos os blocos desde o último sem sinal da janela sinalizaram e, na sua própria taxa de blocos sem sinal, ele teria falhado vários deles. Um pool que parou de minerar ou mudou sua tag aparece da mesma forma."
 
 msgid "Radar doesn't crawl devnets, so there is nothing to map."
 msgstr "O Radar não rastreia devnets, por isso não há nada a mapear."
@@ -1228,6 +1282,9 @@ msgstr "Começa"
 
 msgid "Status"
 msgstr "Estado"
+
+msgid "stopped signalling"
+msgstr "parou de sinalizar"
 
 msgid "Supply and blockchain size are not shown until it catches up."
 msgstr "A oferta e o tamanho da blockchain não são mostrados até o índice se atualizar."

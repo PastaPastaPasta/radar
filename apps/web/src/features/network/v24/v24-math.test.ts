@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import { RadarActivationSchema, v24Pending } from '@/data/radar/schemas'
+import { RadarActivationSchema, v24Pending, type ActivationWindow } from '@/data/radar/schemas'
 import mainnet from '@/test/fixtures/http/radar/mainnet/activation.json'
 import testnet from '@/test/fixtures/http/radar/testnet/activation.json'
 import signalling from './signalling.fixture.json'
 import {
+  currentRate,
   estimateMs,
+  layoutOf,
+  poolStandings,
   milestones,
   projectLockIn,
   rateOf,
@@ -189,5 +192,190 @@ describe('the lock-in outlook (mainnet at block 2,577,670)', () => {
   it('dates heights to come at the recent pace', () => {
     expect(estimateMs(doc, 2_577_670)).toBe(1_795_530_762_000)
     expect(estimateMs(doc, 2_577_680)).toBe(1_795_530_762_000 + 1_571_000)
+  })
+})
+
+describe('poolStandings', () => {
+  const win = (
+    marks: string,
+    pools: { pool: string | null; blocks: number; signalling: number }[],
+  ) => ({
+    count: marks.split('#').length - 1,
+    mined: marks.length,
+    start: { height: 1000 },
+    end: { height: 1999 },
+    signalling: marks,
+    pools,
+  })
+  const kinds = (w: ActivationWindow) =>
+    Object.fromEntries(poolStandings(w).map((s) => [s.row.pool ?? '-', s.trend]))
+
+  it('reads a pool as now signalling once the streak since the last miss must hold some of its blocks', () => {
+    const marks = '-#'.repeat(400) + '#'.repeat(200)
+    const t = kinds(
+      win(marks, [
+        { pool: 'ViaBTC', blocks: 500, signalling: 100 },
+        { pool: 'F2Pool', blocks: 500, signalling: 500 },
+      ]),
+    )
+    expect(t.ViaBTC).toEqual({ kind: 'on', since: 1000 + 799, streak: 201 })
+    expect(t.F2Pool).toEqual({ kind: 'all' })
+  })
+
+  it('reads the lone holdout as stopped when it signalled long before its first miss and misses to the end', () => {
+    const marks = '#'.repeat(600) + '-#'.repeat(200)
+    const t = kinds(
+      win(marks, [
+        { pool: 'AntPool', blocks: 500, signalling: 300 },
+        { pool: 'F2Pool', blocks: 500, signalling: 500 },
+      ]),
+    )
+    expect(t.AntPool).toEqual({ kind: 'off', from: 1600, streak: 400 })
+  })
+
+  it('calls a small pool partly when the streak is too short to have held its blocks', () => {
+    const marks = '-#'.repeat(450) + '#'.repeat(100)
+    const t = kinds(
+      win(marks, [
+        { pool: 'Zpool', blocks: 20, signalling: 5 },
+        { pool: 'F2Pool', blocks: 980, signalling: 545 },
+      ]),
+    )
+    expect(t.Zpool).toEqual({ kind: 'partly' })
+    expect(t.F2Pool).toEqual({ kind: 'on', since: 1899, streak: 101 })
+  })
+
+  it('makes no call on order when two pools miss and none could have stopped', () => {
+    const marks = '-#'.repeat(500)
+    const t = kinds(
+      win(marks, [
+        { pool: 'A', blocks: 500, signalling: 250 },
+        { pool: 'B', blocks: 500, signalling: 250 },
+      ]),
+    )
+    expect(t.A).toEqual({ kind: 'partly' })
+    expect(t.B).toEqual({ kind: 'partly' })
+  })
+
+  it('makes no call on order without the block string, and keeps all and none', () => {
+    const w = { ...win('#'.repeat(10), []), signalling: null, mined: 10 }
+    const t = kinds({
+      ...w,
+      pools: [
+        { pool: 'A', blocks: 5, signalling: 2 },
+        { pool: 'B', blocks: 3, signalling: 3 },
+        { pool: null, blocks: 2, signalling: 0 },
+      ],
+    })
+    expect(t).toEqual({ A: { kind: 'partly' }, B: { kind: 'all' }, '-': { kind: 'none' } })
+  })
+
+  it('counts the share signalling now: whole pools that signal now, the window ratio for the unknown', () => {
+    const marks = '-#'.repeat(400) + '#'.repeat(200)
+    const s = poolStandings(
+      win(marks, [
+        { pool: 'ViaBTC', blocks: 500, signalling: 300 },
+        { pool: 'F2Pool', blocks: 280, signalling: 280 },
+        { pool: 'X', blocks: 20, signalling: 0 },
+        { pool: 'Y', blocks: 200, signalling: 20 },
+      ]),
+    )
+    // 400 misses: ViaBTC 200, Y 180, X 20. ViaBTC and Y signal now, X doesn't: 500 + 280 + 200 of 1,000.
+    expect(s.map((x) => x.trend.kind)).toEqual(['on', 'all', 'none', 'on'])
+    expect(currentRate(s)).toBeCloseTo(0.98)
+  })
+
+  it('does not call a pool that steadily misses a few of its blocks a switch', () => {
+    // A 20% pool signalling in 90% of its blocks: 21 misses, one every 45 blocks, the last 100 blocks ago.
+    const marks = Array.from({ length: 1000 }, (_, i) =>
+      i % 45 === 0 && i <= 900 ? '-' : '#',
+    ).join('')
+    const t = kinds(
+      win(marks, [
+        { pool: 'P', blocks: 200, signalling: 179 },
+        { pool: 'F2Pool', blocks: 800, signalling: 800 },
+      ]),
+    )
+    expect(t.P).toEqual({ kind: 'partly' })
+  })
+
+  it('lays each mixed pool across the divide, labels the biggest holdout, and spans only a lone mixed pool', () => {
+    const marks = '-#'.repeat(400) + '#'.repeat(200)
+    const one = layoutOf(
+      poolStandings(
+        win(marks, [
+          { pool: 'ViaBTC', blocks: 500, signalling: 100 },
+          { pool: 'F2Pool', blocks: 500, signalling: 500 },
+        ]),
+      ),
+      'Untagged',
+    )
+    expect(one.segments.map((x) => [x.name, x.on, x.blocks, x.since])).toEqual([
+      ['F2Pool', true, 500, undefined],
+      ['ViaBTC', true, 100, undefined],
+      ['ViaBTC', false, 400, 1799],
+    ])
+    expect(one.span).toEqual({ name: 'ViaBTC', blocks: 500, left: 500 })
+
+    const two = layoutOf(
+      poolStandings(
+        win('-'.repeat(300) + '#'.repeat(700), [
+          { pool: 'A', blocks: 400, signalling: 210 },
+          { pool: 'B', blocks: 100, signalling: 90 },
+          { pool: 'C', blocks: 100, signalling: 0 },
+          { pool: null, blocks: 400, signalling: 400 },
+        ]),
+      ),
+      'Untagged',
+    )
+    expect(two.segments.map((x) => `${x.name}${x.on ? '+' : '-'}${String(x.blocks)}`)).toEqual([
+      'Untagged+400',
+      'A+210',
+      'B+90',
+      'B-10',
+      'A-190',
+      'C-100',
+    ])
+    expect(new Set(two.segments.map((x) => x.key)).size).toBe(two.segments.length)
+    expect(two.span).toBeUndefined()
+    // A's 190 misses outweigh C's 100, but A signals now.
+    expect(two.blocker?.name).toBe('C')
+
+    const partly = layoutOf(
+      poolStandings({
+        ...win('#'.repeat(250), []),
+        signalling: null,
+        pools: [
+          { pool: 'P', blocks: 100, signalling: 90 },
+          { pool: 'ViaBTC', blocks: 150, signalling: 0 },
+        ],
+      }),
+      'Untagged',
+    )
+    expect(partly.blocker?.name).toBe('ViaBTC')
+  })
+
+  it('calls no stop when the holdout signalled in more blocks than it mined before its first miss', () => {
+    // AntPool's first miss is at 607 (about 300 of its blocks before it), yet it signalled in 450 of 500: it kept
+    // signalling in most of its blocks after, so it didn't stop.
+    const marks = '#'.repeat(600) + ('#'.repeat(7) + '-').repeat(50)
+    const t = kinds(
+      win(marks, [
+        { pool: 'AntPool', blocks: 500, signalling: 450 },
+        { pool: 'F2Pool', blocks: 500, signalling: 500 },
+      ]),
+    )
+    expect(t.AntPool).toEqual({ kind: 'partly' })
+  })
+
+  it("calls no switch when the pools' totals don't match the window", () => {
+    const marks = '-#'.repeat(400) + '#'.repeat(200)
+    const t = kinds(
+      win(marks, [
+        { pool: 'ViaBTC', blocks: 450, signalling: 100 },
+        { pool: 'F2Pool', blocks: 500, signalling: 500 },
+      ]),
+    )
+    expect(t.ViaBTC).toEqual({ kind: 'partly' })
   })
 })
