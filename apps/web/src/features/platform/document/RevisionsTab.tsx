@@ -26,7 +26,10 @@ function Revisions({ ctx }: { ctx: DocumentContext }) {
       }),
     rows: (p) => p.data,
     getRowId: (r) => String(r.atMs),
-    next: (p) => (p.data.length === REVISION_PAGE ? p.data.at(-1)?.atMs : undefined),
+    next: (p) => {
+      const last = p.data.at(-1)?.atMs
+      return p.data.length === REVISION_PAGE && last !== undefined ? last + 1 : undefined
+    },
   })
   const stamps = chainStamps(list.pages)
   // From the top of the history a revision without a number is numbered by its place; part-way down that is unknown.

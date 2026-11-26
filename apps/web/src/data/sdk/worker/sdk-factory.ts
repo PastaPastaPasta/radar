@@ -1,6 +1,7 @@
 import { EvoSDK } from '@dashevo/evo-sdk'
 import type { SdkNetworkConfig } from '../methods'
 import type { SdkHandle } from './api'
+import { statusDto } from './convert'
 import type { SdkReads } from './impl'
 
 /**
@@ -8,7 +9,6 @@ import type { SdkReads } from './impl'
  * touches the package, so everything else can be tested without the wasm.
  */
 export async function createEvoSdk(cfg: SdkNetworkConfig): Promise<SdkHandle> {
-  const protocolVersion = await EvoSDK.getLatestVersionNumber()
   const { retries, banFailedAddress, logs } = cfg.settings ?? {}
   const sdk = new EvoSDK({
     network: cfg.network,
@@ -27,6 +27,16 @@ export async function createEvoSdk(cfg: SdkNetworkConfig): Promise<SdkHandle> {
       : {}),
   })
   await sdk.connect()
+  const protocolVersion = await sdk.system
+    .status()
+    .then((status) => {
+      try {
+        return statusDto(status).protocolVersion
+      } finally {
+        status.free()
+      }
+    })
+    .catch(() => 0)
   return {
     reads: sdk as unknown as SdkReads,
     protocolVersion,

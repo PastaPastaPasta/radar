@@ -43,7 +43,7 @@ export interface PDataMethods {
     args: { id: string; limit?: number; startAtMs?: number }
     result: ContractVersionDto[]
   }
-  /** Oldest first. Platform answers at most 10 revisions and, for a proof, takes no offset: the next page starts after `startAtMs` (exclusive). */
+  /** Oldest first. Platform answers at most 10 revisions and, for a proof, takes no offset: the next page starts at `startAtMs` (inclusive). */
   'documents.history': {
     args: { contractId: string; type: string; id: string; limit?: number; startAtMs?: number }
     result: DocumentRevisionDto[]
