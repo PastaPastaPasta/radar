@@ -1,34 +1,101 @@
+import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { Link } from '@tanstack/react-router'
-import type { ReactNode } from 'react'
 import { stampOf } from '@/data/envelope'
 import { Card, Empty } from '@/ui'
-import type { Slice } from './census-charts'
 import { useCensusColors, type CensusColors } from './census-colors'
 import { countryLink, hostLink } from './census-links'
 import { countryName, flag } from './census-format'
 import { byOrg, radarScope, total, UNKNOWN, type DistRow } from './census-math'
-import { Donut, Ranked, useShareText, type RankedRow } from './parts'
+import { Answer, SegBar, type BarPart } from './bars'
+import { Ranked, useShareText, type RankedRow } from './parts'
 import { SCOPE_NOUN } from './scope-text'
 import { loadState, type SectionProps } from './shared'
 
-const TOP = 5
+const TOP = 3
 
-/** The five largest groups get a rank colour; the rest and "Unknown" the neutral grays. */
+/** The three largest named groups get a rank colour; the rest and "Unknown" the neutral grays. */
 const rankColor = (colors: CensusColors, key: string, i: number): string =>
-  key === UNKNOWN ? colors.axis : i >= TOP ? colors.other : colors.rank[i]!
+  key === UNKNOWN ? colors.unknown : i >= TOP ? colors.other : colors.rank[i]!
 
-function slicesOf(
+/** The three largest named groups, then everything else, then the nodes we could not place. */
+function partsOf(
   rows: readonly { key: string; name: string; n: number }[],
   colors: CensusColors,
-  rest: string,
-): Slice[] {
-  const top = rows.slice(0, TOP)
-  const left = rows.slice(TOP).reduce((a, r) => a + r.n, 0)
+  names: { rest: string; unknown: string },
+): BarPart[] {
+  const named = rows.filter((r) => r.key !== UNKNOWN)
+  const unknown = rows.find((r) => r.key === UNKNOWN)?.n ?? 0
+  const left = named.slice(TOP).reduce((a, r) => a + r.n, 0)
   return [
-    ...top.map((r, i) => ({ name: r.name, value: r.n, color: rankColor(colors, r.key, i) })),
-    ...(left > 0 ? [{ name: rest, value: left, color: colors.other }] : []),
+    ...named
+      .slice(0, TOP)
+      .map((r, i) => ({ key: r.key, name: r.name, n: r.n, color: colors.rank[i]! })),
+    ...(left > 0 ? [{ key: '~rest', name: names.rest, n: left, color: colors.other }] : []),
+    ...(unknown > 0
+      ? [{ key: UNKNOWN, name: names.unknown, n: unknown, color: colors.unknown }]
+      : []),
   ]
+}
+
+/** The top three named groups' share of every node, Unknown included, as the bar and the rows count them. */
+const topThree = (ns: readonly number[]): number => ns.slice(0, TOP).reduce((a, n) => a + n, 0)
+
+function WhereCard({
+  id,
+  title,
+  noun,
+  summary,
+  emptyTitle,
+  pill,
+  topShare,
+  barLabel,
+  parts,
+  rows,
+  count,
+  sum,
+}: {
+  id: string
+  title: string
+  noun: string
+  summary: SectionProps['summary']
+  emptyTitle: string
+  pill: string
+  topShare: string
+  barLabel: string
+  parts: BarPart[]
+  rows: RankedRow[]
+  count: number
+  sum: number
+}) {
+  const { t } = useLingui()
+  return (
+    <Card
+      level="section"
+      title={title}
+      id={id}
+      layer="network"
+      subtitle={t`Share of ${noun}`}
+      source={summary.data ? [stampOf(summary.data)] : []}
+      state={loadState(summary)}
+      error={summary.error}
+      onRetry={() => void summary.refetch()}
+    >
+      {rows.length === 0 ? (
+        <Empty kind="none-yet" title={emptyTitle} />
+      ) : (
+        <div className="grid gap-4">
+          <Answer tone="neutral" pill={pill}>
+            <span className="rx-nanswer__line">
+              {t`Top three identified:`} <b>{topShare}</b>
+            </span>
+          </Answer>
+          <SegBar label={barLabel} legend="none" parts={parts} />
+          <Ranked rows={rows} limit={6} count={count} sum={sum} empty={t`No data yet.`} />
+        </div>
+      )}
+    </Card>
+  )
 }
 
 export function WhereCards(props: SectionProps) {
@@ -45,15 +112,12 @@ export function WhereCards(props: SectionProps) {
   const listed = scope === 'mn' || scope === 'evo'
   const realOrgs = orgs.filter((o) => o.org !== UNKNOWN)
   const realCountries = countries.filter(([k]) => k !== UNKNOWN)
-  const o0 = realOrgs[0]
-  const c0 = realCountries[0]
-  const source = summary.data ? [stampOf(summary.data)] : []
-  const rest = t`Everything else`
+  const names = { rest: t`Other`, unknown: t`Unknown` }
 
-  const hostRows: RankedRow[] = orgs.map((o, i) => ({
+  const hostRows: RankedRow[] = orgs.map((o) => ({
     key: o.org,
     n: o.n,
-    color: rankColor(colors, o.org, i),
+    color: rankColor(colors, o.org, realOrgs.indexOf(o)),
     title: o.asns.map((a) => `AS${a}`).join(', '),
     label:
       listed && o.org !== UNKNOWN && o.asns.length > 0 ? (
@@ -66,12 +130,16 @@ export function WhereCards(props: SectionProps) {
         o.org
       ),
   }))
-  const countryLabel = (code: string): ReactNode =>
+  const countryLabel = (code: string): string =>
     code === UNKNOWN ? t`Unknown` : `${flag(code)} ${countryName(code)}`.trim()
-  const countryRows: RankedRow[] = countries.map(([code, n], i) => ({
+  const countryRows: RankedRow[] = countries.map(([code, n]) => ({
     key: code,
     n,
-    color: rankColor(colors, code, i),
+    color: rankColor(
+      colors,
+      code,
+      realCountries.findIndex(([k]) => k === code),
+    ),
     label:
       listed && code !== UNKNOWN ? (
         <Link to="/masternodes" search={countryLink(code, scope)}>
@@ -82,88 +150,44 @@ export function WhereCards(props: SectionProps) {
       ),
   }))
 
-  const lede = o0
-    ? t`${o0.org} hosts ${share(o0.n, sumOrgs)} of ${noun}, and the three largest providers host ${share(
-        realOrgs.slice(0, 3).reduce((a, o) => a + o.n, 0),
-        sumOrgs,
-      )}.`
-    : undefined
-
   return (
     <div className="rx-cols" data-where>
-      <Card
-        level="section"
-        title={t`Hosting providers`}
+      <WhereCard
         id="hosting"
-        layer="network"
-        subtitle={lede}
-        source={source}
-        state={loadState(summary)}
-        error={summary.error}
-        onRetry={() => void summary.refetch()}
-      >
-        {orgs.length === 0 ? (
-          <Empty kind="none-yet" title={t`No hosting data yet.`} />
-        ) : (
-          <div className="grid gap-4">
-            <Donut
-              slices={slicesOf(
-                orgs.map((o) => ({
-                  key: o.org,
-                  name: o.org === UNKNOWN ? t`Unknown` : o.org,
-                  n: o.n,
-                })),
-                colors,
-                rest,
-              )}
-              label={t`Share of ${noun} by hosting provider`}
-              surface={colors.surface}
-              center={{ value: String(realOrgs.length), caption: t`providers` }}
-            />
-            <Ranked rows={hostRows} count={realOrgs.length} sum={sumOrgs} empty={t`No data yet.`} />
-          </div>
+        title={t`Hosting providers`}
+        noun={noun}
+        summary={summary}
+        emptyTitle={t`No hosting data yet.`}
+        pill={plural(realOrgs.length, { one: '# provider', other: '# providers' })}
+        topShare={share(topThree(realOrgs.map((o) => o.n)), sumOrgs)}
+        barLabel={t`Share of ${noun} by hosting provider`}
+        parts={partsOf(
+          orgs.map((o) => ({ key: o.org, name: o.org, n: o.n })),
+          colors,
+          names,
         )}
-      </Card>
-      <Card
-        level="section"
-        title={t`Countries`}
+        rows={hostRows}
+        count={realOrgs.length}
+        sum={sumOrgs}
+      />
+      <WhereCard
         id="countries"
-        layer="network"
-        subtitle={
-          c0 ? t`${countryName(c0[0])} alone has ${share(c0[1], sumCountries)}.` : undefined
-        }
-        source={source}
-        state={loadState(summary)}
-        error={summary.error}
-        onRetry={() => void summary.refetch()}
-      >
-        {countries.length === 0 ? (
-          <Empty kind="none-yet" title={t`No location data yet.`} />
-        ) : (
-          <div className="grid gap-4">
-            <Donut
-              slices={slicesOf(
-                countries.map(([code, n]) => ({
-                  key: code,
-                  name: code === UNKNOWN ? t`Unknown` : countryName(code),
-                  n,
-                })),
-                colors,
-                rest,
-              )}
-              label={t`Share of ${noun} by country`}
-              surface={colors.surface}
-              center={{ value: String(realCountries.length), caption: t`countries` }}
-            />
-            <Ranked
-              rows={countryRows}
-              count={realCountries.length}
-              sum={sumCountries}
-              empty={t`No data yet.`}
-            />
-          </div>
+        title={t`Countries`}
+        noun={noun}
+        summary={summary}
+        emptyTitle={t`No location data yet.`}
+        pill={plural(realCountries.length, { one: '# country', other: '# countries' })}
+        topShare={share(topThree(realCountries.map(([, n]) => n)), sumCountries)}
+        barLabel={t`Share of ${noun} by country`}
+        parts={partsOf(
+          countries.map(([code, n]) => ({ key: code, name: countryLabel(code), n })),
+          colors,
+          names,
         )}
-      </Card>
+        rows={countryRows}
+        count={realCountries.length}
+        sum={sumCountries}
+      />
     </div>
   )
 }

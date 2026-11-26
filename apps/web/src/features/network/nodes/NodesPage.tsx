@@ -1,6 +1,6 @@
 import { useLingui } from '@lingui/react/macro'
 import { useSearch } from '@tanstack/react-router'
-import { PageFrame, PageLink, useNetwork } from '@/features/entity'
+import { PageFrame, useNetwork } from '@/features/entity'
 import { isDevnet } from '@/lib/network'
 import { Empty, SegFilter, Unavailable } from '@/ui'
 import { nodesClaim } from './claim'
@@ -8,7 +8,6 @@ import { useCensus, useCrawlAvailable, useV24Pending } from './census-data'
 import { CENSUS_SCOPES, radarScope } from './census-math'
 import { DapiMasternodes } from './DapiMasternodes'
 import { Headline } from './Headline'
-import { Notice } from './parts'
 import { ReachCard } from './ReachCard'
 import { SCOPE_LABEL } from './scope-text'
 import { StaleCrawl } from './StaleCrawl'
@@ -68,12 +67,6 @@ export function NodesPage() {
     return (
       <>
         <StaleCrawl net={net} status={census.status} summary={census.summary} />
-        {v24 ? (
-          <Notice data-v24-link>
-            {t`Dash Core 24 activation is under way.`}{' '}
-            <PageLink to="/v24">{t`Follow it on the activation tracker`}</PageLink>
-          </Notice>
-        ) : null}
         <Headline {...props} />
         <div
           className="flex min-w-0 flex-wrap items-center gap-3 [&_.dh-seg]:max-w-full [&_.dh-seg]:overflow-x-auto"
@@ -90,13 +83,17 @@ export function NodesPage() {
           />
           <span className="sr-only" data-radar-scope={radarScope(scope)} />
         </div>
-        <VersionsCard {...props} census={census} />
+        <VersionsCard {...props} census={census} v24={v24} />
         <WhereCards {...props} />
         <ReachCard {...props} census={census} />
-        <ReadinessCard {...props} />
-        <YieldsCard {...props} />
-        <PlatformHealthCard {...props} />
-        <SpeedCard {...props} census={census} />
+        <div className="rx-cols" data-census-pair="masternodes">
+          <ReadinessCard {...props} />
+          <YieldsCard {...props} />
+        </div>
+        <div className="rx-cols" data-census-pair="service">
+          <SpeedCard {...props} census={census} />
+          <PlatformHealthCard {...props} />
+        </div>
       </>
     )
   }

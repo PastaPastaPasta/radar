@@ -19,6 +19,10 @@ msgstr ""
 msgid ", {0} unknown"
 msgstr ", {0} невідомих"
 
+#. placeholder {0}: String(Math.round(r.evo.platform_span_days))
+msgid ", from {0} days of epochs"
+msgstr ", з епох за {0} дн."
+
 msgid ", so the figures below may be out of date."
 msgstr ", тож наведені нижче цифри можуть бути застарілими."
 
@@ -29,27 +33,37 @@ msgstr "\"Announce 24\" враховує дійсних учасників, чи
 msgid "(empty)"
 msgstr "(порожньо)"
 
+#. placeholder {0}: realCountries.length
+msgid "{0, plural, one {# country} other {# countries}}"
+msgstr "{0, plural, one {# країна} few {# країни} many {# країн} other {# країни}}"
+
 #. placeholder {0}: -diff
-msgid "{0, plural, one {# fewer masternode answering than a day ago} other {# fewer masternodes answering than a day ago}}"
-msgstr "{0, plural, one {відповідає на # мастерноду менше, ніж добу тому} few {відповідає на # мастерноди менше, ніж добу тому} many {відповідає на # мастернод менше, ніж добу тому} other {відповідає на # мастерноди менше, ніж добу тому}}"
+msgid "{0, plural, one {# fewer answering than a day ago} other {# fewer answering than a day ago}}"
+msgstr "{0, plural, one {відповідає на # менше, ніж добу тому} few {відповідають на # менше, ніж добу тому} many {відповідають на # менше, ніж добу тому} other {відповідають на # менше, ніж добу тому}}"
+
+#. placeholder {0}: n.masternodes
+msgid "{0, plural, one {# masternode answering} other {# masternodes answering}}"
+msgstr "{0, plural, one {# мастернода відповідає} few {# мастерноди відповідають} many {# мастернод відповідають} other {# мастерноди відповідають}}"
+
+#. placeholder {0}: realOrgs.length
+msgid "{0, plural, one {# provider} other {# providers}}"
+msgstr "{0, plural, one {# провайдер} few {# провайдери} many {# провайдерів} other {# провайдера}}"
 
 #. placeholder {0}: -diff
 msgid "{0, plural, one {That’s # fewer than a day ago.} other {That’s # fewer than a day ago.}}"
 msgstr "{0, plural, one {Це на # менше, ніж добу тому.} few {Це на # менше, ніж добу тому.} many {Це на # менше, ніж добу тому.} other {Це на # менше, ніж добу тому.}}"
 
+#. placeholder {0}: formatPercent(goodShare, 0)
+msgid "{0} A or B"
+msgstr "{0} — A або B"
+
 #. placeholder {0}: formatPercent(v, 1)
 msgid "{0} a year"
 msgstr "{0} на рік"
 
-#. placeholder {0}: formatInt(crawl.reachable)
-#. placeholder {1}: formatInt(crawl.tried)
-msgid "{0} addresses answered out of {1} tried. Counted are addresses that answered at least once this week, plus every enabled masternode’s."
-msgstr "Відповіли {0} адрес із {1} опитаних. Враховано адреси, що відповіли хоча б раз цього тижня, і адреси всіх увімкнених мастернод."
-
-#. placeholder {0}: countryName(c0[0])
-#. placeholder {1}: share(c0[1], sumCountries)
-msgid "{0} alone has {1}."
-msgstr "Лише {0} має {1}."
+#. placeholder {0}: share(answered.n, answered.of)
+msgid "{0} answered the last crawl"
+msgstr "{0} відповіли в останньому обході"
 
 #. placeholder {0}: formatInt(masternodes)
 #. placeholder {1}: formatInt(places.length)
@@ -61,18 +75,12 @@ msgid "{0} fail"
 msgstr "не пройшли: {0}"
 
 #. placeholder {0}: formatInt(d.beyond_version)
-msgid "{0} fail another check that needs a fix."
-msgstr "Не проходять іншу перевірку, яку потрібно виправити: {0}."
+msgid "{0} fail a check that upgrading alone won’t fix."
+msgstr "Не проходять перевірку, яку саме оновлення не виправить: {0}."
 
 #. placeholder {0}: formatInt(d.version_only)
 msgid "{0} fail only the version check and need just the upgrade. "
 msgstr "Не проходять лише перевірку версії й потребують тільки оновлення: {0}. "
-
-#. placeholder {0}: o0.org
-#. placeholder {1}: share(o0.n, sumOrgs)
-#. placeholder {2}: share( realOrgs.slice(0, 3).reduce((a, o) => a + o.n, 0), sumOrgs, )
-msgid "{0} hosts {1} of {noun}, and the three largest providers host {2}."
-msgstr "{noun}: {0} розміщує {1}, а три найбільші провайдери — {2}."
 
 #. placeholder {0}: formatInt(p.masternodes)
 msgid "{0} masternodes"
@@ -95,14 +103,20 @@ msgctxt "share of blocks"
 msgid "{0} needed"
 msgstr "потрібно {0}"
 
-#. placeholder {0}: formatInt(p.healthy)
+#. placeholder {0}: formatInt(answered.n)
+#. placeholder {0}: formatInt(d.overall.pass)
 #. placeholder {0}: formatInt(q.valid)
-#. placeholder {0}: formatInt(r.signalling)
-#. placeholder {1}: formatInt(p.checked)
+#. placeholder {1}: formatInt(answered.of)
+#. placeholder {1}: formatInt(d.masternodes)
 #. placeholder {1}: formatInt(p.window)
-#. placeholder {1}: formatInt(q.members)
 msgid "{0} of {1}"
 msgstr "{0} з {1}"
+
+#. placeholder {0}: formatInt(answered.n)
+#. placeholder {1}: formatInt(answered.of)
+#. placeholder {2}: formatInt(crawl.tried)
+msgid "{0} of {1} · {2} tried in the last crawl"
+msgstr "{0} з {1} · в останньому обході перевірено {2}"
 
 #. placeholder {0}: formatInt(threshold ?? 0)
 #. placeholder {1}: formatInt(p.window)
@@ -129,12 +143,16 @@ msgstr "{0} із {1} блоків, спроба {2}"
 msgid "{0} of {1} enabled evonodes passed our latest Platform check: their Tenderdash P2P port was open and their DAPI answered over valid TLS."
 msgstr "{0} із {1} увімкнених евонод пройшли нашу останню перевірку Platform: їхній порт Tenderdash P2P був відкритий, а DAPI відповів через дійсний TLS."
 
-#. placeholder {0}: ready(d.overall.pass)
-#. placeholder {1}: formatInt(d.masternodes)
-msgid "{0} of {1} enabled masternodes pass every check."
-msgstr "{0} із {1} увімкнених мастернод проходять усі перевірки."
+#. placeholder {0}: formatInt(p.healthy)
+#. placeholder {1}: formatInt(p.checked)
+msgid "{0} of {1} healthy"
+msgstr "{0} з {1} у нормі"
 
-#. placeholder {0}: share(reach.yes, reach.yes + reach.no)
+#. placeholder {0}: share(answered.n, answered.of)
+msgid "{0} of enabled {noun} answered"
+msgstr "Відповіли {0} увімкнених ({noun})"
+
+#. placeholder {0}: share(answered.n, answered.of)
 #. placeholder {1}: formatInt(reach.no)
 msgid "{0} of enabled {noun} answered our handshake on their registered address; {1} didn't."
 msgstr "{noun}, увімкнені: {0} відповіли на наше рукостискання за зареєстрованою адресою; {1} — ні."
@@ -143,39 +161,32 @@ msgstr "{noun}, увімкнені: {0} відповіли на наше рук�
 msgid "{0} of enabled answered"
 msgstr "{0} увімкнених відповіли"
 
-#. placeholder {0}: formatInt(evo)
-msgid "{0} of them evonodes"
-msgstr "з них евонод: {0}"
+#. placeholder {0}: formatInt(r.folded)
+msgid "{0} older releases"
+msgstr "Старіших релізів: {0}"
+
+#. placeholder {0}: share(onLatestMajor, sum)
+msgid "{0} on Core {latestMajor}"
+msgstr "{0} на Core {latestMajor}"
 
 #. placeholder {0}: formatInt(r.folded)
 msgid "{0} other clients"
 msgstr "Інших клієнтів: {0}"
 
 #. placeholder {0}: formatInt(r.folded)
-msgid "{0} other releases"
-msgstr "Інших релізів: {0}"
+#. placeholder {1}: majorOf(latest)!
+msgid "{0} other Core {1} releases"
+msgstr "Інших релізів Core {1}: {0}"
 
-#. placeholder {0}: formatInt(d.overall.pass)
+#. placeholder {0}: formatPercent(ready, 1)
 msgid "{0} ready"
 msgstr "Готових: {0}"
-
-#. placeholder {0}: top[0]
-#. placeholder {1}: share(top[1], sum)
-#. placeholder {2}: second[0]
-#. placeholder {3}: share(second[1], sum)
-msgid "{0} runs on {1} of {noun} and {2} on {3}."
-msgstr "{noun}: {0} працює на {1}, а {2} — на {3}."
-
-#. placeholder {0}: top[0]
-#. placeholder {1}: share(top[1], sum)
-msgid "{0} runs on {1} of {noun}."
-msgstr "{noun}: {0} працює на {1}."
 
 #. placeholder {0}: formatInt(v.tested)
 #. placeholder {1}: formatInt(Math.round(median(v.headers_per_sec) ?? 0))
 #. placeholder {2}: formatInt(Math.round(median(v.ping_ms) ?? 0))
-msgid "{0} tested this cycle. Median {1} headers/s, ping {2} ms."
-msgstr "Протестовано в цьому циклі: {0}. Медіана {1} заголовків/с, пінг {2} мс."
+msgid "{0} tested · median {1} headers/s · ping {2} ms"
+msgstr "перевірено {0} · медіана {1} заголовків/с · пінг {2} мс"
 
 #. placeholder {0}: block(b)
 #. placeholder {1}: b.estimated ? t`about` + ' ' : ''
@@ -196,11 +207,14 @@ msgstr "{0}: {1}, із сигналом"
 msgid "{answered, plural, one {# masternode answered the last crawl} other {# masternodes answered the last crawl}}"
 msgstr "{answered, plural, one {# мастернода відповіла в останньому обході} few {# мастерноди відповіли в останньому обході} many {# мастернод відповіли в останньому обході} other {# мастерноди відповіли в останньому обході}}"
 
-msgid "{diff, plural, one {# more masternode answering than a day ago} other {# more masternodes answering than a day ago}}"
-msgstr "{diff, plural, one {відповідає на # мастерноду більше, ніж добу тому} few {відповідає на # мастерноди більше, ніж добу тому} many {відповідає на # мастернод більше, ніж добу тому} other {відповідає на # мастерноди більше, ніж добу тому}}"
+msgid "{diff, plural, one {# more answering than a day ago} other {# more answering than a day ago}}"
+msgstr "{diff, plural, one {відповідає на # більше, ніж добу тому} few {відповідають на # більше, ніж добу тому} many {відповідають на # більше, ніж добу тому} other {відповідають на # більше, ніж добу тому}}"
 
 msgid "{diff, plural, one {That’s # more than a day ago.} other {That’s # more than a day ago.}}"
 msgstr "{diff, plural, one {Це на # більше, ніж добу тому.} few {Це на # більше, ніж добу тому.} many {Це на # більше, ніж добу тому.} other {Це на # більше, ніж добу тому.}}"
+
+msgid "{passing} pass every check"
+msgstr "{passing} проходять усі перевірки"
 
 msgid "{silent, plural, one {# didn't answer} other {# didn't answer}}"
 msgstr "{silent, plural, one {# не відповів} few {# не відповіли} many {# не відповіли} other {# не відповіли}}"
@@ -210,9 +224,6 @@ msgstr "<0.1%"
 
 msgid "<0>{count}</0> masternodes answered the last crawl"
 msgstr "<0>{count}</0> мастернод відповіли в останньому обході"
-
-msgid "0 ready"
-msgstr "0 готових"
 
 msgid "1 y"
 msgstr "1 р"
@@ -250,6 +261,9 @@ msgstr "приблизно {0}"
 msgid "about {0} at today's pace"
 msgstr "близько {0} за сьогоднішнього темпу"
 
+msgid "About the network size"
+msgstr "Про розмір мережі"
+
 msgid "About the pool tags"
 msgstr "Про мітки пулів"
 
@@ -271,6 +285,12 @@ msgstr "Активне"
 
 msgid "Address networks"
 msgstr "Адресні мережі"
+
+msgid "Addresses that accept connections"
+msgstr "Адреси, що приймають з’єднання"
+
+msgid "Addresses that answered this week, plus every enabled masternode’s"
+msgstr "Адреси, що відповіли цього тижня, а також адреса кожної увімкненої мастерноди"
 
 msgid "Addresses tried"
 msgstr "Опитано адрес"
@@ -302,9 +322,6 @@ msgstr "Відповів"
 
 msgid "As many as a day ago."
 msgstr "Стільки ж, скільки добу тому."
-
-msgid "as many masternodes answering as a day ago"
-msgstr "відповідає стільки ж мастернод, скільки добу тому"
 
 #. placeholder {0}: when(p.timeout)
 msgid "At that pace no window locks in before the timeout, {0}."
@@ -436,6 +453,9 @@ msgstr "Core 24"
 msgid "Core 24 activation"
 msgstr "Активація Core 24"
 
+msgid "Core 24 activation tracker"
+msgstr "Хід активації Core 24"
+
 #. placeholder {0}: when(p.start_time)
 msgid "Core 24 can't start before {0} (the chain's median time). Then masternodes signal it, and miners vote window by window."
 msgstr "Core 24 не може стартувати раніше {0} (за медіанним часом ланцюга). Потім мастерноди подають сигнал, а майнери голосують вікно за вікном."
@@ -491,15 +511,15 @@ msgstr "Блоки Core, мастерноди й записи Platform в одн
 msgid "Core height"
 msgstr "Висота Core"
 
+msgid "Core payments"
+msgstr "Виплати Core"
+
 msgid "Core tip"
 msgstr "Вершина Core"
 
 #. placeholder {0}: formatInt(crawl.tip_height)
 msgid "counted at block {0}"
 msgstr "пораховано на блоці {0}"
-
-msgid "countries"
-msgstr "країни"
 
 msgid "Countries"
 msgstr "Країни"
@@ -512,9 +532,6 @@ msgstr "Список мастернод DAPI зараз недоступний."
 
 msgid "Dash Core"
 msgstr "Dash Core"
-
-msgid "Dash Core 24 activation is under way."
-msgstr "Триває активація Dash Core 24."
 
 msgid "Dash Platform"
 msgstr "Dash Platform"
@@ -530,6 +547,9 @@ msgstr "Не відповіли"
 
 msgid "Difficulty"
 msgstr "Складність"
+
+msgid "Drag the slider or press the arrow keys to read a point."
+msgstr "Перетягніть повзунок або натискайте клавіші зі стрілками, щоб читати точки."
 
 msgid "Drive versions"
 msgstr "Версії Drive"
@@ -557,6 +577,9 @@ msgstr "увімкнені"
 msgid "Enabled"
 msgstr "Увімкнена"
 
+msgid "Enabled {noun}"
+msgstr "Увімкнені: {noun}"
+
 msgid "Enabled masternodes"
 msgstr "Увімкнені мастерноди"
 
@@ -581,9 +604,6 @@ msgstr "Кожен вузол Dash, що відповідає на обхід: �
 msgid "Every version and user agent"
 msgstr "Кожна версія й user agent"
 
-msgid "Everything else"
-msgstr "Решта"
-
 msgid "Evonode Platform health"
 msgstr "Стан Platform евонод"
 
@@ -596,14 +616,12 @@ msgstr "Evonode"
 msgid "evonodes only"
 msgstr "лише евоноди"
 
-msgid "Evonodes, Core payments"
-msgstr "Евоноди, виплати Core"
-
-msgid "Evonodes, Platform rewards"
-msgstr "Евоноди, нагороди Platform"
-
 msgid "Failed"
 msgstr "Помилка"
+
+#. placeholder {0}: String(reachFailures)
+msgid "fails after {0} missed checks in a row"
+msgstr "не пройдена після {0} пропущених перевірок поспіль"
 
 msgid "First seen"
 msgstr "Уперше помічено"
@@ -614,26 +632,14 @@ msgstr "Відкривається перше вікно, що може врах
 msgid "First window that can count opens, at the earliest"
 msgstr "Відкривається перше вікно, що може враховуватися, найраніше"
 
-msgid "Focus the chart and press the arrow keys to read a point."
-msgstr "Перейдіть до діаграми й натискайте клавіші зі стрілками, щоб читати точки."
-
-msgid "Follow it on the activation tracker"
-msgstr "Стежте за цим у трекері активації"
-
 msgid "Formed at"
 msgstr "Сформовано"
 
 msgid "From block"
 msgstr "Від блока"
 
-msgid "Grade {g}"
-msgstr "Оцінка {g}"
-
 msgid "Hash rate"
 msgstr "Хешрейт"
-
-msgid "Healthy"
-msgstr "У нормі"
 
 msgid "highest seen"
 msgstr "найвища з бачених"
@@ -649,6 +655,12 @@ msgstr "Як швидко вони віддають дані"
 
 msgid "How the outlook is worked out"
 msgstr "Як рахується прогноз"
+
+msgid "How the speed is tested"
+msgstr "Як перевіряється швидкість"
+
+msgid "How the yield is measured"
+msgstr "Як рахується дохідність"
 
 msgid "Hyphen doesn't index devnets"
 msgstr "Hyphen не індексує devnet"
@@ -675,8 +687,8 @@ msgstr "IPv6"
 msgid "It's from block {0}; our dashd or the crawler host may be down."
 msgstr "Він з блока {0}; можливо, наш dashd або хост краулера не працює."
 
-msgid "Known addresses"
-msgstr "Відомі адреси"
+msgid "last crawl"
+msgstr "останній обхід"
 
 msgid "Latest Core blocks"
 msgstr "Останні блоки Core"
@@ -689,6 +701,10 @@ msgstr "Останні переходи Platform"
 
 msgid "latest release"
 msgstr "останній реліз"
+
+#. placeholder {0}: latest ?? ''
+msgid "Latest release {0}:"
+msgstr "Останній реліз {0}:"
 
 msgid "Left, at today's pace"
 msgstr "Залишилось, за сьогоднішнього темпу"
@@ -750,13 +766,17 @@ msgstr "Доступні мастерноди"
 msgid "Masternodes' signal mined"
 msgstr "Сигнал мастернод замайнено"
 
+#. placeholder {0}: String(r.window_days)
+msgid "Median annual yield, last {0} days"
+msgstr "Медіанна річна дохідність, останні {0} дн."
+
 #. placeholder {0}: formatInt(r.regular?.masternodes ?? 0)
 msgid "median of {0}, on 1,000 DASH"
 msgstr "медіана для {0} мастернод, на 1 000 DASH"
 
 #. placeholder {0}: formatInt(r.evo?.masternodes ?? 0)
-msgid "median of {0}, on 4,000 DASH, Core payments and Platform rewards together"
-msgstr "медіана для {0} евонод, на 4 000 DASH, виплати Core і нагороди Platform разом"
+msgid "median of {0}, on 4,000 DASH"
+msgstr "медіана по {0}, на 4 000 DASH"
 
 #. placeholder {0}: formatInt(r.evo?.masternodes ?? 0)
 msgid "median of {0}, on 4,000 DASH; Core payments only, Platform rewards aren't counted"
@@ -764,13 +784,6 @@ msgstr "медіана для {0} евонод, на 4 000 DASH; лише ви�
 
 msgid "Median time reaches the start time"
 msgstr "Медіанний час досягає часу початку"
-
-msgid "median, from the Core blocks that paid them"
-msgstr "медіана за блоками Core, що їх виплатили"
-
-#. placeholder {0}: String(Math.round(r.evo.platform_span_days ?? 0))
-msgid "median, from the Platform epochs of the last {0} days"
-msgstr "медіана за епохами Platform за останні {0} дн."
 
 msgid "Members of the quorum that would sign now that announce Dash Core 24"
 msgstr "Учасники кворуму, який підписував би зараз, що оголошують Dash Core 24"
@@ -803,9 +816,6 @@ msgstr "Майнери ще не можуть голосувати. Почина
 
 msgid "Miners' signalling"
 msgstr "Сигналізація майнерів"
-
-msgid "Name"
-msgstr "Ім’я"
 
 msgid "Needed"
 msgstr "Потрібно"
@@ -940,13 +950,10 @@ msgstr "із {0} поки що"
 msgid "Older"
 msgstr "Старіші"
 
-msgid "on"
-msgstr "на"
-
 msgid "On pace"
 msgstr "Темпу вистачає"
 
-#. placeholder {0}: formatPercent(good / runs, 0)
+#. placeholder {0}: formatPercent(goodShare, 0)
 msgid "Once every two weeks we download the latest 50,000 headers and the masternode list from every enabled masternode. {0} of the latest tests earned an A or B."
 msgstr "Раз на два тижні ми завантажуємо останні 50 000 заголовків і список мастернод з кожної увімкненої мастерноди. {0} останніх тестів отримали оцінку A або B."
 
@@ -991,9 +998,6 @@ msgstr "Недосяжно"
 msgid "Over time"
 msgstr "З часом"
 
-msgid "Pass every check"
-msgstr "Проходять усі перевірки"
-
 msgid "Pending transactions"
 msgstr "Транзакції в очікуванні"
 
@@ -1021,6 +1025,9 @@ msgstr "Platform Explorer не відповідає"
 msgid "Platform height"
 msgstr "Висота Platform"
 
+msgid "Platform rewards"
+msgstr "Нагороди Platform"
+
 msgid "Platform transitions"
 msgstr "Переходи Platform"
 
@@ -1047,9 +1054,6 @@ msgstr "Протокол"
 
 msgid "Protocol version"
 msgstr "Версія протоколу"
-
-msgid "providers"
-msgstr "провайдери"
 
 msgid "Quorum"
 msgstr "Кворум"
@@ -1093,11 +1097,9 @@ msgstr "Доступні адреси"
 msgid "Reachable addresses are addresses, not nodes: a node doesn’t tell peers its addresses on other networks, so one reachable on IPv4 and Tor counts twice. Masternodes are counted by their registration, so each counts once."
 msgstr "Доступні адреси — це адреси, а не вузли: вузол не повідомляє пірам свої адреси в інших мережах, тож вузол, доступний через IPv4 і Tor, рахується двічі. Мастерноди рахуються за реєстрацією, тож кожна — один раз."
 
-msgid "Reachable masternodes"
-msgstr "Доступні мастерноди"
-
-msgid "Reachable now"
-msgstr "Доступні зараз"
+#. placeholder {0}: formatInt(n.known)
+msgid "reachable of {0} known"
+msgstr "доступні з {0} відомих"
 
 #. placeholder {0}: doc.dashd || t`unknown version`
 #. placeholder {1}: formatInt(doc.tip.height)
@@ -1125,14 +1127,14 @@ msgstr "реліз-кандидат"
 msgid "Release candidates"
 msgstr "Реліз-кандидати"
 
-msgid "Release ladder"
-msgstr "Драбина релізів"
-
 msgid "Releases"
 msgstr "Релізи"
 
 msgid "Request id"
 msgstr "ID запиту"
+
+msgid "same as a day ago"
+msgstr "стільки ж, як добу тому"
 
 msgid "Search Radar"
 msgstr "Пошук у Radar"
@@ -1154,6 +1156,9 @@ msgstr "Серія"
 
 msgid "Share"
 msgstr "Частка"
+
+msgid "Share of {noun}"
+msgstr "Частка: {noun}"
 
 msgid "Share of {noun} by country"
 msgstr "Частка за країнами: {noun}"
@@ -1209,6 +1214,10 @@ msgstr "Розмір"
 
 msgid "Sources, Dash Core v24.0.0:"
 msgstr "Джерела, Dash Core v24.0.0:"
+
+#. placeholder {0}: v.location || v.vantage
+msgid "Speed-test grades, {0}"
+msgstr "Оцінки тестів швидкості, {0}"
 
 #. placeholder {0}: when(p.start_time)
 msgid "start time {0}"
@@ -1365,6 +1374,9 @@ msgstr "Сьогоднішній темп — за останніми {0} бло
 msgid "Today's pace is this window's so far: {0} of {1} blocks signalled ({2})."
 msgstr "Сьогоднішній темп — за цим вікном на зараз: {0} з {1} блоків із сигналом ({2})."
 
+msgid "Top three identified:"
+msgstr "Трійка найбільших із відомих:"
+
 msgid "Tor"
 msgstr "Tor"
 
@@ -1435,6 +1447,9 @@ msgstr "Не вдалося прочитати підписувальний кв
 msgid "What happens next"
 msgstr "Що буде далі"
 
+msgid "What healthy means"
+msgstr "Що означає «у нормі»"
+
 #. placeholder {0}: String(r.window_days)
 msgid "What masternodes were actually paid over the last {0} days, against their collateral, counting every enabled masternode registered for at least that long."
 msgstr "Що мастерноди фактично отримали за останні {0} дн. порівняно із заставою; враховано кожну увімкнену мастерноду, зареєстровану не менш як стільки часу."
@@ -1457,6 +1472,9 @@ msgstr "Які вузли"
 #. placeholder {0}: formatInt(g.quorums.length)
 msgid "Which quorum signs depends on the request and on which quorums are active then (a new one forms about every day), so here are the {0} active now, the one that would sign now first."
 msgstr "Який кворум підписує, залежить від запиту та від того, які кворуми тоді активні (новий формується приблизно щодня), тож ось {0} активних зараз; першим іде той, що підписував би зараз."
+
+msgid "Who is counted"
+msgstr "Хто враховується"
 
 #. placeholder {0}: formatInt(mined)
 msgid "Who mined this window's {0} blocks and how many of them signalled. Best effort: we go by the tag in each block's coinbase, which is whatever the miner wrote, and some blocks carry none."

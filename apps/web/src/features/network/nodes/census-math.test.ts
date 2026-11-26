@@ -8,9 +8,13 @@ import {
   keepVersions,
   kindOf,
   ladderGroups,
+  majorOf,
+  onMajor,
   radarScope,
   releaseBook,
   versionOf,
+  rowsOwnTimes,
+  nearestIndex,
 } from './census-math'
 
 const book = releaseBook({
@@ -71,6 +75,74 @@ describe('ladderGroups', () => {
     expect(groups[3]!.rows).toEqual([{ key: 'Foo 1.0', n: 25, folded: 2 }])
   })
 
+  it('folds the latest major’s small releases apart from older majors’', () => {
+    const two = releaseBook({
+      releases: [
+        { tag: 'v24.0.1', version: '24.0.1', prerelease: false, published: 5 },
+        { tag: 'v24.0.0', version: '24.0.0', prerelease: false, published: 3 },
+        { tag: 'v23.1.9', version: '23.1.9', prerelease: false, published: 2 },
+        { tag: 'v23.1.8', version: '23.1.8', prerelease: false, published: 1 },
+      ],
+    })
+    const rows = [
+      ['24.0.1', 900],
+      ['24.0.0', 5],
+      ['23.1.9', 3],
+      ['23.1.8', 2],
+    ] as const
+    const releases = ladderGroups(two, rows.slice(), 910)[0]!.rows
+    expect(releases).toEqual([
+      { key: '24.0.1', n: 900 },
+      { key: '24.0.0', n: 5 },
+      { key: '23.1.9', n: 5, folded: 2 },
+    ])
+  })
+
+  it('keeps a major’s releases together, the small ones after its larger ones', () => {
+    const two = releaseBook({
+      releases: [
+        { tag: 'v24.0.2', version: '24.0.2', prerelease: false, published: 5 },
+        { tag: 'v24.0.1', version: '24.0.1', prerelease: false, published: 4 },
+        { tag: 'v23.1.9', version: '23.1.9', prerelease: false, published: 3 },
+      ],
+    })
+    const rows = [
+      ['24.0.2', 500],
+      ['23.1.9', 400],
+      ['24.0.1', 5],
+    ] as const
+    expect(ladderGroups(two, rows.slice(), 905)[0]!.rows.map((r) => r.key)).toEqual([
+      '24.0.2',
+      '24.0.1',
+      '23.1.9',
+    ])
+  })
+
+  it('puts the fold of older majors last, after every shown release', () => {
+    const many = releaseBook({
+      releases: [
+        { tag: 'v24.0.2', version: '24.0.2', prerelease: false, published: 5 },
+        { tag: 'v23.1.2', version: '23.1.2', prerelease: false, published: 4 },
+        { tag: 'v23.0.3', version: '23.0.3', prerelease: false, published: 3 },
+        { tag: 'v22.0.0', version: '22.0.0', prerelease: false, published: 2 },
+        { tag: 'v21.1.0', version: '21.1.0', prerelease: false, published: 1 },
+      ],
+    })
+    const rows = [
+      ['24.0.2', 500],
+      ['23.1.2', 400],
+      ['23.0.3', 80],
+      ['22.0.0', 4],
+      ['21.1.0', 3],
+    ] as const
+    expect(ladderGroups(many, rows.slice(), 987)[0]!.rows).toEqual([
+      { key: '24.0.2', n: 500 },
+      { key: '23.1.2', n: 400 },
+      { key: '23.0.3', n: 80 },
+      { key: '22.0.0', n: 7, folded: 2 },
+    ])
+  })
+
   it('keeps the latest release first even when nothing runs it', () => {
     const groups = ladderGroups(book, [['23.1.10', 100]], 100)
     expect(groups[0]!.rows[0]).toEqual({ key: '24.0.0', n: 0 })
@@ -126,5 +198,70 @@ describe('shares', () => {
     expect(isTiny(1, 10_000)).toBe(true)
     expect(isTiny(0, 10_000)).toBe(false)
     expect(isTiny(100, 10_000)).toBe(false)
+  })
+})
+
+describe('major releases', () => {
+  it('reads the major of a Core version and nothing else', () => {
+    expect(majorOf('24.0.3')).toBe('24')
+    expect(majorOf('23.1.10')).toBe('23')
+    expect(majorOf('Lksc Core 5.18')).toBeUndefined()
+    expect(majorOf('Unknown')).toBeUndefined()
+  })
+
+  it('counts every build of a major, not a longer major that starts the same', () => {
+    const rows: [string, number][] = [
+      ['24.0.3', 10],
+      ['24.1.0', 2],
+      ['23.1.8', 5],
+      ['240.0.0', 7],
+      ['Unknown', 3],
+    ]
+    expect(onMajor(rows, '24')).toBe(12)
+    expect(onMajor(rows, '23')).toBe(5)
+  })
+})
+
+describe('rowsOwnTimes', () => {
+  const at = (h: number) => Date.UTC(2026, 10, 26, h)
+  it('keeps one stamp when the shown locations ran together', () => {
+    expect(
+      rowsOwnTimes([
+        { tested: 10, updated: at(10) },
+        { tested: 12, updated: at(10) + 60_000 },
+      ]),
+    ).toBe(false)
+  })
+
+  it('gives each row its time when the shown locations ran hours apart', () => {
+    expect(
+      rowsOwnTimes([
+        { tested: 10, updated: at(2) },
+        { tested: 12, updated: at(10) },
+      ]),
+    ).toBe(true)
+  })
+
+  it('gives a shown row its time when a hidden location set a newer stamp', () => {
+    expect(
+      rowsOwnTimes([
+        { tested: 10, updated: at(2) },
+        { tested: 0, updated: at(10) },
+      ]),
+    ).toBe(true)
+  })
+})
+
+describe('nearestIndex', () => {
+  const t = [100, 200, 300, 400]
+  it('finds the sample nearest a picked time', () => {
+    expect(nearestIndex(t, 200)).toBe(1)
+    expect(nearestIndex(t, 260)).toBe(2)
+  })
+
+  it('drops a time outside the series', () => {
+    expect(nearestIndex(t, 50)).toBeUndefined()
+    expect(nearestIndex(t, 450)).toBeUndefined()
+    expect(nearestIndex([], 100)).toBeUndefined()
   })
 })

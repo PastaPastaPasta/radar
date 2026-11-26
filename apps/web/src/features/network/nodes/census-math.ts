@@ -64,6 +64,14 @@ export function byNewest(a: string, b: string): number {
 /** Whether a version is Dash Core's ("23.1.9"), not another client's ("Lksc Core 5.18"). */
 export const isCoreVersion = (v: string): boolean => /^\d+\./.test(v)
 
+/** A Core version's major release: "24.0.3" gives "24". */
+export const majorOf = (v: string): string | undefined =>
+  isCoreVersion(v) ? v.slice(0, v.indexOf('.')) : undefined
+
+/** How many of the rows run any Core version of `major`: releases, candidates and other builds alike. */
+export const onMajor = (rows: readonly DistRow[], major: string): number =>
+  rows.reduce((a, [v, n]) => (majorOf(v) === major ? a + n : a), 0)
+
 /** The version in a user agent: "/Dash Core:24.0.0/" gives "24.0.0". */
 export const versionOf = (ua: string): string => /^\/Dash Core:([^/(]+)/.exec(ua)?.[1] ?? (ua || '')
 
@@ -132,8 +140,9 @@ export interface LadderGroup {
 
 /**
  * The ladder's groups, the latest release always first (even if nothing runs it yet): releases newest first, those
- * under 1 % after the latest folded into one row; release candidates; builds that match no release; and other
- * clients folded into one row. Without the release list, one group by share.
+ * under 1 % after the latest folded into one row for the latest's major and one for older majors (always last), so the
+ * latest major's share can be read off its rows; release candidates; builds that match no release; and other clients
+ * folded into one row. Without the release list, one group by share.
  */
 export function ladderGroups(
   book: ReleaseBook,
@@ -155,8 +164,16 @@ export function ladderGroups(
   if (latest !== undefined && !kinds[0]!.some(([v]) => v === latest)) kinds[0]!.unshift([latest, 0])
   const shown = kinds[0]!.filter(([v, n]) => v === latest || fraction(n, sum) >= 0.01)
   const older = kinds[0]!.filter((r) => !shown.includes(r))
+  const major = latest === undefined ? undefined : majorOf(latest)
+  const sameMajor = older.filter(([v]) => majorOf(v) === major)
+  const otherMajors = older.filter(([v]) => majorOf(v) !== major)
+  const byMajor = (r: LadderRow) => Number(majorOf(r.key) ?? 0)
+  const releases = [...shown.map(row), ...(sameMajor.length ? [fold(sameMajor)] : [])].sort(
+    (a, b) => byMajor(b) - byMajor(a),
+  )
+  if (otherMajors.length) releases.push(fold(otherMajors))
   const groups: LadderGroup[] = [
-    { kind: 0, rows: [...shown.map(row), ...(older.length ? [fold(older)] : [])] },
+    { kind: 0, rows: releases },
     { kind: 1, rows: kinds[1]!.map(row) },
     { kind: 2, rows: kinds[2]!.map(row) },
     { kind: 3, rows: kinds[3]!.length ? [fold(kinds[3]!)] : [] },
@@ -234,4 +251,23 @@ export const GRADES = ['A', 'B', 'C', 'D', 'F'] as const
 export const median = (values: readonly (number | null)[]): number | null => {
   const sorted = values.filter((v): v is number => v !== null).sort((a, b) => a - b)
   return sorted.length ? sorted[sorted.length >> 1]! : null
+}
+
+const HOUR_MS = 3_600_000
+
+/**
+ * Whether the speed rows say their own times: the card's stamp is the newest location's time, hidden locations (no
+ * tests) included, so a shown one more than an hour older says when its results are from.
+ */
+export function rowsOwnTimes(vantages: readonly { tested: number; updated: number }[]): boolean {
+  const newest = Math.max(0, ...vantages.map((v) => v.updated))
+  return vantages.some((v) => v.tested > 0 && newest - v.updated > HOUR_MS)
+}
+
+/** The index of the sample nearest `ms`, or undefined when `ms` lies outside the series (a point picked on another range). */
+export function nearestIndex(t: readonly number[], ms: number): number | undefined {
+  if (t.length === 0 || ms < t[0]! || ms > t[t.length - 1]!) return undefined
+  let best = 0
+  for (let i = 1; i < t.length; i++) if (Math.abs(t[i]! - ms) < Math.abs(t[best]! - ms)) best = i
+  return best
 }

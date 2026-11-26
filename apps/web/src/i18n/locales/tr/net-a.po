@@ -19,6 +19,10 @@ msgstr ""
 msgid ", {0} unknown"
 msgstr ", {0} bilinmiyor"
 
+#. placeholder {0}: String(Math.round(r.evo.platform_span_days))
+msgid ", from {0} days of epochs"
+msgstr ", {0} günlük epoch verisinden"
+
 msgid ", so the figures below may be out of date."
 msgstr ", bu yüzden aşağıdaki rakamlar güncel olmayabilir."
 
@@ -29,27 +33,37 @@ msgstr "\"Announce 24\", tarayıcımızla geçen hafta yaptığı son el sıkı�
 msgid "(empty)"
 msgstr "(boş)"
 
+#. placeholder {0}: realCountries.length
+msgid "{0, plural, one {# country} other {# countries}}"
+msgstr "{0, plural, one {# ülke} other {# ülke}}"
+
 #. placeholder {0}: -diff
-msgid "{0, plural, one {# fewer masternode answering than a day ago} other {# fewer masternodes answering than a day ago}}"
-msgstr "{0, plural, one {yanıt veren masternode sayısı bir gün öncekinden # eksik} other {yanıt veren masternode sayısı bir gün öncekinden # eksik}}"
+msgid "{0, plural, one {# fewer answering than a day ago} other {# fewer answering than a day ago}}"
+msgstr "{0, plural, one {bir gün öncesine göre # daha az yanıt veren} other {bir gün öncesine göre # daha az yanıt veren}}"
+
+#. placeholder {0}: n.masternodes
+msgid "{0, plural, one {# masternode answering} other {# masternodes answering}}"
+msgstr "{0, plural, one {# masternode yanıt veriyor} other {# masternode yanıt veriyor}}"
+
+#. placeholder {0}: realOrgs.length
+msgid "{0, plural, one {# provider} other {# providers}}"
+msgstr "{0, plural, one {# sağlayıcı} other {# sağlayıcı}}"
 
 #. placeholder {0}: -diff
 msgid "{0, plural, one {That’s # fewer than a day ago.} other {That’s # fewer than a day ago.}}"
 msgstr "{0, plural, one {Bir gün öncekinden # eksik.} other {Bir gün öncekinden # eksik.}}"
 
+#. placeholder {0}: formatPercent(goodShare, 0)
+msgid "{0} A or B"
+msgstr "{0} A veya B"
+
 #. placeholder {0}: formatPercent(v, 1)
 msgid "{0} a year"
 msgstr "yılda {0}"
 
-#. placeholder {0}: formatInt(crawl.reachable)
-#. placeholder {1}: formatInt(crawl.tried)
-msgid "{0} addresses answered out of {1} tried. Counted are addresses that answered at least once this week, plus every enabled masternode’s."
-msgstr "Denenen {1} adresten {0} tanesi yanıt verdi. Bu hafta en az bir kez yanıt veren adresler ile her etkin masternode’un adresi sayılır."
-
-#. placeholder {0}: countryName(c0[0])
-#. placeholder {1}: share(c0[1], sumCountries)
-msgid "{0} alone has {1}."
-msgstr "{0} tek başına {1} paya sahip."
+#. placeholder {0}: share(answered.n, answered.of)
+msgid "{0} answered the last crawl"
+msgstr "{0} son taramaya yanıt verdi"
 
 #. placeholder {0}: formatInt(masternodes)
 #. placeholder {1}: formatInt(places.length)
@@ -61,18 +75,12 @@ msgid "{0} fail"
 msgstr "{0} başarısız"
 
 #. placeholder {0}: formatInt(d.beyond_version)
-msgid "{0} fail another check that needs a fix."
-msgstr "{0} düzeltme gerektiren başka bir kontrolde başarısız."
+msgid "{0} fail a check that upgrading alone won’t fix."
+msgstr "{0} tanesi yalnızca güncellemeyle düzelmeyecek bir denetimden geçemiyor."
 
 #. placeholder {0}: formatInt(d.version_only)
 msgid "{0} fail only the version check and need just the upgrade. "
 msgstr "{0} yalnızca sürüm kontrolünde başarısız ve yalnızca yükseltme gerekiyor. "
-
-#. placeholder {0}: o0.org
-#. placeholder {1}: share(o0.n, sumOrgs)
-#. placeholder {2}: share( realOrgs.slice(0, 3).reduce((a, o) => a + o.n, 0), sumOrgs, )
-msgid "{0} hosts {1} of {noun}, and the three largest providers host {2}."
-msgstr "{noun} içindeki {1} payı {0} barındırıyor; en büyük üç sağlayıcı toplamda {2} barındırıyor."
 
 #. placeholder {0}: formatInt(p.masternodes)
 msgid "{0} masternodes"
@@ -95,14 +103,20 @@ msgctxt "share of blocks"
 msgid "{0} needed"
 msgstr "{0} gerekli"
 
-#. placeholder {0}: formatInt(p.healthy)
+#. placeholder {0}: formatInt(answered.n)
+#. placeholder {0}: formatInt(d.overall.pass)
 #. placeholder {0}: formatInt(q.valid)
-#. placeholder {0}: formatInt(r.signalling)
-#. placeholder {1}: formatInt(p.checked)
+#. placeholder {1}: formatInt(answered.of)
+#. placeholder {1}: formatInt(d.masternodes)
 #. placeholder {1}: formatInt(p.window)
-#. placeholder {1}: formatInt(q.members)
 msgid "{0} of {1}"
 msgstr "{0} / {1}"
+
+#. placeholder {0}: formatInt(answered.n)
+#. placeholder {1}: formatInt(answered.of)
+#. placeholder {2}: formatInt(crawl.tried)
+msgid "{0} of {1} · {2} tried in the last crawl"
+msgstr "{1} adresten {0} · son taramada {2} adres denendi"
 
 #. placeholder {0}: formatInt(threshold ?? 0)
 #. placeholder {1}: formatInt(p.window)
@@ -129,12 +143,16 @@ msgstr "{2}. denemede {1} bloktan {0}"
 msgid "{0} of {1} enabled evonodes passed our latest Platform check: their Tenderdash P2P port was open and their DAPI answered over valid TLS."
 msgstr "Etkin {1} evonode’un {0} oranı son Platform kontrolümüzü geçti: Tenderdash P2P portları açıktı ve DAPI’leri geçerli TLS üzerinden yanıt verdi."
 
-#. placeholder {0}: ready(d.overall.pass)
-#. placeholder {1}: formatInt(d.masternodes)
-msgid "{0} of {1} enabled masternodes pass every check."
-msgstr "Etkin {1} masternode’un {0} tanesi her kontrolü geçiyor."
+#. placeholder {0}: formatInt(p.healthy)
+#. placeholder {1}: formatInt(p.checked)
+msgid "{0} of {1} healthy"
+msgstr "{1} içinde {0} sağlıklı"
 
-#. placeholder {0}: share(reach.yes, reach.yes + reach.no)
+#. placeholder {0}: share(answered.n, answered.of)
+msgid "{0} of enabled {noun} answered"
+msgstr "Etkin {noun} içinde {0} oranı yanıt verdi"
+
+#. placeholder {0}: share(answered.n, answered.of)
 #. placeholder {1}: formatInt(reach.no)
 msgid "{0} of enabled {noun} answered our handshake on their registered address; {1} didn't."
 msgstr "Etkin {noun} içinde {0} oranı, kayıtlı adresinde el sıkışmamıza yanıt verdi; {1} yanıt vermedi."
@@ -143,39 +161,32 @@ msgstr "Etkin {noun} içinde {0} oranı, kayıtlı adresinde el sıkışmamıza 
 msgid "{0} of enabled answered"
 msgstr "Etkin olanların {0} oranı yanıt verdi"
 
-#. placeholder {0}: formatInt(evo)
-msgid "{0} of them evonodes"
-msgstr "bunların {0} tanesi evonode"
+#. placeholder {0}: formatInt(r.folded)
+msgid "{0} older releases"
+msgstr "{0} eski sürüm"
+
+#. placeholder {0}: share(onLatestMajor, sum)
+msgid "{0} on Core {latestMajor}"
+msgstr "{0} Core {latestMajor} çalıştırıyor"
 
 #. placeholder {0}: formatInt(r.folded)
 msgid "{0} other clients"
 msgstr "{0} diğer istemci"
 
 #. placeholder {0}: formatInt(r.folded)
-msgid "{0} other releases"
-msgstr "{0} diğer sürüm"
+#. placeholder {1}: majorOf(latest)!
+msgid "{0} other Core {1} releases"
+msgstr "{0} diğer Core {1} sürümü"
 
-#. placeholder {0}: formatInt(d.overall.pass)
+#. placeholder {0}: formatPercent(ready, 1)
 msgid "{0} ready"
 msgstr "{0} hazır"
-
-#. placeholder {0}: top[0]
-#. placeholder {1}: share(top[1], sum)
-#. placeholder {2}: second[0]
-#. placeholder {3}: share(second[1], sum)
-msgid "{0} runs on {1} of {noun} and {2} on {3}."
-msgstr "{0}, {noun} içinde {1} oranında çalışıyor; {2} ise {3} oranında."
-
-#. placeholder {0}: top[0]
-#. placeholder {1}: share(top[1], sum)
-msgid "{0} runs on {1} of {noun}."
-msgstr "{0}, {noun} içinde {1} oranında çalışıyor."
 
 #. placeholder {0}: formatInt(v.tested)
 #. placeholder {1}: formatInt(Math.round(median(v.headers_per_sec) ?? 0))
 #. placeholder {2}: formatInt(Math.round(median(v.ping_ms) ?? 0))
-msgid "{0} tested this cycle. Median {1} headers/s, ping {2} ms."
-msgstr "Bu turda {0} test edildi. Ortanca {1} başlık/sn, ping {2} ms."
+msgid "{0} tested · median {1} headers/s · ping {2} ms"
+msgstr "{0} test edildi · medyan {1} başlık/sn · ping {2} ms"
 
 #. placeholder {0}: block(b)
 #. placeholder {1}: b.estimated ? t`about` + ' ' : ''
@@ -196,11 +207,14 @@ msgstr "{0}: {1}, sinyal veriyor"
 msgid "{answered, plural, one {# masternode answered the last crawl} other {# masternodes answered the last crawl}}"
 msgstr "{answered, plural, one {# masternode son taramaya yanıt verdi} other {# masternode son taramaya yanıt verdi}}"
 
-msgid "{diff, plural, one {# more masternode answering than a day ago} other {# more masternodes answering than a day ago}}"
-msgstr "{diff, plural, one {yanıt veren masternode sayısı bir gün öncekinden # fazla} other {yanıt veren masternode sayısı bir gün öncekinden # fazla}}"
+msgid "{diff, plural, one {# more answering than a day ago} other {# more answering than a day ago}}"
+msgstr "{diff, plural, one {bir gün öncesine göre # daha fazla yanıt veren} other {bir gün öncesine göre # daha fazla yanıt veren}}"
 
 msgid "{diff, plural, one {That’s # more than a day ago.} other {That’s # more than a day ago.}}"
 msgstr "{diff, plural, one {Bir gün öncekinden # fazla.} other {Bir gün öncekinden # fazla.}}"
+
+msgid "{passing} pass every check"
+msgstr "{passing} tüm denetimlerden geçiyor"
 
 msgid "{silent, plural, one {# didn't answer} other {# didn't answer}}"
 msgstr "{silent, plural, one {# yanıt vermedi} other {# yanıt vermedi}}"
@@ -210,9 +224,6 @@ msgstr "<%0,1"
 
 msgid "<0>{count}</0> masternodes answered the last crawl"
 msgstr "<0>{count}</0> masternode son taramaya yanıt verdi"
-
-msgid "0 ready"
-msgstr "0 hazır"
 
 msgid "1 y"
 msgstr "1 yıl"
@@ -250,6 +261,9 @@ msgstr "yaklaşık {0}"
 msgid "about {0} at today's pace"
 msgstr "bugünkü hızla yaklaşık {0}"
 
+msgid "About the network size"
+msgstr "Ağ boyutu hakkında"
+
 msgid "About the pool tags"
 msgstr "Havuz etiketleri hakkında"
 
@@ -271,6 +285,12 @@ msgstr "Etkin"
 
 msgid "Address networks"
 msgstr "Adres ağları"
+
+msgid "Addresses that accept connections"
+msgstr "Bağlantı kabul eden adresler"
+
+msgid "Addresses that answered this week, plus every enabled masternode’s"
+msgstr "Bu hafta yanıt veren adresler ile her etkin masternode’un adresi"
 
 msgid "Addresses tried"
 msgstr "Denenen adresler"
@@ -302,9 +322,6 @@ msgstr "Yanıt verdi"
 
 msgid "As many as a day ago."
 msgstr "Bir gün öncekiyle aynı sayıda."
-
-msgid "as many masternodes answering as a day ago"
-msgstr "yanıt veren masternode sayısı bir gün öncekiyle aynı"
 
 #. placeholder {0}: when(p.timeout)
 msgid "At that pace no window locks in before the timeout, {0}."
@@ -436,6 +453,9 @@ msgstr "Core 24"
 msgid "Core 24 activation"
 msgstr "Core 24 etkinleştirmesi"
 
+msgid "Core 24 activation tracker"
+msgstr "Core 24 etkinleştirme takibi"
+
 #. placeholder {0}: when(p.start_time)
 msgid "Core 24 can't start before {0} (the chain's median time). Then masternodes signal it, and miners vote window by window."
 msgstr "Core 24, {0} (zincirin ortanca zamanı) öncesinde başlayamaz. Ardından masternode’lar bunu sinyaller ve madenciler pencere pencere oy verir."
@@ -491,15 +511,15 @@ msgstr "Core blokları, masternode’lar ve Platform kayıtları tek yerde. Her 
 msgid "Core height"
 msgstr "Core yüksekliği"
 
+msgid "Core payments"
+msgstr "Core ödemeleri"
+
 msgid "Core tip"
 msgstr "Core ucu"
 
 #. placeholder {0}: formatInt(crawl.tip_height)
 msgid "counted at block {0}"
 msgstr "{0}. blokta sayıldı"
-
-msgid "countries"
-msgstr "ülkeler"
 
 msgid "Countries"
 msgstr "Ülkeler"
@@ -512,9 +532,6 @@ msgstr "DAPI’nin masternode listesi şu anda kullanılamıyor."
 
 msgid "Dash Core"
 msgstr "Dash Core"
-
-msgid "Dash Core 24 activation is under way."
-msgstr "Dash Core 24 etkinleştirmesi sürüyor."
 
 msgid "Dash Platform"
 msgstr "Dash Platform"
@@ -530,6 +547,9 @@ msgstr "Yanıt vermedi"
 
 msgid "Difficulty"
 msgstr "Zorluk"
+
+msgid "Drag the slider or press the arrow keys to read a point."
+msgstr "Bir noktayı okumak için kaydırıcıyı sürükleyin veya ok tuşlarına basın."
 
 msgid "Drive versions"
 msgstr "Drive sürümleri"
@@ -557,6 +577,9 @@ msgstr "etkin"
 msgid "Enabled"
 msgstr "Etkin"
 
+msgid "Enabled {noun}"
+msgstr "Etkin {noun}"
+
 msgid "Enabled masternodes"
 msgstr "Etkin masternode’lar"
 
@@ -581,9 +604,6 @@ msgstr "Taramaya yanıt veren her Dash düğümü: ne çalıştırdıkları, ner
 msgid "Every version and user agent"
 msgstr "Tüm sürümler ve kullanıcı aracıları"
 
-msgid "Everything else"
-msgstr "Geri kalan her şey"
-
 msgid "Evonode Platform health"
 msgstr "Evonode Platform sağlığı"
 
@@ -596,14 +616,12 @@ msgstr "Evonode’lar"
 msgid "evonodes only"
 msgstr "yalnızca evonode’lar"
 
-msgid "Evonodes, Core payments"
-msgstr "Evonode’lar, Core ödemeleri"
-
-msgid "Evonodes, Platform rewards"
-msgstr "Evonode’lar, Platform ödülleri"
-
 msgid "Failed"
 msgstr "Başarısız"
+
+#. placeholder {0}: String(reachFailures)
+msgid "fails after {0} missed checks in a row"
+msgstr "art arda {0} kaçırılan denetimden sonra başarısız"
 
 msgid "First seen"
 msgstr "İlk görülme"
@@ -614,26 +632,14 @@ msgstr "Sayılabilecek ilk pencere açılır"
 msgid "First window that can count opens, at the earliest"
 msgstr "Sayılabilecek ilk pencere açılır, en erken"
 
-msgid "Focus the chart and press the arrow keys to read a point."
-msgstr "Grafiğe odaklanın ve bir noktayı okumak için ok tuşlarına basın."
-
-msgid "Follow it on the activation tracker"
-msgstr "Etkinleştirme izleyicisinde takip edin"
-
 msgid "Formed at"
 msgstr "Oluşturulma"
 
 msgid "From block"
 msgstr "Başlangıç bloğu"
 
-msgid "Grade {g}"
-msgstr "Not {g}"
-
 msgid "Hash rate"
 msgstr "Hash oranı"
-
-msgid "Healthy"
-msgstr "Sağlıklı"
 
 msgid "highest seen"
 msgstr "görülen en yüksek"
@@ -649,6 +655,12 @@ msgstr "Ne kadar hızlı sunuyorlar"
 
 msgid "How the outlook is worked out"
 msgstr "Görünüm nasıl hesaplanır"
+
+msgid "How the speed is tested"
+msgstr "Hız nasıl test edilir"
+
+msgid "How the yield is measured"
+msgstr "Getiri nasıl ölçülür"
 
 msgid "Hyphen doesn't index devnets"
 msgstr "Hyphen devnet’leri dizinlemez"
@@ -675,8 +687,8 @@ msgstr "IPv6"
 msgid "It's from block {0}; our dashd or the crawler host may be down."
 msgstr "{0}. bloktan; dashd’miz veya tarayıcı sunucusu kapalı olabilir."
 
-msgid "Known addresses"
-msgstr "Bilinen adresler"
+msgid "last crawl"
+msgstr "son tarama"
 
 msgid "Latest Core blocks"
 msgstr "Son Core blokları"
@@ -689,6 +701,10 @@ msgstr "Son Platform geçişleri"
 
 msgid "latest release"
 msgstr "son sürüm"
+
+#. placeholder {0}: latest ?? ''
+msgid "Latest release {0}:"
+msgstr "Son sürüm {0}:"
 
 msgid "Left, at today's pace"
 msgstr "Kalan, bugünkü hızla"
@@ -750,13 +766,17 @@ msgstr "Erişilebilir masternode’lar"
 msgid "Masternodes' signal mined"
 msgstr "Masternode’ların sinyali bloğa girdi"
 
+#. placeholder {0}: String(r.window_days)
+msgid "Median annual yield, last {0} days"
+msgstr "Ortanca yıllık getiri, son {0} gün"
+
 #. placeholder {0}: formatInt(r.regular?.masternodes ?? 0)
 msgid "median of {0}, on 1,000 DASH"
 msgstr "{0} masternode’un ortancası, 1.000 DASH için"
 
 #. placeholder {0}: formatInt(r.evo?.masternodes ?? 0)
-msgid "median of {0}, on 4,000 DASH, Core payments and Platform rewards together"
-msgstr "{0} evonode’un ortancası, 4.000 DASH için, Core ödemeleri ve Platform ödülleri birlikte"
+msgid "median of {0}, on 4,000 DASH"
+msgstr "{0} tanesinin medyanı, 4.000 DASH üzerinden"
 
 #. placeholder {0}: formatInt(r.evo?.masternodes ?? 0)
 msgid "median of {0}, on 4,000 DASH; Core payments only, Platform rewards aren't counted"
@@ -764,13 +784,6 @@ msgstr "{0} evonode’un ortancası, 4.000 DASH için; yalnızca Core ödemeleri
 
 msgid "Median time reaches the start time"
 msgstr "Ortanca zaman başlangıç zamanına ulaşır"
-
-msgid "median, from the Core blocks that paid them"
-msgstr "ortanca, onlara ödeme yapan Core bloklarından"
-
-#. placeholder {0}: String(Math.round(r.evo.platform_span_days ?? 0))
-msgid "median, from the Platform epochs of the last {0} days"
-msgstr "ortanca, son {0} günün Platform epoch’larından"
 
 msgid "Members of the quorum that would sign now that announce Dash Core 24"
 msgstr "Şimdi imzalayacak quorum’un Dash Core 24 duyuran üyeleri"
@@ -803,9 +816,6 @@ msgstr "Madenciler henüz oy veremez. Sayılan ilk pencereden itibaren, her {0} 
 
 msgid "Miners' signalling"
 msgstr "Madencilerin sinyali"
-
-msgid "Name"
-msgstr "Ad"
 
 msgid "Needed"
 msgstr "Gereken"
@@ -940,13 +950,10 @@ msgstr "şimdiye kadarki {0} içinde"
 msgid "Older"
 msgstr "Eskiler"
 
-msgid "on"
-msgstr ":"
-
 msgid "On pace"
 msgstr "Hız yeterli"
 
-#. placeholder {0}: formatPercent(good / runs, 0)
+#. placeholder {0}: formatPercent(goodShare, 0)
 msgid "Once every two weeks we download the latest 50,000 headers and the masternode list from every enabled masternode. {0} of the latest tests earned an A or B."
 msgstr "İki haftada bir, etkin her masternode’dan en son 50.000 başlığı ve masternode listesini indiriyoruz. Son testlerin {0} oranı A veya B aldı."
 
@@ -991,9 +998,6 @@ msgstr "Ulaşılamaz"
 msgid "Over time"
 msgstr "Zaman içinde"
 
-msgid "Pass every check"
-msgstr "Her kontrolü geçenler"
-
 msgid "Pending transactions"
 msgstr "Bekleyen işlemler"
 
@@ -1021,6 +1025,9 @@ msgstr "Platform Explorer yanıt vermiyor"
 msgid "Platform height"
 msgstr "Platform yüksekliği"
 
+msgid "Platform rewards"
+msgstr "Platform ödülleri"
+
 msgid "Platform transitions"
 msgstr "Platform geçişleri"
 
@@ -1047,9 +1054,6 @@ msgstr "Protokol"
 
 msgid "Protocol version"
 msgstr "Protokol sürümü"
-
-msgid "providers"
-msgstr "sağlayıcılar"
 
 msgid "Quorum"
 msgstr "Quorum"
@@ -1093,11 +1097,9 @@ msgstr "Erişilebilir adresler"
 msgid "Reachable addresses are addresses, not nodes: a node doesn’t tell peers its addresses on other networks, so one reachable on IPv4 and Tor counts twice. Masternodes are counted by their registration, so each counts once."
 msgstr "Erişilebilir adresler düğüm değil adrestir: bir düğüm diğer ağlardaki adreslerini eşlerine bildirmez, bu yüzden IPv4 ve Tor üzerinden erişilebilen bir düğüm iki kez sayılır. Masternode’lar kayıtlarına göre sayılır, yani her biri bir kez."
 
-msgid "Reachable masternodes"
-msgstr "Erişilebilir masternode’lar"
-
-msgid "Reachable now"
-msgstr "Şu anda erişilebilir"
+#. placeholder {0}: formatInt(n.known)
+msgid "reachable of {0} known"
+msgstr "bilinen {0} içinde erişilebilir"
 
 #. placeholder {0}: doc.dashd || t`unknown version`
 #. placeholder {1}: formatInt(doc.tip.height)
@@ -1125,14 +1127,14 @@ msgstr "sürüm adayı"
 msgid "Release candidates"
 msgstr "Sürüm adayları"
 
-msgid "Release ladder"
-msgstr "Sürüm basamakları"
-
 msgid "Releases"
 msgstr "Sürümler"
 
 msgid "Request id"
 msgstr "İstek kimliği"
+
+msgid "same as a day ago"
+msgstr "bir gün öncesiyle aynı"
 
 msgid "Search Radar"
 msgstr "Radar’da ara"
@@ -1154,6 +1156,9 @@ msgstr "Seri"
 
 msgid "Share"
 msgstr "Pay"
+
+msgid "Share of {noun}"
+msgstr "{noun} payı"
 
 msgid "Share of {noun} by country"
 msgstr "{noun} payı, ülkeye göre"
@@ -1209,6 +1214,10 @@ msgstr "Boyut"
 
 msgid "Sources, Dash Core v24.0.0:"
 msgstr "Kaynaklar, Dash Core v24.0.0:"
+
+#. placeholder {0}: v.location || v.vantage
+msgid "Speed-test grades, {0}"
+msgstr "Hız testi notları, {0}"
 
 #. placeholder {0}: when(p.start_time)
 msgid "start time {0}"
@@ -1365,6 +1374,9 @@ msgstr "Bugünkü hız son {0} bloğa göre: {1} tanesi sinyal verdi ({2})."
 msgid "Today's pace is this window's so far: {0} of {1} blocks signalled ({2})."
 msgstr "Bugünkü hız bu pencerenin şimdiye kadarkine göre: {1} bloğun {0} tanesi sinyal verdi ({2})."
 
+msgid "Top three identified:"
+msgstr "Belirlenenlerden ilk üç:"
+
 msgid "Tor"
 msgstr "Tor"
 
@@ -1435,6 +1447,9 @@ msgstr "İmzalayan quorum’u dashd’mizden okuyamadık: {0}"
 msgid "What happens next"
 msgstr "Sırada ne var"
 
+msgid "What healthy means"
+msgstr "Sağlıklı ne demek"
+
 #. placeholder {0}: String(r.window_days)
 msgid "What masternodes were actually paid over the last {0} days, against their collateral, counting every enabled masternode registered for at least that long."
 msgstr "Son {0} günde masternode’lara teminatlarına oranla gerçekte ne ödendiği; en az o süredir kayıtlı olan her etkin masternode sayılır."
@@ -1457,6 +1472,9 @@ msgstr "Hangi düğümler"
 #. placeholder {0}: formatInt(g.quorums.length)
 msgid "Which quorum signs depends on the request and on which quorums are active then (a new one forms about every day), so here are the {0} active now, the one that would sign now first."
 msgstr "Hangi quorum’un imzalayacağı isteğe ve o sırada hangi quorum’ların etkin olduğuna bağlıdır (yaklaşık her gün yenisi oluşur); bu yüzden şu anda etkin olan {0} quorum burada, önce şimdi imzalayacak olan."
+
+msgid "Who is counted"
+msgstr "Kimler sayılır"
 
 #. placeholder {0}: formatInt(mined)
 msgid "Who mined this window's {0} blocks and how many of them signalled. Best effort: we go by the tag in each block's coinbase, which is whatever the miner wrote, and some blocks carry none."

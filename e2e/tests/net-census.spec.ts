@@ -60,8 +60,9 @@ test.describe('Network census', () => {
     )
     await expect(headline).not.toContainText('answered the last crawl')
     await expect(headline.locator('[data-census-delta]')).toContainText(
-      '32 fewer masternodes answering than a day ago',
+      '32 fewer answering than a day ago',
     )
+    await expect(headline.locator('.dh-pill')).toHaveText('99.2% of enabled answered')
     await expect(
       page.locator('[data-header-tip]'),
       'the header carries the Core tip',
@@ -100,8 +101,10 @@ test.describe('Network census', () => {
   test('opens the list or section behind each headline figure @RA-02', async ({ page }) => {
     await openNodes(page)
     const hrefs: [string, RegExp][] = [
-      ['Reachable masternodes', /\/masternodes\?reach=reachable&status=enabled$/],
+      ['Answered', /\/masternodes\?reach=reachable&status=enabled$/],
+      ["Didn't answer", /\/masternodes\?reach=unreachable&status=enabled$/],
       ['Enabled', /\/masternodes\?status=enabled$/],
+      ['Evonodes', /\/masternodes\?(?=.*\btype=evo\b)(?=.*\bstatus=enabled\b)/],
       ['PoSe-banned', /\/masternodes\?status=pose-banned$/],
       ['Countries', /\/nodes#countries$/],
       ['Hosting providers', /\/nodes#hosting$/],
@@ -141,7 +144,7 @@ test.describe('Network census', () => {
     // taken days before the list, so here only the filters are checked. The link builders' unit test checks that the
     // list then counts what the figure counts.
     await openNodes(page)
-    await figure(page, /^Reachable masternodes/).click()
+    await figure(page, /^Answered/).click()
     await expect(page.locator('.rx-activef').first()).toContainText('match')
     expect(filters().get('reach')).toBe('reachable')
     expect(filters().get('status')).toBe('enabled')
@@ -175,6 +178,13 @@ test.describe('Network census', () => {
       'true',
     )
     const reach = card(page, 'reach')
+    await expect(reach.locator('.rx-nanswer')).toContainText('97.2% answered the last crawl')
+    await expect(reach.locator('.rx-nanswer')).toContainText(
+      '2,581 of 2,655 · 8,129 tried in the last crawl',
+    )
+    await expect(reach.locator('.rx-sec__lede')).toHaveText(
+      'Addresses that answered this week, plus every enabled masternode’s',
+    )
     const allText = await reach.locator('.rx-sec__lede').innerText()
     await scope.getByRole('button', { name: 'Evonodes' }).click()
     await expect(page).toHaveURL(/scope=evo/)
@@ -202,15 +212,20 @@ test.describe('Network census', () => {
   }) => {
     await openNodes(page)
     const versions = card(page, 'versions')
+    await expect(versions.locator('[data-versions-answer] .dh-pill')).toContainText('on Core 24')
+    await expect(
+      versions.getByRole('img', { name: /^Share of reachable addresses by version: 24\.0\.0 / }),
+    ).toBeVisible()
     const ladder = versions.locator('[data-ladder]')
-    await expect(ladder.getByRole('rowgroup').first()).toBeAttached()
     await expect(ladder).toContainText('Releases')
     await expect(ladder).toContainText("Builds that aren't releases")
     await expect(ladder.locator('[data-version-row]', { hasText: '24.0.0' })).toContainText(
       'latest release',
     )
     await expect(ladder.locator('[data-version-row]', { hasText: '24.0.0' })).toContainText('76.5%')
-    await expect(versions.locator('[data-donut]')).toContainText('latest release')
+    await expect(versions.locator('[data-latest-share]')).toContainText(
+      'Latest release 24.0.0: 76.5%',
+    )
 
     await versions.locator('summary', { hasText: 'Every version and user agent' }).click()
     const every = versions.locator('[data-every-version] table')
@@ -242,11 +257,16 @@ test.describe('Network census', () => {
   }) => {
     await openNodes(page)
     const hosting = card(page, 'hosting')
-    await expect(hosting.locator('[data-ranked] li')).toHaveCount(8)
+    await expect(hosting.locator('[data-ranked] li')).toHaveCount(6)
+    await expect(
+      hosting.getByRole('img', {
+        name: /^Share of reachable addresses by hosting provider: Hetzner Online GmbH /,
+      }),
+    ).toBeVisible()
     await expect(hosting).toContainText('Hetzner Online GmbH')
     await expect(hosting.locator('[data-ranked] a')).toHaveCount(0)
     await hosting.getByRole('button', { name: /^Show all/ }).click()
-    expect(await hosting.locator('[data-ranked] li').count()).toBeGreaterThan(8)
+    expect(await hosting.locator('[data-ranked] li').count()).toBeGreaterThan(6)
     await hosting.getByRole('button', { name: 'Show fewer' }).click()
 
     await census(page)
@@ -285,29 +305,29 @@ test.describe('Network census', () => {
       /\/masternodes\?reach=unreachable&status=enabled$/,
     )
     const networks = reach.locator('[data-address-networks]')
-    for (const name of ['IPv4', 'IPv6', 'Tor', 'I2P', 'CJDNS']) {
-      await expect(networks.getByRole('row', { name: new RegExp(`^${name}`) })).toBeVisible()
+    for (const [id, name] of [
+      ['ipv4', 'IPv4'],
+      ['ipv6', 'IPv6'],
+      ['onion', 'Tor'],
+      ['i2p', 'I2P'],
+      ['cjdns', 'CJDNS'],
+    ] as const) {
+      await expect(networks.locator(`[data-network="${id}"]`)).toContainText(name)
     }
+    await expect(networks.locator('[data-network="ipv4"]')).toContainText(
+      '2,384 reachable of 8,716 known',
+    )
+    await expect(networks.locator('[data-network="ipv4"]')).toContainText('2,229 masternodes')
     await expect(networks.locator('[data-network="cjdns"]')).toContainText(
       'not crawled: disabled (CJDNS=false)',
     )
-    await expect(
-      networks.getByRole('columnheader', { name: 'Masternodes answering' }),
-    ).toBeVisible()
-    const note = reach.locator('[data-networks-note]')
-    await expect(note).toContainText('PoSe-banned included')
-    await expect(networks.locator('caption')).toHaveText('Address networks')
-    await expect(networks.locator('table')).toHaveAttribute(
-      'aria-describedby',
-      (await note.getAttribute('id'))!,
-    )
+    await expect(networks.locator('[data-networks-note]')).toContainText('PoSe-banned included')
 
     const size = reach.locator('[data-size-chart]')
     await expect(size.getByRole('img', { name: 'Network size over time' })).toBeVisible()
     const readout = size.locator('[data-size-readout]')
     await size.getByRole('slider').focus()
     await expect(readout).toContainText('Reachable addresses')
-    await expect(size.locator('[data-size-note]')).toContainText('addresses, not nodes')
     const last = await readout.innerText()
     await page.keyboard.press('ArrowLeft')
     await expect(readout).not.toHaveText(last)
@@ -316,6 +336,8 @@ test.describe('Network census', () => {
     await expect(readout).toHaveText(last)
     await page.keyboard.press('Home')
     await expect(readout).not.toHaveText(earlier)
+    await size.getByRole('button', { name: 'About the network size' }).click()
+    await expect(page.locator('[data-size-note]')).toContainText('addresses, not nodes')
   })
 
   test('counts the masternodes ready for Core 24 quorums per check and opens the failures @RA-07', async ({
@@ -323,7 +345,8 @@ test.describe('Network census', () => {
   }) => {
     await openNodes(page)
     const ready = card(page, 'readiness')
-    await expect(ready).toContainText('Pass every check')
+    await expect(ready).toContainText('pass every check')
+    await expect(ready.locator('.dh-pill')).toContainText('ready')
     await expect(ready.locator('[data-dkg-check="protocol"]')).toContainText('384 fail')
     await expect(ready.locator('[data-dkg-check="protocol"]').getByRole('link')).toHaveAttribute(
       'href',
@@ -341,13 +364,18 @@ test.describe('Network census', () => {
   }) => {
     await openNodes(page)
     const yields = card(page, 'yields')
-    await expect(yields).toContainText('last 90 days')
+    await expect(yields.locator('.rx-sec__lede')).toContainText('Median annual yield')
     await expect(yields).toContainText('Regular masternodes')
     await expect(yields).toContainText('7.2% a year')
     await expect(yields).toContainText('median of 1,566, on 1,000 DASH')
     await expect(yields).toContainText('Evonodes')
     await expect(yields).toContainText('8.5% a year')
-    await expect(yields).toContainText('1.8% a year')
+    await expect(yields.locator('[data-yield-split]')).toContainText('Core payments 1.8% a year')
+    await expect(yields.locator('[data-yield-split]')).toContainText(
+      /Platform rewards [\d.]+% a year, from \d+ days of epochs/,
+    )
+    await yields.getByRole('button', { name: 'How the yield is measured' }).click()
+    await expect(page.getByRole('dialog')).toContainText('last 90 days')
   })
 
   test("shows evonodes' Platform health with the Drive and Tenderdash version breakdowns @RA-09", async ({
@@ -369,8 +397,11 @@ test.describe('Network census', () => {
     await openNodes(page)
     const speed = card(page, 'speed')
     await expect(speed).toBeVisible()
-    await expect(speed.locator('[data-vantage]').first()).toContainText('tested this cycle')
-    await expect(speed.locator('[data-sharebar]').first()).toContainText('Grade A')
+    await expect(speed.locator('[data-vantage]').first()).toContainText(
+      /tested · median [\d,]+ headers\/s/,
+    )
+    await expect(speed.locator('.dh-pill')).toContainText('A or B')
+    await expect(speed.locator('[data-vantage]').first().locator('[data-legend="A"]')).toBeVisible()
   })
 
   test('links to the activation tracker while Core 24 is pending or active for under 30 days, on the census page and the home @RA-11', async ({
