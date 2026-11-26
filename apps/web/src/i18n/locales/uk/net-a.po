@@ -57,6 +57,10 @@ msgstr "{0} — A або B"
 msgid "{0} a year"
 msgstr "{0} на рік"
 
+#. placeholder {0}: share(answered.n, answered.of)
+msgid "{0} answered the last crawl"
+msgstr "{0} відповіли в останньому обході"
+
 #. placeholder {0}: formatInt(masternodes)
 #. placeholder {1}: formatInt(places.length)
 msgid "{0} answering masternodes in {1} places"
@@ -106,8 +110,9 @@ msgstr "{0} з {1}"
 
 #. placeholder {0}: formatInt(answered.n)
 #. placeholder {1}: formatInt(answered.of)
-msgid "{0} of {1} addresses seen this week"
-msgstr "{0} з {1} адрес, помічених цього тижня"
+#. placeholder {2}: formatInt(crawl.tried)
+msgid "{0} of {1} · {2} tried in the last crawl"
+msgstr "{0} з {1} · в останньому обході перевірено {2}"
 
 #. placeholder {0}: formatInt(threshold ?? 0)
 #. placeholder {1}: formatInt(p.window)
@@ -138,10 +143,6 @@ msgstr "{0} із {1} увімкнених евонод пройшли нашу �
 #. placeholder {1}: formatInt(p.checked)
 msgid "{0} of {1} healthy"
 msgstr "{0} з {1} у нормі"
-
-#. placeholder {0}: share(answered.n, answered.of)
-msgid "{0} of addresses answered"
-msgstr "Відповіли {0} адрес"
 
 #. placeholder {0}: share(answered.n, answered.of)
 msgid "{0} of enabled {noun} answered"
@@ -281,11 +282,11 @@ msgstr "Активне"
 msgid "Address networks"
 msgstr "Адресні мережі"
 
-msgid "Addresses seen this week"
-msgstr "Адреси, помічені цього тижня"
-
 msgid "Addresses that accept connections"
 msgstr "Адреси, що приймають з’єднання"
+
+msgid "Addresses that answered this week, plus every enabled masternode’s"
+msgstr "Адреси, що відповіли цього тижня, а також адреса кожної увімкненої мастерноди"
 
 msgid "Addresses tried"
 msgstr "Опитано адрес"
@@ -512,10 +513,6 @@ msgstr "Виплати Core"
 msgid "Core tip"
 msgstr "Вершина Core"
 
-#. placeholder {0}: formatInt(crawl.tried)
-msgid "Counted are the addresses that answered at least once this week, plus every enabled masternode’s. The latest crawl tried {0} addresses in all."
-msgstr "Враховуються адреси, що відповіли хоча б раз цього тижня, а також адреса кожної увімкненої мастерноди. Останній обхід перевірив усього {0} адрес."
-
 #. placeholder {0}: formatInt(crawl.tip_height)
 msgid "counted at block {0}"
 msgstr "пораховано на блоці {0}"
@@ -612,9 +609,6 @@ msgstr "Evonode"
 msgid "evonodes only"
 msgstr "лише евоноди"
 
-msgid "Evonodes, Platform rewards"
-msgstr "Евоноди, нагороди Platform"
-
 msgid "Failed"
 msgstr "Помилка"
 
@@ -636,6 +630,10 @@ msgstr "Перейдіть до діаграми й натискайте кла�
 
 msgid "Formed at"
 msgstr "Сформовано"
+
+#. placeholder {0}: String(Math.round(r.evo.platform_span_days))
+msgid "from {0} days of epochs"
+msgstr "за епохами за {0} дн."
 
 msgid "From block"
 msgstr "Від блока"
@@ -688,6 +686,9 @@ msgstr "IPv6"
 #. placeholder {0}: String(doc.tip.height)
 msgid "It's from block {0}; our dashd or the crawler host may be down."
 msgstr "Він з блока {0}; можливо, наш dashd або хост краулера не працює."
+
+msgid "last crawl"
+msgstr "останній обхід"
 
 msgid "Latest Core blocks"
 msgstr "Останні блоки Core"
@@ -783,10 +784,6 @@ msgstr "медіана для {0} евонод, на 4 000 DASH; лише ви�
 
 msgid "Median time reaches the start time"
 msgstr "Медіанний час досягає часу початку"
-
-#. placeholder {0}: String(Math.round(r.evo.platform_span_days))
-msgid "median, from the Platform epochs of the last {0} days"
-msgstr "медіана за епохами Platform за останні {0} дн."
 
 msgid "Members of the quorum that would sign now that announce Dash Core 24"
 msgstr "Учасники кворуму, який підписував би зараз, що оголошують Dash Core 24"

@@ -364,6 +364,9 @@ test.describe('Network census', () => {
     await expect(yields).toContainText('Evonodes')
     await expect(yields).toContainText('8.5% a year')
     await expect(yields.locator('[data-yield-split]')).toContainText('Core payments 1.8% a year')
+    await expect(yields.locator('[data-yield-split]')).toContainText(
+      /Platform rewards [\d.]+% a year, from \d+ days of epochs/,
+    )
     await yields.getByRole('button', { name: 'How the yield is measured' }).click()
     await expect(page.getByRole('dialog')).toContainText('last 90 days')
   })

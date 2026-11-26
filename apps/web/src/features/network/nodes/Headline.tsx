@@ -117,6 +117,7 @@ export function Headline({ versions, days, summary }: SectionProps) {
               hash="reach"
               label={t`Addresses tried`}
               value={formatInt(crawl.tried)}
+              note={t`last crawl`}
             />
             <FigureLink
               to="/nodes"

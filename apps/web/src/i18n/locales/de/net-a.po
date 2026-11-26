@@ -57,6 +57,10 @@ msgstr "{0} A oder B"
 msgid "{0} a year"
 msgstr "{0} pro Jahr"
 
+#. placeholder {0}: share(answered.n, answered.of)
+msgid "{0} answered the last crawl"
+msgstr "{0} haben beim letzten Crawl geantwortet"
+
 #. placeholder {0}: formatInt(masternodes)
 #. placeholder {1}: formatInt(places.length)
 msgid "{0} answering masternodes in {1} places"
@@ -106,8 +110,9 @@ msgstr "{0} von {1}"
 
 #. placeholder {0}: formatInt(answered.n)
 #. placeholder {1}: formatInt(answered.of)
-msgid "{0} of {1} addresses seen this week"
-msgstr "{0} von {1} diese Woche gesehenen Adressen"
+#. placeholder {2}: formatInt(crawl.tried)
+msgid "{0} of {1} · {2} tried in the last crawl"
+msgstr "{0} von {1} · {2} beim letzten Crawl versucht"
 
 #. placeholder {0}: formatInt(threshold ?? 0)
 #. placeholder {1}: formatInt(p.window)
@@ -138,10 +143,6 @@ msgstr "{0} von {1} aktiven Evonodes haben unsere letzte Platform-Prüfung besta
 #. placeholder {1}: formatInt(p.checked)
 msgid "{0} of {1} healthy"
 msgstr "{0} von {1} gesund"
-
-#. placeholder {0}: share(answered.n, answered.of)
-msgid "{0} of addresses answered"
-msgstr "{0} der Adressen haben geantwortet"
 
 #. placeholder {0}: share(answered.n, answered.of)
 msgid "{0} of enabled {noun} answered"
@@ -281,11 +282,11 @@ msgstr "Aktiv"
 msgid "Address networks"
 msgstr "Adressnetzwerke"
 
-msgid "Addresses seen this week"
-msgstr "Diese Woche gesehene Adressen"
-
 msgid "Addresses that accept connections"
 msgstr "Adressen, die Verbindungen annehmen"
+
+msgid "Addresses that answered this week, plus every enabled masternode’s"
+msgstr "Adressen, die diese Woche geantwortet haben, plus die jedes aktiven Masternodes"
 
 msgid "Addresses tried"
 msgstr "Versuchte Adressen"
@@ -512,10 +513,6 @@ msgstr "Core-Zahlungen"
 msgid "Core tip"
 msgstr "Core-Spitze"
 
-#. placeholder {0}: formatInt(crawl.tried)
-msgid "Counted are the addresses that answered at least once this week, plus every enabled masternode’s. The latest crawl tried {0} addresses in all."
-msgstr "Gezählt werden die Adressen, die diese Woche mindestens einmal geantwortet haben, plus die jedes aktiven Masternodes. Der letzte Crawl hat insgesamt {0} Adressen versucht."
-
 #. placeholder {0}: formatInt(crawl.tip_height)
 msgid "counted at block {0}"
 msgstr "gezählt bei Block {0}"
@@ -612,9 +609,6 @@ msgstr "Evonodes"
 msgid "evonodes only"
 msgstr "nur Evonodes"
 
-msgid "Evonodes, Platform rewards"
-msgstr "Evonodes, Platform-Belohnungen"
-
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
@@ -636,6 +630,10 @@ msgstr "Fokussiere das Diagramm und lies mit den Pfeiltasten einen Punkt ab."
 
 msgid "Formed at"
 msgstr "Gebildet bei"
+
+#. placeholder {0}: String(Math.round(r.evo.platform_span_days))
+msgid "from {0} days of epochs"
+msgstr "aus {0} Tagen an Epochen"
 
 msgid "From block"
 msgstr "Ab Block"
@@ -688,6 +686,9 @@ msgstr "IPv6"
 #. placeholder {0}: String(doc.tip.height)
 msgid "It's from block {0}; our dashd or the crawler host may be down."
 msgstr "Sie stammt von Block {0}; unser dashd oder der Crawler-Host ist möglicherweise ausgefallen."
+
+msgid "last crawl"
+msgstr "letzter Crawl"
 
 msgid "Latest Core blocks"
 msgstr "Neueste Core-Blöcke"
@@ -783,10 +784,6 @@ msgstr "Median von {0}, bei 4.000 DASH; nur Core-Zahlungen, Platform-Belohnungen
 
 msgid "Median time reaches the start time"
 msgstr "Die Median Time erreicht die Startzeit"
-
-#. placeholder {0}: String(Math.round(r.evo.platform_span_days))
-msgid "median, from the Platform epochs of the last {0} days"
-msgstr "Median, aus den Platform-Epochen der letzten {0} Tage"
 
 msgid "Members of the quorum that would sign now that announce Dash Core 24"
 msgstr "Mitglieder des Quorums, das jetzt signieren würde, die Dash Core 24 melden"

@@ -57,6 +57,10 @@ msgstr "{0} A veya B"
 msgid "{0} a year"
 msgstr "yılda {0}"
 
+#. placeholder {0}: share(answered.n, answered.of)
+msgid "{0} answered the last crawl"
+msgstr "{0} son taramaya yanıt verdi"
+
 #. placeholder {0}: formatInt(masternodes)
 #. placeholder {1}: formatInt(places.length)
 msgid "{0} answering masternodes in {1} places"
@@ -106,8 +110,9 @@ msgstr "{0} / {1}"
 
 #. placeholder {0}: formatInt(answered.n)
 #. placeholder {1}: formatInt(answered.of)
-msgid "{0} of {1} addresses seen this week"
-msgstr "bu hafta görülen {1} adresten {0}"
+#. placeholder {2}: formatInt(crawl.tried)
+msgid "{0} of {1} · {2} tried in the last crawl"
+msgstr "{1} adresten {0} · son taramada {2} adres denendi"
 
 #. placeholder {0}: formatInt(threshold ?? 0)
 #. placeholder {1}: formatInt(p.window)
@@ -138,10 +143,6 @@ msgstr "Etkin {1} evonode’un {0} oranı son Platform kontrolümüzü geçti: T
 #. placeholder {1}: formatInt(p.checked)
 msgid "{0} of {1} healthy"
 msgstr "{1} içinde {0} sağlıklı"
-
-#. placeholder {0}: share(answered.n, answered.of)
-msgid "{0} of addresses answered"
-msgstr "Adreslerin {0} oranı yanıt verdi"
 
 #. placeholder {0}: share(answered.n, answered.of)
 msgid "{0} of enabled {noun} answered"
@@ -281,11 +282,11 @@ msgstr "Etkin"
 msgid "Address networks"
 msgstr "Adres ağları"
 
-msgid "Addresses seen this week"
-msgstr "Bu hafta görülen adresler"
-
 msgid "Addresses that accept connections"
 msgstr "Bağlantı kabul eden adresler"
+
+msgid "Addresses that answered this week, plus every enabled masternode’s"
+msgstr "Bu hafta yanıt veren adresler ile her etkin masternode’un adresi"
 
 msgid "Addresses tried"
 msgstr "Denenen adresler"
@@ -512,10 +513,6 @@ msgstr "Core ödemeleri"
 msgid "Core tip"
 msgstr "Core ucu"
 
-#. placeholder {0}: formatInt(crawl.tried)
-msgid "Counted are the addresses that answered at least once this week, plus every enabled masternode’s. The latest crawl tried {0} addresses in all."
-msgstr "Bu hafta en az bir kez yanıt veren adresler ile her etkin masternode’un adresi sayılır. Son tarama toplam {0} adresi denedi."
-
 #. placeholder {0}: formatInt(crawl.tip_height)
 msgid "counted at block {0}"
 msgstr "{0}. blokta sayıldı"
@@ -612,9 +609,6 @@ msgstr "Evonode’lar"
 msgid "evonodes only"
 msgstr "yalnızca evonode’lar"
 
-msgid "Evonodes, Platform rewards"
-msgstr "Evonode’lar, Platform ödülleri"
-
 msgid "Failed"
 msgstr "Başarısız"
 
@@ -636,6 +630,10 @@ msgstr "Grafiğe odaklanın ve bir noktayı okumak için ok tuşlarına basın."
 
 msgid "Formed at"
 msgstr "Oluşturulma"
+
+#. placeholder {0}: String(Math.round(r.evo.platform_span_days))
+msgid "from {0} days of epochs"
+msgstr "{0} günlük epoch verisinden"
 
 msgid "From block"
 msgstr "Başlangıç bloğu"
@@ -688,6 +686,9 @@ msgstr "IPv6"
 #. placeholder {0}: String(doc.tip.height)
 msgid "It's from block {0}; our dashd or the crawler host may be down."
 msgstr "{0}. bloktan; dashd’miz veya tarayıcı sunucusu kapalı olabilir."
+
+msgid "last crawl"
+msgstr "son tarama"
 
 msgid "Latest Core blocks"
 msgstr "Son Core blokları"
@@ -783,10 +784,6 @@ msgstr "{0} evonode’un ortancası, 4.000 DASH için; yalnızca Core ödemeleri
 
 msgid "Median time reaches the start time"
 msgstr "Ortanca zaman başlangıç zamanına ulaşır"
-
-#. placeholder {0}: String(Math.round(r.evo.platform_span_days))
-msgid "median, from the Platform epochs of the last {0} days"
-msgstr "ortanca, son {0} günün Platform epoch’larından"
 
 msgid "Members of the quorum that would sign now that announce Dash Core 24"
 msgstr "Şimdi imzalayacak quorum’un Dash Core 24 duyuran üyeleri"

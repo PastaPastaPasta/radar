@@ -164,12 +164,6 @@ export function YieldsCard({ summary }: SectionProps) {
               <p className="m-0">
                 {t`What masternodes were actually paid over the last ${String(r.window_days)} days, against their collateral, counting every enabled masternode registered for at least that long.`}
               </p>
-              {r.evo?.platform_span_days != null && platform != null ? (
-                <p className="mb-0 mt-2">
-                  {t`Evonodes, Platform rewards`}:{' '}
-                  {t`median, from the Platform epochs of the last ${String(Math.round(r.evo.platform_span_days))} days`}
-                </p>
-              ) : null}
             </InfoTip>
           </>
         ) : undefined
@@ -205,6 +199,9 @@ export function YieldsCard({ summary }: SectionProps) {
             {split ? (
               <p className="rx-nyield__note m-0" data-yield-split>
                 {t`Core payments`} <b>{pct(evo)}</b> · {t`Platform rewards`} <b>{pct(platform)}</b>
+                {r.evo?.platform_span_days != null
+                  ? `, ${t`from ${String(Math.round(r.evo.platform_span_days))} days of epochs`}`
+                  : null}
               </p>
             ) : null}
           </li>

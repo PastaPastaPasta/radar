@@ -37,9 +37,7 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
     scope === 'other'
       ? t`Other full nodes accept connections at ${formatInt(total(dist.version ?? []))} addresses. A node reachable on several networks counts at each, and nodes that only connect out can't be seen from outside.`
       : scope === 'all'
-        ? crawl
-          ? t`Counted are the addresses that answered at least once this week, plus every enabled masternode’s. The latest crawl tried ${formatInt(crawl.tried)} addresses in all.`
-          : undefined
+        ? undefined
         : answered
           ? t`${share(answered.n, answered.of)} of enabled ${noun} answered our handshake on their registered address; ${formatInt(reach.no)} didn't.`
           : undefined
@@ -63,7 +61,7 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
       layer="network"
       subtitle={
         scope === 'all'
-          ? t`Addresses seen this week`
+          ? t`Addresses that answered this week, plus every enabled masternode’s`
           : scope === 'other'
             ? t`Addresses that accept connections`
             : t`Enabled ${noun}`
@@ -80,13 +78,13 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
               tone={scope === 'all' ? 'neutral' : shareTone(answered.n / answered.of)}
               pill={
                 scope === 'all' || scope === 'other'
-                  ? t`${share(answered.n, answered.of)} of addresses answered`
+                  ? t`${share(answered.n, answered.of)} answered the last crawl`
                   : t`${share(answered.n, answered.of)} of enabled ${noun} answered`
               }
             >
               <span className="rx-nanswer__line">
-                {scope === 'all'
-                  ? t`${formatInt(answered.n)} of ${formatInt(answered.of)} addresses seen this week`
+                {scope === 'all' && crawl
+                  ? t`${formatInt(answered.n)} of ${formatInt(answered.of)} · ${formatInt(crawl.tried)} tried in the last crawl`
                   : t`${formatInt(answered.n)} of ${formatInt(answered.of)}`}
               </span>
               {about ? (

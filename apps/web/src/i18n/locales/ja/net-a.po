@@ -57,6 +57,10 @@ msgstr "{0} が A か B"
 msgid "{0} a year"
 msgstr "年 {0}"
 
+#. placeholder {0}: share(answered.n, answered.of)
+msgid "{0} answered the last crawl"
+msgstr "{0} が直近のクロールに応答"
+
 #. placeholder {0}: formatInt(masternodes)
 #. placeholder {1}: formatInt(places.length)
 msgid "{0} answering masternodes in {1} places"
@@ -106,8 +110,9 @@ msgstr "{0} / {1}"
 
 #. placeholder {0}: formatInt(answered.n)
 #. placeholder {1}: formatInt(answered.of)
-msgid "{0} of {1} addresses seen this week"
-msgstr "今週見つかった {1} 件のアドレス中 {0} 件"
+#. placeholder {2}: formatInt(crawl.tried)
+msgid "{0} of {1} · {2} tried in the last crawl"
+msgstr "{1} 件中 {0} 件 · 直近のクロールで {2} 件を試行"
 
 #. placeholder {0}: formatInt(threshold ?? 0)
 #. placeholder {1}: formatInt(p.window)
@@ -138,10 +143,6 @@ msgstr "有効な {1} 台の Evonode のうち {0} が直近の Platform 確認�
 #. placeholder {1}: formatInt(p.checked)
 msgid "{0} of {1} healthy"
 msgstr "{1} 台中 {0} 台が正常"
-
-#. placeholder {0}: share(answered.n, answered.of)
-msgid "{0} of addresses answered"
-msgstr "アドレスの {0} が応答"
 
 #. placeholder {0}: share(answered.n, answered.of)
 msgid "{0} of enabled {noun} answered"
@@ -281,11 +282,11 @@ msgstr "アクティブ"
 msgid "Address networks"
 msgstr "アドレスのネットワーク"
 
-msgid "Addresses seen this week"
-msgstr "今週見つかったアドレス"
-
 msgid "Addresses that accept connections"
 msgstr "接続を受け付けるアドレス"
+
+msgid "Addresses that answered this week, plus every enabled masternode’s"
+msgstr "今週応答したアドレスと、有効なすべてのマスターノードのアドレス"
 
 msgid "Addresses tried"
 msgstr "試行したアドレス"
@@ -512,10 +513,6 @@ msgstr "Core の支払い"
 msgid "Core tip"
 msgstr "Core の先頭"
 
-#. placeholder {0}: formatInt(crawl.tried)
-msgid "Counted are the addresses that answered at least once this week, plus every enabled masternode’s. The latest crawl tried {0} addresses in all."
-msgstr "今週少なくとも 1 回応答したアドレスと、有効なすべてのマスターノードのアドレスを数えています。直近のクロールは合計 {0} 件のアドレスを試しました。"
-
 #. placeholder {0}: formatInt(crawl.tip_height)
 msgid "counted at block {0}"
 msgstr "ブロック {0} で集計"
@@ -612,9 +609,6 @@ msgstr "Evonode"
 msgid "evonodes only"
 msgstr "Evonode のみ"
 
-msgid "Evonodes, Platform rewards"
-msgstr "Evonode、Platform の報酬"
-
 msgid "Failed"
 msgstr "失敗"
 
@@ -636,6 +630,10 @@ msgstr "チャートにフォーカスして矢印キーを押すと、各点を
 
 msgid "Formed at"
 msgstr "形成時"
+
+#. placeholder {0}: String(Math.round(r.evo.platform_span_days))
+msgid "from {0} days of epochs"
+msgstr "{0} 日分のエポックから"
 
 msgid "From block"
 msgstr "開始ブロック"
@@ -688,6 +686,9 @@ msgstr "IPv6"
 #. placeholder {0}: String(doc.tip.height)
 msgid "It's from block {0}; our dashd or the crawler host may be down."
 msgstr "ブロック {0} 時点のものです。dashd またはクローラーのホストが停止している可能性があります。"
+
+msgid "last crawl"
+msgstr "直近のクロール"
 
 msgid "Latest Core blocks"
 msgstr "最新の Core ブロック"
@@ -783,10 +784,6 @@ msgstr "{0} 台の中央値、4,000 DASH あたり。Core の支払いのみで�
 
 msgid "Median time reaches the start time"
 msgstr "中央値時刻が開始時刻に達する"
-
-#. placeholder {0}: String(Math.round(r.evo.platform_span_days))
-msgid "median, from the Platform epochs of the last {0} days"
-msgstr "中央値、直近 {0} 日間の Platform エポックから算出"
 
 msgid "Members of the quorum that would sign now that announce Dash Core 24"
 msgstr "今署名するクォーラムのメンバーのうち、Dash Core 24 を通知しているもの"

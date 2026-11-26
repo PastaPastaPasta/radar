@@ -57,6 +57,10 @@ msgstr "{0} 为 A 或 B"
 msgid "{0} a year"
 msgstr "每年 {0}"
 
+#. placeholder {0}: share(answered.n, answered.of)
+msgid "{0} answered the last crawl"
+msgstr "{0} 在上次抓取中响应"
+
 #. placeholder {0}: formatInt(masternodes)
 #. placeholder {1}: formatInt(places.length)
 msgid "{0} answering masternodes in {1} places"
@@ -106,8 +110,9 @@ msgstr "{0} / {1}"
 
 #. placeholder {0}: formatInt(answered.n)
 #. placeholder {1}: formatInt(answered.of)
-msgid "{0} of {1} addresses seen this week"
-msgstr "本周见到的 {1} 个地址中 {0} 个"
+#. placeholder {2}: formatInt(crawl.tried)
+msgid "{0} of {1} · {2} tried in the last crawl"
+msgstr "{1} 个中 {0} 个 · 上次抓取尝试了 {2} 个"
 
 #. placeholder {0}: formatInt(threshold ?? 0)
 #. placeholder {1}: formatInt(p.window)
@@ -138,10 +143,6 @@ msgstr "{1} 个已启用的 evonode 中，{0} 通过了我们最近一次 Platfo
 #. placeholder {1}: formatInt(p.checked)
 msgid "{0} of {1} healthy"
 msgstr "{1} 个中 {0} 个健康"
-
-#. placeholder {0}: share(answered.n, answered.of)
-msgid "{0} of addresses answered"
-msgstr "{0} 的地址有响应"
 
 #. placeholder {0}: share(answered.n, answered.of)
 msgid "{0} of enabled {noun} answered"
@@ -281,11 +282,11 @@ msgstr "活跃"
 msgid "Address networks"
 msgstr "地址网络"
 
-msgid "Addresses seen this week"
-msgstr "本周见到的地址"
-
 msgid "Addresses that accept connections"
 msgstr "接受连接的地址"
+
+msgid "Addresses that answered this week, plus every enabled masternode’s"
+msgstr "本周有响应的地址，加上每个已启用主节点的地址"
 
 msgid "Addresses tried"
 msgstr "已尝试的地址"
@@ -512,10 +513,6 @@ msgstr "Core 支付"
 msgid "Core tip"
 msgstr "Core 链顶"
 
-#. placeholder {0}: formatInt(crawl.tried)
-msgid "Counted are the addresses that answered at least once this week, plus every enabled masternode’s. The latest crawl tried {0} addresses in all."
-msgstr "统计的是本周至少响应过一次的地址，加上每个已启用主节点的地址。最近一次爬取共尝试了 {0} 个地址。"
-
 #. placeholder {0}: formatInt(crawl.tip_height)
 msgid "counted at block {0}"
 msgstr "统计于区块 {0}"
@@ -612,9 +609,6 @@ msgstr "Evonode"
 msgid "evonodes only"
 msgstr "仅 evonode"
 
-msgid "Evonodes, Platform rewards"
-msgstr "Evonode，Platform 奖励"
-
 msgid "Failed"
 msgstr "失败"
 
@@ -636,6 +630,10 @@ msgstr "聚焦图表并按方向键读取数据点。"
 
 msgid "Formed at"
 msgstr "形成于"
+
+#. placeholder {0}: String(Math.round(r.evo.platform_span_days))
+msgid "from {0} days of epochs"
+msgstr "基于 {0} 天的纪元"
 
 msgid "From block"
 msgstr "起始区块"
@@ -688,6 +686,9 @@ msgstr "IPv6"
 #. placeholder {0}: String(doc.tip.height)
 msgid "It's from block {0}; our dashd or the crawler host may be down."
 msgstr "这是区块 {0} 的数据；我们的 dashd 或爬虫主机可能已宕机。"
+
+msgid "last crawl"
+msgstr "上次抓取"
 
 msgid "Latest Core blocks"
 msgstr "最新 Core 区块"
@@ -783,10 +784,6 @@ msgstr "{0} 个 evonode 的中位数，按 4,000 DASH 计；仅含 Core 付款�
 
 msgid "Median time reaches the start time"
 msgstr "中位时间达到开始时间"
-
-#. placeholder {0}: String(Math.round(r.evo.platform_span_days))
-msgid "median, from the Platform epochs of the last {0} days"
-msgstr "中位数，来自最近 {0} 天的 Platform 纪元"
 
 msgid "Members of the quorum that would sign now that announce Dash Core 24"
 msgstr "将要签名的 Quorum 成员中，已公布 Dash Core 24 的成员"
