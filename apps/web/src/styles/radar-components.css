@@ -2886,6 +2886,9 @@ html[data-scroll-gutter] {
 .rx-cols > * {
   min-width: 0;
 }
+.rx-cols > :only-child {
+  grid-column: 1 / -1;
+}
 @media (min-width: 1024px) {
   .rx-cols {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -3268,4 +3271,387 @@ html[data-scroll-gutter] {
   max-width: calc(100vw - 24px);
   font-size: var(--dh-fs-sm);
   line-height: 1.5;
+}
+
+/* ============================================================ 29. Node census at a glance: answers, bars, checklists */
+.rx-nanswer {
+  row-gap: 6px;
+}
+.rx-nanswer__line {
+  color: var(--dh-ink-2);
+  font-size: var(--dh-fs-ui);
+}
+.rx-nanswer__line b {
+  color: var(--dh-ink);
+  font-weight: var(--dh-w-strong);
+  font-variant-numeric: tabular-nums;
+}
+.rx-nanswer a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.rx-nbar {
+  margin: 0;
+  min-width: 0;
+}
+.rx-nbar__track {
+  display: flex;
+  height: 28px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--rx-track);
+}
+.rx-nbar__track--sm {
+  height: 10px;
+  border-radius: 4px;
+}
+.rx-nbar__track > span {
+  flex-basis: 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+/* Separators are drawn over the segments, so the shares keep their scale. */
+.rx-nbar__track > span[data-sep] {
+  box-shadow: inset 2px 0 0 var(--rx-ground, var(--dh-page));
+}
+.rx-nbar__seg {
+  display: flex;
+  gap: 0.4em;
+  padding: 0 8px;
+  white-space: nowrap;
+  font-size: 12.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.rx-nbar__track > span[data-sep] .rx-nbar__seg {
+  padding-left: 10px;
+}
+.rx-nanswer__count {
+  color: var(--dh-ink);
+}
+.rx-nbar__legend {
+  margin-top: 8px;
+}
+.rx-nbar__legend li > span.tabular-nums {
+  color: var(--dh-ink-2);
+}
+.rx-nbar__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: inherit;
+  text-decoration: none;
+}
+.rx-nbar__link > span:not(.rx-sw) {
+  text-decoration: underline;
+  text-decoration-color: var(--dh-line-2);
+  text-underline-offset: 3px;
+}
+.rx-nbar__link:hover > span:not(.rx-sw) {
+  color: var(--dh-brand-ink);
+}
+.rx-nbar__extra {
+  margin-left: auto;
+}
+.rx-nbar__extra a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+/* a small heading inside a census section, with its info button */
+.rx-nsub {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 0 8px;
+  font-size: var(--dh-fs-ui);
+  font-weight: var(--dh-w-strong);
+}
+.rx-nsub > h3 {
+  margin: 0;
+  font: inherit;
+}
+/* the answer pill can hold a sentence: it wraps on a phone rather than overflow */
+.rx-nanswer .rx-v24-verdict {
+  height: auto;
+  min-height: 30px;
+  padding-block: 4px;
+  line-height: 1.25;
+  white-space: normal;
+}
+/* the headline: the masternode list as one bar beside the counts that open their lists */
+.rx-nhead {
+  display: grid;
+  gap: 20px 40px;
+  align-items: center;
+}
+@media (min-width: 1024px) {
+  .rx-nhead {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  }
+}
+/* release ladder as compact rows in columns */
+.rx-nladder {
+  display: grid;
+  gap: 14px;
+}
+.rx-nladder__h {
+  margin: 0 0 4px;
+  font-size: 12px;
+  font-weight: var(--dh-w-strong);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--dh-ink-2);
+}
+.rx-nladder ul {
+  columns: 3 230px;
+  column-gap: 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.rx-nladder li {
+  break-inside: avoid;
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr) auto auto;
+  align-items: baseline;
+  gap: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--dh-line);
+  font-size: var(--dh-fs-ui);
+}
+.rx-nladder li > .rx-sw {
+  align-self: center;
+}
+.rx-nladder small {
+  margin-left: 4px;
+  color: var(--dh-ink-2);
+  font-size: 12px;
+}
+.rx-nladder b {
+  font-weight: var(--dh-w-strong);
+  font-variant-numeric: tabular-nums;
+}
+.rx-nladder li > span:last-child {
+  min-width: 3.5em;
+  text-align: right;
+  color: var(--dh-ink-2);
+  font-variant-numeric: tabular-nums;
+}
+/* address networks: one tile per network */
+.rx-nnets {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.rx-nnets > li {
+  display: grid;
+  gap: 2px;
+  padding: 10px 12px;
+  border: 1px solid var(--dh-line);
+  border-radius: 8px;
+  background: var(--dh-surface);
+  min-width: 0;
+}
+.rx-nnets__name {
+  font-size: var(--dh-fs-sm);
+  color: var(--dh-ink-2);
+}
+.rx-nnets__value {
+  font: 650 20px/1.2 var(--dh-font);
+  font-stretch: 110%;
+  font-variant-numeric: tabular-nums;
+}
+.rx-nnets__value small,
+.rx-nnets__note {
+  font-size: 12.5px;
+  font-weight: var(--dh-w-ui);
+  font-stretch: 100%;
+  color: var(--dh-ink-2);
+}
+.rx-nnets__meter {
+  height: 4px;
+  margin: 4px 0 2px;
+  border-radius: 2px;
+  background: var(--rx-track);
+  overflow: hidden;
+}
+.rx-nnets__meter > i {
+  display: block;
+  height: 100%;
+  background: var(--dh-good);
+}
+.rx-nnets > li[data-crawled='false'] {
+  border-style: dashed;
+  background: transparent;
+}
+/* checklist rows: a mark, the check, a pass bar and the failures */
+/* One grid for every row, so the labels, the bars and the counts line up from row to row. */
+.rx-ncheck {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) max-content max-content;
+  column-gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.rx-ncheck > li {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  align-items: center;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--dh-line);
+  font-size: var(--dh-fs-ui);
+}
+.rx-ncheck__mark {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+.rx-ncheck__mark[data-tone='good'] {
+  background: var(--dh-good-soft);
+  color: var(--dh-good);
+}
+.rx-ncheck__mark[data-tone='warn'] {
+  background: var(--dh-warn-soft);
+  color: var(--dh-warn);
+}
+.rx-ncheck__mark .rx-ico {
+  width: 13px;
+  height: 13px;
+}
+.rx-ncheck small {
+  margin-left: 6px;
+  color: var(--dh-ink-2);
+  font-size: 12px;
+}
+.rx-ncheck__pct {
+  text-align: right;
+  font-weight: var(--dh-w-strong);
+  font-variant-numeric: tabular-nums;
+}
+.rx-ncheck__out {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  color: var(--dh-ink-2);
+}
+.rx-ncheck__out a {
+  color: var(--dh-warn);
+  font-weight: var(--dh-w-strong);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+@media (max-width: 640px) {
+  .rx-ncheck {
+    grid-template-columns: 20px minmax(0, 1fr) max-content;
+    column-gap: 10px;
+  }
+  .rx-ncheck__out {
+    grid-column: 2 / -1;
+    text-align: left;
+    font-size: 12.5px;
+  }
+}
+/* yields: one bar per masternode type on a shared scale */
+.rx-nyield,
+.rx-nspeed {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.rx-nyield > li,
+.rx-nspeed > li {
+  display: grid;
+  gap: 4px;
+}
+.rx-nyield__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 10px;
+}
+.rx-nyield__value {
+  font: 650 22px/1.2 var(--dh-font);
+  font-stretch: 110%;
+  font-variant-numeric: tabular-nums;
+}
+.rx-nyield__note {
+  font-size: 12.5px;
+  color: var(--dh-ink-2);
+}
+.rx-nyield__bar {
+  display: flex;
+  height: 14px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.rx-nyield__bar > i {
+  display: block;
+  height: 100%;
+}
+/* speed tests: one row per vantage */
+.rx-nspeed > li {
+  min-width: 0;
+}
+.rx-nspeed__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px 12px;
+  font-size: var(--dh-fs-ui);
+}
+.rx-nspeed__head > span:last-child {
+  font-size: 12.5px;
+  color: var(--dh-ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.rx-nfoot {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--dh-ink-2);
+}
+@media (max-width: 640px) {
+  .rx-nnets {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  .rx-nnets > li {
+    grid-template-columns: 3.5em minmax(0, 1fr) auto;
+    align-items: baseline;
+    column-gap: 10px;
+    padding: 6px 0;
+    border: 0;
+    border-bottom: 1px solid var(--dh-line);
+    border-radius: 0;
+    background: transparent;
+  }
+  .rx-nnets > li[data-crawled='false'] {
+    border-style: solid;
+  }
+  .rx-nnets__value {
+    font-size: 16px;
+  }
+  .rx-nnets__meter {
+    grid-column: 2 / -1;
+    grid-row: 2;
+    margin: 2px 0 0;
+  }
+  .rx-nnets__note {
+    text-align: right;
+  }
+  .rx-nnets > li[data-crawled='false'] .rx-nnets__note {
+    grid-column: 2 / -1;
+    text-align: left;
+  }
 }

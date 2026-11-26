@@ -3,14 +3,20 @@ import { useLingui } from '@lingui/react/macro'
 import { stampOf } from '@/data/envelope'
 import { formatInt, formatPercent } from '@/lib/format'
 import { Card } from '@/ui'
-import { reachableLink } from './census-links'
+import { Answer, SegBar, shareTone } from './bars'
+import { useCensusColors } from './census-colors'
+import { reachableLink, unreachableLink } from './census-links'
 import { byOrg, countOf, reachShare, UNKNOWN } from './census-math'
 import { FigureGrid, FigureLink } from './parts'
 import { loadState, type SectionProps } from './shared'
 
-/** The six headline figures: each opens the list or the section that shows that many items. */
+/**
+ * The enabled masternodes as one bar (answered, silent), each part opening the list it counts, beside the figures that
+ * open the lists and sections behind them.
+ */
 export function Headline({ versions, days, summary }: SectionProps) {
   const { t } = useLingui()
+  const colors = useCensusColors()
   const crawl = summary.data?.data.crawl
   const dayAgo = summary.data?.data.day_ago
   const all = summary.data?.data.dists.all ?? {}
@@ -35,57 +41,82 @@ export function Headline({ versions, days, summary }: SectionProps) {
       onRetry={() => void summary.refetch()}
     >
       {crawl ? (
-        <div className="grid gap-4" data-census-headline>
-          <p className="text-sm text-[var(--dh-ink-2)] [&_a]:underline">
-            {diff === undefined ? null : (
-              <span data-census-delta>
-                {diff === 0
-                  ? t`as many masternodes answering as a day ago`
-                  : diff > 0
-                    ? plural(diff, {
-                        one: '# more masternode answering than a day ago',
-                        other: '# more masternodes answering than a day ago',
-                      })
-                    : plural(-diff, {
-                        one: '# fewer masternode answering than a day ago',
-                        other: '# fewer masternodes answering than a day ago',
-                      })}
-                {' · '}
-              </span>
-            )}
-            {t`counted at block ${formatInt(crawl.tip_height)}`}
-          </p>
-          <FigureGrid columns={6}>
-            <FigureLink
-              to="/masternodes"
-              search={reachableLink()}
-              label={t`Reachable masternodes`}
-              value={formatInt(crawl.mn_reachable)}
-              note={
-                share === undefined ? undefined : t`${formatPercent(share, 1)} of enabled answered`
-              }
-              tone={
+        <div className="rx-nhead" data-census-headline>
+          <div className="grid min-w-0 gap-3">
+            <Answer
+              tone={share === undefined ? 'neutral' : shareTone(share)}
+              pill={
                 share === undefined
-                  ? undefined
-                  : share >= 0.98
-                    ? 'good'
-                    : share >= 0.9
-                      ? 'warn'
-                      : 'bad'
+                  ? t`Masternodes`
+                  : t`${formatPercent(share, 1)} of enabled answered`
               }
+            >
+              <span className="rx-nanswer__line">
+                {diff === undefined ? null : (
+                  <span data-census-delta>
+                    {diff === 0
+                      ? t`same as a day ago`
+                      : diff > 0
+                        ? plural(diff, {
+                            one: '# more answering than a day ago',
+                            other: '# more answering than a day ago',
+                          })
+                        : plural(-diff, {
+                            one: '# fewer answering than a day ago',
+                            other: '# fewer answering than a day ago',
+                          })}
+                    {' · '}
+                  </span>
+                )}
+                {t`counted at block ${formatInt(crawl.tip_height)}`}
+              </span>
+            </Answer>
+            <SegBar
+              inline={false}
+              label={t`Enabled masternodes`}
+              parts={[
+                {
+                  key: 'answered',
+                  name: t`Answered`,
+                  n: answered,
+                  color: colors.good,
+                  link: { to: '/masternodes', search: reachableLink() },
+                },
+                {
+                  key: 'silent',
+                  name: t`Didn't answer`,
+                  n: silent,
+                  color: colors.bad,
+                  link: { to: '/masternodes', search: unreachableLink('mn') },
+                },
+              ]}
             />
+          </div>
+          <FigureGrid tight>
             <FigureLink
               to="/masternodes"
               search={{ status: ['enabled'] }}
               label={t`Enabled`}
               value={formatInt(crawl.mn_total)}
-              note={evo > 0 ? t`${formatInt(evo)} of them evonodes` : undefined}
+            />
+            <FigureLink
+              to="/masternodes"
+              search={{ type: ['evo'], status: ['enabled'] }}
+              label={t`Evonodes`}
+              value={formatInt(evo)}
             />
             <FigureLink
               to="/masternodes"
               search={{ status: ['pose-banned'] }}
               label={t`PoSe-banned`}
               value={formatInt(banned)}
+            />
+            <FigureLink
+              to="/nodes"
+              search={whole}
+              hash="reach"
+              label={t`Addresses tried`}
+              value={formatInt(crawl.tried)}
             />
             <FigureLink
               to="/nodes"
@@ -102,13 +133,6 @@ export function Headline({ versions, days, summary }: SectionProps) {
               label={t`Hosting providers`}
               value={formatInt(providers)}
               note={t`all nodes`}
-            />
-            <FigureLink
-              to="/nodes"
-              search={whole}
-              hash="reach"
-              label={t`Addresses tried`}
-              value={formatInt(crawl.tried)}
             />
           </FigureGrid>
         </div>

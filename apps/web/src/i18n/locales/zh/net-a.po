@@ -29,27 +29,33 @@ msgstr "\"Announce 24\" 统计的是过去一周内与我们的爬虫最近一�
 msgid "(empty)"
 msgstr "（空）"
 
+#. placeholder {0}: realCountries.length
+msgid "{0, plural, one {# country} other {# countries}}"
+msgstr "{0, plural, other {# 个国家}}"
+
 #. placeholder {0}: -diff
-msgid "{0, plural, one {# fewer masternode answering than a day ago} other {# fewer masternodes answering than a day ago}}"
-msgstr "{0, plural, other {应答的主节点比一天前少 # 个}}"
+msgid "{0, plural, one {# fewer answering than a day ago} other {# fewer answering than a day ago}}"
+msgstr "{0, plural, other {响应数比一天前少 #}}"
+
+#. placeholder {0}: n.masternodes
+msgid "{0, plural, one {# masternode answering} other {# masternodes answering}}"
+msgstr "{0, plural, other {# 个主节点有响应}}"
+
+#. placeholder {0}: realOrgs.length
+msgid "{0, plural, one {# provider} other {# providers}}"
+msgstr "{0, plural, other {# 家服务商}}"
 
 #. placeholder {0}: -diff
 msgid "{0, plural, one {That’s # fewer than a day ago.} other {That’s # fewer than a day ago.}}"
 msgstr "{0, plural, other {比一天前少 # 个。}}"
 
+#. placeholder {0}: formatPercent(goodShare, 0)
+msgid "{0} A or B"
+msgstr "{0} 为 A 或 B"
+
 #. placeholder {0}: formatPercent(v, 1)
 msgid "{0} a year"
 msgstr "每年 {0}"
-
-#. placeholder {0}: formatInt(crawl.reachable)
-#. placeholder {1}: formatInt(crawl.tried)
-msgid "{0} addresses answered out of {1} tried. Counted are addresses that answered at least once this week, plus every enabled masternode’s."
-msgstr "在尝试的 {1} 个地址中有 {0} 个应答。计入本周至少应答过一次的地址，以及每个已启用主节点的地址。"
-
-#. placeholder {0}: countryName(c0[0])
-#. placeholder {1}: share(c0[1], sumCountries)
-msgid "{0} alone has {1}."
-msgstr "仅 {0} 就占 {1}。"
 
 #. placeholder {0}: formatInt(masternodes)
 #. placeholder {1}: formatInt(places.length)
@@ -61,18 +67,12 @@ msgid "{0} fail"
 msgstr "{0} 个未通过"
 
 #. placeholder {0}: formatInt(d.beyond_version)
-msgid "{0} fail another check that needs a fix."
-msgstr "{0} 个未通过另一项需要修复的检查。"
+msgid "{0} fail a check that upgrading alone won’t fix."
+msgstr "{0} 个未通过一项仅靠升级无法解决的检查。"
 
 #. placeholder {0}: formatInt(d.version_only)
 msgid "{0} fail only the version check and need just the upgrade. "
 msgstr "{0} 个仅未通过版本检查，只需升级。 "
-
-#. placeholder {0}: o0.org
-#. placeholder {1}: share(o0.n, sumOrgs)
-#. placeholder {2}: share( realOrgs.slice(0, 3).reduce((a, o) => a + o.n, 0), sumOrgs, )
-msgid "{0} hosts {1} of {noun}, and the three largest providers host {2}."
-msgstr "{0} 托管了{noun}的 {1}，前三大提供商共托管 {2}。"
 
 #. placeholder {0}: formatInt(p.masternodes)
 msgid "{0} masternodes"
@@ -95,12 +95,12 @@ msgctxt "share of blocks"
 msgid "{0} needed"
 msgstr "需要 {0}"
 
-#. placeholder {0}: formatInt(p.healthy)
+#. placeholder {0}: formatInt(answered.n)
+#. placeholder {0}: formatInt(d.overall.pass)
 #. placeholder {0}: formatInt(q.valid)
-#. placeholder {0}: formatInt(r.signalling)
-#. placeholder {1}: formatInt(p.checked)
+#. placeholder {1}: formatInt(answered.of)
+#. placeholder {1}: formatInt(d.masternodes)
 #. placeholder {1}: formatInt(p.window)
-#. placeholder {1}: formatInt(q.members)
 msgid "{0} of {1}"
 msgstr "{0} / {1}"
 
@@ -129,12 +129,25 @@ msgstr "{1} 个区块中的 {0} 个，第 {2} 次尝试"
 msgid "{0} of {1} enabled evonodes passed our latest Platform check: their Tenderdash P2P port was open and their DAPI answered over valid TLS."
 msgstr "{1} 个已启用的 evonode 中，{0} 通过了我们最近一次 Platform 检查：其 Tenderdash P2P 端口已开放，且 DAPI 通过有效 TLS 做出了响应。"
 
-#. placeholder {0}: ready(d.overall.pass)
-#. placeholder {1}: formatInt(d.masternodes)
-msgid "{0} of {1} enabled masternodes pass every check."
-msgstr "{1} 个已启用的主节点中，{0} 个通过所有检查。"
+#. placeholder {0}: formatInt(p.healthy)
+#. placeholder {1}: formatInt(p.checked)
+msgid "{0} of {1} healthy"
+msgstr "{1} 个中 {0} 个健康"
 
-#. placeholder {0}: share(reach.yes, reach.yes + reach.no)
+#. placeholder {0}: formatInt(answered.n)
+#. placeholder {1}: formatInt(answered.of)
+msgid "{0} of {1} seen this week"
+msgstr "本周见到的 {1} 个中 {0} 个"
+
+#. placeholder {0}: share(answered.n, answered.of)
+msgid "{0} of addresses answered"
+msgstr "{0} 的地址有响应"
+
+#. placeholder {0}: share(answered.n, answered.of)
+msgid "{0} of enabled {noun} answered"
+msgstr "已启用的{noun}中 {0} 有响应"
+
+#. placeholder {0}: share(answered.n, answered.of)
 #. placeholder {1}: formatInt(reach.no)
 msgid "{0} of enabled {noun} answered our handshake on their registered address; {1} didn't."
 msgstr "已启用的{noun}中，{0} 在其注册地址上响应了我们的握手；{1} 个未响应。"
@@ -143,39 +156,32 @@ msgstr "已启用的{noun}中，{0} 在其注册地址上响应了我们的握�
 msgid "{0} of enabled answered"
 msgstr "已启用的 {0} 有响应"
 
-#. placeholder {0}: formatInt(evo)
-msgid "{0} of them evonodes"
-msgstr "其中 {0} 个为 evonode"
+#. placeholder {0}: formatInt(r.folded)
+msgid "{0} older releases"
+msgstr "另有 {0} 个较旧的发布版本"
+
+#. placeholder {0}: share(onLatestMajor, sum)
+msgid "{0} on Core {latestMajor}"
+msgstr "{0} 运行 Core {latestMajor}"
 
 #. placeholder {0}: formatInt(r.folded)
 msgid "{0} other clients"
 msgstr "另有 {0} 个其他客户端"
 
 #. placeholder {0}: formatInt(r.folded)
-msgid "{0} other releases"
-msgstr "另有 {0} 个其他发布版本"
+#. placeholder {1}: majorOf(latest)!
+msgid "{0} other Core {1} releases"
+msgstr "另有 {0} 个 Core {1} 发布版本"
 
-#. placeholder {0}: formatInt(d.overall.pass)
+#. placeholder {0}: formatPercent(ready, 1)
 msgid "{0} ready"
 msgstr "{0} 个就绪"
-
-#. placeholder {0}: top[0]
-#. placeholder {1}: share(top[1], sum)
-#. placeholder {2}: second[0]
-#. placeholder {3}: share(second[1], sum)
-msgid "{0} runs on {1} of {noun} and {2} on {3}."
-msgstr "在{noun}中，{0} 占 {1}，{2} 占 {3}。"
-
-#. placeholder {0}: top[0]
-#. placeholder {1}: share(top[1], sum)
-msgid "{0} runs on {1} of {noun}."
-msgstr "在{noun}中，{0} 占 {1}。"
 
 #. placeholder {0}: formatInt(v.tested)
 #. placeholder {1}: formatInt(Math.round(median(v.headers_per_sec) ?? 0))
 #. placeholder {2}: formatInt(Math.round(median(v.ping_ms) ?? 0))
-msgid "{0} tested this cycle. Median {1} headers/s, ping {2} ms."
-msgstr "本周期已测试 {0} 个。中位数 {1} 个区块头/秒，ping {2} ms。"
+msgid "{0} tested · median {1} headers/s · ping {2} ms"
+msgstr "已测 {0} 个 · 中位数 {1} 区块头/秒 · ping {2} ms"
 
 #. placeholder {0}: block(b)
 #. placeholder {1}: b.estimated ? t`about` + ' ' : ''
@@ -196,11 +202,14 @@ msgstr "{0}：{1}，发出信号"
 msgid "{answered, plural, one {# masternode answered the last crawl} other {# masternodes answered the last crawl}}"
 msgstr "{answered, plural, other {# 个主节点在上次抓取中响应}}"
 
-msgid "{diff, plural, one {# more masternode answering than a day ago} other {# more masternodes answering than a day ago}}"
-msgstr "{diff, plural, other {应答的主节点比一天前多 # 个}}"
+msgid "{diff, plural, one {# more answering than a day ago} other {# more answering than a day ago}}"
+msgstr "{diff, plural, other {响应数比一天前多 #}}"
 
 msgid "{diff, plural, one {That’s # more than a day ago.} other {That’s # more than a day ago.}}"
 msgstr "{diff, plural, other {比一天前多 # 个。}}"
+
+msgid "{passing} pass every check"
+msgstr "{passing} 通过全部检查"
 
 msgid "{silent, plural, one {# didn't answer} other {# didn't answer}}"
 msgstr "{silent, plural, other {# 个未响应}}"
@@ -210,9 +219,6 @@ msgstr "<0.1%"
 
 msgid "<0>{count}</0> masternodes answered the last crawl"
 msgstr "<0>{count}</0> 个主节点在上次抓取中响应"
-
-msgid "0 ready"
-msgstr "0 个就绪"
 
 msgid "1 y"
 msgstr "1年"
@@ -250,6 +256,12 @@ msgstr "约 {0}"
 msgid "about {0} at today's pace"
 msgstr "按今天的速度约 {0}"
 
+msgid "About address networks"
+msgstr "关于地址网络"
+
+msgid "About the network size"
+msgstr "关于网络规模"
+
 msgid "About the pool tags"
 msgstr "关于矿池标签"
 
@@ -271,6 +283,12 @@ msgstr "活跃"
 
 msgid "Address networks"
 msgstr "地址网络"
+
+msgid "Addresses seen this week"
+msgstr "本周见到的地址"
+
+msgid "Addresses that accept connections"
+msgstr "接受连接的地址"
 
 msgid "Addresses tried"
 msgstr "已尝试的地址"
@@ -302,9 +320,6 @@ msgstr "有应答"
 
 msgid "As many as a day ago."
 msgstr "与一天前数量相同。"
-
-msgid "as many masternodes answering as a day ago"
-msgstr "应答的主节点数量与一天前相同"
 
 #. placeholder {0}: when(p.timeout)
 msgid "At that pace no window locks in before the timeout, {0}."
@@ -436,6 +451,9 @@ msgstr "Core 24"
 msgid "Core 24 activation"
 msgstr "Core 24 激活"
 
+msgid "Core 24 activation tracker"
+msgstr "Core 24 激活进度"
+
 #. placeholder {0}: when(p.start_time)
 msgid "Core 24 can't start before {0} (the chain's median time). Then masternodes signal it, and miners vote window by window."
 msgstr "Core 24 在 {0}（链的中位时间）之前无法启动。之后主节点发出信号，矿工逐个窗口投票。"
@@ -491,15 +509,19 @@ msgstr "Core 区块、主节点和 Platform 记录，一站式查看。每个数
 msgid "Core height"
 msgstr "Core 高度"
 
+msgid "Core payments"
+msgstr "Core 支付"
+
 msgid "Core tip"
 msgstr "Core 链顶"
+
+#. placeholder {0}: formatInt(crawl.tried)
+msgid "Counted are the addresses that answered at least once this week, plus every enabled masternode’s. The latest crawl tried {0} addresses in all."
+msgstr "统计的是本周至少响应过一次的地址，加上每个已启用主节点的地址。最近一次爬取共尝试了 {0} 个地址。"
 
 #. placeholder {0}: formatInt(crawl.tip_height)
 msgid "counted at block {0}"
 msgstr "统计于区块 {0}"
-
-msgid "countries"
-msgstr "国家/地区"
 
 msgid "Countries"
 msgstr "国家/地区"
@@ -512,9 +534,6 @@ msgstr "DAPI 的主节点列表目前不可用。"
 
 msgid "Dash Core"
 msgstr "Dash Core"
-
-msgid "Dash Core 24 activation is under way."
-msgstr "Dash Core 24 激活正在进行中。"
 
 msgid "Dash Platform"
 msgstr "Dash Platform"
@@ -557,6 +576,9 @@ msgstr "已启用"
 msgid "Enabled"
 msgstr "已启用"
 
+msgid "Enabled {noun}"
+msgstr "已启用的{noun}"
+
 msgid "Enabled masternodes"
 msgstr "已启用的主节点"
 
@@ -581,9 +603,6 @@ msgstr "所有响应抓取的 Dash 节点：运行什么、托管在哪里，以
 msgid "Every version and user agent"
 msgstr "所有版本和 user agent"
 
-msgid "Everything else"
-msgstr "其他所有"
-
 msgid "Evonode Platform health"
 msgstr "Evonode Platform 健康状况"
 
@@ -595,9 +614,6 @@ msgstr "Evonode"
 
 msgid "evonodes only"
 msgstr "仅 evonode"
-
-msgid "Evonodes, Core payments"
-msgstr "Evonode，Core 付款"
 
 msgid "Evonodes, Platform rewards"
 msgstr "Evonode，Platform 奖励"
@@ -617,23 +633,14 @@ msgstr "首个可计入的窗口开启，最早于"
 msgid "Focus the chart and press the arrow keys to read a point."
 msgstr "聚焦图表并按方向键读取数据点。"
 
-msgid "Follow it on the activation tracker"
-msgstr "在激活跟踪器中关注"
-
 msgid "Formed at"
 msgstr "形成于"
 
 msgid "From block"
 msgstr "起始区块"
 
-msgid "Grade {g}"
-msgstr "等级 {g}"
-
 msgid "Hash rate"
 msgstr "算力"
-
-msgid "Healthy"
-msgstr "健康"
 
 msgid "highest seen"
 msgstr "历史最高"
@@ -649,6 +656,12 @@ msgstr "服务速度"
 
 msgid "How the outlook is worked out"
 msgstr "展望如何计算"
+
+msgid "How the speed is tested"
+msgstr "速度如何测试"
+
+msgid "How the yield is measured"
+msgstr "收益率如何计算"
 
 msgid "Hyphen doesn't index devnets"
 msgstr "Hyphen 不索引开发网"
@@ -675,9 +688,6 @@ msgstr "IPv6"
 msgid "It's from block {0}; our dashd or the crawler host may be down."
 msgstr "这是区块 {0} 的数据；我们的 dashd 或爬虫主机可能已宕机。"
 
-msgid "Known addresses"
-msgstr "已知地址"
-
 msgid "Latest Core blocks"
 msgstr "最新 Core 区块"
 
@@ -689,6 +699,10 @@ msgstr "最新 Platform 状态转换"
 
 msgid "latest release"
 msgstr "最新发布版"
+
+#. placeholder {0}: latest ?? ''
+msgid "Latest release {0}:"
+msgstr "最新发布版 {0}:"
 
 msgid "Left, at today's pace"
 msgstr "剩余（按今天的速度）"
@@ -750,13 +764,17 @@ msgstr "可达的主节点"
 msgid "Masternodes' signal mined"
 msgstr "主节点信号已挖出"
 
+#. placeholder {0}: String(r.window_days)
+msgid "Median annual yield, last {0} days"
+msgstr "年化收益率中位数，最近 {0} 天"
+
 #. placeholder {0}: formatInt(r.regular?.masternodes ?? 0)
 msgid "median of {0}, on 1,000 DASH"
 msgstr "{0} 个主节点的中位数，按 1,000 DASH 计"
 
 #. placeholder {0}: formatInt(r.evo?.masternodes ?? 0)
-msgid "median of {0}, on 4,000 DASH, Core payments and Platform rewards together"
-msgstr "{0} 个 evonode 的中位数，按 4,000 DASH 计，Core 付款与 Platform 奖励合计"
+msgid "median of {0}, on 4,000 DASH"
+msgstr "{0} 个的中位数,按 4,000 DASH 计"
 
 #. placeholder {0}: formatInt(r.evo?.masternodes ?? 0)
 msgid "median of {0}, on 4,000 DASH; Core payments only, Platform rewards aren't counted"
@@ -765,10 +783,7 @@ msgstr "{0} 个 evonode 的中位数，按 4,000 DASH 计；仅含 Core 付款�
 msgid "Median time reaches the start time"
 msgstr "中位时间达到开始时间"
 
-msgid "median, from the Core blocks that paid them"
-msgstr "中位数，来自支付给它们的 Core 区块"
-
-#. placeholder {0}: String(Math.round(r.evo.platform_span_days ?? 0))
+#. placeholder {0}: String(Math.round(r.evo.platform_span_days))
 msgid "median, from the Platform epochs of the last {0} days"
 msgstr "中位数，来自最近 {0} 天的 Platform 纪元"
 
@@ -803,9 +818,6 @@ msgstr "矿工暂时还不能投票。从首个计入的窗口起，每个 {0} �
 
 msgid "Miners' signalling"
 msgstr "矿工的信号"
-
-msgid "Name"
-msgstr "名称"
 
 msgid "Needed"
 msgstr "所需"
@@ -933,6 +945,10 @@ msgstr "现在"
 msgid "Now"
 msgstr "现在"
 
+#. placeholder {0}: formatInt(n.known)
+msgid "of {0} known"
+msgstr "已知 {0} 个中"
+
 #. placeholder {0}: formatInt(r.mined)
 msgid "of {0} so far"
 msgstr "目前共 {0}"
@@ -940,13 +956,10 @@ msgstr "目前共 {0}"
 msgid "Older"
 msgstr "较早"
 
-msgid "on"
-msgstr "占"
-
 msgid "On pace"
 msgstr "速度达标"
 
-#. placeholder {0}: formatPercent(good / runs, 0)
+#. placeholder {0}: formatPercent(goodShare, 0)
 msgid "Once every two weeks we download the latest 50,000 headers and the masternode list from every enabled masternode. {0} of the latest tests earned an A or B."
 msgstr "每两周一次，我们会从每个已启用的主节点下载最新的 50,000 个区块头和主节点列表。在最近的测试中，{0} 获得了 A 或 B。"
 
@@ -991,9 +1004,6 @@ msgstr "无法达到"
 msgid "Over time"
 msgstr "随时间变化"
 
-msgid "Pass every check"
-msgstr "通过所有检查"
-
 msgid "Pending transactions"
 msgstr "待处理交易"
 
@@ -1021,6 +1031,9 @@ msgstr "Platform Explorer 没有响应"
 msgid "Platform height"
 msgstr "Platform 高度"
 
+msgid "Platform rewards"
+msgstr "Platform 奖励"
+
 msgid "Platform transitions"
 msgstr "Platform 状态转换"
 
@@ -1047,9 +1060,6 @@ msgstr "协议"
 
 msgid "Protocol version"
 msgstr "协议版本"
-
-msgid "providers"
-msgstr "提供商"
 
 msgid "Quorum"
 msgstr "Quorum"
@@ -1093,12 +1103,6 @@ msgstr "可达地址"
 msgid "Reachable addresses are addresses, not nodes: a node doesn’t tell peers its addresses on other networks, so one reachable on IPv4 and Tor counts twice. Masternodes are counted by their registration, so each counts once."
 msgstr "可达地址是地址而不是节点：节点不会告诉对等节点它在其他网络上的地址，因此一个通过 IPv4 和 Tor 都可达的节点会被计两次。主节点按注册计数，因此每个只计一次。"
 
-msgid "Reachable masternodes"
-msgstr "可达的主节点"
-
-msgid "Reachable now"
-msgstr "当前可达"
-
 #. placeholder {0}: doc.dashd || t`unknown version`
 #. placeholder {1}: formatInt(doc.tip.height)
 #. placeholder {2}: when(doc.updated)
@@ -1125,14 +1129,14 @@ msgstr "候选版本"
 msgid "Release candidates"
 msgstr "候选版本"
 
-msgid "Release ladder"
-msgstr "发布阶梯"
-
 msgid "Releases"
 msgstr "发布版本"
 
 msgid "Request id"
 msgstr "请求 ID"
+
+msgid "same as a day ago"
+msgstr "与一天前相同"
 
 msgid "Search Radar"
 msgstr "搜索 Radar"
@@ -1154,6 +1158,9 @@ msgstr "系列"
 
 msgid "Share"
 msgstr "占比"
+
+msgid "Share of {noun}"
+msgstr "{noun}占比"
 
 msgid "Share of {noun} by country"
 msgstr "各国家/地区的{noun}占比"
@@ -1209,6 +1216,10 @@ msgstr "大小"
 
 msgid "Sources, Dash Core v24.0.0:"
 msgstr "来源，Dash Core v24.0.0："
+
+#. placeholder {0}: v.location || v.vantage
+msgid "Speed-test grades, {0}"
+msgstr "速度测试评级，{0}"
 
 #. placeholder {0}: when(p.start_time)
 msgid "start time {0}"
@@ -1365,6 +1376,9 @@ msgstr "今天的速度取最近 {0} 个区块：{1} 个发出信号（{2}）。
 msgid "Today's pace is this window's so far: {0} of {1} blocks signalled ({2})."
 msgstr "今天的速度取本窗口目前的数据：{1} 个区块中 {0} 个发出信号（{2}）。"
 
+msgid "Top three identified:"
+msgstr "已识别的前三名:"
+
 msgid "Tor"
 msgstr "Tor"
 
@@ -1435,6 +1449,9 @@ msgstr "无法从我们的 dashd 读取签名 Quorum：{0}"
 msgid "What happens next"
 msgstr "接下来会发生什么"
 
+msgid "What healthy means"
+msgstr "“健康”的含义"
+
 #. placeholder {0}: String(r.window_days)
 msgid "What masternodes were actually paid over the last {0} days, against their collateral, counting every enabled masternode registered for at least that long."
 msgstr "过去 {0} 天内主节点实际获得的付款相对其抵押品的比例，统计所有已注册至少这么久的已启用主节点。"
@@ -1457,6 +1474,9 @@ msgstr "哪些节点"
 #. placeholder {0}: formatInt(g.quorums.length)
 msgid "Which quorum signs depends on the request and on which quorums are active then (a new one forms about every day), so here are the {0} active now, the one that would sign now first."
 msgstr "具体由哪个 Quorum 签名，取决于请求以及届时哪些 Quorum 处于活动状态（约每天形成一个新的），因此这里列出当前活动的 {0} 个，将要签名的排在最前。"
+
+msgid "Who is counted"
+msgstr "统计范围"
 
 #. placeholder {0}: formatInt(mined)
 msgid "Who mined this window's {0} blocks and how many of them signalled. Best effort: we go by the tag in each block's coinbase, which is whatever the miner wrote, and some blocks carry none."

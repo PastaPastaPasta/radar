@@ -64,6 +64,14 @@ export function byNewest(a: string, b: string): number {
 /** Whether a version is Dash Core's ("23.1.9"), not another client's ("Lksc Core 5.18"). */
 export const isCoreVersion = (v: string): boolean => /^\d+\./.test(v)
 
+/** A Core version's major release: "24.0.3" gives "24". */
+export const majorOf = (v: string): string | undefined =>
+  isCoreVersion(v) ? v.slice(0, v.indexOf('.')) : undefined
+
+/** How many of the rows run any Core version of `major`: releases, candidates and other builds alike. */
+export const onMajor = (rows: readonly DistRow[], major: string): number =>
+  rows.reduce((a, [v, n]) => (majorOf(v) === major ? a + n : a), 0)
+
 /** The version in a user agent: "/Dash Core:24.0.0/" gives "24.0.0". */
 export const versionOf = (ua: string): string => /^\/Dash Core:([^/(]+)/.exec(ua)?.[1] ?? (ua || '')
 
@@ -132,8 +140,9 @@ export interface LadderGroup {
 
 /**
  * The ladder's groups, the latest release always first (even if nothing runs it yet): releases newest first, those
- * under 1 % after the latest folded into one row; release candidates; builds that match no release; and other
- * clients folded into one row. Without the release list, one group by share.
+ * under 1 % after the latest folded into one row for the latest's major and one for the rest, so a major's share can
+ * be read off its rows; release candidates; builds that match no release; and other clients folded into one row.
+ * Without the release list, one group by share.
  */
 export function ladderGroups(
   book: ReleaseBook,
@@ -155,8 +164,13 @@ export function ladderGroups(
   if (latest !== undefined && !kinds[0]!.some(([v]) => v === latest)) kinds[0]!.unshift([latest, 0])
   const shown = kinds[0]!.filter(([v, n]) => v === latest || fraction(n, sum) >= 0.01)
   const older = kinds[0]!.filter((r) => !shown.includes(r))
+  const major = latest === undefined ? undefined : majorOf(latest)
+  const folds = [
+    older.filter(([v]) => majorOf(v) === major),
+    older.filter(([v]) => majorOf(v) !== major),
+  ].filter((rows) => rows.length > 0)
   const groups: LadderGroup[] = [
-    { kind: 0, rows: [...shown.map(row), ...(older.length ? [fold(older)] : [])] },
+    { kind: 0, rows: [...shown.map(row), ...folds.map(fold)] },
     { kind: 1, rows: kinds[1]!.map(row) },
     { kind: 2, rows: kinds[2]!.map(row) },
     { kind: 3, rows: kinds[3]!.length ? [fold(kinds[3]!)] : [] },

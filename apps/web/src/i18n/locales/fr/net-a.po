@@ -29,27 +29,33 @@ msgstr "« Announce 24 » compte les membres valides dont le dernier handshake a
 msgid "(empty)"
 msgstr "(vide)"
 
+#. placeholder {0}: realCountries.length
+msgid "{0, plural, one {# country} other {# countries}}"
+msgstr "{0, plural, one {# pays} other {# pays}}"
+
 #. placeholder {0}: -diff
-msgid "{0, plural, one {# fewer masternode answering than a day ago} other {# fewer masternodes answering than a day ago}}"
-msgstr "{0, plural, one {# masternode de moins répond qu’il y a un jour} other {# masternodes de moins répondent qu’il y a un jour}}"
+msgid "{0, plural, one {# fewer answering than a day ago} other {# fewer answering than a day ago}}"
+msgstr "{0, plural, one {# répondant de moins qu’il y a un jour} other {# répondants de moins qu’il y a un jour}}"
+
+#. placeholder {0}: n.masternodes
+msgid "{0, plural, one {# masternode answering} other {# masternodes answering}}"
+msgstr "{0, plural, one {# masternode répond} other {# masternodes répondent}}"
+
+#. placeholder {0}: realOrgs.length
+msgid "{0, plural, one {# provider} other {# providers}}"
+msgstr "{0, plural, one {# hébergeur} other {# hébergeurs}}"
 
 #. placeholder {0}: -diff
 msgid "{0, plural, one {That’s # fewer than a day ago.} other {That’s # fewer than a day ago.}}"
 msgstr "{0, plural, one {C’est # de moins qu’il y a un jour.} other {C’est # de moins qu’il y a un jour.}}"
 
+#. placeholder {0}: formatPercent(goodShare, 0)
+msgid "{0} A or B"
+msgstr "{0} A ou B"
+
 #. placeholder {0}: formatPercent(v, 1)
 msgid "{0} a year"
 msgstr "{0} par an"
-
-#. placeholder {0}: formatInt(crawl.reachable)
-#. placeholder {1}: formatInt(crawl.tried)
-msgid "{0} addresses answered out of {1} tried. Counted are addresses that answered at least once this week, plus every enabled masternode’s."
-msgstr "{0} adresses ont répondu sur {1} essayées. Sont comptées les adresses qui ont répondu au moins une fois cette semaine, plus celles de chaque masternode activé."
-
-#. placeholder {0}: countryName(c0[0])
-#. placeholder {1}: share(c0[1], sumCountries)
-msgid "{0} alone has {1}."
-msgstr "Rien que {0} : {1}."
 
 #. placeholder {0}: formatInt(masternodes)
 #. placeholder {1}: formatInt(places.length)
@@ -61,18 +67,12 @@ msgid "{0} fail"
 msgstr "{0} échouent"
 
 #. placeholder {0}: formatInt(d.beyond_version)
-msgid "{0} fail another check that needs a fix."
-msgstr "{0} échouent à un autre contrôle qui demande une correction."
+msgid "{0} fail a check that upgrading alone won’t fix."
+msgstr "{0} échouent à une vérification qu’une simple mise à jour ne corrigera pas."
 
 #. placeholder {0}: formatInt(d.version_only)
 msgid "{0} fail only the version check and need just the upgrade. "
 msgstr "{0} n’échouent qu’au contrôle de version et n’ont besoin que de la mise à niveau. "
-
-#. placeholder {0}: o0.org
-#. placeholder {1}: share(o0.n, sumOrgs)
-#. placeholder {2}: share( realOrgs.slice(0, 3).reduce((a, o) => a + o.n, 0), sumOrgs, )
-msgid "{0} hosts {1} of {noun}, and the three largest providers host {2}."
-msgstr "{0} héberge {1} des {noun}, et les trois plus gros fournisseurs en hébergent {2}."
 
 #. placeholder {0}: formatInt(p.masternodes)
 msgid "{0} masternodes"
@@ -95,12 +95,12 @@ msgctxt "share of blocks"
 msgid "{0} needed"
 msgstr "{0} nécessaires"
 
-#. placeholder {0}: formatInt(p.healthy)
+#. placeholder {0}: formatInt(answered.n)
+#. placeholder {0}: formatInt(d.overall.pass)
 #. placeholder {0}: formatInt(q.valid)
-#. placeholder {0}: formatInt(r.signalling)
-#. placeholder {1}: formatInt(p.checked)
+#. placeholder {1}: formatInt(answered.of)
+#. placeholder {1}: formatInt(d.masternodes)
 #. placeholder {1}: formatInt(p.window)
-#. placeholder {1}: formatInt(q.members)
 msgid "{0} of {1}"
 msgstr "{0} sur {1}"
 
@@ -129,12 +129,25 @@ msgstr "{0} blocs sur {1}, à la tentative {2}"
 msgid "{0} of {1} enabled evonodes passed our latest Platform check: their Tenderdash P2P port was open and their DAPI answered over valid TLS."
 msgstr "{0} des {1} evonodes activés ont réussi notre dernière vérification Platform : leur port P2P Tenderdash était ouvert et leur DAPI a répondu via un TLS valide."
 
-#. placeholder {0}: ready(d.overall.pass)
-#. placeholder {1}: formatInt(d.masternodes)
-msgid "{0} of {1} enabled masternodes pass every check."
-msgstr "{0} des {1} masternodes activés réussissent toutes les vérifications."
+#. placeholder {0}: formatInt(p.healthy)
+#. placeholder {1}: formatInt(p.checked)
+msgid "{0} of {1} healthy"
+msgstr "{0} sur {1} en bonne santé"
 
-#. placeholder {0}: share(reach.yes, reach.yes + reach.no)
+#. placeholder {0}: formatInt(answered.n)
+#. placeholder {1}: formatInt(answered.of)
+msgid "{0} of {1} seen this week"
+msgstr "{0} sur {1} vues cette semaine"
+
+#. placeholder {0}: share(answered.n, answered.of)
+msgid "{0} of addresses answered"
+msgstr "{0} des adresses ont répondu"
+
+#. placeholder {0}: share(answered.n, answered.of)
+msgid "{0} of enabled {noun} answered"
+msgstr "{0} des {noun} activés ont répondu"
+
+#. placeholder {0}: share(answered.n, answered.of)
 #. placeholder {1}: formatInt(reach.no)
 msgid "{0} of enabled {noun} answered our handshake on their registered address; {1} didn't."
 msgstr "{0} des {noun} activés ont répondu à notre handshake sur leur adresse enregistrée ; {1} n’ont pas répondu."
@@ -143,39 +156,32 @@ msgstr "{0} des {noun} activés ont répondu à notre handshake sur leur adresse
 msgid "{0} of enabled answered"
 msgstr "{0} des activés ont répondu"
 
-#. placeholder {0}: formatInt(evo)
-msgid "{0} of them evonodes"
-msgstr "dont {0} evonodes"
+#. placeholder {0}: formatInt(r.folded)
+msgid "{0} older releases"
+msgstr "{0} versions publiées plus anciennes"
+
+#. placeholder {0}: share(onLatestMajor, sum)
+msgid "{0} on Core {latestMajor}"
+msgstr "{0} sur Core {latestMajor}"
 
 #. placeholder {0}: formatInt(r.folded)
 msgid "{0} other clients"
 msgstr "{0} autres clients"
 
 #. placeholder {0}: formatInt(r.folded)
-msgid "{0} other releases"
-msgstr "{0} autres versions publiées"
+#. placeholder {1}: majorOf(latest)!
+msgid "{0} other Core {1} releases"
+msgstr "{0} autres versions publiées de Core {1}"
 
-#. placeholder {0}: formatInt(d.overall.pass)
+#. placeholder {0}: formatPercent(ready, 1)
 msgid "{0} ready"
 msgstr "{0} prêts"
-
-#. placeholder {0}: top[0]
-#. placeholder {1}: share(top[1], sum)
-#. placeholder {2}: second[0]
-#. placeholder {3}: share(second[1], sum)
-msgid "{0} runs on {1} of {noun} and {2} on {3}."
-msgstr "{0} tourne sur {1} des {noun} et {2} sur {3}."
-
-#. placeholder {0}: top[0]
-#. placeholder {1}: share(top[1], sum)
-msgid "{0} runs on {1} of {noun}."
-msgstr "{0} tourne sur {1} des {noun}."
 
 #. placeholder {0}: formatInt(v.tested)
 #. placeholder {1}: formatInt(Math.round(median(v.headers_per_sec) ?? 0))
 #. placeholder {2}: formatInt(Math.round(median(v.ping_ms) ?? 0))
-msgid "{0} tested this cycle. Median {1} headers/s, ping {2} ms."
-msgstr "{0} testés durant ce cycle. Médiane de {1} en-têtes/s, ping de {2} ms."
+msgid "{0} tested · median {1} headers/s · ping {2} ms"
+msgstr "{0} testés · médiane {1} en-têtes/s · ping {2} ms"
 
 #. placeholder {0}: block(b)
 #. placeholder {1}: b.estimated ? t`about` + ' ' : ''
@@ -196,11 +202,14 @@ msgstr "{0} : {1}, signale"
 msgid "{answered, plural, one {# masternode answered the last crawl} other {# masternodes answered the last crawl}}"
 msgstr "{answered, plural, one {# masternode a répondu au dernier crawl} other {# masternodes ont répondu au dernier crawl}}"
 
-msgid "{diff, plural, one {# more masternode answering than a day ago} other {# more masternodes answering than a day ago}}"
-msgstr "{diff, plural, one {# masternode de plus répond qu’il y a un jour} other {# masternodes de plus répondent qu’il y a un jour}}"
+msgid "{diff, plural, one {# more answering than a day ago} other {# more answering than a day ago}}"
+msgstr "{diff, plural, one {# répondant de plus qu’il y a un jour} other {# répondants de plus qu’il y a un jour}}"
 
 msgid "{diff, plural, one {That’s # more than a day ago.} other {That’s # more than a day ago.}}"
 msgstr "{diff, plural, one {C’est # de plus qu’il y a un jour.} other {C’est # de plus qu’il y a un jour.}}"
+
+msgid "{passing} pass every check"
+msgstr "{passing} passent toutes les vérifications"
 
 msgid "{silent, plural, one {# didn't answer} other {# didn't answer}}"
 msgstr "{silent, plural, one {# n’a pas répondu} other {# n’ont pas répondu}}"
@@ -210,9 +219,6 @@ msgstr "<0,1 %"
 
 msgid "<0>{count}</0> masternodes answered the last crawl"
 msgstr "<0>{count}</0> masternodes ont répondu au dernier crawl"
-
-msgid "0 ready"
-msgstr "0 prêt"
 
 msgid "1 y"
 msgstr "1 an"
@@ -250,6 +256,12 @@ msgstr "environ {0}"
 msgid "about {0} at today's pace"
 msgstr "environ {0} au rythme d’aujourd’hui"
 
+msgid "About address networks"
+msgstr "À propos des réseaux d’adresses"
+
+msgid "About the network size"
+msgstr "À propos de la taille du réseau"
+
 msgid "About the pool tags"
 msgstr "À propos des tags de pool"
 
@@ -271,6 +283,12 @@ msgstr "Active"
 
 msgid "Address networks"
 msgstr "Réseaux d’adresses"
+
+msgid "Addresses seen this week"
+msgstr "Adresses vues cette semaine"
+
+msgid "Addresses that accept connections"
+msgstr "Adresses qui acceptent les connexions"
 
 msgid "Addresses tried"
 msgstr "Adresses essayées"
@@ -302,9 +320,6 @@ msgstr "A répondu"
 
 msgid "As many as a day ago."
 msgstr "Autant qu’il y a un jour."
-
-msgid "as many masternodes answering as a day ago"
-msgstr "autant de masternodes qui répondent qu’il y a un jour"
 
 #. placeholder {0}: when(p.timeout)
 msgid "At that pace no window locks in before the timeout, {0}."
@@ -436,6 +451,9 @@ msgstr "Core 24"
 msgid "Core 24 activation"
 msgstr "Activation de Core 24"
 
+msgid "Core 24 activation tracker"
+msgstr "Suivi de l’activation de Core 24"
+
 #. placeholder {0}: when(p.start_time)
 msgid "Core 24 can't start before {0} (the chain's median time). Then masternodes signal it, and miners vote window by window."
 msgstr "Core 24 ne peut pas démarrer avant {0} (le temps médian de la chaîne). Ensuite, les masternodes le signalent et les mineurs votent fenêtre par fenêtre."
@@ -491,15 +509,19 @@ msgstr "Blocs Core, masternodes et données Platform au même endroit. Chaque ch
 msgid "Core height"
 msgstr "Hauteur Core"
 
+msgid "Core payments"
+msgstr "Paiements Core"
+
 msgid "Core tip"
 msgstr "Pointe de Core"
+
+#. placeholder {0}: formatInt(crawl.tried)
+msgid "Counted are the addresses that answered at least once this week, plus every enabled masternode’s. The latest crawl tried {0} addresses in all."
+msgstr "Sont comptées les adresses qui ont répondu au moins une fois cette semaine, plus celle de chaque masternode activé. Le dernier crawl a essayé {0} adresses en tout."
 
 #. placeholder {0}: formatInt(crawl.tip_height)
 msgid "counted at block {0}"
 msgstr "comptés au bloc {0}"
-
-msgid "countries"
-msgstr "pays"
 
 msgid "Countries"
 msgstr "Pays"
@@ -512,9 +534,6 @@ msgstr "La liste des masternodes de DAPI n’est pas disponible pour le moment."
 
 msgid "Dash Core"
 msgstr "Dash Core"
-
-msgid "Dash Core 24 activation is under way."
-msgstr "L’activation de Dash Core 24 est en cours."
 
 msgid "Dash Platform"
 msgstr "Dash Platform"
@@ -557,6 +576,9 @@ msgstr "activés"
 msgid "Enabled"
 msgstr "Activé"
 
+msgid "Enabled {noun}"
+msgstr "{noun} activés"
+
 msgid "Enabled masternodes"
 msgstr "Masternodes activés"
 
@@ -581,9 +603,6 @@ msgstr "Tous les nœuds Dash qui répondent à un crawl : ce qu’ils exécutent
 msgid "Every version and user agent"
 msgstr "Toutes les versions et tous les user agents"
 
-msgid "Everything else"
-msgstr "Tout le reste"
-
 msgid "Evonode Platform health"
 msgstr "État Platform des evonodes"
 
@@ -595,9 +614,6 @@ msgstr "Evonodes"
 
 msgid "evonodes only"
 msgstr "evonodes uniquement"
-
-msgid "Evonodes, Core payments"
-msgstr "Evonodes, paiements Core"
 
 msgid "Evonodes, Platform rewards"
 msgstr "Evonodes, récompenses Platform"
@@ -617,23 +633,14 @@ msgstr "Ouverture de la première fenêtre qui peut compter, au plus tôt"
 msgid "Focus the chart and press the arrow keys to read a point."
 msgstr "Placez le focus sur le graphique et utilisez les flèches du clavier pour lire un point."
 
-msgid "Follow it on the activation tracker"
-msgstr "Suivez-le sur le suivi d’activation"
-
 msgid "Formed at"
 msgstr "Formé à"
 
 msgid "From block"
 msgstr "Depuis le bloc"
 
-msgid "Grade {g}"
-msgstr "Note {g}"
-
 msgid "Hash rate"
 msgstr "Taux de hachage"
-
-msgid "Healthy"
-msgstr "En bonne santé"
 
 msgid "highest seen"
 msgstr "plus haut observé"
@@ -649,6 +656,12 @@ msgstr "Leur rapidité de service"
 
 msgid "How the outlook is worked out"
 msgstr "Comment la prévision est calculée"
+
+msgid "How the speed is tested"
+msgstr "Comment la vitesse est testée"
+
+msgid "How the yield is measured"
+msgstr "Comment le rendement est mesuré"
 
 msgid "Hyphen doesn't index devnets"
 msgstr "Hyphen n’indexe pas les devnets"
@@ -675,9 +688,6 @@ msgstr "IPv6"
 msgid "It's from block {0}; our dashd or the crawler host may be down."
 msgstr "Elle date du bloc {0} ; notre dashd ou l’hôte du crawler est peut-être hors service."
 
-msgid "Known addresses"
-msgstr "Adresses connues"
-
 msgid "Latest Core blocks"
 msgstr "Derniers blocs Core"
 
@@ -689,6 +699,10 @@ msgstr "Dernières transitions Platform"
 
 msgid "latest release"
 msgstr "dernière version"
+
+#. placeholder {0}: latest ?? ''
+msgid "Latest release {0}:"
+msgstr "Dernière version {0} :"
 
 msgid "Left, at today's pace"
 msgstr "Restants, au rythme d’aujourd’hui"
@@ -750,13 +764,17 @@ msgstr "Masternodes joignables"
 msgid "Masternodes' signal mined"
 msgstr "Signal des masternodes miné"
 
+#. placeholder {0}: String(r.window_days)
+msgid "Median annual yield, last {0} days"
+msgstr "Rendement annuel médian, {0} derniers jours"
+
 #. placeholder {0}: formatInt(r.regular?.masternodes ?? 0)
 msgid "median of {0}, on 1,000 DASH"
 msgstr "médiane de {0}, sur 1 000 DASH"
 
 #. placeholder {0}: formatInt(r.evo?.masternodes ?? 0)
-msgid "median of {0}, on 4,000 DASH, Core payments and Platform rewards together"
-msgstr "médiane de {0}, sur 4 000 DASH, paiements Core et récompenses Platform confondus"
+msgid "median of {0}, on 4,000 DASH"
+msgstr "médiane de {0}, sur 4 000 DASH"
 
 #. placeholder {0}: formatInt(r.evo?.masternodes ?? 0)
 msgid "median of {0}, on 4,000 DASH; Core payments only, Platform rewards aren't counted"
@@ -765,10 +783,7 @@ msgstr "médiane de {0}, sur 4 000 DASH ; paiements Core uniquement, les récomp
 msgid "Median time reaches the start time"
 msgstr "Le temps médian atteint l’heure de début"
 
-msgid "median, from the Core blocks that paid them"
-msgstr "médiane, d’après les blocs Core qui les ont payés"
-
-#. placeholder {0}: String(Math.round(r.evo.platform_span_days ?? 0))
+#. placeholder {0}: String(Math.round(r.evo.platform_span_days))
 msgid "median, from the Platform epochs of the last {0} days"
 msgstr "médiane, d’après les époques Platform des {0} derniers jours"
 
@@ -803,9 +818,6 @@ msgstr "Les mineurs ne peuvent pas encore voter. À partir de la première fenê
 
 msgid "Miners' signalling"
 msgstr "Signalisation des mineurs"
-
-msgid "Name"
-msgstr "Nom"
 
 msgid "Needed"
 msgstr "Nécessaire"
@@ -933,6 +945,10 @@ msgstr "maintenant"
 msgid "Now"
 msgstr "Maintenant"
 
+#. placeholder {0}: formatInt(n.known)
+msgid "of {0} known"
+msgstr "sur {0} connues"
+
 #. placeholder {0}: formatInt(r.mined)
 msgid "of {0} so far"
 msgstr "sur {0} jusqu’ici"
@@ -940,13 +956,10 @@ msgstr "sur {0} jusqu’ici"
 msgid "Older"
 msgstr "Plus anciens"
 
-msgid "on"
-msgstr "sur"
-
 msgid "On pace"
 msgstr "Au rythme"
 
-#. placeholder {0}: formatPercent(good / runs, 0)
+#. placeholder {0}: formatPercent(goodShare, 0)
 msgid "Once every two weeks we download the latest 50,000 headers and the masternode list from every enabled masternode. {0} of the latest tests earned an A or B."
 msgstr "Toutes les deux semaines, nous téléchargeons les 50 000 derniers en-têtes et la liste des masternodes depuis chaque masternode activé. {0} des derniers tests ont obtenu un A ou un B."
 
@@ -991,9 +1004,6 @@ msgstr "Hors d’atteinte"
 msgid "Over time"
 msgstr "Dans le temps"
 
-msgid "Pass every check"
-msgstr "Réussissent tous les contrôles"
-
 msgid "Pending transactions"
 msgstr "Transactions en attente"
 
@@ -1021,6 +1031,9 @@ msgstr "Platform Explorer ne répond pas"
 msgid "Platform height"
 msgstr "Hauteur Platform"
 
+msgid "Platform rewards"
+msgstr "Récompenses Platform"
+
 msgid "Platform transitions"
 msgstr "Transitions Platform"
 
@@ -1047,9 +1060,6 @@ msgstr "Protocole"
 
 msgid "Protocol version"
 msgstr "Version du protocole"
-
-msgid "providers"
-msgstr "fournisseurs"
 
 msgid "Quorum"
 msgstr "Quorum"
@@ -1093,12 +1103,6 @@ msgstr "Adresses joignables"
 msgid "Reachable addresses are addresses, not nodes: a node doesn’t tell peers its addresses on other networks, so one reachable on IPv4 and Tor counts twice. Masternodes are counted by their registration, so each counts once."
 msgstr "Les adresses joignables sont des adresses, pas des nœuds : un nœud ne donne pas à ses pairs ses adresses sur d’autres réseaux, donc un nœud joignable en IPv4 et sur Tor compte deux fois. Les masternodes sont comptés par leur enregistrement, donc chacun une fois."
 
-msgid "Reachable masternodes"
-msgstr "Masternodes joignables"
-
-msgid "Reachable now"
-msgstr "Joignables maintenant"
-
 #. placeholder {0}: doc.dashd || t`unknown version`
 #. placeholder {1}: formatInt(doc.tip.height)
 #. placeholder {2}: when(doc.updated)
@@ -1125,14 +1129,14 @@ msgstr "release candidate"
 msgid "Release candidates"
 msgstr "Release candidates"
 
-msgid "Release ladder"
-msgstr "Échelle des versions"
-
 msgid "Releases"
 msgstr "Versions publiées"
 
 msgid "Request id"
 msgstr "ID de la requête"
+
+msgid "same as a day ago"
+msgstr "autant qu’il y a un jour"
 
 msgid "Search Radar"
 msgstr "Rechercher dans Radar"
@@ -1154,6 +1158,9 @@ msgstr "Série"
 
 msgid "Share"
 msgstr "Part"
+
+msgid "Share of {noun}"
+msgstr "Part des {noun}"
 
 msgid "Share of {noun} by country"
 msgstr "Part des {noun} par pays"
@@ -1209,6 +1216,10 @@ msgstr "Taille"
 
 msgid "Sources, Dash Core v24.0.0:"
 msgstr "Sources, Dash Core v24.0.0 :"
+
+#. placeholder {0}: v.location || v.vantage
+msgid "Speed-test grades, {0}"
+msgstr "Notes des tests de vitesse, {0}"
 
 #. placeholder {0}: when(p.start_time)
 msgid "start time {0}"
@@ -1365,6 +1376,9 @@ msgstr "Le rythme d’aujourd’hui est celui des {0} derniers blocs : {1} ont s
 msgid "Today's pace is this window's so far: {0} of {1} blocks signalled ({2})."
 msgstr "Le rythme d’aujourd’hui est celui de cette fenêtre jusqu’ici : {0} blocs sur {1} ont signalé ({2})."
 
+msgid "Top three identified:"
+msgstr "Les trois premiers identifiés :"
+
 msgid "Tor"
 msgstr "Tor"
 
@@ -1435,6 +1449,9 @@ msgstr "Nous n’avons pas pu lire le quorum signataire depuis notre dashd : {0}
 msgid "What happens next"
 msgstr "Ce qui se passe ensuite"
 
+msgid "What healthy means"
+msgstr "Ce que signifie « en bonne santé »"
+
 #. placeholder {0}: String(r.window_days)
 msgid "What masternodes were actually paid over the last {0} days, against their collateral, counting every enabled masternode registered for at least that long."
 msgstr "Ce que les masternodes ont réellement perçu sur les {0} derniers jours, rapporté à leur collatéral, en comptant chaque masternode activé et enregistré depuis au moins aussi longtemps."
@@ -1457,6 +1474,9 @@ msgstr "Quels nœuds"
 #. placeholder {0}: formatInt(g.quorums.length)
 msgid "Which quorum signs depends on the request and on which quorums are active then (a new one forms about every day), so here are the {0} active now, the one that would sign now first."
 msgstr "Le quorum qui signe dépend de la requête et des quorums actifs à ce moment-là (un nouveau se forme environ chaque jour) ; voici donc les {0} actifs maintenant, celui qui signerait maintenant en premier."
+
+msgid "Who is counted"
+msgstr "Qui est compté"
 
 #. placeholder {0}: formatInt(mined)
 msgid "Who mined this window's {0} blocks and how many of them signalled. Best effort: we go by the tag in each block's coinbase, which is whatever the miner wrote, and some blocks carry none."

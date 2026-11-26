@@ -8,6 +8,8 @@ import {
   keepVersions,
   kindOf,
   ladderGroups,
+  majorOf,
+  onMajor,
   radarScope,
   releaseBook,
   versionOf,
@@ -71,6 +73,29 @@ describe('ladderGroups', () => {
     expect(groups[3]!.rows).toEqual([{ key: 'Foo 1.0', n: 25, folded: 2 }])
   })
 
+  it('folds the latest major’s small releases apart from older majors’', () => {
+    const two = releaseBook({
+      releases: [
+        { tag: 'v24.0.1', version: '24.0.1', prerelease: false, published: 5 },
+        { tag: 'v24.0.0', version: '24.0.0', prerelease: false, published: 3 },
+        { tag: 'v23.1.9', version: '23.1.9', prerelease: false, published: 2 },
+        { tag: 'v23.1.8', version: '23.1.8', prerelease: false, published: 1 },
+      ],
+    })
+    const rows = [
+      ['24.0.1', 900],
+      ['24.0.0', 5],
+      ['23.1.9', 3],
+      ['23.1.8', 2],
+    ] as const
+    const releases = ladderGroups(two, rows.slice(), 910)[0]!.rows
+    expect(releases).toEqual([
+      { key: '24.0.1', n: 900 },
+      { key: '24.0.0', n: 5 },
+      { key: '23.1.9', n: 5, folded: 2 },
+    ])
+  })
+
   it('keeps the latest release first even when nothing runs it', () => {
     const groups = ladderGroups(book, [['23.1.10', 100]], 100)
     expect(groups[0]!.rows[0]).toEqual({ key: '24.0.0', n: 0 })
@@ -126,5 +151,26 @@ describe('shares', () => {
     expect(isTiny(1, 10_000)).toBe(true)
     expect(isTiny(0, 10_000)).toBe(false)
     expect(isTiny(100, 10_000)).toBe(false)
+  })
+})
+
+describe('major releases', () => {
+  it('reads the major of a Core version and nothing else', () => {
+    expect(majorOf('24.0.3')).toBe('24')
+    expect(majorOf('23.1.10')).toBe('23')
+    expect(majorOf('Lksc Core 5.18')).toBeUndefined()
+    expect(majorOf('Unknown')).toBeUndefined()
+  })
+
+  it('counts every build of a major, not a longer major that starts the same', () => {
+    const rows: [string, number][] = [
+      ['24.0.3', 10],
+      ['24.1.0', 2],
+      ['23.1.8', 5],
+      ['240.0.0', 7],
+      ['Unknown', 3],
+    ]
+    expect(onMajor(rows, '24')).toBe(12)
+    expect(onMajor(rows, '23')).toBe(5)
   })
 })

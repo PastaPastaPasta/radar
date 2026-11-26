@@ -2,9 +2,7 @@ import { useLingui } from '@lingui/react/macro'
 import { Link, type LinkProps } from '@tanstack/react-router'
 import { useState, type ReactNode } from 'react'
 import { formatInt, formatPercent } from '@/lib/format'
-import { Chart } from '@/ui'
-
-import { donutOption, type Slice } from './census-charts'
+import { swatchOf, useCensusColors } from './census-colors'
 import { fraction, isTiny } from './census-math'
 
 interface FigureProps {
@@ -50,23 +48,21 @@ export function Figure({ tone, ...body }: FigureProps) {
   )
 }
 
+/** A grid of figures: two a row on a phone, `columns` from 640 px; `tight` keeps three a row on a phone too. */
 export function FigureGrid({
   children,
   columns = 3,
+  tight = false,
 }: {
   children: ReactNode
-  columns?: 2 | 3 | 4 | 6
+  columns?: 3 | 4
+  tight?: boolean
 }) {
-  const cols = {
-    2: 'sm:grid-cols-2',
-    3: 'sm:grid-cols-3',
-    4: 'sm:grid-cols-2 lg:grid-cols-4',
-    6: 'sm:grid-cols-3 lg:grid-cols-6',
-  }[columns]
-  return <div className={`rx-statgrid grid grid-cols-2 gap-2 sm:gap-4 ${cols}`}>{children}</div>
+  const wide = columns === 4 ? 'sm:grid-cols-2 lg:grid-cols-4' : 'sm:grid-cols-3'
+  const cols = tight ? 'grid-cols-3' : `grid-cols-2 ${wide}`
+  return <div className={`rx-statgrid grid gap-2 sm:gap-4 ${cols}`}>{children}</div>
 }
 
-/** One notice line: a warning (a stale crawl) or a plain note. */
 /** A table wider than a phone scrolls sideways, so the scroll area takes focus and arrow keys reach what is cut off. */
 export function ScrollRegion({
   label,
@@ -81,6 +77,7 @@ export function ScrollRegion({
   )
 }
 
+/** One notice line: a warning (a stale crawl) or a plain note. */
 export function Notice({
   children,
   tone = 'note',
@@ -108,53 +105,6 @@ export function useShareText(): (n: number, sum: number) => string {
   return (n, sum) => (isTiny(n, sum) ? t`<0.1%` : formatPercent(fraction(n, sum), 1))
 }
 
-/** A donut with a value and a caption in its hole, the same slices as the table equivalent. */
-export function Donut({
-  slices,
-  label,
-  center,
-  surface,
-  height = 180,
-}: {
-  slices: readonly Slice[]
-  label: string
-  center?: { value: string; caption: string } | undefined
-  surface: string
-  height?: number
-}) {
-  const { t } = useLingui()
-  const sum = slices.reduce((a, s) => a + s.value, 0)
-  return (
-    <div className="relative" data-donut>
-      <Chart
-        option={donutOption(slices, surface)}
-        height={height}
-        label={label}
-        table={{
-          columns: [t`Name`, t`Nodes`, t`Share`],
-          rows: slices.map((s) => [
-            s.name,
-            formatInt(s.value),
-            formatPercent(fraction(s.value, sum), 1),
-          ]),
-        }}
-      />
-      {center ? (
-        <div
-          className="pointer-events-none absolute inset-x-0 grid place-items-center text-center"
-          style={{ top: 0, height: height - 8 }}
-          aria-hidden="true"
-        >
-          <div>
-            <div className="text-xl font-semibold tabular-nums">{center.value}</div>
-            <div className="text-xs text-[var(--dh-ink-2)]">{center.caption}</div>
-          </div>
-        </div>
-      ) : null}
-    </div>
-  )
-}
-
 export interface RankedRow {
   key: string
   label: ReactNode
@@ -163,7 +113,7 @@ export interface RankedRow {
   title?: string
 }
 
-/** Ranked rows with a share bar each, dotted with the colour of their donut slice; the rest behind "Show all". */
+/** Ranked rows with a share bar each, dotted with the colour of their segment in the bar above; the rest behind "Show all". */
 export function Ranked({
   rows,
   limit = 8,
@@ -180,6 +130,7 @@ export function Ranked({
 }) {
   const { t } = useLingui()
   const share = useShareText()
+  const colors = useCensusColors()
   const [all, setAll] = useState(false)
   const shown = all ? rows : rows.slice(0, limit)
   const max = Math.max(1, ...shown.map((r) => r.n))
@@ -196,7 +147,7 @@ export function Ranked({
             <i
               aria-hidden="true"
               className="inline-block h-2.5 w-2.5 rounded-full"
-              style={{ background: r.color }}
+              style={{ background: swatchOf(colors, r.color) }}
             />
             <span className="min-w-0 truncate">{r.label}</span>
             <span className="tabular-nums">{formatInt(r.n)}</span>
@@ -210,7 +161,10 @@ export function Ranked({
             >
               <span
                 className="block h-1 rounded"
-                style={{ width: `${String((r.n / max) * 100)}%`, background: r.color }}
+                style={{
+                  width: `${String((r.n / max) * 100)}%`,
+                  background: swatchOf(colors, r.color),
+                }}
               />
             </span>
           </li>
@@ -228,49 +182,6 @@ export function Ranked({
           {all ? t`Show fewer` : t`Show all ${formatInt(count)}`}
         </button>
       ) : null}
-    </div>
-  )
-}
-
-/** A 100 % bar of the largest groups with the legend that names them. */
-export function ShareBar({
-  parts,
-  label,
-}: {
-  parts: readonly { key: string; name: string; n: number; color: string }[]
-  label: string
-}) {
-  const share = useShareText()
-  const sum = parts.reduce((a, p) => a + p.n, 0)
-  if (sum === 0) return null
-  return (
-    <div className="grid gap-2" data-sharebar>
-      <div
-        role="img"
-        aria-label={`${label}: ${parts.map((p) => `${p.name} ${share(p.n, sum)}`).join(', ')}`}
-        className="flex h-3 overflow-hidden rounded bg-[var(--dh-line)]"
-      >
-        {parts.map((p) => (
-          <div
-            key={p.key}
-            title={`${p.name}: ${formatInt(p.n)} (${share(p.n, sum)})`}
-            style={{ flexGrow: p.n, background: p.color }}
-          />
-        ))}
-      </div>
-      <ul className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-        {parts.map((p) => (
-          <li key={p.key} className="inline-flex min-w-0 items-center gap-1.5">
-            <i
-              aria-hidden="true"
-              className="inline-block h-2.5 w-2.5 rounded-full"
-              style={{ background: p.color }}
-            />
-            <span className="min-w-0 [overflow-wrap:anywhere]">{p.name}</span>
-            <b className="tabular-nums">{share(p.n, sum)}</b>
-          </li>
-        ))}
-      </ul>
     </div>
   )
 }

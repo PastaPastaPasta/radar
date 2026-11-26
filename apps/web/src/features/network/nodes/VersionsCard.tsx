@@ -1,17 +1,20 @@
 import { useLingui } from '@lingui/react/macro'
 import { useMemo } from 'react'
 import { formatInt } from '@/lib/format'
+import { PageLink } from '@/features/entity'
 import { Card, Chart, Empty, SegFilter, Skeleton, stampsOf, useNow } from '@/ui'
 import { useSeriesSlots } from '@/ui/series'
-import { stackedShareOption, type Series, type Slice } from './census-charts'
-import { useCensusColors, type CensusColors } from './census-colors'
+import { Answer, SegBar, type BarPart } from './bars'
+import { stackedShareOption, type Series } from './census-charts'
+import { swatchOf, useCensusColors, type CensusColors } from './census-colors'
 import { dayMonth, dayMonthYear, monthYear } from './census-format'
 import { CENSUS_DAYS, type Census } from './census-data'
 import {
-  fraction,
   isCoreVersion,
   keepVersions,
   ladderGroups,
+  majorOf,
+  onMajor,
   radarScope,
   releaseBook,
   stackShares,
@@ -21,7 +24,7 @@ import {
   type LadderRow,
   type ReleaseBook,
 } from './census-math'
-import { Donut, ScrollRegion, useShareText } from './parts'
+import { ScrollRegion, useShareText } from './parts'
 import { SCOPE_NOUN } from './scope-text'
 import { loadState, useCensusSearch, type SectionProps } from './shared'
 
@@ -33,8 +36,8 @@ const isRelease = (book: ReleaseBook, key: string): boolean =>
   book.status(key) !== 'build'
 
 /**
- * A version's colour. A release keeps the slot it was given for as long as it is shown, in the donut, the ladder and
- * the history alike; a candidate is good, a build that is no release is warn, no answer is the axis grey and
+ * A version's colour. A release keeps the slot it was given for as long as it is shown, in the bar, the ladder and
+ * the history alike; a candidate is good, a build that is no release is warn, no answer is the unknown grey and
  * everything folded together is the muted "other".
  */
 function versionColor(
@@ -44,7 +47,7 @@ function versionColor(
   key: string,
   folded?: number,
 ): string {
-  if (key === UNKNOWN) return colors.axis
+  if (key === UNKNOWN) return colors.unknown
   if (folded !== undefined || !isCoreVersion(key)) return colors.other
   const status = book.status(key)
   if (status === 'candidate') return colors.good
@@ -59,7 +62,8 @@ export function VersionsCard({
   days,
   summary,
   census,
-}: SectionProps & { census: Census }) {
+  v24,
+}: SectionProps & { census: Census; v24: boolean }) {
   const { t, i18n } = useLingui()
   const setSearch = useCensusSearch()
   const now = useNow()
@@ -93,14 +97,14 @@ export function VersionsCard({
     const at = book.published(r.key)
     return at === undefined ? '' : monthYear(at)
   }
-  const label = (r: LadderRow, group: 0 | 1 | 2 | 3): string =>
-    r.folded === undefined
-      ? r.key
-      : group === 3
-        ? t`${formatInt(r.folded)} other clients`
-        : book.known
-          ? t`${formatInt(r.folded)} other releases`
-          : t`${formatInt(r.folded)} more versions`
+  const label = (r: LadderRow, group: 0 | 1 | 2 | 3): string => {
+    if (r.folded === undefined) return r.key
+    if (group === 3) return t`${formatInt(r.folded)} other clients`
+    if (!book.known) return t`${formatInt(r.folded)} more versions`
+    if (latest !== undefined && majorOf(r.key) === majorOf(latest))
+      return t`${formatInt(r.folded)} other Core ${majorOf(latest)!} releases`
+    return t`${formatInt(r.folded)} older releases`
+  }
 
   const flat = groups.flatMap((g) => g.rows.map((r) => ({ ...r, group: g.kind })))
   const history = census.versions.data?.data
@@ -116,35 +120,38 @@ export function VersionsCard({
     ].filter((key) => isRelease(book, key)),
     !census.releases.isLoading,
   )
-  const slices: Slice[] = [
+  const parts: BarPart[] = [
     ...flat
       .filter((r) => r.n > 0)
       .map((r) => ({
+        key: `${r.key}-${String(r.folded ?? 0)}`,
         name: label(r, r.group),
-        value: r.n,
+        n: r.n,
         color: versionColor(book, colors, slotOf, r.key, r.folded),
       })),
-    ...(unknown > 0 ? [{ name: t`No answer this week`, value: unknown, color: colors.axis }] : []),
+    ...(unknown > 0
+      ? [{ key: UNKNOWN, name: t`No answer this week`, n: unknown, color: colors.unknown }]
+      : []),
   ]
 
-  const top = named[0]
-  const second = named[1]
-  const lede = top
-    ? second
-      ? t`${top[0]} runs on ${share(top[1], sum)} of ${noun} and ${second[0]} on ${share(second[1], sum)}.`
-      : t`${top[0]} runs on ${share(top[1], sum)} of ${noun}.`
-    : t`No ${noun} have told us their version yet.`
+  const latestMajor = latest === undefined ? undefined : majorOf(latest)
+  const onLatestMajor = latestMajor === undefined ? 0 : onMajor(named, latestMajor)
 
   const ua = dist.ua ?? []
   const uaTotal = total(ua)
   const proto = (dist.protocol ?? []).filter(([k]) => k !== UNKNOWN)
-  const protoTotal = total(proto)
   const overTime = versions === 'time'
   const series: Series[] = shares.map((s) => ({
     key: s.key,
     name: s.key === UNKNOWN ? t`No answer this week` : s.key,
     color: versionColor(book, colors, slotOf, s.key, undefined),
     values: s.values,
+  }))
+  const protoParts: BarPart[] = proto.map(([k, n], i) => ({
+    key: k,
+    name: k,
+    n,
+    color: i === 0 ? colors.ink2 : i === 1 ? colors.other : colors.unknown,
   }))
 
   return (
@@ -154,7 +161,7 @@ export function VersionsCard({
       id="versions"
       className="min-w-0 [&_.dh-seg]:max-w-full [&_.dh-seg]:overflow-x-auto"
       layer="network"
-      subtitle={lede}
+      subtitle={t`Share of ${noun}`}
       source={stampsOf(
         summary.data,
         census.releases.data,
@@ -177,7 +184,25 @@ export function VersionsCard({
         />
       }
     >
-      <div className="grid min-w-0 gap-6 [&>*]:min-w-0">
+      <div className="grid min-w-0 gap-5 [&>*]:min-w-0">
+        {sum > 0 && latestMajor !== undefined ? (
+          <Answer
+            tone="neutral"
+            pill={t`${share(onLatestMajor, sum)} on Core ${latestMajor}`}
+            data-versions-answer=""
+          >
+            {latestRow ? (
+              <span className="rx-nanswer__line" data-latest-share>
+                {t`Latest release ${latest ?? ''}:`} <b>{share(latestRow.n, sum)}</b>
+              </span>
+            ) : null}
+            {v24 ? (
+              <span className="rx-nanswer__line" data-v24-link>
+                <PageLink to="/v24">{t`Core 24 activation tracker`}</PageLink>
+              </span>
+            ) : null}
+          </Answer>
+        ) : null}
         {overTime ? (
           <div
             className="grid gap-3 [&_.dh-seg]:max-w-full [&_.dh-seg]:overflow-x-auto"
@@ -229,25 +254,13 @@ export function VersionsCard({
             ) : null}
           </div>
         ) : (
-          <div
-            className="grid gap-6 md:grid-cols-[minmax(0,240px)_minmax(0,1fr)]"
-            data-versions-view="now"
-          >
-            {slices.length > 0 ? (
-              <Donut
-                slices={slices}
-                label={t`Share of ${noun} by version`}
-                surface={colors.surface}
-                center={
-                  latestRow
-                    ? { value: share(latestRow.n, sum), caption: t`latest release` }
-                    : undefined
-                }
-              />
+          <div className="grid gap-5" data-versions-view="now">
+            {parts.length > 0 ? (
+              <SegBar label={t`Share of ${noun} by version`} legend="none" parts={parts} />
             ) : (
               <Empty kind="none-yet" title={t`No ${noun} have told us their version yet.`} />
             )}
-            <LadderTable
+            <Ladder
               groups={groups.map((g) => ({
                 title: groupLabel[g.kind],
                 rows: g.rows.map((r) => ({
@@ -264,11 +277,11 @@ export function VersionsCard({
             />
           </div>
         )}
-        {proto.length > 0 ? (
-          <p className="text-sm text-[var(--dh-ink-2)]" data-protocols>
-            {t`Protocol`}{' '}
-            {proto.map(([k, n]) => `${k} ${t`on`} ${share(n, protoTotal)}`).join(', ')}.
-          </p>
+        {protoParts.length > 0 ? (
+          <div className="grid gap-1" data-protocols>
+            <h3 className="rx-nsub">{t`Protocol`}</h3>
+            <SegBar label={t`Protocol`} size="sm" legend="share" parts={protoParts} />
+          </div>
         ) : null}
         {ua.length > 0 ? (
           <details className="rx-details" data-every-version>
@@ -325,7 +338,8 @@ interface LadderView {
   rows: { key: string; label: string; note: string; n: number; color: string }[]
 }
 
-function LadderTable({
+/** The release ladder as compact rows in columns: a swatch matching the bar, the version, its note, share and count. */
+function Ladder({
   groups,
   unknown,
   sum,
@@ -338,84 +352,36 @@ function LadderTable({
 }) {
   const { t } = useLingui()
   const share = useShareText()
-  return (
-    <ScrollRegion label={t`Release ladder`}>
-      <table className="dh-table dh-table--compact" data-ladder>
-        <caption className="dh-sr">{t`Release ladder`}</caption>
-        <thead>
-          <tr>
-            <th scope="col">{t`Version`}</th>
-            <td aria-hidden="true" />
-            <th scope="col" className="text-right">
-              {t`Share`}
-            </th>
-            <th scope="col" className="text-right">
-              {t`Nodes`}
-            </th>
-          </tr>
-        </thead>
-        {groups.map((g) => (
-          <tbody key={g.title}>
-            <tr>
-              <th
-                colSpan={4}
-                scope="rowgroup"
-                className="text-left text-xs uppercase tracking-wide text-[var(--dh-ink-2)]"
-              >
-                {g.title}
-              </th>
-            </tr>
-            {g.rows.map(({ key, ...r }) => (
-              <LadderLine key={`${key}-${r.label}`} {...r} sum={sum} share={share} />
-            ))}
-          </tbody>
-        ))}
-        {unknown > 0 ? (
-          <tbody>
-            <LadderLine
-              label={t`No answer this week`}
-              note=""
-              n={unknown}
-              color={colors.axis}
-              sum={sum}
-              share={share}
-            />
-          </tbody>
-        ) : null}
-      </table>
-    </ScrollRegion>
-  )
-}
-
-function LadderLine({
-  label,
-  note,
-  n,
-  color,
-  sum,
-  share,
-}: {
-  label: string
-  note: string
-  n: number
-  color: string
-  sum: number
-  share: (n: number, sum: number) => string
-}) {
-  return (
-    <tr data-version-row>
-      <th scope="row" className="font-normal">
+  const row = ({ key, label, note, n, color }: LadderView['rows'][number]) => (
+    <li key={`${key}-${label}`} data-version-row>
+      <span className="rx-sw" style={{ background: swatchOf(colors, color) }} />
+      <span className="min-w-0 [overflow-wrap:anywhere]">
         {label}
-        {note ? <small className="ml-1 text-[var(--dh-ink-2)]">{note}</small> : null}
-      </th>
-      <td aria-hidden="true" className="w-1/4">
-        <i
-          className="block h-2 rounded"
-          style={{ width: `${String(fraction(n, sum) * 100)}%`, background: color }}
-        />
-      </td>
-      <td className="text-right tabular-nums">{share(n, sum)}</td>
-      <td className="text-right tabular-nums">{formatInt(n)}</td>
-    </tr>
+        {note ? <small>{note}</small> : null}
+      </span>
+      <b>{share(n, sum)}</b>
+      <span>{formatInt(n)}</span>
+    </li>
+  )
+  return (
+    <div className="rx-nladder" data-ladder>
+      {groups.map((g) => (
+        <div key={g.title}>
+          <h3 className="rx-nladder__h">{g.title}</h3>
+          <ul>{g.rows.map(row)}</ul>
+        </div>
+      ))}
+      {unknown > 0 ? (
+        <ul>
+          {row({
+            key: UNKNOWN,
+            label: t`No answer this week`,
+            note: '',
+            n: unknown,
+            color: colors.unknown,
+          })}
+        </ul>
+      ) : null}
+    </div>
   )
 }

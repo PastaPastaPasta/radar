@@ -1,6 +1,7 @@
+import { plural } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react/macro'
 import { Link } from '@tanstack/react-router'
-import { useId, useState } from 'react'
+import { useState } from 'react'
 import { formatInt } from '@/lib/format'
 import { Card, Chart, Empty, Skeleton, stampsOf } from '@/ui'
 import { sizeOption, type Series } from './census-charts'
@@ -8,8 +9,10 @@ import { useCensusColors } from './census-colors'
 import type { Census } from './census-data'
 import { unreachableLink } from './census-links'
 import { dayMonthTime } from './census-format'
-import { radarScope, reachShare, total } from './census-math'
-import { ScrollRegion, ShareBar, useShareText } from './parts'
+import { fraction, radarScope, reachShare, total } from './census-math'
+import { InfoTip } from '../v24/InfoTip'
+import { Answer, SegBar, shareTone } from './bars'
+import { useShareText } from './parts'
 import { SCOPE_NOUN } from './scope-text'
 import { loadState, type SectionProps } from './shared'
 
@@ -21,23 +24,7 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
   const dist = data?.dists[radarScope(scope)] ?? {}
   const reach = reachShare(dist.reachable)
   const noun = i18n._(SCOPE_NOUN[scope])
-  const networksNote = useId()
-  const parts = [
-    { key: 'yes', name: t`Answered`, n: reach.yes, color: colors.good },
-    { key: 'no', name: t`Didn't answer`, n: reach.no, color: colors.bad },
-    { key: 'unchecked', name: t`Not checked`, n: reach.unchecked, color: colors.axis },
-  ].filter((p) => p.n > 0)
   const crawl = data?.crawl
-  const lede =
-    scope === 'other'
-      ? t`Other full nodes accept connections at ${formatInt(total(dist.version ?? []))} addresses. A node reachable on several networks counts at each, and nodes that only connect out can't be seen from outside.`
-      : scope === 'all'
-        ? crawl
-          ? t`${formatInt(crawl.reachable)} addresses answered out of ${formatInt(crawl.tried)} tried. Counted are addresses that answered at least once this week, plus every enabled masternode’s.`
-          : undefined
-        : reach.yes + reach.no > 0
-          ? t`${share(reach.yes, reach.yes + reach.no)} of enabled ${noun} answered our handshake on their registered address; ${formatInt(reach.no)} didn't.`
-          : undefined
   const names: Record<string, string> = {
     ipv4: t`IPv4`,
     ipv6: t`IPv6`,
@@ -45,6 +32,28 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
     i2p: t`I2P`,
     cjdns: t`CJDNS`,
   }
+  const answered = reach.yes + reach.no > 0 ? { n: reach.yes, of: reach.yes + reach.no } : undefined
+  const about =
+    scope === 'other'
+      ? t`Other full nodes accept connections at ${formatInt(total(dist.version ?? []))} addresses. A node reachable on several networks counts at each, and nodes that only connect out can't be seen from outside.`
+      : scope === 'all'
+        ? crawl
+          ? t`Counted are the addresses that answered at least once this week, plus every enabled masternode’s. The latest crawl tried ${formatInt(crawl.tried)} addresses in all.`
+          : undefined
+        : answered
+          ? t`${share(answered.n, answered.of)} of enabled ${noun} answered our handshake on their registered address; ${formatInt(reach.no)} didn't.`
+          : undefined
+  const parts = [
+    { key: 'yes', name: t`Answered`, n: reach.yes, color: colors.good },
+    { key: 'no', name: t`Didn't answer`, n: reach.no, color: colors.bad },
+    { key: 'unchecked', name: t`Not checked`, n: reach.unchecked, color: colors.unknown },
+  ]
+  const seeWhich =
+    reach.no > 0 && scope !== 'all' && scope !== 'other' ? (
+      <Link to="/masternodes" search={unreachableLink(scope)}>
+        {t`See which`}
+      </Link>
+    ) : undefined
 
   return (
     <Card
@@ -52,69 +61,87 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
       title={t`Can they be reached`}
       id="reach"
       layer="network"
-      subtitle={lede}
+      subtitle={
+        scope === 'all'
+          ? t`Addresses seen this week`
+          : scope === 'other'
+            ? t`Addresses that accept connections`
+            : t`Enabled ${noun}`
+      }
       source={stampsOf(summary.data, census.size.data)}
       state={loadState(summary)}
       error={summary.error}
       onRetry={() => void summary.refetch()}
     >
-      <div className="grid min-w-0 gap-6 [&>*]:min-w-0">
-        <div className="grid gap-2">
-          {parts.length > 0 ? <ShareBar parts={parts} label={t`Reachability`} /> : null}
-          {reach.no > 0 && scope !== 'all' && scope !== 'other' ? (
-            <p>
-              <Link to="/masternodes" search={unreachableLink(scope)}>
-                {t`See which`}
-              </Link>
-            </p>
+      <div className="grid min-w-0 gap-6 lg:grid-cols-2 [&>*]:min-w-0">
+        <div className="grid content-start gap-5">
+          {answered ? (
+            <Answer
+              tone={scope === 'all' ? 'neutral' : shareTone(answered.n / answered.of)}
+              pill={
+                scope === 'all' || scope === 'other'
+                  ? t`${share(answered.n, answered.of)} of addresses answered`
+                  : t`${share(answered.n, answered.of)} of enabled ${noun} answered`
+              }
+            >
+              <span className="rx-nanswer__line">
+                {scope === 'all'
+                  ? t`${formatInt(answered.n)} of ${formatInt(answered.of)} seen this week`
+                  : t`${formatInt(answered.n)} of ${formatInt(answered.of)}`}
+              </span>
+              {about ? (
+                <InfoTip label={t`Who is counted`}>
+                  <p className="m-0">{about}</p>
+                </InfoTip>
+              ) : null}
+            </Answer>
+          ) : about ? (
+            <p className="rx-nfoot">{about}</p>
+          ) : null}
+          <SegBar label={t`Reachability`} legend="share" parts={parts} extra={seeWhich} />
+          {data && data.networks.length > 0 ? (
+            <div data-address-networks>
+              <div className="rx-nsub">
+                <h3>{t`Address networks`}</h3>
+                <InfoTip label={t`About address networks`}>
+                  <p className="m-0" data-networks-note>
+                    {t`Masternodes answering counts registered masternodes, PoSe-banned included, that answered on an address of that network; one that answers on two networks counts in both.`}
+                  </p>
+                </InfoTip>
+              </div>
+              <ul className="rx-nnets">
+                {data.networks.map((n) => (
+                  <li key={n.network} data-network={n.network} data-crawled={String(n.crawled)}>
+                    <span className="rx-nnets__name">{names[n.network] ?? n.network}</span>
+                    {n.crawled ? (
+                      <>
+                        <span className="rx-nnets__value">
+                          {formatInt(n.reachable)}{' '}
+                          <small>{t`of ${formatInt(n.known)} known`}</small>
+                        </span>
+                        <span className="rx-nnets__meter" aria-hidden="true">
+                          <i
+                            style={{ width: `${String(fraction(n.reachable, n.known) * 100)}%` }}
+                          />
+                        </span>
+                        <span className="rx-nnets__note">
+                          {plural(n.masternodes, {
+                            one: '# masternode answering',
+                            other: '# masternodes answering',
+                          })}
+                        </span>
+                      </>
+                    ) : (
+                      <span className="rx-nnets__note" title={n.reason ?? ''}>
+                        {n.reason ? t`not crawled: ${n.reason}` : t`not crawled`}
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
           ) : null}
         </div>
-        {data && data.networks.length > 0 ? (
-          <ScrollRegion label={t`Address networks`} data-address-networks>
-            <table className="dh-table dh-table--compact" aria-describedby={networksNote}>
-              <caption className="text-left font-semibold">{t`Address networks`}</caption>
-              <thead>
-                <tr>
-                  <th scope="col">{t`Network`}</th>
-                  <th scope="col" className="text-right">
-                    {t`Known addresses`}
-                  </th>
-                  <th scope="col" className="text-right">
-                    {t`Reachable now`}
-                  </th>
-                  <th scope="col" className="text-right">
-                    {t`Masternodes answering`}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.networks.map((n) => (
-                  <tr key={n.network} data-network={n.network}>
-                    <th scope="row" className="font-normal">
-                      {names[n.network] ?? n.network}
-                    </th>
-                    <td className="text-right tabular-nums">{formatInt(n.known)}</td>
-                    {n.crawled ? (
-                      <td className="text-right tabular-nums">{formatInt(n.reachable)}</td>
-                    ) : (
-                      <td className="text-right text-[var(--dh-ink-2)]" title={n.reason ?? ''}>
-                        {n.reason ? t`not crawled: ${n.reason}` : t`not crawled`}
-                      </td>
-                    )}
-                    <td className="text-right tabular-nums">
-                      {n.crawled ? formatInt(n.masternodes) : '–'}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </ScrollRegion>
-        ) : null}
-        {data && data.networks.length > 0 ? (
-          <p id={networksNote} className="-mt-4 text-sm text-[var(--dh-ink-2)]" data-networks-note>
-            {t`Masternodes answering counts registered masternodes, PoSe-banned included, that answered on an address of that network; one that answers on two networks counts in both.`}
-          </p>
-        ) : null}
         <SizeChart census={census} />
       </div>
     </Card>
@@ -152,8 +179,15 @@ function SizeChart({ census }: { census: Census }) {
   if (!doc) return <Skeleton shape="chart" height={220} />
   const at = cursor ?? Math.max(0, count - 1)
   return (
-    <div className="grid min-w-0 gap-2" data-size-chart>
-      <h4 className="font-semibold">{t`Network size`}</h4>
+    <div className="relative grid min-w-0 content-start gap-2" data-size-chart>
+      <div className="rx-nsub">
+        <h3>{t`Network size`}</h3>
+        <InfoTip label={t`About the network size`}>
+          <p className="m-0" data-size-note>
+            {t`Reachable addresses are addresses, not nodes: a node doesn’t tell peers its addresses on other networks, so one reachable on IPv4 and Tor counts twice. Masternodes are counted by their registration, so each counts once.`}
+          </p>
+        </InfoTip>
+      </div>
       <Chart
         option={sizeOption(doc, series, cursor, colors.warn)}
         height={220}
@@ -169,7 +203,7 @@ function SizeChart({ census }: { census: Census }) {
       />
       <input
         type="range"
-        className="w-full accent-[var(--dh-focus)]"
+        className={cursor === undefined ? 'dh-sr' : 'w-full accent-[var(--dh-focus)]'}
         min={0}
         max={Math.max(0, count - 1)}
         step={1}
@@ -186,11 +220,12 @@ function SizeChart({ census }: { census: Census }) {
           setCursor(undefined)
         }}
       />
-      <p className="min-h-5 text-sm text-[var(--dh-ink-2)]" aria-live="polite" data-size-readout>
+      <p
+        className={`min-h-5 text-sm text-[var(--dh-ink-2)]${cursor === undefined ? ' dh-sr' : ''}`}
+        aria-live="polite"
+        data-size-readout
+      >
         {readout}
-      </p>
-      <p className="text-sm text-[var(--dh-ink-2)]" data-size-note>
-        {t`Reachable addresses are addresses, not nodes: a node doesn’t tell peers its addresses on other networks, so one reachable on IPv4 and Tor counts twice. Masternodes are counted by their registration, so each counts once.`}
       </p>
     </div>
   )

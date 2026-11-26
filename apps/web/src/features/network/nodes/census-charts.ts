@@ -3,47 +3,26 @@ import type { RadarHistory } from '@/data/radar/schemas'
 import { formatInt, formatPercent } from '@/lib/format'
 import { dayMonth } from './census-format'
 
-export interface Slice {
-  name: string
-  value: number
-  color: string
-}
-
-/** A donut of the slices; the rows beside it carry the numbers. */
-export function donutOption(slices: readonly Slice[], surface: string): EChartsOption {
-  const sum = slices.reduce((a, s) => a + s.value, 0)
-  return {
-    tooltip: {
-      trigger: 'item',
-      formatter: (p) => {
-        const item = p as unknown as { name: string; value: number }
-        return `${item.name}: ${formatInt(item.value)} (${formatPercent(sum > 0 ? item.value / sum : 0, 1)})`
-      },
-    },
-    series: [
-      {
-        type: 'pie',
-        radius: ['62%', '92%'],
-        center: ['50%', '50%'],
-        avoidLabelOverlap: false,
-        label: { show: false },
-        labelLine: { show: false },
-        itemStyle: { borderColor: surface, borderWidth: 2 },
-        data: slices.map((s) => ({
-          name: s.name,
-          value: s.value,
-          itemStyle: { color: s.color },
-        })),
-      },
-    ],
-  }
-}
-
 export interface Series {
   key: string
   name: string
   color: string
   values: (number | null)[]
+}
+
+const MONTH_MS = 31 * 24 * 3600 * 1000
+
+/**
+ * A dated x-axis with four to six labels, so a phone's narrow chart doesn't run the dates together. ECharts steps from
+ * four days straight to a week, so a month-long range asks for the week.
+ */
+function timeAxis(t: readonly number[]): EChartsOption['xAxis'] {
+  const span = t.length > 1 ? t[t.length - 1]! - t[0]! : 0
+  return {
+    type: 'time',
+    minInterval: span <= MONTH_MS ? span / 3.5 : span / 5,
+    axisLabel: { formatter: (v: number) => dayMonth(v), hideOverlap: true },
+  }
 }
 
 /** The version history as stacked shares of each point, which together read as 100 %. */
@@ -58,7 +37,7 @@ export function stackedShareOption(
       valueFormatter: (v) => `${formatPercent(Number(v) / 100, 1)}`,
     },
     grid: { left: 8, right: 12, top: 12, bottom: 24, containLabel: true },
-    xAxis: { type: 'time', axisLabel: { formatter: (v: number) => dayMonth(v) } },
+    xAxis: timeAxis(doc.t),
     yAxis: {
       type: 'value',
       min: 0,
@@ -94,7 +73,7 @@ export function sizeOption(
   return {
     tooltip: { trigger: 'axis', valueFormatter: (v) => formatInt(Math.round(Number(v))) },
     grid: { left: 8, right: 12, top: 12, bottom: 24, containLabel: true },
-    xAxis: { type: 'time', axisLabel: { formatter: (v: number) => dayMonth(v) } },
+    xAxis: timeAxis(doc.t),
     yAxis: { type: 'value', scale: true, axisLabel: { formatter: (v: number) => formatInt(v) } },
     series: [
       ...series.map((s) => ({
