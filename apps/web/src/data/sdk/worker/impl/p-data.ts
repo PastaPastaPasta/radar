@@ -41,7 +41,11 @@ export interface PDataReads {
       documentId: string
       limit?: number
       startAtMs?: number
-    }): Promise<ProvedResponse<{ entries: { timeMs: bigint; document: DocumentLike }[] }>>
+    }): Promise<
+      ProvedResponse<
+        { entries: ({ timeMs: bigint; document: DocumentLike } & Freeable)[] } & Freeable
+      >
+    >
   }
   group: {
     infoWithProof(
@@ -119,10 +123,13 @@ export const pDataImpl: { [M in keyof PDataMethods]: Impl<M> } = {
       ...(startAtMs === undefined ? {} : { startAtMs }),
     })
     const data = []
-    for (const { timeMs, document } of response.data.entries) {
-      data.push({ atMs: Number(timeMs), document: documentDto(document) })
+    for (const entry of response.data.entries) {
+      const document = entry.document
+      data.push({ atMs: Number(entry.timeMs), document: documentDto(document) })
       document.free?.()
+      entry.free?.()
     }
+    response.data.free?.()
     data.sort((a, b) => a.atMs - b.atMs)
     return { data, response }
   },

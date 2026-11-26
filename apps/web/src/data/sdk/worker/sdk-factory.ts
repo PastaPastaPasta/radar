@@ -27,9 +27,16 @@ export async function createEvoSdk(cfg: SdkNetworkConfig): Promise<SdkHandle> {
       : {}),
   })
   await sdk.connect()
-  const status = await sdk.system.status()
-  const { protocolVersion } = statusDto(status)
-  status.free()
+  const protocolVersion = await sdk.system.status().then(
+    (status) => {
+      try {
+        return statusDto(status).protocolVersion
+      } finally {
+        status.free()
+      }
+    },
+    () => 0,
+  )
   return {
     reads: sdk as unknown as SdkReads,
     protocolVersion,
