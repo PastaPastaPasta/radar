@@ -104,6 +104,11 @@ msgstr "{0} gerekli"
 msgid "{0} of {1}"
 msgstr "{0} / {1}"
 
+#. placeholder {0}: formatInt(answered.n)
+#. placeholder {1}: formatInt(answered.of)
+msgid "{0} of {1} addresses seen this week"
+msgstr "bu hafta görülen {1} adresten {0}"
+
 #. placeholder {0}: formatInt(threshold ?? 0)
 #. placeholder {1}: formatInt(p.window)
 #. placeholder {2}: share(p.threshold_min, p.window)
@@ -133,11 +138,6 @@ msgstr "Etkin {1} evonode’un {0} oranı son Platform kontrolümüzü geçti: T
 #. placeholder {1}: formatInt(p.checked)
 msgid "{0} of {1} healthy"
 msgstr "{1} içinde {0} sağlıklı"
-
-#. placeholder {0}: formatInt(answered.n)
-#. placeholder {1}: formatInt(answered.of)
-msgid "{0} of {1} seen this week"
-msgstr "bu hafta görülen {1} adresten {0}"
 
 #. placeholder {0}: share(answered.n, answered.of)
 msgid "{0} of addresses answered"
@@ -255,9 +255,6 @@ msgstr "yaklaşık {0}"
 #. placeholder {0}: formatInt(projected)
 msgid "about {0} at today's pace"
 msgstr "bugünkü hızla yaklaşık {0}"
-
-msgid "About address networks"
-msgstr "Adres ağları hakkında"
 
 msgid "About the network size"
 msgstr "Ağ boyutu hakkında"
@@ -621,6 +618,10 @@ msgstr "Evonode’lar, Platform ödülleri"
 msgid "Failed"
 msgstr "Başarısız"
 
+#. placeholder {0}: String(reachFailures)
+msgid "fails after {0} missed checks in a row"
+msgstr "art arda {0} kaçırılan denetimden sonra başarısız"
+
 msgid "First seen"
 msgstr "İlk görülme"
 
@@ -945,10 +946,6 @@ msgstr "şimdi"
 msgid "Now"
 msgstr "Şimdi"
 
-#. placeholder {0}: formatInt(n.known)
-msgid "of {0} known"
-msgstr "bilinen {0} içinde"
-
 #. placeholder {0}: formatInt(r.mined)
 msgid "of {0} so far"
 msgstr "şimdiye kadarki {0} içinde"
@@ -1102,6 +1099,10 @@ msgstr "Erişilebilir adresler"
 
 msgid "Reachable addresses are addresses, not nodes: a node doesn’t tell peers its addresses on other networks, so one reachable on IPv4 and Tor counts twice. Masternodes are counted by their registration, so each counts once."
 msgstr "Erişilebilir adresler düğüm değil adrestir: bir düğüm diğer ağlardaki adreslerini eşlerine bildirmez, bu yüzden IPv4 ve Tor üzerinden erişilebilen bir düğüm iki kez sayılır. Masternode’lar kayıtlarına göre sayılır, yani her biri bir kez."
+
+#. placeholder {0}: formatInt(n.known)
+msgid "reachable of {0} known"
+msgstr "bilinen {0} içinde erişilebilir"
 
 #. placeholder {0}: doc.dashd || t`unknown version`
 #. placeholder {1}: formatInt(doc.tip.height)

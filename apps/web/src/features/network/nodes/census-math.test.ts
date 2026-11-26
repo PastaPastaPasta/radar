@@ -96,6 +96,26 @@ describe('ladderGroups', () => {
     ])
   })
 
+  it('keeps a major’s releases together, the small ones after its larger ones', () => {
+    const two = releaseBook({
+      releases: [
+        { tag: 'v24.0.2', version: '24.0.2', prerelease: false, published: 5 },
+        { tag: 'v24.0.1', version: '24.0.1', prerelease: false, published: 4 },
+        { tag: 'v23.1.9', version: '23.1.9', prerelease: false, published: 3 },
+      ],
+    })
+    const rows = [
+      ['24.0.2', 500],
+      ['23.1.9', 400],
+      ['24.0.1', 5],
+    ] as const
+    expect(ladderGroups(two, rows.slice(), 905)[0]!.rows.map((r) => r.key)).toEqual([
+      '24.0.2',
+      '24.0.1',
+      '23.1.9',
+    ])
+  })
+
   it('keeps the latest release first even when nothing runs it', () => {
     const groups = ladderGroups(book, [['23.1.10', 100]], 100)
     expect(groups[0]!.rows[0]).toEqual({ key: '24.0.0', n: 0 })

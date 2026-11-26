@@ -104,6 +104,11 @@ msgstr "需要 {0}"
 msgid "{0} of {1}"
 msgstr "{0} / {1}"
 
+#. placeholder {0}: formatInt(answered.n)
+#. placeholder {1}: formatInt(answered.of)
+msgid "{0} of {1} addresses seen this week"
+msgstr "本周见到的 {1} 个地址中 {0} 个"
+
 #. placeholder {0}: formatInt(threshold ?? 0)
 #. placeholder {1}: formatInt(p.window)
 #. placeholder {2}: share(p.threshold_min, p.window)
@@ -133,11 +138,6 @@ msgstr "{1} 个已启用的 evonode 中，{0} 通过了我们最近一次 Platfo
 #. placeholder {1}: formatInt(p.checked)
 msgid "{0} of {1} healthy"
 msgstr "{1} 个中 {0} 个健康"
-
-#. placeholder {0}: formatInt(answered.n)
-#. placeholder {1}: formatInt(answered.of)
-msgid "{0} of {1} seen this week"
-msgstr "本周见到的 {1} 个中 {0} 个"
 
 #. placeholder {0}: share(answered.n, answered.of)
 msgid "{0} of addresses answered"
@@ -255,9 +255,6 @@ msgstr "约 {0}"
 #. placeholder {0}: formatInt(projected)
 msgid "about {0} at today's pace"
 msgstr "按今天的速度约 {0}"
-
-msgid "About address networks"
-msgstr "关于地址网络"
 
 msgid "About the network size"
 msgstr "关于网络规模"
@@ -621,6 +618,10 @@ msgstr "Evonode，Platform 奖励"
 msgid "Failed"
 msgstr "失败"
 
+#. placeholder {0}: String(reachFailures)
+msgid "fails after {0} missed checks in a row"
+msgstr "连续 {0} 次检查未响应即判为不通过"
+
 msgid "First seen"
 msgstr "首次出现"
 
@@ -945,10 +946,6 @@ msgstr "现在"
 msgid "Now"
 msgstr "现在"
 
-#. placeholder {0}: formatInt(n.known)
-msgid "of {0} known"
-msgstr "已知 {0} 个中"
-
 #. placeholder {0}: formatInt(r.mined)
 msgid "of {0} so far"
 msgstr "目前共 {0}"
@@ -1102,6 +1099,10 @@ msgstr "可达地址"
 
 msgid "Reachable addresses are addresses, not nodes: a node doesn’t tell peers its addresses on other networks, so one reachable on IPv4 and Tor counts twice. Masternodes are counted by their registration, so each counts once."
 msgstr "可达地址是地址而不是节点：节点不会告诉对等节点它在其他网络上的地址，因此一个通过 IPv4 和 Tor 都可达的节点会被计两次。主节点按注册计数，因此每个只计一次。"
+
+#. placeholder {0}: formatInt(n.known)
+msgid "reachable of {0} known"
+msgstr "可达，已知 {0} 个"
 
 #. placeholder {0}: doc.dashd || t`unknown version`
 #. placeholder {1}: formatInt(doc.tip.height)

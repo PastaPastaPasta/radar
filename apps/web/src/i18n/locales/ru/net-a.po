@@ -104,6 +104,11 @@ msgstr "нужно {0}"
 msgid "{0} of {1}"
 msgstr "{0} из {1}"
 
+#. placeholder {0}: formatInt(answered.n)
+#. placeholder {1}: formatInt(answered.of)
+msgid "{0} of {1} addresses seen this week"
+msgstr "{0} из {1} адресов, замеченных на этой неделе"
+
 #. placeholder {0}: formatInt(threshold ?? 0)
 #. placeholder {1}: formatInt(p.window)
 #. placeholder {2}: share(p.threshold_min, p.window)
@@ -133,11 +138,6 @@ msgstr "{0} из {1} включённых эвонод прошли нашу п�
 #. placeholder {1}: formatInt(p.checked)
 msgid "{0} of {1} healthy"
 msgstr "{0} из {1} в порядке"
-
-#. placeholder {0}: formatInt(answered.n)
-#. placeholder {1}: formatInt(answered.of)
-msgid "{0} of {1} seen this week"
-msgstr "{0} из {1} замеченных на этой неделе"
 
 #. placeholder {0}: share(answered.n, answered.of)
 msgid "{0} of addresses answered"
@@ -255,9 +255,6 @@ msgstr "около {0}"
 #. placeholder {0}: formatInt(projected)
 msgid "about {0} at today's pace"
 msgstr "около {0} при сегодняшнем темпе"
-
-msgid "About address networks"
-msgstr "Об адресных сетях"
 
 msgid "About the network size"
 msgstr "О размере сети"
@@ -621,6 +618,10 @@ msgstr "Эвоноды, награды Platform"
 msgid "Failed"
 msgstr "Ошибка"
 
+#. placeholder {0}: String(reachFailures)
+msgid "fails after {0} missed checks in a row"
+msgstr "не пройдена после {0} пропущенных проверок подряд"
+
 msgid "First seen"
 msgstr "Впервые замечено"
 
@@ -945,10 +946,6 @@ msgstr "сейчас"
 msgid "Now"
 msgstr "Сейчас"
 
-#. placeholder {0}: formatInt(n.known)
-msgid "of {0} known"
-msgstr "из {0} известных"
-
 #. placeholder {0}: formatInt(r.mined)
 msgid "of {0} so far"
 msgstr "из {0} пока"
@@ -1102,6 +1099,10 @@ msgstr "Доступные адреса"
 
 msgid "Reachable addresses are addresses, not nodes: a node doesn’t tell peers its addresses on other networks, so one reachable on IPv4 and Tor counts twice. Masternodes are counted by their registration, so each counts once."
 msgstr "Доступные адреса — это адреса, а не узлы: узел не сообщает пирам свои адреса в других сетях, поэтому узел, доступный по IPv4 и через Tor, учитывается дважды. Мастерноды считаются по регистрации, поэтому каждая учитывается один раз."
+
+#. placeholder {0}: formatInt(n.known)
+msgid "reachable of {0} known"
+msgstr "доступны из {0} известных"
 
 #. placeholder {0}: doc.dashd || t`unknown version`
 #. placeholder {1}: formatInt(doc.tip.height)

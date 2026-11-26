@@ -46,13 +46,16 @@ function useTrack() {
         b?.width === el.clientWidth && b.font === font ? b : { width: el.clientWidth, font },
       )
     }
+    const remeasure = () => {
+      setBox((b) => (b ? { ...b } : b))
+    }
     read()
     const fonts = typeof document === 'undefined' ? undefined : document.fonts
-    fonts?.addEventListener('loadingdone', read)
+    fonts?.addEventListener('loadingdone', remeasure)
     const ro = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(read)
     ro?.observe(el)
     return () => {
-      fonts?.removeEventListener('loadingdone', read)
+      fonts?.removeEventListener('loadingdone', remeasure)
       ro?.disconnect()
     }
   }, [el])

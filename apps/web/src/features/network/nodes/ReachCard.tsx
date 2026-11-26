@@ -86,7 +86,7 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
             >
               <span className="rx-nanswer__line">
                 {scope === 'all'
-                  ? t`${formatInt(answered.n)} of ${formatInt(answered.of)} seen this week`
+                  ? t`${formatInt(answered.n)} of ${formatInt(answered.of)} addresses seen this week`
                   : t`${formatInt(answered.n)} of ${formatInt(answered.of)}`}
               </span>
               {about ? (
@@ -101,14 +101,7 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
           <SegBar label={t`Reachability`} legend="share" parts={parts} extra={seeWhich} />
           {data && data.networks.length > 0 ? (
             <div data-address-networks>
-              <div className="rx-nsub">
-                <h3>{t`Address networks`}</h3>
-                <InfoTip label={t`About address networks`}>
-                  <p className="m-0" data-networks-note>
-                    {t`Masternodes answering counts registered masternodes, PoSe-banned included, that answered on an address of that network; one that answers on two networks counts in both.`}
-                  </p>
-                </InfoTip>
-              </div>
+              <h3 className="rx-nsub">{t`Address networks`}</h3>
               <ul className="rx-nnets">
                 {data.networks.map((n) => (
                   <li key={n.network} data-network={n.network} data-crawled={String(n.crawled)}>
@@ -117,7 +110,7 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
                       <>
                         <span className="rx-nnets__value">
                           {formatInt(n.reachable)}{' '}
-                          <small>{t`of ${formatInt(n.known)} known`}</small>
+                          <small>{t`reachable of ${formatInt(n.known)} known`}</small>
                         </span>
                         <span className="rx-nnets__meter" aria-hidden="true">
                           <i
@@ -139,6 +132,9 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
                   </li>
                 ))}
               </ul>
+              <p className="rx-nfoot" data-networks-note>
+                {t`Masternodes answering counts registered masternodes, PoSe-banned included, that answered on an address of that network; one that answers on two networks counts in both.`}
+              </p>
             </div>
           ) : null}
         </div>
@@ -203,7 +199,7 @@ function SizeChart({ census }: { census: Census }) {
       />
       <input
         type="range"
-        className={cursor === undefined ? 'dh-sr' : 'w-full accent-[var(--dh-focus)]'}
+        className="w-full accent-[var(--dh-focus)]"
         min={0}
         max={Math.max(0, count - 1)}
         step={1}
@@ -220,11 +216,7 @@ function SizeChart({ census }: { census: Census }) {
           setCursor(undefined)
         }}
       />
-      <p
-        className={`min-h-5 text-sm text-[var(--dh-ink-2)]${cursor === undefined ? ' dh-sr' : ''}`}
-        aria-live="polite"
-        data-size-readout
-      >
+      <p className="min-h-5 text-sm text-[var(--dh-ink-2)]" aria-live="polite" data-size-readout>
         {readout}
       </p>
     </div>

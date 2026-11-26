@@ -104,6 +104,11 @@ msgstr "потрібно {0}"
 msgid "{0} of {1}"
 msgstr "{0} з {1}"
 
+#. placeholder {0}: formatInt(answered.n)
+#. placeholder {1}: formatInt(answered.of)
+msgid "{0} of {1} addresses seen this week"
+msgstr "{0} з {1} адрес, помічених цього тижня"
+
 #. placeholder {0}: formatInt(threshold ?? 0)
 #. placeholder {1}: formatInt(p.window)
 #. placeholder {2}: share(p.threshold_min, p.window)
@@ -133,11 +138,6 @@ msgstr "{0} із {1} увімкнених евонод пройшли нашу �
 #. placeholder {1}: formatInt(p.checked)
 msgid "{0} of {1} healthy"
 msgstr "{0} з {1} у нормі"
-
-#. placeholder {0}: formatInt(answered.n)
-#. placeholder {1}: formatInt(answered.of)
-msgid "{0} of {1} seen this week"
-msgstr "{0} з {1} помічених цього тижня"
 
 #. placeholder {0}: share(answered.n, answered.of)
 msgid "{0} of addresses answered"
@@ -255,9 +255,6 @@ msgstr "приблизно {0}"
 #. placeholder {0}: formatInt(projected)
 msgid "about {0} at today's pace"
 msgstr "близько {0} за сьогоднішнього темпу"
-
-msgid "About address networks"
-msgstr "Про адресні мережі"
 
 msgid "About the network size"
 msgstr "Про розмір мережі"
@@ -621,6 +618,10 @@ msgstr "Евоноди, нагороди Platform"
 msgid "Failed"
 msgstr "Помилка"
 
+#. placeholder {0}: String(reachFailures)
+msgid "fails after {0} missed checks in a row"
+msgstr "не пройдена після {0} пропущених перевірок поспіль"
+
 msgid "First seen"
 msgstr "Уперше помічено"
 
@@ -945,10 +946,6 @@ msgstr "зараз"
 msgid "Now"
 msgstr "Зараз"
 
-#. placeholder {0}: formatInt(n.known)
-msgid "of {0} known"
-msgstr "з {0} відомих"
-
 #. placeholder {0}: formatInt(r.mined)
 msgid "of {0} so far"
 msgstr "із {0} поки що"
@@ -1102,6 +1099,10 @@ msgstr "Доступні адреси"
 
 msgid "Reachable addresses are addresses, not nodes: a node doesn’t tell peers its addresses on other networks, so one reachable on IPv4 and Tor counts twice. Masternodes are counted by their registration, so each counts once."
 msgstr "Доступні адреси — це адреси, а не вузли: вузол не повідомляє пірам свої адреси в інших мережах, тож вузол, доступний через IPv4 і Tor, рахується двічі. Мастерноди рахуються за реєстрацією, тож кожна — один раз."
+
+#. placeholder {0}: formatInt(n.known)
+msgid "reachable of {0} known"
+msgstr "доступні з {0} відомих"
 
 #. placeholder {0}: doc.dashd || t`unknown version`
 #. placeholder {1}: formatInt(doc.tip.height)

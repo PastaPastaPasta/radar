@@ -307,14 +307,14 @@ test.describe('Network census', () => {
     ] as const) {
       await expect(networks.locator(`[data-network="${id}"]`)).toContainText(name)
     }
-    await expect(networks.locator('[data-network="ipv4"]')).toContainText('2,384 of 8,716')
+    await expect(networks.locator('[data-network="ipv4"]')).toContainText(
+      '2,384 reachable of 8,716 known',
+    )
     await expect(networks.locator('[data-network="ipv4"]')).toContainText('2,229 masternodes')
     await expect(networks.locator('[data-network="cjdns"]')).toContainText(
       'not crawled: disabled (CJDNS=false)',
     )
-    await networks.getByRole('button', { name: 'About address networks' }).click()
-    await expect(page.locator('[data-networks-note]')).toContainText('PoSe-banned included')
-    await page.keyboard.press('Escape')
+    await expect(networks.locator('[data-networks-note]')).toContainText('PoSe-banned included')
 
     const size = reach.locator('[data-size-chart]')
     await expect(size.getByRole('img', { name: 'Network size over time' })).toBeVisible()

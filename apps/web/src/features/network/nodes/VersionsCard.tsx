@@ -202,6 +202,10 @@ export function VersionsCard({
               </span>
             ) : null}
           </Answer>
+        ) : v24 ? (
+          <p className="m-0" data-v24-link>
+            <PageLink to="/v24">{t`Core 24 activation tracker`}</PageLink>
+          </p>
         ) : null}
         {overTime ? (
           <div

@@ -140,8 +140,8 @@ export interface LadderGroup {
 
 /**
  * The ladder's groups, the latest release always first (even if nothing runs it yet): releases newest first, those
- * under 1 % after the latest folded into one row for the latest's major and one for the rest, so a major's share can
- * be read off its rows; release candidates; builds that match no release; and other clients folded into one row.
+ * under 1 % after the latest folded into one row for the latest's major and one for the rest, and each major's rows
+ * kept together, so a major's share can be read off its rows; release candidates; builds that match no release; and other clients folded into one row.
  * Without the release list, one group by share.
  */
 export function ladderGroups(
@@ -169,8 +169,10 @@ export function ladderGroups(
     older.filter(([v]) => majorOf(v) === major),
     older.filter(([v]) => majorOf(v) !== major),
   ].filter((rows) => rows.length > 0)
+  const byMajor = (r: LadderRow) => Number(majorOf(r.key) ?? 0)
+  const releases = [...shown.map(row), ...folds.map(fold)].sort((a, b) => byMajor(b) - byMajor(a))
   const groups: LadderGroup[] = [
-    { kind: 0, rows: [...shown.map(row), ...folds.map(fold)] },
+    { kind: 0, rows: releases },
     { kind: 1, rows: kinds[1]!.map(row) },
     { kind: 2, rows: kinds[2]!.map(row) },
     { kind: 3, rows: kinds[3]!.length ? [fold(kinds[3]!)] : [] },

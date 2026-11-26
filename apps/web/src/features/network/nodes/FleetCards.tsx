@@ -27,6 +27,7 @@ export function ReadinessCard({ summary }: SectionProps) {
   }
   const release = typeof d?.rules?.release === 'string' ? d.rules.release : t`Core 24`
   const minProtocol = typeof d?.rules?.min_protocol === 'number' ? d.rules.min_protocol : undefined
+  const reachFailures = typeof d?.rules?.reach_failures === 'number' ? d.rules.reach_failures : 3
   const protocolCounts = d?.rules?.protocol_check !== false
   const checks = d
     ? DKG_CHECK_IDS.filter((id) => {
@@ -79,9 +80,11 @@ export function ReadinessCard({ summary }: SectionProps) {
               const extra =
                 id === 'protocol' && minProtocol !== undefined
                   ? t`needs ${String(minProtocol)}+`
-                  : id === 'platform_ban'
-                    ? t`evonodes only`
-                    : undefined
+                  : id === 'reachable'
+                    ? t`fails after ${String(reachFailures)} missed checks in a row`
+                    : id === 'platform_ban'
+                      ? t`evonodes only`
+                      : undefined
               const tone = c.fail > 0 ? 'warn' : c.pass > 0 ? 'good' : 'neutral'
               return (
                 <li key={id}>

@@ -104,6 +104,11 @@ msgstr "{0} nécessaires"
 msgid "{0} of {1}"
 msgstr "{0} sur {1}"
 
+#. placeholder {0}: formatInt(answered.n)
+#. placeholder {1}: formatInt(answered.of)
+msgid "{0} of {1} addresses seen this week"
+msgstr "{0} sur {1} adresses vues cette semaine"
+
 #. placeholder {0}: formatInt(threshold ?? 0)
 #. placeholder {1}: formatInt(p.window)
 #. placeholder {2}: share(p.threshold_min, p.window)
@@ -133,11 +138,6 @@ msgstr "{0} des {1} evonodes activés ont réussi notre dernière vérification 
 #. placeholder {1}: formatInt(p.checked)
 msgid "{0} of {1} healthy"
 msgstr "{0} sur {1} en bonne santé"
-
-#. placeholder {0}: formatInt(answered.n)
-#. placeholder {1}: formatInt(answered.of)
-msgid "{0} of {1} seen this week"
-msgstr "{0} sur {1} vues cette semaine"
 
 #. placeholder {0}: share(answered.n, answered.of)
 msgid "{0} of addresses answered"
@@ -255,9 +255,6 @@ msgstr "environ {0}"
 #. placeholder {0}: formatInt(projected)
 msgid "about {0} at today's pace"
 msgstr "environ {0} au rythme d’aujourd’hui"
-
-msgid "About address networks"
-msgstr "À propos des réseaux d’adresses"
 
 msgid "About the network size"
 msgstr "À propos de la taille du réseau"
@@ -621,6 +618,10 @@ msgstr "Evonodes, récompenses Platform"
 msgid "Failed"
 msgstr "Échec"
 
+#. placeholder {0}: String(reachFailures)
+msgid "fails after {0} missed checks in a row"
+msgstr "échoue après {0} vérifications manquées d’affilée"
+
 msgid "First seen"
 msgstr "Vu pour la première fois"
 
@@ -945,10 +946,6 @@ msgstr "maintenant"
 msgid "Now"
 msgstr "Maintenant"
 
-#. placeholder {0}: formatInt(n.known)
-msgid "of {0} known"
-msgstr "sur {0} connues"
-
 #. placeholder {0}: formatInt(r.mined)
 msgid "of {0} so far"
 msgstr "sur {0} jusqu’ici"
@@ -1102,6 +1099,10 @@ msgstr "Adresses joignables"
 
 msgid "Reachable addresses are addresses, not nodes: a node doesn’t tell peers its addresses on other networks, so one reachable on IPv4 and Tor counts twice. Masternodes are counted by their registration, so each counts once."
 msgstr "Les adresses joignables sont des adresses, pas des nœuds : un nœud ne donne pas à ses pairs ses adresses sur d’autres réseaux, donc un nœud joignable en IPv4 et sur Tor compte deux fois. Les masternodes sont comptés par leur enregistrement, donc chacun une fois."
+
+#. placeholder {0}: formatInt(n.known)
+msgid "reachable of {0} known"
+msgstr "joignables sur {0} connues"
 
 #. placeholder {0}: doc.dashd || t`unknown version`
 #. placeholder {1}: formatInt(doc.tip.height)
