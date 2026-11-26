@@ -192,6 +192,11 @@ describe('Platform overview', () => {
   })
 
   it('groups quorums by size, counts the polls ending soon and names the contracts @NX-04', async () => {
+    // The recorded vote polls end within two weeks of their recording; read them as of that day.
+    vi.useFakeTimers({ toFake: ['Date'], now: Date.parse('2026-11-13T09:38:07Z') })
+    onTestFinished(() => {
+      vi.useRealTimers()
+    })
     renderAt('/platform')
     const quorums = await ready('quorums')
     expect(quorums.querySelectorAll('[data-quorum-sizes] li').length).toBeGreaterThan(0)
