@@ -290,7 +290,9 @@ function NowLine({
         ? t`If every pool keeps signalling as it does now (${share} of blocks), this window ends with about ${ends} of the ${needs} it needs and locks Core 24 in, about ${at(outlook.endHeight)}.`
         : locksIn(lock)
           ? t`If every pool keeps signalling as it does now (${share} of blocks), this window ends with about ${ends} of the ${needs} it needs; window #${String(lock.attempt + 1)} would lock in, about ${at(lock.end)}.`
-          : t`If every pool keeps signalling as it does now (${share} of blocks), this window ends with about ${ends} of the ${needs} it needs, and no window locks in at that share.`
+          : lock
+            ? t`If every pool keeps signalling as it does now (${share} of blocks), this window ends with about ${ends} of the ${needs} it needs, and no window locks in at that share.`
+            : undefined
   }
   return (
     <p className="rx-v24-pace-line grid gap-1" data-v24-pools-now>
