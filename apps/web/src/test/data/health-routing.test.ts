@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { fixture } from '@/test/fixtures/load'
 import { server } from '@/test/server'
 import { setActiveNetwork } from '@/data/active-network'
+import { enableEarlyAnswers } from '@/data/early'
 import { healthRegistry } from '@/data/health'
 import { CRAWL_TIP_MAX_AGE_MS, healthQueries } from '@/data/health-queries'
 import { PROBE_FRAGMENT } from '@/data/http'
@@ -77,6 +78,34 @@ describe('hyphen probe lag', () => {
     crawlSays(chain(Date.now()))
     await c.fetchQuery({ ...healthQueries.hyphen('testnet'), staleTime: 0 })
     expect(healthRegistry.get('testnet', 'hyphen').lag).toBeUndefined()
+  })
+
+  it('asks radar nothing when DAPI gives the tip in time', async () => {
+    const { core } = await import('@/data/core/client')
+    const tip = vi.spyOn(core, 'tip').mockResolvedValue({
+      data: { height: recorded.networks.testnet.chain.blocks, hash: '00'.repeat(32), time: 0 },
+      source: 'dapi',
+      asOf: Date.now(),
+      fetchedAt: Date.now(),
+      proved: false,
+    })
+    const asked = vi.fn()
+    server.use(
+      http.get('https://radar.dashhq.org/api/v1/status', () => {
+        asked()
+        return HttpResponse.json(recorded)
+      }),
+    )
+    enableEarlyAnswers()
+    try {
+      await client().fetchQuery(healthQueries.hyphen('testnet'))
+      expect(tip).toHaveBeenCalled()
+      expect(asked).not.toHaveBeenCalled()
+      expect(healthRegistry.get('testnet', 'hyphen').lag?.blocks).toBeGreaterThan(0)
+    } finally {
+      enableEarlyAnswers(false)
+      tip.mockRestore()
+    }
   })
 
   it('is measured against radar, and its claim is cleared (its state kept) when radar cannot be read', async () => {
