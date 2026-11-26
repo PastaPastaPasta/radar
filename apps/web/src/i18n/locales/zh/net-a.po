@@ -53,6 +53,11 @@ msgstr "{0, plural, other {# 家服务商}}"
 msgid "{0, plural, one {That’s # fewer than a day ago.} other {That’s # fewer than a day ago.}}"
 msgstr "{0, plural, other {比一天前少 # 个。}}"
 
+#. placeholder {0}: x.name
+#. placeholder {1}: pct(x.blocks, mined)
+msgid "{0} {1} in all"
+msgstr "{0} 共 {1}"
+
 #. placeholder {0}: formatPercent(goodShare, 0)
 msgid "{0} A or B"
 msgstr "{0} 为 A 或 B"
@@ -201,6 +206,12 @@ msgstr "{0}：{1}，未发出信号"
 
 #. placeholder {0}: s.name
 #. placeholder {1}: pct(s.blocks, mined)
+#. placeholder {2}: formatInt(s.before)
+msgid "{0}: {1}, not signalling before block {2}"
+msgstr "{0}：{1}，区块 {2} 之前未发出信号"
+
+#. placeholder {0}: s.name
+#. placeholder {1}: pct(s.blocks, mined)
 msgid "{0}: {1}, signalling"
 msgstr "{0}：{1}，发出信号"
 
@@ -216,6 +227,9 @@ msgstr "{diff, plural, other {比一天前多 # 个。}}"
 msgid "{passing} pass every check"
 msgstr "{passing} 通过全部检查"
 
+msgid "{signalled} of {blocks} this window"
+msgstr "本窗口 {blocks} 个中的 {signalled} 个"
+
 msgid "{silent, plural, one {# didn't answer} other {# didn't answer}}"
 msgstr "{silent, plural, other {# 个未响应}}"
 
@@ -224,6 +238,11 @@ msgstr "<0.1%"
 
 msgid "<0>{count}</0> masternodes answered the last crawl"
 msgstr "<0>{count}</0> 个主节点在上次抓取中响应"
+
+#. placeholder {0}: formatInt(streak)
+#. placeholder {1}: aboutBlocks(streak, doc.block_seconds)
+msgid "<0>Every block since <1/> has signalled:</0> the last {0}, about {1}."
+msgstr "<0>自 <1/> 起的每个区块都发出了信号：</0>最近 {0} 个，约 {1}。"
 
 msgid "1 y"
 msgstr "1年"
@@ -323,6 +342,10 @@ msgstr "有应答"
 msgid "As many as a day ago."
 msgstr "与一天前数量相同。"
 
+#. placeholder {0}: ago(trend.streak)
+msgid "at block <0/> (about {0} ago) · {signalled} of {blocks} this window"
+msgstr "于区块 <0/>（约 {0} 前）· 本窗口 {blocks} 个中的 {signalled} 个"
+
 #. placeholder {0}: when(p.timeout)
 msgid "At that pace no window locks in before the timeout, {0}."
 msgstr "按此速度，在超时 {0} 之前没有窗口能锁定。"
@@ -362,6 +385,9 @@ msgstr "按今天的速度没有窗口能锁定：即使最低阈值也是 {0}�
 #. placeholder {1}: at(projection.end)
 msgid "At today's pace window #{0} locks in, about {1}."
 msgstr "按今天的速度，第 {0} 个窗口将锁定，约在 {1}。"
+
+msgid "before it switched"
+msgstr "切换之前"
 
 #. placeholder {0}: g.llmq
 #. placeholder {1}: formatInt(size)
@@ -674,6 +700,18 @@ msgstr "仍在检查 Hyphen 的索引。"
 msgid "I2P"
 msgstr "I2P"
 
+#. placeholder {0}: at(outlook.endHeight)
+msgid "If every pool keeps signalling as it does now ({share} of blocks), this window ends with about {ends} of the {needs} it needs and locks Core 24 in, about {0}."
+msgstr "如果每个矿池都保持现在的信号状态（{share} 的区块），本窗口结束时约有 {ends} 个，所需 {needs} 个，Core 24 将锁定，约在 {0}。"
+
+msgid "If every pool keeps signalling as it does now ({share} of blocks), this window ends with about {ends} of the {needs} it needs, and no window locks in at that share."
+msgstr "如果每个矿池都保持现在的信号状态（{share} 的区块），本窗口结束时约有 {ends} 个，所需 {needs} 个，按此比例没有窗口能锁定。"
+
+#. placeholder {0}: String(lock.attempt + 1)
+#. placeholder {1}: at(lock.end)
+msgid "If every pool keeps signalling as it does now ({share} of blocks), this window ends with about {ends} of the {needs} it needs; window #{0} would lock in, about {1}."
+msgstr "如果每个矿池都保持现在的信号状态（{share} 的区块），本窗口结束时约有 {ends} 个，所需 {needs} 个；第 {0} 个窗口将锁定，约在 {1}。"
+
 msgid "In all {addresses} addresses answered; a node reachable on several networks counts at each."
 msgstr "共有 {addresses} 个地址应答；在多个网络上可达的节点在每个网络中各计一次。"
 
@@ -925,6 +963,9 @@ msgstr "未发出信号"
 msgid "Not signalling"
 msgstr "未发出信号"
 
+msgid "Not signalling, from pools that since switched"
+msgstr "未发出信号（之后已切换的矿池）"
+
 msgid "Not started"
 msgstr "未开始"
 
@@ -942,6 +983,9 @@ msgstr "现在"
 
 msgid "Now"
 msgstr "现在"
+
+msgid "now signalling"
+msgstr "现已发出信号"
 
 #. placeholder {0}: formatInt(r.mined)
 msgid "of {0} so far"
@@ -997,6 +1041,9 @@ msgstr "无法达到"
 
 msgid "Over time"
 msgstr "随时间变化"
+
+msgid "partly"
+msgstr "部分"
 
 msgid "Pending transactions"
 msgstr "待处理交易"
@@ -1060,6 +1107,9 @@ msgstr "Quorum"
 
 msgid "Quorums that would sign the Core 24 signal"
 msgstr "将要对 Core 24 信号签名的 Quorum"
+
+msgid "Radar counts each pool's blocks, not where they fall. A pool reads as now signalling when every block since the window's last one that didn't has signalled and its share says it mined several of them."
+msgstr "Radar 统计每个矿池的区块数，而不是它们的位置。当窗口中最后一个未发信号的区块之后的每个区块都发出了信号，且该矿池的份额表明它挖出了其中若干个时，就视其为现已发出信号。"
 
 msgid "Radar doesn't crawl devnets, so there is nothing to map."
 msgstr "Radar 不抓取开发网，因此没有可绘制的内容。"
@@ -1209,6 +1259,11 @@ msgstr "{0} 个窗口的信号占比和阈值"
 msgid "since block {0}"
 msgstr "自区块 {0} 起"
 
+#. placeholder {0}: formatInt(trend.streak)
+#. placeholder {1}: ago(trend.streak)
+msgid "since block <0/> ({0} blocks, about {1} ago) · {signalled} of {blocks} this window"
+msgstr "自区块 <0/> 起（{0} 个区块，约 {1} 前）· 本窗口 {blocks} 个中的 {signalled} 个"
+
 msgid "Size"
 msgstr "大小"
 
@@ -1228,6 +1283,9 @@ msgstr "开始"
 
 msgid "Status"
 msgstr "状态"
+
+msgid "stopped signalling"
+msgstr "已停止发出信号"
 
 msgid "Supply and blockchain size are not shown until it catches up."
 msgstr "在索引追上之前,不显示流通量和区块链大小。"

@@ -53,6 +53,11 @@ msgstr "{0, plural, one {# провайдер} few {# провайдери} many
 msgid "{0, plural, one {That’s # fewer than a day ago.} other {That’s # fewer than a day ago.}}"
 msgstr "{0, plural, one {Це на # менше, ніж добу тому.} few {Це на # менше, ніж добу тому.} many {Це на # менше, ніж добу тому.} other {Це на # менше, ніж добу тому.}}"
 
+#. placeholder {0}: x.name
+#. placeholder {1}: pct(x.blocks, mined)
+msgid "{0} {1} in all"
+msgstr "{0}: усього {1}"
+
 #. placeholder {0}: formatPercent(goodShare, 0)
 msgid "{0} A or B"
 msgstr "{0} — A або B"
@@ -201,6 +206,12 @@ msgstr "{0}: {1}, без сигналу"
 
 #. placeholder {0}: s.name
 #. placeholder {1}: pct(s.blocks, mined)
+#. placeholder {2}: formatInt(s.before)
+msgid "{0}: {1}, not signalling before block {2}"
+msgstr "{0}: {1}, без сигналу до блока {2}"
+
+#. placeholder {0}: s.name
+#. placeholder {1}: pct(s.blocks, mined)
 msgid "{0}: {1}, signalling"
 msgstr "{0}: {1}, із сигналом"
 
@@ -216,6 +227,9 @@ msgstr "{diff, plural, one {Це на # більше, ніж добу тому.}
 msgid "{passing} pass every check"
 msgstr "{passing} проходять усі перевірки"
 
+msgid "{signalled} of {blocks} this window"
+msgstr "{signalled} з {blocks} у цьому вікні"
+
 msgid "{silent, plural, one {# didn't answer} other {# didn't answer}}"
 msgstr "{silent, plural, one {# не відповів} few {# не відповіли} many {# не відповіли} other {# не відповіли}}"
 
@@ -224,6 +238,11 @@ msgstr "<0.1%"
 
 msgid "<0>{count}</0> masternodes answered the last crawl"
 msgstr "<0>{count}</0> мастернод відповіли в останньому обході"
+
+#. placeholder {0}: formatInt(streak)
+#. placeholder {1}: aboutBlocks(streak, doc.block_seconds)
+msgid "<0>Every block since <1/> has signalled:</0> the last {0}, about {1}."
+msgstr "<0>Кожен блок починаючи з <1/> подав сигнал:</0> останні {0}, близько {1}."
 
 msgid "1 y"
 msgstr "1 р"
@@ -323,6 +342,10 @@ msgstr "Відповів"
 msgid "As many as a day ago."
 msgstr "Стільки ж, скільки добу тому."
 
+#. placeholder {0}: ago(trend.streak)
+msgid "at block <0/> (about {0} ago) · {signalled} of {blocks} this window"
+msgstr "з блока <0/> (близько {0} тому) · {signalled} з {blocks} у цьому вікні"
+
 #. placeholder {0}: when(p.timeout)
 msgid "At that pace no window locks in before the timeout, {0}."
 msgstr "За такого темпу жодне вікно не зафіксується до тайм-ауту, {0}."
@@ -362,6 +385,9 @@ msgstr "За сьогоднішнього темпу жодне вікно не 
 #. placeholder {1}: at(projection.end)
 msgid "At today's pace window #{0} locks in, about {1}."
 msgstr "За сьогоднішнього темпу зафіксується вікно №{0}, приблизно {1}."
+
+msgid "before it switched"
+msgstr "до переходу"
 
 #. placeholder {0}: g.llmq
 #. placeholder {1}: formatInt(size)
@@ -674,6 +700,18 @@ msgstr "Індекс Hyphen ще перевіряється."
 msgid "I2P"
 msgstr "I2P"
 
+#. placeholder {0}: at(outlook.endHeight)
+msgid "If every pool keeps signalling as it does now ({share} of blocks), this window ends with about {ends} of the {needs} it needs and locks Core 24 in, about {0}."
+msgstr "Якщо кожен пул і далі сигналізуватиме як зараз ({share} блоків), це вікно завершиться приблизно з {ends} із потрібних {needs} і зафіксує Core 24, близько {0}."
+
+msgid "If every pool keeps signalling as it does now ({share} of blocks), this window ends with about {ends} of the {needs} it needs, and no window locks in at that share."
+msgstr "Якщо кожен пул і далі сигналізуватиме як зараз ({share} блоків), це вікно завершиться приблизно з {ends} із потрібних {needs}, і за такої частки жодне вікно не зафіксує оновлення."
+
+#. placeholder {0}: String(lock.attempt + 1)
+#. placeholder {1}: at(lock.end)
+msgid "If every pool keeps signalling as it does now ({share} of blocks), this window ends with about {ends} of the {needs} it needs; window #{0} would lock in, about {1}."
+msgstr "Якщо кожен пул і далі сигналізуватиме як зараз ({share} блоків), це вікно завершиться приблизно з {ends} із потрібних {needs}; вікно №{0} зафіксує оновлення, близько {1}."
+
 msgid "In all {addresses} addresses answered; a node reachable on several networks counts at each."
 msgstr "Усього відповіли {addresses} адрес; вузол, доступний у кількох мережах, враховується в кожній."
 
@@ -925,6 +963,9 @@ msgstr "без сигналу"
 msgid "Not signalling"
 msgstr "Без сигналу"
 
+msgid "Not signalling, from pools that since switched"
+msgstr "Без сигналу, від пулів, які згодом перейшли"
+
 msgid "Not started"
 msgstr "Не розпочато"
 
@@ -942,6 +983,9 @@ msgstr "зараз"
 
 msgid "Now"
 msgstr "Зараз"
+
+msgid "now signalling"
+msgstr "тепер із сигналом"
 
 #. placeholder {0}: formatInt(r.mined)
 msgid "of {0} so far"
@@ -997,6 +1041,9 @@ msgstr "Недосяжно"
 
 msgid "Over time"
 msgstr "З часом"
+
+msgid "partly"
+msgstr "частково"
 
 msgid "Pending transactions"
 msgstr "Транзакції в очікуванні"
@@ -1060,6 +1107,9 @@ msgstr "Кворум"
 
 msgid "Quorums that would sign the Core 24 signal"
 msgstr "Кворуми, які підписали б сигнал Core 24"
+
+msgid "Radar counts each pool's blocks, not where they fall. A pool reads as now signalling when every block since the window's last one that didn't has signalled and its share says it mined several of them."
+msgstr "Radar рахує блоки кожного пулу, але не їхнє місце. Пул вважається таким, що перейшов на сигнал, якщо кожен блок після останнього блока вікна без сигналу подав сигнал і за часткою пулу він мав добути кілька з них."
 
 msgid "Radar doesn't crawl devnets, so there is nothing to map."
 msgstr "Radar не обходить devnet, тому на карті нічого відображати."
@@ -1209,6 +1259,11 @@ msgstr "Частка сигналізації та поріг для вікон:
 msgid "since block {0}"
 msgstr "від блока {0}"
 
+#. placeholder {0}: formatInt(trend.streak)
+#. placeholder {1}: ago(trend.streak)
+msgid "since block <0/> ({0} blocks, about {1} ago) · {signalled} of {blocks} this window"
+msgstr "з блока <0/> (блоків: {0}, близько {1} тому) · {signalled} з {blocks} у цьому вікні"
+
 msgid "Size"
 msgstr "Розмір"
 
@@ -1228,6 +1283,9 @@ msgstr "Початок"
 
 msgid "Status"
 msgstr "Статус"
+
+msgid "stopped signalling"
+msgstr "сигнал припинено"
 
 msgid "Supply and blockchain size are not shown until it catches up."
 msgstr "Пропозицію монет і розмір блокчейна не показано, доки індекс не наздожене ланцюг."

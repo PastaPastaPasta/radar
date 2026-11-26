@@ -53,6 +53,11 @@ msgstr "{0, plural, one {# Anbieter} other {# Anbieter}}"
 msgid "{0, plural, one {That’s # fewer than a day ago.} other {That’s # fewer than a day ago.}}"
 msgstr "{0, plural, one {Das ist # weniger als vor einem Tag.} other {Das sind # weniger als vor einem Tag.}}"
 
+#. placeholder {0}: x.name
+#. placeholder {1}: pct(x.blocks, mined)
+msgid "{0} {1} in all"
+msgstr "{0} {1} insgesamt"
+
 #. placeholder {0}: formatPercent(goodShare, 0)
 msgid "{0} A or B"
 msgstr "{0} A oder B"
@@ -201,6 +206,12 @@ msgstr "{0}: {1}, signalisiert nicht"
 
 #. placeholder {0}: s.name
 #. placeholder {1}: pct(s.blocks, mined)
+#. placeholder {2}: formatInt(s.before)
+msgid "{0}: {1}, not signalling before block {2}"
+msgstr "{0}: {1}, signalisierte vor Block {2} nicht"
+
+#. placeholder {0}: s.name
+#. placeholder {1}: pct(s.blocks, mined)
 msgid "{0}: {1}, signalling"
 msgstr "{0}: {1}, signalisiert"
 
@@ -216,6 +227,9 @@ msgstr "{diff, plural, one {Das ist # mehr als vor einem Tag.} other {Das sind #
 msgid "{passing} pass every check"
 msgstr "{passing} bestehen jede Prüfung"
 
+msgid "{signalled} of {blocks} this window"
+msgstr "{signalled} von {blocks} in diesem Fenster"
+
 msgid "{silent, plural, one {# didn't answer} other {# didn't answer}}"
 msgstr "{silent, plural, one {# hat nicht geantwortet} other {# haben nicht geantwortet}}"
 
@@ -224,6 +238,11 @@ msgstr "<0,1 %"
 
 msgid "<0>{count}</0> masternodes answered the last crawl"
 msgstr "<0>{count}</0> Masternodes haben beim letzten Crawl geantwortet"
+
+#. placeholder {0}: formatInt(streak)
+#. placeholder {1}: aboutBlocks(streak, doc.block_seconds)
+msgid "<0>Every block since <1/> has signalled:</0> the last {0}, about {1}."
+msgstr "<0>Jeder Block seit <1/> hat signalisiert:</0> die letzten {0}, etwa {1}."
 
 msgid "1 y"
 msgstr "1 J"
@@ -323,6 +342,10 @@ msgstr "Geantwortet"
 msgid "As many as a day ago."
 msgstr "So viele wie vor einem Tag."
 
+#. placeholder {0}: ago(trend.streak)
+msgid "at block <0/> (about {0} ago) · {signalled} of {blocks} this window"
+msgstr "bei Block <0/> (vor etwa {0}) · {signalled} von {blocks} in diesem Fenster"
+
 #. placeholder {0}: when(p.timeout)
 msgid "At that pace no window locks in before the timeout, {0}."
 msgstr "Bei diesem Tempo wird vor dem Timeout, {0}, kein Fenster festgeschrieben."
@@ -362,6 +385,9 @@ msgstr "Beim heutigen Tempo wird kein Fenster festgeschrieben: Selbst der niedri
 #. placeholder {1}: at(projection.end)
 msgid "At today's pace window #{0} locks in, about {1}."
 msgstr "Beim heutigen Tempo wird Fenster #{0} festgeschrieben, etwa am {1}."
+
+msgid "before it switched"
+msgstr "vor dem Wechsel"
 
 #. placeholder {0}: g.llmq
 #. placeholder {1}: formatInt(size)
@@ -674,6 +700,18 @@ msgstr "Der Hyphen-Index wird noch geprüft."
 msgid "I2P"
 msgstr "I2P"
 
+#. placeholder {0}: at(outlook.endHeight)
+msgid "If every pool keeps signalling as it does now ({share} of blocks), this window ends with about {ends} of the {needs} it needs and locks Core 24 in, about {0}."
+msgstr "Signalisiert jeder Pool weiter wie jetzt ({share} der Blöcke), endet dieses Fenster mit etwa {ends} der nötigen {needs} und schließt Core 24 ein, etwa am {0}."
+
+msgid "If every pool keeps signalling as it does now ({share} of blocks), this window ends with about {ends} of the {needs} it needs, and no window locks in at that share."
+msgstr "Signalisiert jeder Pool weiter wie jetzt ({share} der Blöcke), endet dieses Fenster mit etwa {ends} der nötigen {needs}, und bei diesem Anteil schließt kein Fenster ein."
+
+#. placeholder {0}: String(lock.attempt + 1)
+#. placeholder {1}: at(lock.end)
+msgid "If every pool keeps signalling as it does now ({share} of blocks), this window ends with about {ends} of the {needs} it needs; window #{0} would lock in, about {1}."
+msgstr "Signalisiert jeder Pool weiter wie jetzt ({share} der Blöcke), endet dieses Fenster mit etwa {ends} der nötigen {needs}; Fenster #{0} würde einschließen, etwa am {1}."
+
 msgid "In all {addresses} addresses answered; a node reachable on several networks counts at each."
 msgstr "Insgesamt haben {addresses} Adressen geantwortet; ein Knoten, der in mehreren Netzen erreichbar ist, zählt in jedem."
 
@@ -925,6 +963,9 @@ msgstr "signalisiert nicht"
 msgid "Not signalling"
 msgstr "Signalisiert nicht"
 
+msgid "Not signalling, from pools that since switched"
+msgstr "Nicht signalisiert, von Pools, die inzwischen gewechselt haben"
+
 msgid "Not started"
 msgstr "Nicht gestartet"
 
@@ -942,6 +983,9 @@ msgstr "jetzt"
 
 msgid "Now"
 msgstr "Jetzt"
+
+msgid "now signalling"
+msgstr "signalisiert jetzt"
 
 #. placeholder {0}: formatInt(r.mined)
 msgid "of {0} so far"
@@ -997,6 +1041,9 @@ msgstr "Unerreichbar"
 
 msgid "Over time"
 msgstr "Im Zeitverlauf"
+
+msgid "partly"
+msgstr "teilweise"
 
 msgid "Pending transactions"
 msgstr "Ausstehende Transaktionen"
@@ -1060,6 +1107,9 @@ msgstr "Quorum"
 
 msgid "Quorums that would sign the Core 24 signal"
 msgstr "Quorums, die das Core-24-Signal signieren würden"
+
+msgid "Radar counts each pool's blocks, not where they fall. A pool reads as now signalling when every block since the window's last one that didn't has signalled and its share says it mined several of them."
+msgstr "Radar zählt die Blöcke jedes Pools, nicht ihre Position. Ein Pool gilt als jetzt signalisierend, wenn jeder Block seit dem letzten nicht signalisierenden des Fensters signalisiert hat und sein Anteil sagt, dass er mehrere davon gefunden hat."
 
 msgid "Radar doesn't crawl devnets, so there is nothing to map."
 msgstr "Radar crawlt keine Devnets, daher gibt es nichts zu kartieren."
@@ -1209,6 +1259,11 @@ msgstr "Signalisierungsanteil und Schwellenwert für {0} Fenster"
 msgid "since block {0}"
 msgstr "seit Block {0}"
 
+#. placeholder {0}: formatInt(trend.streak)
+#. placeholder {1}: ago(trend.streak)
+msgid "since block <0/> ({0} blocks, about {1} ago) · {signalled} of {blocks} this window"
+msgstr "seit Block <0/> ({0} Blöcke, vor etwa {1}) · {signalled} von {blocks} in diesem Fenster"
+
 msgid "Size"
 msgstr "Größe"
 
@@ -1228,6 +1283,9 @@ msgstr "Beginn"
 
 msgid "Status"
 msgstr "Status"
+
+msgid "stopped signalling"
+msgstr "signalisiert nicht mehr"
 
 msgid "Supply and blockchain size are not shown until it catches up."
 msgstr "Umlaufmenge und Blockchain-Größe werden nicht angezeigt, bis der Index aufgeholt hat."

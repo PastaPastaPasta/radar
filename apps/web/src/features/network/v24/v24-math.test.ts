@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { RadarActivationSchema, v24Pending } from '@/data/radar/schemas'
+import { RadarActivationSchema, v24Pending, type ActivationWindow } from '@/data/radar/schemas'
 import mainnet from '@/test/fixtures/http/radar/mainnet/activation.json'
 import testnet from '@/test/fixtures/http/radar/testnet/activation.json'
 import signalling from './signalling.fixture.json'
 import {
+  currentRate,
   estimateMs,
+  poolStandings,
   milestones,
   projectLockIn,
   rateOf,
@@ -189,5 +191,95 @@ describe('the lock-in outlook (mainnet at block 2,577,670)', () => {
   it('dates heights to come at the recent pace', () => {
     expect(estimateMs(doc, 2_577_670)).toBe(1_795_530_762_000)
     expect(estimateMs(doc, 2_577_680)).toBe(1_795_530_762_000 + 1_571_000)
+  })
+})
+
+describe('poolStandings', () => {
+  const win = (
+    marks: string,
+    pools: { pool: string | null; blocks: number; signalling: number }[],
+  ) => ({
+    count: marks.split('#').length - 1,
+    mined: marks.length,
+    start: { height: 1000 },
+    end: { height: 1999 },
+    signalling: marks,
+    pools,
+  })
+  const kinds = (w: ActivationWindow) =>
+    Object.fromEntries(poolStandings(w).map((s) => [s.row.pool ?? '-', s.trend]))
+
+  it('reads a pool as now signalling once the streak since the last miss must hold some of its blocks', () => {
+    const marks = '-#'.repeat(400) + '#'.repeat(200)
+    const t = kinds(
+      win(marks, [
+        { pool: 'ViaBTC', blocks: 500, signalling: 100 },
+        { pool: 'F2Pool', blocks: 500, signalling: 500 },
+      ]),
+    )
+    expect(t.ViaBTC).toEqual({ kind: 'on', since: 1000 + 799, streak: 201 })
+    expect(t.F2Pool).toEqual({ kind: 'all' })
+  })
+
+  it('reads the lone holdout as stopped when it signalled long before its first miss and misses to the end', () => {
+    const marks = '#'.repeat(600) + '-#'.repeat(200)
+    const t = kinds(
+      win(marks, [
+        { pool: 'AntPool', blocks: 500, signalling: 300 },
+        { pool: 'F2Pool', blocks: 500, signalling: 500 },
+      ]),
+    )
+    expect(t.AntPool).toEqual({ kind: 'off', from: 1600, streak: 400 })
+  })
+
+  it('calls a small pool partly when the streak is too short to have held its blocks', () => {
+    const marks = '-#'.repeat(450) + '#'.repeat(100)
+    const t = kinds(
+      win(marks, [
+        { pool: 'Zpool', blocks: 20, signalling: 5 },
+        { pool: 'F2Pool', blocks: 980, signalling: 545 },
+      ]),
+    )
+    expect(t.Zpool).toEqual({ kind: 'partly' })
+    expect(t.F2Pool).toEqual({ kind: 'on', since: 1899, streak: 101 })
+  })
+
+  it('makes no call on order when two pools miss and none could have stopped', () => {
+    const marks = '-#'.repeat(500)
+    const t = kinds(
+      win(marks, [
+        { pool: 'A', blocks: 500, signalling: 250 },
+        { pool: 'B', blocks: 500, signalling: 250 },
+      ]),
+    )
+    expect(t.A).toEqual({ kind: 'partly' })
+    expect(t.B).toEqual({ kind: 'partly' })
+  })
+
+  it('makes no call on order without the block string, and keeps all and none', () => {
+    const w = { ...win('#'.repeat(10), []), signalling: null, mined: 10 }
+    const t = kinds({
+      ...w,
+      pools: [
+        { pool: 'A', blocks: 5, signalling: 2 },
+        { pool: 'B', blocks: 3, signalling: 3 },
+        { pool: null, blocks: 2, signalling: 0 },
+      ],
+    })
+    expect(t).toEqual({ A: { kind: 'partly' }, B: { kind: 'all' }, '-': { kind: 'none' } })
+  })
+
+  it('counts the share signalling now: whole pools that signal now, the window ratio for the unknown', () => {
+    const marks = '-#'.repeat(400) + '#'.repeat(200)
+    const s = poolStandings(
+      win(marks, [
+        { pool: 'ViaBTC', blocks: 400, signalling: 100 },
+        { pool: 'F2Pool', blocks: 300, signalling: 300 },
+        { pool: 'X', blocks: 100, signalling: 0 },
+        { pool: 'Y', blocks: 200, signalling: 100 },
+      ]),
+    )
+    // ViaBTC (on) 400 + F2Pool 300 + Y on too (streak 200 x 20% = 40 expected) 200 = 900 of 1000.
+    expect(currentRate(s)).toBeCloseTo(0.9)
   })
 })

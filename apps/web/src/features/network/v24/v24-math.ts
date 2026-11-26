@@ -357,3 +357,68 @@ export const locksIn = (x: LockInProjection | NoLockIn | undefined): x is LockIn
   x !== undefined && !('never' in x)
 
 export type PoolRow = NonNullable<NonNullable<RadarActivationDeployment['window']>['pools']>[number]
+
+/**
+ * How a pool signals across the window. Radar counts each pool's blocks but not where they fall, so a switch is read
+ * off the window's `#`/`-` string: `on` when every block since the window's last miss signalled and the pool's share
+ * says it mined several of them; `off` when it alone has misses and its share says it mined several blocks before the
+ * first of them and likely none since the last.
+ */
+export type PoolTrend =
+  | { kind: 'all' | 'none' | 'partly' }
+  /** Signalling in every block since `since`; the blocks before it include its misses. */
+  | { kind: 'on'; since: number; streak: number }
+  /** Signalled until `from`, the window's first miss, which is its own. */
+  | { kind: 'off'; from: number; streak: number }
+
+export interface PoolStanding {
+  row: PoolRow
+  trend: PoolTrend
+}
+
+/** Blocks a pool is expected to have mined in a stretch before its absence there is taken as absence by chance. */
+const SURE_BLOCKS = 5
+
+export function poolStandings(w: ActivationWindow): PoolStanding[] {
+  const pools = w.pools ?? []
+  const marks = w.signalling ?? ''
+  const ordered = marks.length === w.mined && w.mined > 0
+  const lastMiss = marks.lastIndexOf('-')
+  const firstMiss = marks.indexOf('-')
+  const tail = marks.length - 1 - lastMiss
+  const holdouts = pools.filter((r) => r.blocks > r.signalling)
+  return pools.map((row) => {
+    const trend = (): PoolTrend => {
+      if (row.signalling === row.blocks) return { kind: 'all' }
+      if (row.signalling === 0) return { kind: 'none' }
+      if (!ordered) return { kind: 'partly' }
+      const share = row.blocks / w.mined
+      if (lastMiss >= 0 && tail * share >= SURE_BLOCKS) {
+        return { kind: 'on', since: w.start.height + lastMiss + 1, streak: tail }
+      }
+      if (holdouts.length === 1 && firstMiss * share >= SURE_BLOCKS && tail * share < 1) {
+        return { kind: 'off', from: w.start.height + firstMiss, streak: marks.length - firstMiss }
+      }
+      return { kind: 'partly' }
+    }
+    return { row, trend: trend() }
+  })
+}
+
+/** Whether a pool signals in its latest blocks, as far as the window shows. */
+export const signalsNow = (t: PoolTrend): boolean => t.kind === 'all' || t.kind === 'on'
+
+/**
+ * The share of blocks that would signal if each pool kept signalling as it does now: all of a pool's share when it
+ * signals now, none when it doesn't, and its window's ratio when that can't be told.
+ */
+export function currentRate(standings: readonly PoolStanding[]): number | undefined {
+  const total = standings.reduce((a, s) => a + s.row.blocks, 0)
+  if (total <= 0) return undefined
+  const on = standings.reduce(
+    (a, { row, trend }) =>
+      a + (signalsNow(trend) ? row.blocks : trend.kind === 'partly' ? row.signalling : 0),
+    0,
+  )
+  return on / total
+}
