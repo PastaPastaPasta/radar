@@ -62,7 +62,8 @@ function referenceTip(net: NetworkId, signal: AbortSignal): ReferenceTip {
       if (asked) return
       asked = true
       clearTimeout(timer)
-      void crawl().then(resolve)
+      if (signal.aborted) resolve(undefined)
+      else void crawl().then(resolve)
     }
     const timer = setTimeout(ask, CRAWL_TIP_GRACE_MS)
     void fromDapi.then((height) => {

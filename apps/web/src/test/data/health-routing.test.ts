@@ -6,7 +6,7 @@ import { server } from '@/test/server'
 import { setActiveNetwork } from '@/data/active-network'
 import { enableEarlyAnswers } from '@/data/early'
 import { healthRegistry } from '@/data/health'
-import { CRAWL_TIP_MAX_AGE_MS, healthQueries } from '@/data/health-queries'
+import { CRAWL_TIP_GRACE_MS, CRAWL_TIP_MAX_AGE_MS, healthQueries } from '@/data/health-queries'
 import { PROBE_FRAGMENT } from '@/data/http'
 import { radar } from '@/data/radar/client'
 import { rate } from '@/data/rate/client'
@@ -105,6 +105,47 @@ describe('hyphen probe lag', () => {
     } finally {
       enableEarlyAnswers(false)
       tip.mockRestore()
+    }
+  })
+
+  it('asks radar at once when DAPI has no tip, and only after the grace period when DAPI is slow', async () => {
+    const { core } = await import('@/data/core/client')
+    const asked = vi.fn()
+    server.use(
+      http.get('https://radar.dashhq.org/api/v1/status', () => {
+        asked()
+        return HttpResponse.json(recorded)
+      }),
+    )
+    enableEarlyAnswers()
+    const failing = vi.spyOn(core, 'tip').mockRejectedValue(new Error('no DAPI'))
+    try {
+      await client().fetchQuery(healthQueries.hyphen('testnet'))
+      expect(asked).toHaveBeenCalledTimes(1)
+      failing.mockRestore()
+
+      asked.mockClear()
+      let answer: (v: Awaited<ReturnType<typeof core.tip>>) => void = () => undefined
+      const slow = vi.spyOn(core, 'tip').mockReturnValue(new Promise((r) => (answer = r)))
+      const probe = client().fetchQuery(healthQueries.hyphen('testnet'))
+      await new Promise((r) => setTimeout(r, CRAWL_TIP_GRACE_MS / 3))
+      expect(asked).not.toHaveBeenCalled()
+      await vi.waitFor(() => expect(asked).toHaveBeenCalledTimes(1), {
+        timeout: CRAWL_TIP_GRACE_MS * 3,
+      })
+      answer({
+        data: { height: recorded.networks.testnet.chain.blocks, hash: '00'.repeat(32), time: 0 },
+        source: 'dapi',
+        asOf: Date.now(),
+        fetchedAt: Date.now(),
+        proved: false,
+      })
+      await probe
+      expect(healthRegistry.get('testnet', 'hyphen').lag?.blocks).toBeGreaterThan(0)
+      slow.mockRestore()
+    } finally {
+      enableEarlyAnswers(false)
+      vi.restoreAllMocks()
     }
   })
 
