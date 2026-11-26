@@ -7,11 +7,10 @@ import { InfoTip } from '../v24/InfoTip'
 import { Answer, SegBar, shareTone } from './bars'
 import { swatchOf, useCensusColors } from './census-colors'
 import type { Census } from './census-data'
-import { DKG_CHECK_IDS, GRADES, median } from './census-math'
+import { DKG_CHECK_IDS, GRADES, median, rowsOwnTimes } from './census-math'
 import { Figure, FigureGrid } from './parts'
 import { loadState, type SectionProps } from './shared'
 
-const HOUR_MS = 3_600_000
 const ENABLED = { status: ['enabled' as const] }
 
 /** Core 24 quorum readiness: one row per DKG connection check, each with its pass rate and a link to its failures. */
@@ -285,7 +284,9 @@ export function PlatformHealthCard({ summary }: SectionProps) {
 export function SpeedCard({ census }: SectionProps & { census: Census }) {
   const { t } = useLingui()
   const colors = useCensusColors()
-  const vantages = (census.bench.data?.data.vantages ?? []).filter((v) => v.tested > 0)
+  const all = census.bench.data?.data.vantages ?? []
+  const vantages = all.filter((v) => v.tested > 0)
+  const apart = rowsOwnTimes(all)
   if (census.bench.data ? vantages.length === 0 : census.bench.isError) return null
   const tones: Record<string, string> = {
     A: colors.good,
@@ -298,8 +299,6 @@ export function SpeedCard({ census }: SectionProps & { census: Census }) {
   const runs = scores.length + vantages.reduce((a, v) => a + v.failed, 0)
   const goodShare = runs > 0 ? scores.filter((s) => s >= 75).length / runs : 0
   const speedTone = shareTone(goodShare)
-  const times = vantages.map((v) => v.updated)
-  const apart = times.length > 1 && Math.max(...times) - Math.min(...times) > HOUR_MS
   // The speed tests run every two weeks: their time is said on the card, not taken for the crawl's on the page line.
   return (
     <NoSourceSection>

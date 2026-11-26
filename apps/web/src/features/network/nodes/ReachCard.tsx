@@ -9,7 +9,7 @@ import { useCensusColors } from './census-colors'
 import type { Census } from './census-data'
 import { unreachableLink } from './census-links'
 import { dayMonthTime } from './census-format'
-import { fraction, radarScope, reachShare, total } from './census-math'
+import { fraction, nearestIndex, radarScope, reachShare, total } from './census-math'
 import { InfoTip } from '../v24/InfoTip'
 import { Answer, SegBar, shareTone } from './bars'
 import { useShareText } from './parts'
@@ -145,7 +145,7 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
 function SizeChart({ census }: { census: Census }) {
   const { t } = useLingui()
   const colors = useCensusColors()
-  const [picked, setCursor] = useState<number>()
+  const [picked, setPicked] = useState<number>()
   const doc = census.size.data?.data
   const labels: Record<string, string> = {
     reachable_nodes: t`Reachable addresses`,
@@ -160,7 +160,7 @@ function SizeChart({ census }: { census: Census }) {
     values: s.values,
   }))
   const count = doc?.t.length ?? 0
-  const cursor = picked !== undefined && picked < count ? picked : undefined
+  const cursor = doc && picked !== undefined ? nearestIndex(doc.t, picked) : undefined
 
   const readout =
     cursor === undefined || !doc
@@ -206,10 +206,10 @@ function SizeChart({ census }: { census: Census }) {
         aria-label={t`Network size. Use the left and right arrow keys to step through the points.`}
         aria-valuetext={readout}
         onChange={(e) => {
-          setCursor(Number(e.target.value))
+          setPicked(doc.t[Number(e.target.value)])
         }}
         onFocus={() => {
-          setCursor((c) => c ?? Math.max(0, count - 1))
+          if (cursor === undefined) setPicked(doc.t[count - 1])
         }}
       />
       <p className="min-h-5 text-sm text-[var(--dh-ink-2)]" aria-live="polite" data-size-readout>

@@ -252,3 +252,22 @@ export const median = (values: readonly (number | null)[]): number | null => {
   const sorted = values.filter((v): v is number => v !== null).sort((a, b) => a - b)
   return sorted.length ? sorted[sorted.length >> 1]! : null
 }
+
+const HOUR_MS = 3_600_000
+
+/**
+ * Whether the speed rows say their own times: the card's stamp is the newest location's time, hidden locations (no
+ * tests) included, so a shown one more than an hour older says when its results are from.
+ */
+export function rowsOwnTimes(vantages: readonly { tested: number; updated: number }[]): boolean {
+  const newest = Math.max(0, ...vantages.map((v) => v.updated))
+  return vantages.some((v) => v.tested > 0 && newest - v.updated > HOUR_MS)
+}
+
+/** The index of the sample nearest `ms`, or undefined when `ms` lies outside the series (a point picked on another range). */
+export function nearestIndex(t: readonly number[], ms: number): number | undefined {
+  if (t.length === 0 || ms < t[0]! || ms > t[t.length - 1]!) return undefined
+  let best = 0
+  for (let i = 1; i < t.length; i++) if (Math.abs(t[i]! - ms) < Math.abs(t[best]! - ms)) best = i
+  return best
+}

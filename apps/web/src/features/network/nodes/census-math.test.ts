@@ -13,6 +13,8 @@ import {
   radarScope,
   releaseBook,
   versionOf,
+  rowsOwnTimes,
+  nearestIndex,
 } from './census-math'
 
 const book = releaseBook({
@@ -217,5 +219,49 @@ describe('major releases', () => {
     ]
     expect(onMajor(rows, '24')).toBe(12)
     expect(onMajor(rows, '23')).toBe(5)
+  })
+})
+
+describe('rowsOwnTimes', () => {
+  const at = (h: number) => Date.UTC(2026, 10, 26, h)
+  it('keeps one stamp when the shown locations ran together', () => {
+    expect(
+      rowsOwnTimes([
+        { tested: 10, updated: at(10) },
+        { tested: 12, updated: at(10) + 60_000 },
+      ]),
+    ).toBe(false)
+  })
+
+  it('gives each row its time when the shown locations ran hours apart', () => {
+    expect(
+      rowsOwnTimes([
+        { tested: 10, updated: at(2) },
+        { tested: 12, updated: at(10) },
+      ]),
+    ).toBe(true)
+  })
+
+  it('gives a shown row its time when a hidden location set a newer stamp', () => {
+    expect(
+      rowsOwnTimes([
+        { tested: 10, updated: at(2) },
+        { tested: 0, updated: at(10) },
+      ]),
+    ).toBe(true)
+  })
+})
+
+describe('nearestIndex', () => {
+  const t = [100, 200, 300, 400]
+  it('finds the sample nearest a picked time', () => {
+    expect(nearestIndex(t, 200)).toBe(1)
+    expect(nearestIndex(t, 260)).toBe(2)
+  })
+
+  it('drops a time outside the series', () => {
+    expect(nearestIndex(t, 50)).toBeUndefined()
+    expect(nearestIndex(t, 450)).toBeUndefined()
+    expect(nearestIndex([], 100)).toBeUndefined()
   })
 })
