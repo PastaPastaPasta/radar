@@ -362,7 +362,9 @@ export type PoolRow = NonNullable<NonNullable<RadarActivationDeployment['window'
  * How a pool signals across the window. Radar counts each pool's blocks but not where they fall, so a switch is read
  * off the window's `#`/`-` string, against the pool's own share of misses: `on` when every block since the window's
  * last miss signalled and, missing at its window rate, the pool would have missed several of them; `off` when it alone
- * misses, would have missed several blocks before its first miss at that rate, and likely mined none since its last.
+ * misses, would have missed several blocks before its first miss at that rate, likely mined none since its last, and
+ * signalled in about as many blocks as it mined before the first. Without a block string that matches the pools'
+ * totals, no switch is called.
  */
 export type PoolTrend =
   | { kind: 'all' | 'none' | 'partly' }
@@ -382,7 +384,11 @@ const SURE_MISSES = 5
 export function poolStandings(w: ActivationWindow): PoolStanding[] {
   const pools = w.pools ?? []
   const marks = w.signalling ?? ''
-  const ordered = marks.length === w.mined && w.mined > 0
+  const ordered =
+    w.mined > 0 &&
+    marks.length === w.mined &&
+    pools.reduce((n, r) => n + r.blocks, 0) === w.mined &&
+    pools.reduce((n, r) => n + r.signalling, 0) === w.count
   const lastMiss = marks.lastIndexOf('-')
   const firstMiss = marks.indexOf('-')
   const tail = marks.length - 1 - lastMiss
@@ -397,7 +403,12 @@ export function poolStandings(w: ActivationWindow): PoolStanding[] {
       if (lastMiss >= 0 && tail * missRate >= SURE_MISSES) {
         return { kind: 'on', since: w.start.height + lastMiss + 1, streak: tail }
       }
-      if (holdouts.length === 1 && firstMiss * missRate >= SURE_MISSES && tail * share < 1) {
+      if (
+        holdouts.length === 1 &&
+        firstMiss * missRate >= SURE_MISSES &&
+        tail * share < 1 &&
+        row.signalling <= firstMiss * share * 1.25 + SURE_MISSES
+      ) {
         return { kind: 'off', from: w.start.height + firstMiss, streak: marks.length - firstMiss }
       }
       return { kind: 'partly' }

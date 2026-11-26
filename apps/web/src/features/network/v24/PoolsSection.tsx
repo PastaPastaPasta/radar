@@ -14,8 +14,8 @@ import {
   locksIn,
   poolStandings,
   projectLockIn,
-  windowOutlook,
   layoutOf,
+  windowOutlook,
   type PoolStanding,
   type Segment,
 } from './v24-math'
@@ -88,7 +88,7 @@ export function PoolsSection({
               {t`Who mined this window's ${formatInt(mined)} blocks and how many of them signalled. Best effort: we go by the tag in each block's coinbase, which is whatever the miner wrote, and some blocks carry none.`}
             </p>
             <p className="m-0 mt-2 text-[var(--dh-ink-2)]">
-              {t`Radar counts each pool's blocks, not where they fall. A pool reads as now signalling when every block since the window's last one that didn't has signalled, and at its own rate of misses it would have missed several of them.`}
+              {t`Radar counts each pool's blocks, not where they fall. A pool reads as now signalling when every block since the window's last one that didn't has signalled, and at its own rate of misses it would have missed several of them. A pool that stopped mining or changed its tag reads the same way.`}
             </p>
           </InfoTip>
         </>
@@ -228,8 +228,8 @@ function PoolStatus({ s, blockSeconds }: { s: PoolStanding; blockSeconds: number
           <Badge tone="success" size="sm">{t`now signalling`}</Badge>
           <small>
             <Trans>
-              every block since <BlockAt height={trend.since} /> ({formatInt(trend.streak)} blocks,
-              about {ago(trend.streak)} ago) · {signalled} of {blocks} this window
+              every block since <BlockAt height={trend.since} /> (about {ago(trend.streak)} ago) ·{' '}
+              {signalled} of {blocks} this window
             </Trans>
           </small>
         </span>

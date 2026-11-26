@@ -624,10 +624,9 @@ msgstr "оценка"
 msgid "Estimated from the difficulty"
 msgstr "Оценка по сложности"
 
-#. placeholder {0}: formatInt(trend.streak)
-#. placeholder {1}: ago(trend.streak)
-msgid "every block since <0/> ({0} blocks, about {1} ago) · {signalled} of {blocks} this window"
-msgstr "каждый блок с <0/> (блоков: {0}, около {1} назад) · {signalled} из {blocks} в этом окне"
+#. placeholder {0}: ago(trend.streak)
+msgid "every block since <0/> (about {0} ago) · {signalled} of {blocks} this window"
+msgstr "каждый блок с <0/> (около {0} назад) · {signalled} из {blocks} в этом окне"
 
 msgid "Every Dash node that answers a crawl: what they run, where they are hosted and whether they can be reached."
 msgstr "Все узлы Dash, отвечающие на обход: что на них запущено, где они размещены и доступны ли они."
@@ -1113,8 +1112,8 @@ msgstr "Кворум"
 msgid "Quorums that would sign the Core 24 signal"
 msgstr "Кворумы, которые подписали бы сигнал Core 24"
 
-msgid "Radar counts each pool's blocks, not where they fall. A pool reads as now signalling when every block since the window's last one that didn't has signalled, and at its own rate of misses it would have missed several of them."
-msgstr "Radar считает блоки каждого пула, но не их положение. Пул считается перешедшим на сигнал, если каждый блок после последнего блока окна без сигнала подал сигнал, а при своей собственной доле блоков без сигнала пул пропустил бы несколько из них."
+msgid "Radar counts each pool's blocks, not where they fall. A pool reads as now signalling when every block since the window's last one that didn't has signalled, and at its own rate of misses it would have missed several of them. A pool that stopped mining or changed its tag reads the same way."
+msgstr "Radar считает блоки каждого пула, но не их положение. Пул считается перешедшим на сигнал, если каждый блок после последнего блока окна без сигнала подал сигнал, а при своей собственной доле блоков без сигнала пул пропустил бы несколько из них. Так же выглядит пул, который перестал майнить или сменил метку."
 
 msgid "Radar doesn't crawl devnets, so there is nothing to map."
 msgstr "Radar не обходит devnet, поэтому отображать на карте нечего."

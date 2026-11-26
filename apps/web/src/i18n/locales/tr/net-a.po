@@ -624,10 +624,9 @@ msgstr "tahmin"
 msgid "Estimated from the difficulty"
 msgstr "Zorluktan tahmin edildi"
 
-#. placeholder {0}: formatInt(trend.streak)
-#. placeholder {1}: ago(trend.streak)
-msgid "every block since <0/> ({0} blocks, about {1} ago) · {signalled} of {blocks} this window"
-msgstr "<0/> numaralı bloktan beri her blok ({0} blok, yaklaşık {1} önce) · bu pencerede {blocks} bloğun {signalled} tanesi"
+#. placeholder {0}: ago(trend.streak)
+msgid "every block since <0/> (about {0} ago) · {signalled} of {blocks} this window"
+msgstr "<0/> numaralı bloktan beri her blok (yaklaşık {0} önce) · bu pencerede {blocks} bloğun {signalled} tanesi"
 
 msgid "Every Dash node that answers a crawl: what they run, where they are hosted and whether they can be reached."
 msgstr "Taramaya yanıt veren her Dash düğümü: ne çalıştırdıkları, nerede barındırıldıkları ve erişilebilir olup olmadıkları."
@@ -1113,8 +1112,8 @@ msgstr "Quorum"
 msgid "Quorums that would sign the Core 24 signal"
 msgstr "Core 24 sinyalini imzalayacak quorum’lar"
 
-msgid "Radar counts each pool's blocks, not where they fall. A pool reads as now signalling when every block since the window's last one that didn't has signalled, and at its own rate of misses it would have missed several of them."
-msgstr "Radar her havuzun bloklarını sayar, yerlerini değil. Penceredeki sinyalsiz son bloktan bu yana her blok sinyal verdiyse ve havuz kendi sinyalsiz blok oranıyla bunların birkaçını kaçırmış olacaksa havuz artık sinyal veriyor sayılır."
+msgid "Radar counts each pool's blocks, not where they fall. A pool reads as now signalling when every block since the window's last one that didn't has signalled, and at its own rate of misses it would have missed several of them. A pool that stopped mining or changed its tag reads the same way."
+msgstr "Radar her havuzun bloklarını sayar, yerlerini değil. Penceredeki sinyalsiz son bloktan bu yana her blok sinyal verdiyse ve havuz kendi sinyalsiz blok oranıyla bunların birkaçını kaçırmış olacaksa havuz artık sinyal veriyor sayılır. Madenciliği bırakan ya da etiketini değiştiren bir havuz da aynı görünür."
 
 msgid "Radar doesn't crawl devnets, so there is nothing to map."
 msgstr "Radar devnet’leri taramadığı için haritalanacak bir şey yok."

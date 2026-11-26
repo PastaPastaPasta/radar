@@ -320,9 +320,9 @@ describe('poolStandings', () => {
     const two = layoutOf(
       poolStandings(
         win('-'.repeat(300) + '#'.repeat(700), [
-          { pool: 'A', blocks: 300, signalling: 200 },
+          { pool: 'A', blocks: 400, signalling: 210 },
           { pool: 'B', blocks: 100, signalling: 90 },
-          { pool: 'C', blocks: 200, signalling: 0 },
+          { pool: 'C', blocks: 100, signalling: 0 },
           { pool: null, blocks: 400, signalling: 400 },
         ]),
       ),
@@ -330,14 +330,15 @@ describe('poolStandings', () => {
     )
     expect(two.segments.map((x) => `${x.name}${x.on ? '+' : '-'}${String(x.blocks)}`)).toEqual([
       'Untagged+400',
-      'A+200',
+      'A+210',
       'B+90',
       'B-10',
-      'A-100',
-      'C-200',
+      'A-190',
+      'C-100',
     ])
     expect(new Set(two.segments.map((x) => x.key)).size).toBe(two.segments.length)
     expect(two.span).toBeUndefined()
+    // A's 190 misses outweigh C's 100, but A signals now.
     expect(two.blocker?.name).toBe('C')
 
     const partly = layoutOf(
@@ -352,5 +353,29 @@ describe('poolStandings', () => {
       'Untagged',
     )
     expect(partly.blocker?.name).toBe('ViaBTC')
+  })
+
+  it('calls no stop when the holdout signalled in more blocks than it mined before its first miss', () => {
+    // AntPool's first miss is at 607 (about 300 of its blocks before it), yet it signalled in 450 of 500: it kept
+    // signalling in most of its blocks after, so it didn't stop.
+    const marks = '#'.repeat(600) + ('#'.repeat(7) + '-').repeat(50)
+    const t = kinds(
+      win(marks, [
+        { pool: 'AntPool', blocks: 500, signalling: 450 },
+        { pool: 'F2Pool', blocks: 500, signalling: 500 },
+      ]),
+    )
+    expect(t.AntPool).not.toEqual(expect.objectContaining({ kind: 'off' }))
+  })
+
+  it("calls no switch when the pools' totals don't match the window", () => {
+    const marks = '-#'.repeat(400) + '#'.repeat(200)
+    const t = kinds(
+      win(marks, [
+        { pool: 'ViaBTC', blocks: 450, signalling: 100 },
+        { pool: 'F2Pool', blocks: 500, signalling: 500 },
+      ]),
+    )
+    expect(t.ViaBTC).toEqual({ kind: 'partly' })
   })
 })
