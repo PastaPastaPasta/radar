@@ -1,6 +1,13 @@
 import { fetchFirstData, firstDataPlan, isCrawler, isNavigation, withFirstData } from './first-data'
 import { withSecurityHeaders } from './headers'
-import { genericOg, isLinkPreviewAgent, matchOgRoute, resolveOg, rewriteHead } from './og'
+import {
+  genericOg,
+  isLinkPreviewAgent,
+  matchOgRoute,
+  readsEntityFor,
+  resolveOg,
+  rewriteHead,
+} from './og'
 import { preloadFiles, preloadTable, withPreloads } from './preload'
 import { handleProxy, isProxyPath } from './proxy'
 import { redirectFor } from './redirects'
@@ -99,7 +106,8 @@ async function handle(request: Request, env: Env, ctx: ExecutionContext): Promis
     out.headers.append('vary', 'user-agent')
     const network = url.searchParams.get('network')
     const decentralized = url.searchParams.get('sources') === 'decentralized'
-    const preview = isLinkPreviewAgent(request.headers.get('user-agent')) && !decentralized
+    const agent = request.headers.get('user-agent')
+    const preview = isLinkPreviewAgent(agent) && !decentralized && readsEntityFor(og, agent)
     const meta = preview ? await resolveOg(og, network) : genericOg(og)
     const query = [
       ...Object.entries(og.search ?? {}).map(([k, v]) => `${k}=${encodeURIComponent(v)}`),

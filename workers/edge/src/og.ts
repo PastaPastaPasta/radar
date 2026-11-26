@@ -347,6 +347,18 @@ export function isLinkPreviewAgent(userAgent: string | null): boolean {
   return userAgent !== null && LINK_PREVIEW_AGENT.test(userAgent)
 }
 
+/** Agents that unfurl a link someone shared, and the search engines whose titles people see. */
+const SHARE_OR_SEARCH =
+  /facebookexternalhit|facebookcatalog|twitterbot|slackbot|slack-imgproxy|discordbot|telegrambot|whatsapp|linkedinbot|skypeuripreview|embedly|iframely|quora link preview|vkshare|mastodon|pleroma|bluesky|redditbot|pinterest|googlebot|bingbot|duckduckbot|applebot/i
+
+/**
+ * Whether this agent gets the entity read behind a preview. A masternode's read goes to radar.dashhq.org, our own
+ * Worker, so it is a second Worker request: other crawlers walking every masternode get the generic tags.
+ */
+export function readsEntityFor(og: OgMatch, userAgent: string | null): boolean {
+  return og.kind !== 'mn' || (userAgent !== null && SHARE_OR_SEARCH.test(userAgent))
+}
+
 function decode(part: string): string | null {
   try {
     return decodeURIComponent(part)
