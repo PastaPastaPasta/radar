@@ -64,13 +64,13 @@ describe('documents.history', () => {
   it('lists revisions oldest first and resumes after the time it is given', async () => {
     const historyWithProof = vi.fn(() =>
       Promise.resolve(
-        proved(
-          new Map([
-            [1000n, doc(1n, 1000)],
-            [3000n, doc(3n, 3000)],
-            [2000n, doc(2n, 2000)],
-          ]),
-        ),
+        proved({
+          entries: [
+            { timeMs: 1000n, document: doc(1n, 1000) },
+            { timeMs: 3000n, document: doc(3n, 3000) },
+            { timeMs: 2000n, document: doc(2n, 2000) },
+          ],
+        }),
       ),
     )
     const out = await pDataImpl['documents.history'](reads({ documents: { historyWithProof } }), {

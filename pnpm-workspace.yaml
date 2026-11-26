@@ -8,3 +8,6 @@ allowBuilds:
   '@bufbuild/buf': true
   esbuild: true
   workerd: true
+minimumReleaseAgeExclude:
+  - '@dashevo/evo-sdk@5.1.0-rc.2'
+  - '@dashevo/wasm-sdk@5.1.0-rc.2'
