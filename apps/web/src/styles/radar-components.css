@@ -3251,8 +3251,8 @@ html[data-scroll-gutter] {
   color: var(--dh-ink-2);
   font-variant-numeric: tabular-nums;
 }
-/* Block links set in running text: underlined, as colour alone doesn't set them apart. */
-.rx-v24-status a,
+/* Block links set in running text: underlined, as colour alone doesn't set them apart (over the table's links). */
+.rx-v24-status a:not(.rx-chip):not(.dh-btn),
 [data-v24-pools-now] a {
   text-decoration: underline;
   text-underline-offset: 3px;
