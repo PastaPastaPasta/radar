@@ -178,6 +178,13 @@ test.describe('Network census', () => {
       'true',
     )
     const reach = card(page, 'reach')
+    await expect(reach.locator('.rx-nanswer')).toContainText('97.2% answered the last crawl')
+    await expect(reach.locator('.rx-nanswer')).toContainText(
+      '2,581 of 2,655 · 8,129 tried in the last crawl',
+    )
+    await expect(reach.locator('.rx-sec__lede')).toHaveText(
+      'Addresses that answered this week, plus every enabled masternode’s',
+    )
     const allText = await reach.locator('.rx-sec__lede').innerText()
     await scope.getByRole('button', { name: 'Evonodes' }).click()
     await expect(page).toHaveURL(/scope=evo/)

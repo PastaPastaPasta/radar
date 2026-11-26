@@ -11,6 +11,7 @@ import { DKG_CHECK_IDS, GRADES, median } from './census-math'
 import { Figure, FigureGrid } from './parts'
 import { loadState, type SectionProps } from './shared'
 
+const HOUR_MS = 3_600_000
 const ENABLED = { status: ['enabled' as const] }
 
 /** Core 24 quorum readiness: one row per DKG connection check, each with its pass rate and a link to its failures. */
@@ -200,7 +201,7 @@ export function YieldsCard({ summary }: SectionProps) {
               <p className="rx-nyield__note m-0" data-yield-split>
                 {t`Core payments`} <b>{pct(evo)}</b> · {t`Platform rewards`} <b>{pct(platform)}</b>
                 {r.evo?.platform_span_days != null
-                  ? `, ${t`from ${String(Math.round(r.evo.platform_span_days))} days of epochs`}`
+                  ? t`, from ${String(Math.round(r.evo.platform_span_days))} days of epochs`
                   : null}
               </p>
             ) : null}
@@ -297,6 +298,8 @@ export function SpeedCard({ census }: SectionProps & { census: Census }) {
   const runs = scores.length + vantages.reduce((a, v) => a + v.failed, 0)
   const goodShare = runs > 0 ? scores.filter((s) => s >= 75).length / runs : 0
   const speedTone = shareTone(goodShare)
+  const times = vantages.map((v) => v.updated)
+  const apart = times.length > 1 && Math.max(...times) - Math.min(...times) > HOUR_MS
   // The speed tests run every two weeks: their time is said on the card, not taken for the crawl's on the page line.
   return (
     <NoSourceSection>
@@ -340,6 +343,12 @@ export function SpeedCard({ census }: SectionProps & { census: Census }) {
                     <b>{v.location || v.vantage}</b>
                     <span>
                       {t`${formatInt(v.tested)} tested · median ${formatInt(Math.round(median(v.headers_per_sec) ?? 0))} headers/s · ping ${formatInt(Math.round(median(v.ping_ms) ?? 0))} ms`}
+                      {apart ? (
+                        <>
+                          {' · '}
+                          {t`Updated`} <Time ms={v.updated} mode="relative" live />
+                        </>
+                      ) : null}
                     </span>
                   </span>
                   <SegBar

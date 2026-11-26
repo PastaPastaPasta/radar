@@ -140,9 +140,9 @@ export interface LadderGroup {
 
 /**
  * The ladder's groups, the latest release always first (even if nothing runs it yet): releases newest first, those
- * under 1 % after the latest folded into one row for the latest's major and one for the rest (always last), and each
- * major's rows kept together, so a major's share can be read off its rows; release candidates; builds that match no release; and other clients folded into one row.
- * Without the release list, one group by share.
+ * under 1 % after the latest folded into one row for the latest's major and one for older majors (always last), so the
+ * latest major's share can be read off its rows; release candidates; builds that match no release; and other clients
+ * folded into one row. Without the release list, one group by share.
  */
 export function ladderGroups(
   book: ReleaseBook,

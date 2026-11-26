@@ -19,6 +19,10 @@ msgstr ""
 msgid ", {0} unknown"
 msgstr "、不明 {0}"
 
+#. placeholder {0}: String(Math.round(r.evo.platform_span_days))
+msgid ", from {0} days of epochs"
+msgstr "、{0} 日分のエポックから"
+
 msgid ", so the figures below may be out of date."
 msgstr "。そのため、以下の数値は古い可能性があります。"
 
@@ -176,7 +180,7 @@ msgstr "ほか {0} の Core {1} リリース"
 
 #. placeholder {0}: formatPercent(ready, 1)
 msgid "{0} ready"
-msgstr "{0} 台が対応済み"
+msgstr "{0} が対応済み"
 
 #. placeholder {0}: formatInt(v.tested)
 #. placeholder {1}: formatInt(Math.round(median(v.headers_per_sec) ?? 0))
@@ -630,10 +634,6 @@ msgstr "カウント可能な最初のウィンドウが開く（最短）"
 
 msgid "Formed at"
 msgstr "形成時"
-
-#. placeholder {0}: String(Math.round(r.evo.platform_span_days))
-msgid "from {0} days of epochs"
-msgstr "{0} 日分のエポックから"
 
 msgid "From block"
 msgstr "開始ブロック"

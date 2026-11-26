@@ -145,7 +145,7 @@ export function ReachCard({ scope, summary, census }: SectionProps & { census: C
 function SizeChart({ census }: { census: Census }) {
   const { t } = useLingui()
   const colors = useCensusColors()
-  const [cursor, setCursor] = useState<number>()
+  const [picked, setCursor] = useState<number>()
   const doc = census.size.data?.data
   const labels: Record<string, string> = {
     reachable_nodes: t`Reachable addresses`,
@@ -160,6 +160,7 @@ function SizeChart({ census }: { census: Census }) {
     values: s.values,
   }))
   const count = doc?.t.length ?? 0
+  const cursor = picked !== undefined && picked < count ? picked : undefined
 
   const readout =
     cursor === undefined || !doc

@@ -19,6 +19,10 @@ msgstr ""
 msgid ", {0} unknown"
 msgstr "，{0} 个未知"
 
+#. placeholder {0}: String(Math.round(r.evo.platform_span_days))
+msgid ", from {0} days of epochs"
+msgstr "，基于 {0} 天的纪元"
+
 msgid ", so the figures below may be out of date."
 msgstr "，因此下方数据可能已过时。"
 
@@ -176,7 +180,7 @@ msgstr "另有 {0} 个 Core {1} 发布版本"
 
 #. placeholder {0}: formatPercent(ready, 1)
 msgid "{0} ready"
-msgstr "{0} 个就绪"
+msgstr "{0} 已就绪"
 
 #. placeholder {0}: formatInt(v.tested)
 #. placeholder {1}: formatInt(Math.round(median(v.headers_per_sec) ?? 0))
@@ -630,10 +634,6 @@ msgstr "首个可计入的窗口开启，最早于"
 
 msgid "Formed at"
 msgstr "形成于"
-
-#. placeholder {0}: String(Math.round(r.evo.platform_span_days))
-msgid "from {0} days of epochs"
-msgstr "基于 {0} 天的纪元"
 
 msgid "From block"
 msgstr "起始区块"
