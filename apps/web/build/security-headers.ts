@@ -2,7 +2,12 @@ import type { Plugin } from 'vite'
 import { SECURITY_HEADERS } from '../../../workers/edge/src/headers'
 
 /** The paths served straight from the asset store, without the Worker: `!` entries of `run_worker_first`. */
-export const STATIC_ASSET_PATTERNS = ['/assets/*', '/dashhq/*', '/favicon.ico'] as const
+export const STATIC_ASSET_PATTERNS = [
+  '/assets/*',
+  '/dashhq/*',
+  '/favicon.ico',
+  '/robots.txt',
+] as const
 
 const title = (name: string) =>
   name
