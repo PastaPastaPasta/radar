@@ -968,6 +968,19 @@ describe('per-entity title and OG', () => {
     assert.match(html, /<div id="root">/)
   })
 
+  it("gives crawlers a masternode's generic tags, without reading radar.dashhq.org", async () => {
+    reset(() => Response.json({ type: 'Evo', status: 'enabled', version: '24.0.0', country: 'DE' }))
+    for (const ua of [
+      'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Reflectionbot/1.0; +https://reflection.ai/bot) Chrome/151.0.0.0 Safari/537.36',
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 (compatible; meta-externalagent/1.1 (+https://developers.facebook.com/docs/sharing/webmasters/crawler))',
+      'Mozilla/5.0 (compatible; SemrushBot/7~bl; +http://www.semrush.com/bot.html)',
+    ]) {
+      const html = await (await get(`/mn/${protx}`, { headers: { 'user-agent': ua } })).text()
+      assert.match(html, /<title>Masternode eeeeeeee…eeeeee · Radar<\/title>/, ua)
+    }
+    assert.equal(upstreamCalls.length, 0)
+  })
+
   it('uses the testnet backends for ?network=testnet', async () => {
     reset(() =>
       Response.json({ blockHeight: 1234567, txCount: 3, blockTime: '2026-11-10T00:00:00Z' }),

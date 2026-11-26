@@ -22,15 +22,18 @@ const probeEvery = (ms: number) =>
 const probe = probeEvery(HEALTH_PROBE_INTERVAL_MS)
 const workerProbe = probeEvery(WORKER_PROBE_INTERVAL_MS)
 
+/** How long a page waits on DAPI's tip before it also asks Radar's crawl for one. */
+export const CRAWL_TIP_GRACE_MS = 1_500
+
 /** How old the crawl's own reading of the chain may be before its height is no reference. The crawler updates it about every minute or two. */
 export const CRAWL_TIP_MAX_AGE_MS = 5 * 60_000
 
 /**
  * The chain tip an index is measured against: DAPI's best height, else the height of Radar's last crawl, taken only
  * while the crawler's node is synced, reports no error and read the chain within `CRAWL_TIP_MAX_AGE_MS`. A tip a
- * stand-in index gave (DAPI down) is no reference for that same index. Both are asked at once and the first to answer
- * decides, so a page that reads an index waits for one request, not for DAPI's two; DAPI's tip, when it lands later,
- * measures the index again.
+ * stand-in index gave (DAPI down) is no reference for that same index. Radar is asked only when DAPI has failed or not
+ * answered within `CRAWL_TIP_GRACE_MS`, and then the first to answer decides; DAPI's tip, when it lands later, measures
+ * the index again.
  */
 function referenceTip(net: NetworkId, signal: AbortSignal): ReferenceTip {
   const key = net === 'testnet' ? 'testnet' : 'mainnet'
@@ -52,7 +55,25 @@ function referenceTip(net: NetworkId, signal: AbortSignal): ReferenceTip {
     const tip = fromDapi.then((height) => height ?? crawl())
     return { first: tip, final: tip }
   }
-  const fromCrawl = crawl()
+  // Radar's status is a Worker request on every page, so it is asked only once DAPI has failed or kept the page waiting.
+  const fromCrawl = new Promise<number | undefined>((resolve) => {
+    let asked = false
+    const ask = () => {
+      if (asked) return
+      asked = true
+      clearTimeout(timer)
+      if (signal.aborted) resolve(undefined)
+      else void crawl().then(resolve)
+    }
+    const timer = setTimeout(ask, CRAWL_TIP_GRACE_MS)
+    void fromDapi.then((height) => {
+      if (height === undefined) ask()
+      else if (!asked) {
+        clearTimeout(timer)
+        resolve(undefined)
+      }
+    })
+  })
   const first = new Promise<number | undefined>((resolve) => {
     let left = 2
     for (const p of [fromDapi, fromCrawl]) {
