@@ -53,8 +53,8 @@ msgstr "{0, plural, one {# hébergeur} other {# hébergeurs}}"
 msgid "{0, plural, one {That’s # fewer than a day ago.} other {That’s # fewer than a day ago.}}"
 msgstr "{0, plural, one {C’est # de moins qu’il y a un jour.} other {C’est # de moins qu’il y a un jour.}}"
 
-#. placeholder {0}: x.name
-#. placeholder {1}: pct(x.blocks, mined)
+#. placeholder {0}: span.name
+#. placeholder {1}: pct(span.blocks, mined)
 msgid "{0} {1} in all"
 msgstr "{0} {1} au total"
 
@@ -206,7 +206,7 @@ msgstr "{0} : {1}, ne signale pas"
 
 #. placeholder {0}: s.name
 #. placeholder {1}: pct(s.blocks, mined)
-#. placeholder {2}: formatInt(s.before)
+#. placeholder {2}: formatInt(s.since)
 msgid "{0}: {1}, not signalling before block {2}"
 msgstr "{0} : {1}, ne signalait pas avant le bloc {2}"
 
@@ -623,6 +623,11 @@ msgstr "estimation"
 
 msgid "Estimated from the difficulty"
 msgstr "Estimé à partir de la difficulté"
+
+#. placeholder {0}: formatInt(trend.streak)
+#. placeholder {1}: ago(trend.streak)
+msgid "every block since <0/> ({0} blocks, about {1} ago) · {signalled} of {blocks} this window"
+msgstr "chaque bloc depuis le <0/> ({0} blocs, il y a environ {1}) · {signalled} sur {blocks} dans cette fenêtre"
 
 msgid "Every Dash node that answers a crawl: what they run, where they are hosted and whether they can be reached."
 msgstr "Tous les nœuds Dash qui répondent à un crawl : ce qu’ils exécutent, où ils sont hébergés et s’ils sont joignables."
@@ -1108,8 +1113,8 @@ msgstr "Quorum"
 msgid "Quorums that would sign the Core 24 signal"
 msgstr "Quorums qui signeraient le signal Core 24"
 
-msgid "Radar counts each pool's blocks, not where they fall. A pool reads as now signalling when every block since the window's last one that didn't has signalled and its share says it mined several of them."
-msgstr "Radar compte les blocs de chaque pool, pas leur position. Un pool est considéré comme signalant désormais quand chaque bloc depuis le dernier sans signal de la fenêtre a signalé et que sa part indique qu'il en a miné plusieurs."
+msgid "Radar counts each pool's blocks, not where they fall. A pool reads as now signalling when every block since the window's last one that didn't has signalled, and at its own rate of misses it would have missed several of them."
+msgstr "Radar compte les blocs de chaque pool, pas leur position. Un pool est considéré comme signalant désormais quand chaque bloc depuis le dernier sans signal de la fenêtre a signalé et qu'à son propre taux de blocs sans signal, il en aurait manqué plusieurs."
 
 msgid "Radar doesn't crawl devnets, so there is nothing to map."
 msgstr "Radar n’explore pas les devnets, donc il n’y a rien à cartographier."
@@ -1258,11 +1263,6 @@ msgstr "Part de signalisation et seuil pour {0} fenêtres"
 #. placeholder {0}: formatInt(d.since)
 msgid "since block {0}"
 msgstr "depuis le bloc {0}"
-
-#. placeholder {0}: formatInt(trend.streak)
-#. placeholder {1}: ago(trend.streak)
-msgid "since block <0/> ({0} blocks, about {1} ago) · {signalled} of {blocks} this window"
-msgstr "depuis le bloc <0/> ({0} blocs, il y a environ {1}) · {signalled} sur {blocks} dans cette fenêtre"
 
 msgid "Size"
 msgstr "Taille"

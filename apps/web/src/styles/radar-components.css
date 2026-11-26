@@ -3218,26 +3218,23 @@ html[data-scroll-gutter] {
 .rx-v24-was .rx-v24-seg {
   color: var(--dh-ink);
 }
-/* A bracket under a pool's signalling and non-signalling segments, with its whole share. */
+/* A bracket under a pool's signalling and non-signalling segments, with its whole share aligned to its outer end, so it stays inside the bar. */
 .rx-v24-spans {
   position: relative;
-  height: 24px;
+  height: 28px;
 }
 .rx-v24-spans > span {
   position: absolute;
+}
+.rx-v24-spans > span:first-child {
   top: 4px;
   height: 6px;
   border: 1.5px solid var(--dh-ink-2);
   border-top: 0;
   border-radius: 0 0 3px 3px;
 }
-.rx-v24-spans > span > span {
-  position: absolute;
-  top: 5px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 0 6px;
-  background: var(--rx-ground, var(--dh-page));
+.rx-v24-spans > span + span {
+  top: 13px;
   font-size: 12.5px;
   line-height: 14px;
   white-space: nowrap;

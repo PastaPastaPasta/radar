@@ -53,8 +53,8 @@ msgstr "{0, plural, other {# 社}}"
 msgid "{0, plural, one {That’s # fewer than a day ago.} other {That’s # fewer than a day ago.}}"
 msgstr "{0, plural, other {1日前より # 件少なくなっています。}}"
 
-#. placeholder {0}: x.name
-#. placeholder {1}: pct(x.blocks, mined)
+#. placeholder {0}: span.name
+#. placeholder {1}: pct(span.blocks, mined)
 msgid "{0} {1} in all"
 msgstr "{0} 合計 {1}"
 
@@ -206,7 +206,7 @@ msgstr "{0}：{1}、シグナルなし"
 
 #. placeholder {0}: s.name
 #. placeholder {1}: pct(s.blocks, mined)
-#. placeholder {2}: formatInt(s.before)
+#. placeholder {2}: formatInt(s.since)
 msgid "{0}: {1}, not signalling before block {2}"
 msgstr "{0}: {1}、ブロック {2} より前はシグナルなし"
 
@@ -623,6 +623,11 @@ msgstr "推定"
 
 msgid "Estimated from the difficulty"
 msgstr "難易度からの推定値"
+
+#. placeholder {0}: formatInt(trend.streak)
+#. placeholder {1}: ago(trend.streak)
+msgid "every block since <0/> ({0} blocks, about {1} ago) · {signalled} of {blocks} this window"
+msgstr "ブロック <0/> 以降のすべてのブロック（{0} ブロック、約 {1} 前）· このウィンドウで {blocks} 中 {signalled}"
 
 msgid "Every Dash node that answers a crawl: what they run, where they are hosted and whether they can be reached."
 msgstr "クロールに応答するすべての Dash ノード：実行内容、ホスティング先、到達できるかどうか。"
@@ -1108,8 +1113,8 @@ msgstr "クォーラム"
 msgid "Quorums that would sign the Core 24 signal"
 msgstr "Core 24 のシグナルに署名するクォーラム"
 
-msgid "Radar counts each pool's blocks, not where they fall. A pool reads as now signalling when every block since the window's last one that didn't has signalled and its share says it mined several of them."
-msgstr "Radar は各プールのブロック数を数えますが、その位置は数えません。ウィンドウ内で最後にシグナルしなかったブロック以降のすべてのブロックがシグナルし、そのプールのシェアからその中の複数をマイニングしたと言える場合に「現在シグナル中」とします。"
+msgid "Radar counts each pool's blocks, not where they fall. A pool reads as now signalling when every block since the window's last one that didn't has signalled, and at its own rate of misses it would have missed several of them."
+msgstr "Radar は各プールのブロック数を数えますが、その位置は数えません。ウィンドウ内で最後にシグナルしなかったブロック以降のすべてのブロックがシグナルし、そのプール自身のシグナルなしの割合なら、その中で複数をシグナルなしにしていたはずの場合に「現在シグナル中」とします。"
 
 msgid "Radar doesn't crawl devnets, so there is nothing to map."
 msgstr "Radar は devnet をクロールしないため、地図に表示するものがありません。"
@@ -1258,11 +1263,6 @@ msgstr "{0} ウィンドウのシグナル割合としきい値"
 #. placeholder {0}: formatInt(d.since)
 msgid "since block {0}"
 msgstr "ブロック {0} 以降"
-
-#. placeholder {0}: formatInt(trend.streak)
-#. placeholder {1}: ago(trend.streak)
-msgid "since block <0/> ({0} blocks, about {1} ago) · {signalled} of {blocks} this window"
-msgstr "ブロック <0/> 以降（{0} ブロック、約 {1} 前）· このウィンドウで {blocks} 中 {signalled}"
 
 msgid "Size"
 msgstr "サイズ"

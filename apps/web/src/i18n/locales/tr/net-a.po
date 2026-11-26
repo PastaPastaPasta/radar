@@ -53,8 +53,8 @@ msgstr "{0, plural, one {# sağlayıcı} other {# sağlayıcı}}"
 msgid "{0, plural, one {That’s # fewer than a day ago.} other {That’s # fewer than a day ago.}}"
 msgstr "{0, plural, one {Bir gün öncekinden # eksik.} other {Bir gün öncekinden # eksik.}}"
 
-#. placeholder {0}: x.name
-#. placeholder {1}: pct(x.blocks, mined)
+#. placeholder {0}: span.name
+#. placeholder {1}: pct(span.blocks, mined)
 msgid "{0} {1} in all"
 msgstr "{0} toplam {1}"
 
@@ -206,7 +206,7 @@ msgstr "{0}: {1}, sinyal vermiyor"
 
 #. placeholder {0}: s.name
 #. placeholder {1}: pct(s.blocks, mined)
-#. placeholder {2}: formatInt(s.before)
+#. placeholder {2}: formatInt(s.since)
 msgid "{0}: {1}, not signalling before block {2}"
 msgstr "{0}: {1}, {2} numaralı bloktan önce sinyal vermiyordu"
 
@@ -623,6 +623,11 @@ msgstr "tahmin"
 
 msgid "Estimated from the difficulty"
 msgstr "Zorluktan tahmin edildi"
+
+#. placeholder {0}: formatInt(trend.streak)
+#. placeholder {1}: ago(trend.streak)
+msgid "every block since <0/> ({0} blocks, about {1} ago) · {signalled} of {blocks} this window"
+msgstr "<0/> numaralı bloktan beri her blok ({0} blok, yaklaşık {1} önce) · bu pencerede {blocks} bloğun {signalled} tanesi"
 
 msgid "Every Dash node that answers a crawl: what they run, where they are hosted and whether they can be reached."
 msgstr "Taramaya yanıt veren her Dash düğümü: ne çalıştırdıkları, nerede barındırıldıkları ve erişilebilir olup olmadıkları."
@@ -1108,8 +1113,8 @@ msgstr "Quorum"
 msgid "Quorums that would sign the Core 24 signal"
 msgstr "Core 24 sinyalini imzalayacak quorum’lar"
 
-msgid "Radar counts each pool's blocks, not where they fall. A pool reads as now signalling when every block since the window's last one that didn't has signalled and its share says it mined several of them."
-msgstr "Radar her havuzun bloklarını sayar, yerlerini değil. Penceredeki sinyalsiz son bloktan bu yana her blok sinyal verdiyse ve havuzun payı bunlardan birkaçını kazdığını gösteriyorsa havuz artık sinyal veriyor sayılır."
+msgid "Radar counts each pool's blocks, not where they fall. A pool reads as now signalling when every block since the window's last one that didn't has signalled, and at its own rate of misses it would have missed several of them."
+msgstr "Radar her havuzun bloklarını sayar, yerlerini değil. Penceredeki sinyalsiz son bloktan bu yana her blok sinyal verdiyse ve havuz kendi sinyalsiz blok oranıyla bunların birkaçını kaçırmış olacaksa havuz artık sinyal veriyor sayılır."
 
 msgid "Radar doesn't crawl devnets, so there is nothing to map."
 msgstr "Radar devnet’leri taramadığı için haritalanacak bir şey yok."
@@ -1258,11 +1263,6 @@ msgstr "{0} pencere için sinyal payı ve eşik"
 #. placeholder {0}: formatInt(d.since)
 msgid "since block {0}"
 msgstr "{0}. bloktan beri"
-
-#. placeholder {0}: formatInt(trend.streak)
-#. placeholder {1}: ago(trend.streak)
-msgid "since block <0/> ({0} blocks, about {1} ago) · {signalled} of {blocks} this window"
-msgstr "<0/> numaralı bloktan beri ({0} blok, yaklaşık {1} önce) · bu pencerede {blocks} bloğun {signalled} tanesi"
 
 msgid "Size"
 msgstr "Boyut"

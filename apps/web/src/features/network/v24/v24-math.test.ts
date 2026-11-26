@@ -6,6 +6,7 @@ import signalling from './signalling.fixture.json'
 import {
   currentRate,
   estimateMs,
+  layoutOf,
   poolStandings,
   milestones,
   projectLockIn,
@@ -273,13 +274,83 @@ describe('poolStandings', () => {
     const marks = '-#'.repeat(400) + '#'.repeat(200)
     const s = poolStandings(
       win(marks, [
-        { pool: 'ViaBTC', blocks: 400, signalling: 100 },
-        { pool: 'F2Pool', blocks: 300, signalling: 300 },
-        { pool: 'X', blocks: 100, signalling: 0 },
-        { pool: 'Y', blocks: 200, signalling: 100 },
+        { pool: 'ViaBTC', blocks: 500, signalling: 300 },
+        { pool: 'F2Pool', blocks: 280, signalling: 280 },
+        { pool: 'X', blocks: 20, signalling: 0 },
+        { pool: 'Y', blocks: 200, signalling: 20 },
       ]),
     )
-    // ViaBTC (on) 400 + F2Pool 300 + Y on too (streak 200 x 20% = 40 expected) 200 = 900 of 1000.
-    expect(currentRate(s)).toBeCloseTo(0.9)
+    // 400 misses: ViaBTC 200, Y 180, X 20. ViaBTC and Y signal now, X doesn't: 500 + 280 + 200 of 1,000.
+    expect(s.map((x) => x.trend.kind)).toEqual(['on', 'all', 'none', 'on'])
+    expect(currentRate(s)).toBeCloseTo(0.98)
+  })
+
+  it('does not call a pool that steadily misses a few of its blocks a switch', () => {
+    // A 20% pool signalling in 90% of its blocks: 21 misses, one every 45 blocks, the last 100 blocks ago.
+    const marks = Array.from({ length: 1000 }, (_, i) =>
+      i % 45 === 0 && i <= 900 ? '-' : '#',
+    ).join('')
+    const t = kinds(
+      win(marks, [
+        { pool: 'P', blocks: 200, signalling: 179 },
+        { pool: 'F2Pool', blocks: 800, signalling: 800 },
+      ]),
+    )
+    expect(t.P).toEqual({ kind: 'partly' })
+  })
+
+  it('lays each mixed pool across the divide, labels the biggest holdout, and spans only a lone mixed pool', () => {
+    const marks = '-#'.repeat(400) + '#'.repeat(200)
+    const one = layoutOf(
+      poolStandings(
+        win(marks, [
+          { pool: 'ViaBTC', blocks: 500, signalling: 100 },
+          { pool: 'F2Pool', blocks: 500, signalling: 500 },
+        ]),
+      ),
+      'Untagged',
+    )
+    expect(one.segments.map((x) => [x.name, x.on, x.blocks, x.since])).toEqual([
+      ['F2Pool', true, 500, undefined],
+      ['ViaBTC', true, 100, undefined],
+      ['ViaBTC', false, 400, 1799],
+    ])
+    expect(one.span).toEqual({ name: 'ViaBTC', blocks: 500, left: 500 })
+
+    const two = layoutOf(
+      poolStandings(
+        win('-'.repeat(300) + '#'.repeat(700), [
+          { pool: 'A', blocks: 300, signalling: 200 },
+          { pool: 'B', blocks: 100, signalling: 90 },
+          { pool: 'C', blocks: 200, signalling: 0 },
+          { pool: null, blocks: 400, signalling: 400 },
+        ]),
+      ),
+      'Untagged',
+    )
+    expect(two.segments.map((x) => `${x.name}${x.on ? '+' : '-'}${String(x.blocks)}`)).toEqual([
+      'Untagged+400',
+      'A+200',
+      'B+90',
+      'B-10',
+      'A-100',
+      'C-200',
+    ])
+    expect(new Set(two.segments.map((x) => x.key)).size).toBe(two.segments.length)
+    expect(two.span).toBeUndefined()
+    expect(two.blocker?.name).toBe('C')
+
+    const partly = layoutOf(
+      poolStandings({
+        ...win('#'.repeat(250), []),
+        signalling: null,
+        pools: [
+          { pool: 'P', blocks: 100, signalling: 90 },
+          { pool: 'ViaBTC', blocks: 150, signalling: 0 },
+        ],
+      }),
+      'Untagged',
+    )
+    expect(partly.blocker?.name).toBe('ViaBTC')
   })
 })

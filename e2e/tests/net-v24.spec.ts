@@ -379,7 +379,7 @@ test.describe('Core 24 activation tracker', () => {
     )
     const via = pools.locator('tbody tr', { hasText: 'ViaBTC' })
     await expect(via.locator('[data-trend="on"]')).toContainText('now signalling')
-    await expect(via).toContainText('since block 2,577,447 (501 blocks')
+    await expect(via).toContainText('every block since 2,577,447 (501 blocks')
     await expect(via).toContainText('250 of 750 this window')
     const now = pools.locator('[data-v24-pools-now]')
     await expect(now).toContainText('Every block since 2,577,447 has signalled: the last 501')

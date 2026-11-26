@@ -15,77 +15,10 @@ import {
   poolStandings,
   projectLockIn,
   windowOutlook,
+  layoutOf,
   type PoolStanding,
+  type Segment,
 } from './v24-math'
-
-interface Segment {
-  key: string
-  name: string
-  blocks: number
-  on: boolean
-  /** Blocks that didn't signal from a pool that signals now. */
-  before?: number
-}
-
-/**
- * Pools that signal in every block first, then each pool's signalling blocks beside its blocks that didn't, so a pool
- * that signals for some reads as one span across the divide; pools that signal in none last.
- */
-function segmentsOf(standings: readonly PoolStanding[], untagged: string): Segment[] {
-  const name = (s: PoolStanding) => s.row.pool ?? untagged
-  const mixed = standings.filter((s) => s.row.signalling > 0 && s.row.signalling < s.row.blocks)
-  const full = standings.filter((s) => s.row.signalling === s.row.blocks && s.row.blocks > 0)
-  const none = standings
-    .filter((s) => s.row.signalling === 0 && s.row.blocks > 0)
-    .sort((a, b) => b.row.blocks - a.row.blocks)
-  const yes = (s: PoolStanding): Segment => ({
-    key: `y:${name(s)}`,
-    name: name(s),
-    blocks: s.row.signalling,
-    on: true,
-  })
-  const no = (s: PoolStanding): Segment => ({
-    key: `n:${name(s)}`,
-    name: name(s),
-    blocks: s.row.blocks - s.row.signalling,
-    on: false,
-    before: s.trend.kind === 'on' ? s.trend.since : undefined,
-  })
-  return [...full.map(yes), ...mixed.map(yes), ...mixed.toReversed().map(no), ...none.map(no)]
-}
-
-interface Span {
-  name: string
-  blocks: number
-  left: number
-  width: number
-}
-
-/** Where each pool that signals for some of its blocks spans the bar, across its two segments. */
-function spansOf(
-  segments: readonly Segment[],
-  standings: readonly PoolStanding[],
-  mined: number,
-  untagged: string,
-): Span[] {
-  const starts = new Map<string, number>()
-  let at = 0
-  for (const s of segments) {
-    if (!starts.has(s.name)) starts.set(s.name, at)
-    at += s.blocks
-  }
-  return standings
-    .filter((s) => s.row.signalling > 0 && s.row.signalling < s.row.blocks)
-    .map((s) => {
-      const name = s.row.pool ?? untagged
-      return {
-        name,
-        blocks: s.row.blocks,
-        left: (starts.get(name) ?? 0) / mined,
-        width: s.row.blocks / mined,
-      }
-    })
-}
 
 /** Which pools' blocks in the window signal, by the tag in each coinbase. Shown only while the window counts. */
 export function PoolsSection({
@@ -131,17 +64,15 @@ export function PoolsSection({
     [t, mined, doc.block_seconds],
   )
   if (!w || !pools || pools.length === 0 || mined <= 0) return null
-  const segments = segmentsOf(standings, t`Untagged`)
-  const blocker = segments.find((s) => !s.on && s.before === undefined)
+  const { segments, span, blocker } = layoutOf(standings, t`Untagged`)
   const yes = segments.filter((s) => s.on).reduce((a, s) => a + s.blocks, 0)
-  const before = segments.reduce((a, s) => a + (s.before === undefined ? 0 : s.blocks), 0)
+  const before = segments.reduce((a, s) => a + (s.since === undefined ? 0 : s.blocks), 0)
   const needed = w.threshold == null ? undefined : w.threshold / d.params.window
-  const spans = spansOf(segments, standings, mined, t`Untagged`)
   const say = (s: Segment) =>
     s.on
       ? t`${s.name}: ${pct(s.blocks, mined)}, signalling`
-      : s.before !== undefined
-        ? t`${s.name}: ${pct(s.blocks, mined)}, not signalling before block ${formatInt(s.before)}`
+      : s.since !== undefined
+        ? t`${s.name}: ${pct(s.blocks, mined)}, not signalling before block ${formatInt(s.since)}`
         : t`${s.name}: ${pct(s.blocks, mined)}, not signalling`
   return (
     <Card
@@ -157,7 +88,7 @@ export function PoolsSection({
               {t`Who mined this window's ${formatInt(mined)} blocks and how many of them signalled. Best effort: we go by the tag in each block's coinbase, which is whatever the miner wrote, and some blocks carry none.`}
             </p>
             <p className="m-0 mt-2 text-[var(--dh-ink-2)]">
-              {t`Radar counts each pool's blocks, not where they fall. A pool reads as now signalling when every block since the window's last one that didn't has signalled and its share says it mined several of them.`}
+              {t`Radar counts each pool's blocks, not where they fall. A pool reads as now signalling when every block since the window's last one that didn't has signalled, and at its own rate of misses it would have missed several of them.`}
             </p>
           </InfoTip>
         </>
@@ -183,7 +114,7 @@ export function PoolsSection({
                   className={
                     s.on
                       ? 'rx-v24-yes'
-                      : s.before !== undefined
+                      : s.since !== undefined
                         ? 'rx-v24-no rx-v24-was'
                         : 'rx-v24-no'
                   }
@@ -191,31 +122,37 @@ export function PoolsSection({
                   title={say(s)}
                   data-pool={s.name}
                   data-blocker={s === blocker || undefined}
-                  data-switched={s.before !== undefined || undefined}
+                  data-switched={s.since !== undefined || undefined}
                 >
                   <span className="rx-v24-seg">
                     <span className="rx-v24-seg__name">{s.name}</span>{' '}
                     <span>{pct(s.blocks, mined)}</span>
                     {s === blocker ? (
                       <span className="rx-v24-seg__not"> · {t`not signalling`}</span>
-                    ) : s.before !== undefined ? (
+                    ) : s.since !== undefined ? (
                       <span className="rx-v24-seg__not"> · {t`before it switched`}</span>
                     ) : null}
                   </span>
                 </span>
               ))}
             </div>
-            {spans.length > 0 ? (
-              <div className="rx-v24-spans" aria-hidden="true">
-                {spans.map((x) => (
-                  <span
-                    key={x.name}
-                    style={{ left: `${x.left * 100}%`, width: `${x.width * 100}%` }}
-                    data-pool-span={x.name}
-                  >
-                    <span>{t`${x.name} ${pct(x.blocks, mined)} in all`}</span>
-                  </span>
-                ))}
+            {span ? (
+              <div className="rx-v24-spans" aria-hidden="true" data-pool-span={span.name}>
+                <span
+                  style={{
+                    left: `${(span.left / mined) * 100}%`,
+                    width: `${(span.blocks / mined) * 100}%`,
+                  }}
+                />
+                <span
+                  style={
+                    span.left + span.blocks / 2 >= mined / 2
+                      ? { right: `${(1 - (span.left + span.blocks) / mined) * 100}%` }
+                      : { left: `${(span.left / mined) * 100}%` }
+                  }
+                >
+                  {t`${span.name} ${pct(span.blocks, mined)} in all`}
+                </span>
               </div>
             ) : null}
             {needed !== undefined ? (
@@ -291,8 +228,8 @@ function PoolStatus({ s, blockSeconds }: { s: PoolStanding; blockSeconds: number
           <Badge tone="success" size="sm">{t`now signalling`}</Badge>
           <small>
             <Trans>
-              since block <BlockAt height={trend.since} /> ({formatInt(trend.streak)} blocks, about{' '}
-              {ago(trend.streak)} ago) · {signalled} of {blocks} this window
+              every block since <BlockAt height={trend.since} /> ({formatInt(trend.streak)} blocks,
+              about {ago(trend.streak)} ago) · {signalled} of {blocks} this window
             </Trans>
           </small>
         </span>
@@ -339,7 +276,8 @@ function NowLine({
   const rate = currentRate(standings)
   const outlook = rate === undefined ? undefined : windowOutlook(d, rate)
   const lastMiss = marks.lastIndexOf('-')
-  const streak = lastMiss < 0 ? 0 : marks.length - 1 - lastMiss
+  const streak =
+    lastMiss < 0 || !standings.some((s) => s.trend.kind === 'on') ? 0 : marks.length - 1 - lastMiss
   const at = (height: number) => day(estimateMs(doc, height))
   let projection: string | undefined
   if (rate !== undefined && outlook) {

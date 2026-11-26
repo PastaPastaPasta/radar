@@ -360,9 +360,9 @@ export type PoolRow = NonNullable<NonNullable<RadarActivationDeployment['window'
 
 /**
  * How a pool signals across the window. Radar counts each pool's blocks but not where they fall, so a switch is read
- * off the window's `#`/`-` string: `on` when every block since the window's last miss signalled and the pool's share
- * says it mined several of them; `off` when it alone has misses and its share says it mined several blocks before the
- * first of them and likely none since the last.
+ * off the window's `#`/`-` string, against the pool's own share of misses: `on` when every block since the window's
+ * last miss signalled and, missing at its window rate, the pool would have missed several of them; `off` when it alone
+ * misses, would have missed several blocks before its first miss at that rate, and likely mined none since its last.
  */
 export type PoolTrend =
   | { kind: 'all' | 'none' | 'partly' }
@@ -376,8 +376,8 @@ export interface PoolStanding {
   trend: PoolTrend
 }
 
-/** Blocks a pool is expected to have mined in a stretch before its absence there is taken as absence by chance. */
-const SURE_BLOCKS = 5
+/** Misses a pool would be expected to make in a stretch before a stretch without them is taken as a change. */
+const SURE_MISSES = 5
 
 export function poolStandings(w: ActivationWindow): PoolStanding[] {
   const pools = w.pools ?? []
@@ -393,10 +393,11 @@ export function poolStandings(w: ActivationWindow): PoolStanding[] {
       if (row.signalling === 0) return { kind: 'none' }
       if (!ordered) return { kind: 'partly' }
       const share = row.blocks / w.mined
-      if (lastMiss >= 0 && tail * share >= SURE_BLOCKS) {
+      const missRate = (row.blocks - row.signalling) / w.mined
+      if (lastMiss >= 0 && tail * missRate >= SURE_MISSES) {
         return { kind: 'on', since: w.start.height + lastMiss + 1, streak: tail }
       }
-      if (holdouts.length === 1 && firstMiss * share >= SURE_BLOCKS && tail * share < 1) {
+      if (holdouts.length === 1 && firstMiss * missRate >= SURE_MISSES && tail * share < 1) {
         return { kind: 'off', from: w.start.height + firstMiss, streak: marks.length - firstMiss }
       }
       return { kind: 'partly' }
@@ -421,4 +422,64 @@ export function currentRate(standings: readonly PoolStanding[]): number | undefi
     0,
   )
   return on / total
+}
+
+export interface Segment {
+  key: string
+  name: string
+  blocks: number
+  on: boolean
+  /** For the blocks that didn't signal from a pool that signals now: the block it signals in every block since. */
+  since?: number
+}
+
+/** The whole share of the one pool that signals for some of its blocks, across its two segments. */
+export interface Span {
+  name: string
+  blocks: number
+  left: number
+}
+
+/**
+ * Pools that signal in every block first, then each pool's signalling blocks beside its blocks that didn't, so a pool
+ * that signals for some reads as one span across the divide; pools that signal in none last. With one such pool, its
+ * span. The blocker is the biggest stretch of blocks that didn't signal from a pool that doesn't signal now.
+ */
+export function layoutOf(
+  standings: readonly PoolStanding[],
+  untagged: string,
+): { segments: Segment[]; span: Span | undefined; blocker: Segment | undefined } {
+  const name = (s: PoolStanding) => s.row.pool ?? untagged
+  const mixed = standings.filter((s) => s.row.signalling > 0 && s.row.signalling < s.row.blocks)
+  const full = standings.filter((s) => s.row.signalling === s.row.blocks && s.row.blocks > 0)
+  const none = standings
+    .filter((s) => s.row.signalling === 0 && s.row.blocks > 0)
+    .sort((a, b) => b.row.blocks - a.row.blocks)
+  const yes = (s: PoolStanding): Omit<Segment, 'key'> => ({
+    name: name(s),
+    blocks: s.row.signalling,
+    on: true,
+  })
+  const no = (s: PoolStanding): Omit<Segment, 'key'> => ({
+    name: name(s),
+    blocks: s.row.blocks - s.row.signalling,
+    on: false,
+    since: s.trend.kind === 'on' ? s.trend.since : undefined,
+  })
+  const segments = [
+    ...full.map(yes),
+    ...mixed.map(yes),
+    ...mixed.toReversed().map(no),
+    ...none.map(no),
+  ].map((x, i) => ({ ...x, key: String(i) }))
+  const one = mixed.length === 1 ? mixed[0]! : undefined
+  const span = one && {
+    name: name(one),
+    blocks: one.row.blocks,
+    left: full.reduce((n, s) => n + s.row.blocks, 0),
+  }
+  const blocker = segments
+    .filter((x) => !x.on && x.since === undefined)
+    .reduce<Segment | undefined>((big, x) => (big && big.blocks >= x.blocks ? big : x), undefined)
+  return { segments, span, blocker }
 }
