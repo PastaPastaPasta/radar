@@ -116,6 +116,31 @@ describe('ladderGroups', () => {
     ])
   })
 
+  it('puts the fold of older majors last, after every shown release', () => {
+    const many = releaseBook({
+      releases: [
+        { tag: 'v24.0.2', version: '24.0.2', prerelease: false, published: 5 },
+        { tag: 'v23.1.2', version: '23.1.2', prerelease: false, published: 4 },
+        { tag: 'v23.0.3', version: '23.0.3', prerelease: false, published: 3 },
+        { tag: 'v22.0.0', version: '22.0.0', prerelease: false, published: 2 },
+        { tag: 'v21.1.0', version: '21.1.0', prerelease: false, published: 1 },
+      ],
+    })
+    const rows = [
+      ['24.0.2', 500],
+      ['23.1.2', 400],
+      ['23.0.3', 80],
+      ['22.0.0', 4],
+      ['21.1.0', 3],
+    ] as const
+    expect(ladderGroups(many, rows.slice(), 987)[0]!.rows).toEqual([
+      { key: '24.0.2', n: 500 },
+      { key: '23.1.2', n: 400 },
+      { key: '23.0.3', n: 80 },
+      { key: '22.0.0', n: 7, folded: 2 },
+    ])
+  })
+
   it('keeps the latest release first even when nothing runs it', () => {
     const groups = ladderGroups(book, [['23.1.10', 100]], 100)
     expect(groups[0]!.rows[0]).toEqual({ key: '24.0.0', n: 0 })

@@ -163,7 +163,7 @@ function SizeChart({ census }: { census: Census }) {
 
   const readout =
     cursor === undefined || !doc
-      ? t`Focus the chart and press the arrow keys to read a point.`
+      ? t`Drag the slider or press the arrow keys to read a point.`
       : `${dayMonthTime(doc.t[cursor]!)}: ${series
           .map((s) => `${s.name} ${formatInt(Math.round(s.values[cursor] ?? 0))}`)
           .join(' · ')}`
@@ -209,9 +209,6 @@ function SizeChart({ census }: { census: Census }) {
         }}
         onFocus={() => {
           setCursor((c) => c ?? Math.max(0, count - 1))
-        }}
-        onBlur={() => {
-          setCursor(undefined)
         }}
       />
       <p className="min-h-5 text-sm text-[var(--dh-ink-2)]" aria-live="polite" data-size-readout>
