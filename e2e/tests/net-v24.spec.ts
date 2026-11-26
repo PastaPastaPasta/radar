@@ -52,7 +52,7 @@ async function open(page: Page, net: Net = 'mainnet', after = MIN) {
  * Rewrites Radar's activation document in the page, because the recordings hold no network that is mid-window.
  * `mutate` receives the parsed body and the v24 deployment.
  */
-async function reshape(page: Page, patch: 'signalling' | 'on-pace' | 'switched') {
+async function reshape(page: Page, patch: 'signalling' | 'on-pace' | 'switched' | 'stopped') {
   await page.addInitScript((kind) => {
     const original = window.fetch.bind(window)
     window.fetch = async (input, init) => {
@@ -81,7 +81,9 @@ async function reshape(page: Page, patch: 'signalling' | 'on-pace' | 'switched')
             ? i % 10 !== 0
             : kind === 'switched'
               ? i >= 1000 || i % 2 === 1
-              : i % 3 === 0
+              : kind === 'stopped'
+                ? i < 1000 || i % 2 === 1
+                : i % 3 === 0
         )
           ? '#'
           : '-',
@@ -108,24 +110,29 @@ async function reshape(page: Page, patch: 'signalling' | 'on-pace' | 'switched')
         possible: false,
         remaining: size - mined,
         pools:
-          kind === 'switched'
+          kind === 'stopped'
             ? [
-                { pool: 'ViaBTC', blocks: 750, signalling: 250 },
-                { pool: 'F2Pool', blocks: 750, signalling: 750 },
+                { pool: 'ViaBTC', blocks: 750, signalling: 750 },
+                { pool: 'F2Pool', blocks: 750, signalling: 500 },
               ]
-            : kind === 'on-pace'
+            : kind === 'switched'
               ? [
-                  { pool: 'F2Pool', blocks: 1250, signalling: 1250 },
-                  { pool: 'ViaBTC', blocks: 150, signalling: 0 },
-                  { pool: 'AntPool', blocks: 60, signalling: 60 },
-                  { pool: null, blocks: 40, signalling: 40 },
+                  { pool: 'ViaBTC', blocks: 750, signalling: 250 },
+                  { pool: 'F2Pool', blocks: 750, signalling: 750 },
                 ]
-              : [
-                  { pool: 'ViaBTC', blocks: 1000, signalling: 0 },
-                  { pool: 'F2Pool', blocks: 400, signalling: 400 },
-                  { pool: 'AntPool', blocks: 60, signalling: 60 },
-                  { pool: null, blocks: 40, signalling: 40 },
-                ],
+              : kind === 'on-pace'
+                ? [
+                    { pool: 'F2Pool', blocks: 1250, signalling: 1250 },
+                    { pool: 'ViaBTC', blocks: 150, signalling: 0 },
+                    { pool: 'AntPool', blocks: 60, signalling: 60 },
+                    { pool: null, blocks: 40, signalling: 40 },
+                  ]
+                : [
+                    { pool: 'ViaBTC', blocks: 1000, signalling: 0 },
+                    { pool: 'F2Pool', blocks: 400, signalling: 400 },
+                    { pool: 'AntPool', blocks: 60, signalling: 60 },
+                    { pool: null, blocks: 40, signalling: 40 },
+                  ],
       }
       d.window = window
       d.windows = [window]
@@ -386,6 +393,22 @@ test.describe('Core 24 activation tracker', () => {
     await expect(now).toContainText(
       'If every pool keeps signalling as it does now (100.0% of blocks)',
     )
+    await expectAccessible(page)
+  })
+
+  test('shows the lone holdout that stopped signalling mid-window as stopped @RA-72', async ({
+    page,
+  }) => {
+    await reshape(page, 'stopped')
+    await open(page)
+    const pools = card(page, 'pools')
+    const f2 = pools.locator('tbody tr', { hasText: 'F2Pool' })
+    await expect(f2.locator('[data-trend="off"]')).toContainText('stopped signalling')
+    await expect(f2).toContainText('at block 2,577,448 (about')
+    await expect(f2).toContainText('500 of 750 this window')
+    await expect(pools.locator('[data-blocker]')).toHaveAttribute('data-pool', 'F2Pool')
+    await expect(pools.locator('[data-v24-pools-now]')).not.toContainText('Every block since')
+    expect(await horizontalOverflow(page)).toBeLessThanOrEqual(0)
     await expectAccessible(page)
   })
 

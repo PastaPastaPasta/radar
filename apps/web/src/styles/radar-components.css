@@ -3251,6 +3251,12 @@ html[data-scroll-gutter] {
   color: var(--dh-ink-2);
   font-variant-numeric: tabular-nums;
 }
+/* Block links set in running text: underlined, as colour alone doesn't set them apart. */
+.rx-v24-status a,
+[data-v24-pools-now] a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 .rx-v24-seg {
   padding: 0 7px;
   overflow: hidden;

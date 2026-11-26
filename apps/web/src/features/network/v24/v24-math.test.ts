@@ -365,7 +365,7 @@ describe('poolStandings', () => {
         { pool: 'F2Pool', blocks: 500, signalling: 500 },
       ]),
     )
-    expect(t.AntPool).not.toEqual(expect.objectContaining({ kind: 'off' }))
+    expect(t.AntPool).toEqual({ kind: 'partly' })
   })
 
   it("calls no switch when the pools' totals don't match the window", () => {
