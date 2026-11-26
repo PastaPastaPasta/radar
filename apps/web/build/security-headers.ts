@@ -1,7 +1,8 @@
 import type { Plugin } from 'vite'
 import { SECURITY_HEADERS } from '../../../workers/edge/src/headers'
 
-export const STATIC_ASSET_PATTERN = '/assets/*'
+/** The paths served straight from the asset store, without the Worker: `!` entries of `run_worker_first`. */
+export const STATIC_ASSET_PATTERNS = ['/assets/*', '/dashhq/*', '/favicon.ico'] as const
 
 const title = (name: string) =>
   name
@@ -12,10 +13,10 @@ const title = (name: string) =>
 /** Cloudflare static-assets `_headers`: the Worker never sees the paths it names. */
 export function renderHeadersFile(
   headers: Record<string, string> = SECURITY_HEADERS,
-  pattern = STATIC_ASSET_PATTERN,
+  patterns: readonly string[] = STATIC_ASSET_PATTERNS,
 ): string {
   const lines = Object.entries(headers).map(([k, v]) => `  ${title(k)}: ${v}`)
-  return `${pattern}\n${lines.join('\n')}\n`
+  return patterns.map((pattern) => `${pattern}\n${lines.join('\n')}\n`).join('')
 }
 
 export function securityHeaders(): Plugin {
