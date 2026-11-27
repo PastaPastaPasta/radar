@@ -758,6 +758,19 @@ describe('hyphen batch', () => {
     assert.equal((await get(`/x/hy/mainnet/batch?${many}`)).status, 400)
     assert.equal((await get('/x/hy/devnet/batch?r=status')).status, 404)
   })
+
+  it('reads a path named twice once, and forwards no validators to the reads', async () => {
+    reset(() => Response.json({ ok: true }))
+    const res = await get('/x/hy/mainnet/batch?r=status&r=status', {
+      headers: { 'if-none-match': '"abc"', cookie: 'a=b' },
+    })
+    const { results } = await res.json()
+    assert.equal(results.length, 2)
+    assert.deepEqual(results[0], results[1])
+    assert.equal(upstreamCalls.length, 1)
+    assert.equal(upstreamCalls[0].headers.get('if-none-match'), null)
+    assert.equal(upstreamCalls[0].headers.get('cookie'), null)
+  })
 })
 
 describe('redirects', () => {

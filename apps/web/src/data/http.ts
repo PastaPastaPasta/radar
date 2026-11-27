@@ -7,7 +7,7 @@ import { SourceError, disabledByMode, type SourceErrorKind } from './errors'
 import { firstDataAnswer, type FirstDataAnswer } from './first-data'
 import { healthRegistry } from './health'
 import { queryLog } from './query-log'
-import { sharedGet } from './shared-get'
+import { jsonUntil, sharedGet } from './shared-get'
 import type { NetworkId } from '@/lib/network'
 
 type HttpSource = Exclude<SourceId, 'sdk' | 'dapi' | 'local'>
@@ -267,7 +267,7 @@ async function readSourced<S extends z.ZodType, N extends 'throw' | 'null' = 'th
       res =
         inlined?.response ??
         (await ((req.method ?? 'GET') === 'GET' && req.body === undefined
-          ? sharedGet(resolveUrl(url), { signal: controller.signal, timeoutMs, fragment })
+          ? sharedGet(resolveUrl(url), { signal: controller.signal, fragment })
           : fetch(`${resolveUrl(url)}${fragment}`, {
               method: req.method ?? 'GET',
               headers: {
@@ -304,7 +304,7 @@ async function readSourced<S extends z.ZodType, N extends 'throw' | 'null' = 'th
 
     let json: unknown
     try {
-      json = await res.json()
+      json = await jsonUntil(res, controller.signal)
     } catch (cause) {
       throw (
         interrupted(cause) ??

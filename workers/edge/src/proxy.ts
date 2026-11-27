@@ -44,6 +44,14 @@ function allowedType(type: string, isStream: boolean): string | null {
 export const HYPHEN_BATCH_MAX = 16
 const BATCH_PATH = /^\/x\/hy\/(mainnet|testnet)\/batch$/
 const BATCH_KEEP = ['etag', 'last-modified']
+/** Under the browser's 10 s, so one slow read comes back as its own 502 instead of timing out the whole batch. */
+const BATCH_READ_TIMEOUT_MS = 6_000
+
+interface BatchEntry {
+  status: number
+  body: unknown
+  headers?: Record<string, string>
+}
 
 /**
  * Several Hyphen reads in one request: `?r=<path>&r=<path>…`, each a path the pass-through serves on its own (a
@@ -55,34 +63,45 @@ async function handleBatch(request: Request, url: URL, net: string): Promise<Res
   if (paths.length === 0 || paths.length > HYPHEN_BATCH_MAX) {
     return json(400, { error: 'bad_batch' })
   }
-  const results = await Promise.all(
-    paths.map(async (path) => {
-      const [pathname = '', search = ''] = path.split(/\?(.*)/s, 2)
-      const sub = new URL(`/x/hy/${net}/${pathname}`, url)
-      sub.search = search
-      const resolved = resolveHyphenRequest(sub.pathname, sub.search)
-      if (!resolved.ok) return { status: resolved.status, body: { error: resolved.error } }
-      if (resolved.stream) return { status: 400, body: { error: 'bad_batch' } }
-      const res = await handleProxy(new Request(sub, { headers: request.headers }), sub)
-      const text = await res.text()
-      let body: unknown = null
-      try {
-        body = text ? JSON.parse(text) : null
-      } catch {
-        return { status: 502, body: { error: 'bad_upstream_type' } }
-      }
-      const headers: Record<string, string> = {}
-      for (const name of BATCH_KEEP) {
-        const v = res.headers.get(name)
-        if (v) headers[name] = v
-      }
-      return { status: res.status, body, headers }
-    }),
-  )
-  return json(200, { results })
+  const accept = new Headers()
+  const wanted = request.headers.get('accept')
+  if (wanted) accept.set('accept', wanted)
+  const reads = new Map<string, Promise<BatchEntry>>()
+  const read = (path: string) => {
+    let entry = reads.get(path)
+    if (!entry) reads.set(path, (entry = readOne(path)))
+    return entry
+  }
+  const readOne = async (path: string): Promise<BatchEntry> => {
+    const [pathname = '', search = ''] = path.split(/\?(.*)/s, 2)
+    const sub = new URL(`/x/hy/${net}/${pathname}`, url)
+    sub.search = search
+    const resolved = resolveHyphenRequest(sub.pathname, sub.search)
+    if (!resolved.ok) return { status: resolved.status, body: { error: resolved.error } }
+    if (resolved.stream) return { status: 400, body: { error: 'bad_batch' } }
+    const res = await handleProxy(new Request(sub, { headers: accept }), sub, BATCH_READ_TIMEOUT_MS)
+    const text = await res.text()
+    let body: unknown = null
+    try {
+      body = text ? JSON.parse(text) : null
+    } catch {
+      return { status: 502, body: { error: 'bad_upstream_type' } }
+    }
+    const headers: Record<string, string> = {}
+    for (const name of BATCH_KEEP) {
+      const v = res.headers.get(name)
+      if (v) headers[name] = v
+    }
+    return { status: res.status, body, headers }
+  }
+  return json(200, { results: await Promise.all(paths.map(read)) })
 }
 
-export async function handleProxy(request: Request, url: URL): Promise<Response> {
+export async function handleProxy(
+  request: Request,
+  url: URL,
+  timeoutMs = UPSTREAM_TIMEOUT_MS,
+): Promise<Response> {
   if (request.method !== 'GET' && request.method !== 'HEAD') {
     return json(405, { error: 'method_not_allowed' }, { allow: 'GET, HEAD' })
   }
@@ -104,7 +123,7 @@ export async function handleProxy(request: Request, url: URL): Promise<Response>
     upstream = await fetch(target, {
       method: request.method,
       headers,
-      signal: isStream ? undefined : AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
+      signal: isStream ? undefined : AbortSignal.timeout(timeoutMs),
       cf: isStream
         ? { cacheTtl: 0, cacheEverything: false }
         : {

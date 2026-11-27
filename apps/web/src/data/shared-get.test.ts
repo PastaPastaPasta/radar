@@ -1,5 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { enableHyphenBatching, HYPHEN_BATCH_MAX, resetSharedGetForTests, sharedGet } from './shared-get'
+import {
+  enableHyphenBatching,
+  HYPHEN_BATCH_MAX,
+  resetSharedGetForTests,
+  sharedGet,
+} from './shared-get'
 
 const BASE = 'http://radar.test/x/hy/mainnet'
 const real = globalThis.fetch
@@ -17,7 +22,7 @@ beforeEach(() => {
     calls.push(url)
     if (init?.signal) signals.push(init.signal)
     return Promise.resolve(answer(url))
-  }) as typeof fetch
+  })
 })
 afterEach(() => {
   globalThis.fetch = real
@@ -25,7 +30,7 @@ afterEach(() => {
 })
 
 const read = (url: string, signal = new AbortController().signal, fragment?: string) =>
-  sharedGet(url, { signal, timeoutMs: 5_000, fragment })
+  sharedGet(url, { signal, fragment })
 
 describe('sharedGet', () => {
   it('shares one request between callers of the same URL, a probe included, and each gets its own body', async () => {
@@ -110,7 +115,9 @@ describe('sharedGet', () => {
     it('splits a burst into batches of at most the edge’s limit', async () => {
       answer = (url) => {
         const n = new URL(url).searchParams.getAll('r').length
-        return Response.json({ results: Array.from({ length: n }, () => ({ status: 200, body: {} })) })
+        return Response.json({
+          results: Array.from({ length: n }, () => ({ status: 200, body: {} })),
+        })
       }
       await Promise.all(
         Array.from({ length: HYPHEN_BATCH_MAX + 2 }, (_, i) => read(`${BASE}/block/${i}`)),
@@ -130,10 +137,37 @@ describe('sharedGet', () => {
       expect(calls).toHaveLength(3)
     })
 
-    it('fails every read of a batch the edge refused', async () => {
-      answer = () => new Response('', { status: 502 })
-      const reads = [read(`${BASE}/block/1`), read(`${BASE}/block/2`)]
-      for (const r of reads) await expect(r).rejects.toThrow(/HTTP 502/)
+    it('hands a refused batch to each read as its own answer, so a 429 keeps its Retry-After', async () => {
+      answer = () => new Response('', { status: 429, headers: { 'retry-after': '7' } })
+      const [a, b] = await Promise.all([read(`${BASE}/block/1`), read(`${BASE}/block/2`)])
+      for (const r of [a, b]) {
+        expect(r.status).toBe(429)
+        expect(r.headers.get('retry-after')).toBe('7')
+      }
+    })
+
+    it('stops batching for an edge that answered its first batch with 404', async () => {
+      answer = (url) =>
+        url.includes('/batch?') ? new Response('', { status: 404 }) : Response.json({ url })
+      await Promise.all([read(`${BASE}/block/1`), read(`${BASE}/block/2`)])
+      await Promise.all([read(`${BASE}/block/3`), read(`${BASE}/block/4`)])
+      expect(calls.filter((u) => u.includes('/batch?'))).toHaveLength(1)
+      expect(calls).toHaveLength(5)
+    })
+
+    it('sends a batch early before its address grows too long', async () => {
+      answer = (url) => {
+        const n = new URL(url).searchParams.getAll('r').length
+        return Response.json({
+          results: Array.from({ length: n }, () => ({ status: 200, body: {} })),
+        })
+      }
+      const cursor = 'ab'.repeat(400)
+      await Promise.all(
+        Array.from({ length: 10 }, (_, i) => read(`${BASE}/address/X${i}/txs?cursor=${cursor}`)),
+      )
+      expect(calls.length).toBeGreaterThan(1)
+      for (const u of calls) expect(u.length).toBeLessThan(7_000)
     })
   })
 })
