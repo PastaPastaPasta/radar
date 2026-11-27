@@ -1,7 +1,12 @@
 import { earlyAnswers } from './early'
 
-/** The element the edge Worker adds to a tx or block page with the Hyphen answers that page reads first (`workers/edge/src/first-data.ts`). */
+/**
+ * The element the edge Worker adds to a page with the answers it reads first (`workers/edge/src/first-data.ts`): the
+ * price on every page, and the Hyphen reads of a tx or block page.
+ */
 export const FIRST_DATA_ELEMENT_ID = 'radar-first-data'
+/** Platform Explorer's price, the one read from another origin the edge inlines (`RATE_URL` there). */
+export const FIRST_DATA_RATE_URL = 'https://api.pe.dashhq.org/rate'
 
 /**
  * How long after the edge built the page its inlined answers stand in for a read. A tab restored later, or the page
@@ -30,7 +35,8 @@ function parse(doc: Document): Inlined {
     out.at = parsed.at
     for (const [path, read] of Object.entries(parsed.reads as Record<string, unknown>)) {
       const r = read as { body?: unknown; fetchedAt?: unknown } | null
-      if (path.startsWith('/x/hy/') && r?.body !== undefined && isTime(r.fetchedAt)) {
+      const known = path.startsWith('/x/hy/') || path === FIRST_DATA_RATE_URL
+      if (known && r?.body !== undefined && isTime(r.fetchedAt)) {
         out.reads.set(path, { body: r.body, fetchedAt: r.fetchedAt })
       }
     }
@@ -47,7 +53,7 @@ export interface FirstDataAnswer {
 }
 
 /**
- * The answer the edge inlined for this same-origin GET, or undefined. Each answers one read, within
+ * The answer the edge inlined for this GET (a same-origin Hyphen read, or the price), or undefined. Each answers one read, within
  * `FIRST_DATA_MAX_AGE_MS` of when the edge built the page; later reads, and reads after that, go to the network. An
  * early answer (§4.7): fixture builds and page tests ask exactly what they recorded.
  */
@@ -62,8 +68,7 @@ export function firstDataAnswer(url: string, now = Date.now()): FirstDataAnswer 
   let key: string
   try {
     const u = new URL(url, location.href)
-    if (u.origin !== location.origin) return undefined
-    key = u.pathname + u.search
+    key = u.origin === location.origin ? u.pathname + u.search : u.href
   } catch {
     return undefined
   }

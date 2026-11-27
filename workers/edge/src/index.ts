@@ -77,16 +77,15 @@ async function handle(request: Request, env: Env, ctx: ExecutionContext): Promis
   }
 
   const ua = request.headers.get('user-agent')
-  const plan =
+  const inlines =
     request.method === 'GET' &&
     env.FIRST_DATA !== 'off' &&
     !isLinkPreviewAgent(ua) &&
-    !isCrawler(ua)
-      ? firstDataPlan(url)
-      : null
-  // The page's first Hyphen reads are looked up beside the shell's own fetch.
-  const firstData = plan
-    ? fetchFirstData(url.origin, plan, ctx, {
+    !isCrawler(ua) &&
+    !STATIC_FILE.test(url.pathname)
+  // The page's first reads are looked up beside the shell's own fetch.
+  const firstData = inlines
+    ? fetchFirstData(url.origin, firstDataPlan(url), ctx, {
         budgetMs: Number(env.FIRST_DATA_BUDGET_MS) || undefined,
         warm: isNavigation(request),
       })
@@ -97,7 +96,7 @@ async function handle(request: Request, env: Env, ctx: ExecutionContext): Promis
 
   const isHtml = served.headers.get('content-type')?.startsWith('text/html') === true
   let res = isHtml && served.status === 200 ? await preloaded(served, request, env, url) : served
-  // The shell waits for its first data at most FIRST_DATA_BUDGET_MS, and only on a tx or block page.
+  // The shell waits for its first data at most FIRST_DATA_BUDGET_MS.
   if (firstData && isHtml && res.status === 200) res = withFirstData(res, await firstData)
 
   const og = matchOgRoute(url)

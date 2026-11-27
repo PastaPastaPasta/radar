@@ -7,10 +7,12 @@ import { enableEarlyAnswers } from '@/data/early'
 import {
   FIRST_DATA_ELEMENT_ID,
   FIRST_DATA_MAX_AGE_MS,
+  FIRST_DATA_RATE_URL,
   resetFirstDataForTests,
 } from '@/data/first-data'
 import { healthRegistry, resetHealthRegistry } from '@/data/health'
 import { hyphen } from '@/data/hyphen/client'
+import { rate } from '@/data/rate/client'
 import { writeSourceMode } from '@/lib/source-mode'
 import { FixtureDapiTransport } from '@/test/msw/dapi-transport'
 
@@ -148,6 +150,17 @@ describe('first data the edge inlined', () => {
     await expect(hyphen.tx('mainnet', TXID)).rejects.toMatchObject({ kind: 'disabled-by-mode' })
     writeSourceMode('all')
     await hyphen.tx('testnet', TXID)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('answers the price from the page on any network, once, and nothing else from Platform Explorer', async () => {
+    const at = Date.now()
+    inline(page(at, at - 2_000, { [FIRST_DATA_RATE_URL]: { usd: 31.5, source: 'kraken' } }))
+    const price = await rate.usd()
+    expect(price.data).toEqual({ usd: 31.5, provider: 'kraken' })
+    expect(price.fetchedAt).toBe(at - 2_000)
+    expect(fetchMock).not.toHaveBeenCalled()
+    await rate.usd().catch(() => undefined)
     expect(fetchMock).toHaveBeenCalledTimes(1)
   })
 
