@@ -9,7 +9,7 @@ const closedBeforeWrite = () =>
     }),
   })
 
-describe('resending a request the mock closed before it was written', () => {
+describe('resending a request the mock failed before it was sent', () => {
   it('sends it again and returns the answer', async () => {
     const answer = new Response('ok')
     const send = vi
@@ -48,5 +48,17 @@ describe('resending a request the mock closed before it was written', () => {
     const send = vi.fn<typeof fetch>().mockRejectedValue(written)
     await expect(resendRefusedBeforeWrite(send)('https://x.test/a')).rejects.toBe(written)
     expect(send).toHaveBeenCalledTimes(1)
+  })
+
+  it('leaves the mock’s own network errors and other refusals alone', async () => {
+    const mocked = new TypeError('fetch failed', { cause: new Response(null) })
+    const reset = new TypeError('fetch failed', {
+      cause: Object.assign(new Error('reset'), { code: 'ECONNRESET' }),
+    })
+    for (const error of [mocked, reset]) {
+      const send = vi.fn<typeof fetch>().mockRejectedValue(error)
+      await expect(resendRefusedBeforeWrite(send)('https://x.test/a')).rejects.toBe(error)
+      expect(send).toHaveBeenCalledTimes(1)
+    }
   })
 })

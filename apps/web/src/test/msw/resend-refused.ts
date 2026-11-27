@@ -21,7 +21,7 @@ export function resendRefusedBeforeWrite(send: typeof fetch): typeof fetch {
   return async (input, init) => {
     for (let attempt = 0; ; attempt++) {
       try {
-        return await send(input, init)
+        return await send(input instanceof Request ? input.clone() : input, init)
       } catch (error) {
         if (attempt >= MAX_RESENDS || !refusedBeforeWrite(error)) throw error
       }
