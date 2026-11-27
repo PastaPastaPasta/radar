@@ -386,6 +386,8 @@ test.describe('Core 24 activation tracker', () => {
     if (test.info().project.name.startsWith('phone')) {
       await expect(nowSeg.locator('.rx-v24-seg__pct')).toBeVisible()
       await expect(nowSeg.locator('.rx-v24-seg__pct')).toHaveText('16.7%')
+      const seg = nowSeg.locator('.rx-v24-seg')
+      expect(await seg.evaluate((e) => e.scrollWidth <= e.clientWidth)).toBe(true)
     } else {
       await expect(nowSeg.locator('.rx-v24-seg__long')).toBeVisible()
       await expect(nowSeg.locator('.rx-v24-seg__short')).toBeHidden()
