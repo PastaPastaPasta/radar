@@ -8,6 +8,12 @@ const CACHE_PREFIX = 'radar-v1:'
 const CHECK_EVERY_MS = 30 * 60_000
 const VISIBLE_THROTTLE_MS = 5 * 60_000
 const ACTIVATION_TIMEOUT_MS = 5_000
+/**
+ * How long after the first paint the worker is registered. Its install fetches the shell and its files again, and the
+ * zone's rate limit counts each of those requests against a page that has just loaded them, so they wait until the
+ * page's own burst has passed (the limit's window is 10 s).
+ */
+export const SW_REGISTER_DELAY_MS = 15_000
 
 export interface RegisterDeps {
   container?: ServiceWorkerContainer
@@ -55,8 +61,13 @@ async function removeWorker(
   await Promise.all(names.filter((n) => n.startsWith(CACHE_PREFIX)).map((n) => storage.delete(n)))
 }
 
+/** When to register: `SW_REGISTER_DELAY_MS` after the first paint, or at once where `radar.sw` says `on` or `off`. */
+export function serviceWorkerDelay(): number {
+  return flag() === null ? SW_REGISTER_DELAY_MS : 0
+}
+
 /**
- * Registers `/sw.js` once the first paint is done (`main.tsx`). It stays out of dev servers and fixture builds (whose
+ * Registers `/sw.js` (`main.tsx` calls it `serviceWorkerDelay()` after the first paint). It stays out of dev servers and fixture builds (whose
  * mock worker holds the same scope) unless `radar.sw` is `on`, and `off` removes it. A worker that finds a newer build
  * waiting raises the update notice; one for this page's own build takes over quietly.
  */

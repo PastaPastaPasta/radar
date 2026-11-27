@@ -25,6 +25,10 @@ const sources: Record<string, string> = {
     "import { V24Page } from '@/features/network'\nloader: routePrefetch('net-a', 'v24Prefetch')",
   [`${R}identities.tsx`]: "import { X } from '@/features/platform'",
   [`${R}settings.tsx`]: "import { SettingsRoute } from '@/app/settings-route'",
+  [`${R}blocks.tsx`]:
+    "import { BlocksPage } from '@/features/core'\nloader: () => import('@/data/query/route-prefetch')",
+  [`${R}identity.tsx`]:
+    "import { IdentityPage } from '@/features/platform'\nloader: () => import('@/data/query/route-prefetch')",
 }
 const read = (file: string) => sources[file] ?? ''
 const page = (name: string) => `${R}${name}.tsx?tsr-split=component`
@@ -113,6 +117,21 @@ describe('planGroups', () => {
   it('leaves whatever reaches the Platform SDK to Rollup', () => {
     expect(groups.get('/app/src/ui/sdk-thing.ts')).toBeUndefined()
     expect(groups.get('/app/node_modules/@dashevo/evo-sdk/dist/sdk.js')).toBeUndefined()
+  })
+
+  it('puts a prefetch package only one import loads with its routes, and the seed list with the pool', () => {
+    const rp = '/app/src/data/query/route-prefetch.ts'
+    const seed = '/app/src/data/dapi-core/seed.mainnet.json'
+    const more = [
+      ...chunks,
+      chunk('blocks.js', [page('blocks')], { facade: page('blocks') }),
+      chunk('identity.js', [page('identity')], { facade: page('identity') }),
+      chunk('route-prefetch.js', [rp], { facade: rp }),
+      chunk('seed.js', [seed], { facade: seed }),
+    ]
+    const planned = planGroups(more, read)
+    expect(planned.get(rp)).toBe(COMMON_CHUNK)
+    expect(planned.get(seed)).toBe(AFTER_PAINT_CHUNK)
   })
 
   it("groups code two pages of one area share in the area's chunk", () => {

@@ -1,4 +1,9 @@
-import { HYPHEN_API_BASE, resolveHyphenRequest, type HyphenNetwork } from './hyphen-path'
+import {
+  HYPHEN_API_BASE,
+  resolveHyphenRequest,
+  UPSTREAM_USER_AGENT,
+  type HyphenNetwork,
+} from './hyphen-path'
 import { handleProxy } from './proxy'
 
 /** The HTML never waits longer than this for the edge cache; past it the page reads Hyphen itself. */
@@ -14,6 +19,25 @@ const IMMUTABLE_TTL_SECONDS = 86_400
 const READ_TTL_SECONDS = 60
 /** Hyphen's 404 is kept this long, so a stream of visits to an id it lacks does not become a stream of reads. */
 const MISSING_TTL_SECONDS = 60
+/**
+ * Platform Explorer's DASH price, which every page reads right after its first paint. Inlined from the edge cache, it
+ * is one request fewer against the zone's rate limit on every cold page; it moves slowly, and the page's own
+ * refresh reads it live.
+ */
+export const RATE_URL = 'https://api.pe.dashhq.org/rate'
+/** A price older than this is still inlined, and a navigation reads a new one for the visits after it. */
+const RATE_FRESH_MS = 120_000
+/** How long the edge keeps a price at all; past it a page reads the price itself. */
+const RATE_KEEP_SECONDS = 900
+/** On the Worker's own origin, so the edge's copy can never stand in for Platform Explorer's own `/rate` in the zone. */
+const RATE_CACHE_PATH = '/__first-data/rate'
+const RATE_READ_TIMEOUT_MS = 5_000
+/** After a failed read, navigations leave Platform Explorer alone this long. */
+const RATE_RETRY_MS = 60_000
+/** One upstream read of the price at a time per isolate (a read cut off with its `waitUntil` frees it after this). */
+const RATE_READ_HELD_MS = 30_000
+let rateReadSince = 0
+let rateFailedAt = 0
 const FETCHED_AT = 'x-radar-fetched-at'
 const MISSING = 'x-radar-missing'
 
@@ -50,7 +74,7 @@ export interface FirstRead {
 export interface FirstData {
   /** When the edge built this page (ms epoch); the page uses none of it once that is older than its window. */
   at: number
-  /** Same-origin `/x/hy/…` paths, each with the read the pass-through returned for it. */
+  /** Same-origin `/x/hy/…` paths, each with the read the pass-through returned for it, and `RATE_URL`. */
   reads: Record<string, FirstRead>
 }
 
@@ -176,15 +200,59 @@ async function gather(
   return { at: Date.now(), reads }
 }
 
+/** The price from the edge cache, reading a new one for the next visits when it is missing or old. */
+async function rateRead(origin: string, ctx: Ctx, opts: Options): Promise<FirstRead | null> {
+  const cache = edgeCache()
+  if (!cache) return null
+  const key = new Request(origin + RATE_CACHE_PATH)
+  const hit = await cache.match(key).catch(() => undefined)
+  const fetchedAt = Number(hit?.headers.get(FETCHED_AT))
+  const body = hit && fetchedAt > 0 ? await hit.json<Json>().catch(() => null) : null
+  const now = Date.now()
+  const due = !body || now - fetchedAt > RATE_FRESH_MS
+  const free = now - rateReadSince > RATE_READ_HELD_MS && now - rateFailedAt > RATE_RETRY_MS
+  if (opts.warm && due && free) {
+    const started = now
+    rateReadSince = started
+    const work = async () => {
+      const res = await fetch(RATE_URL, {
+        headers: { accept: 'application/json', 'user-agent': UPSTREAM_USER_AGENT },
+        signal: AbortSignal.timeout(RATE_READ_TIMEOUT_MS),
+      })
+      const rate = res.ok ? await res.json<Json>().catch(() => null) : null
+      if (typeof rate?.usd !== 'number') {
+        rateFailedAt = Date.now()
+        return res.body?.cancel()
+      }
+      const headers = {
+        'cache-control': `public, max-age=${RATE_KEEP_SECONDS}`,
+        [FETCHED_AT]: String(Date.now()),
+      }
+      await cache.put(key, Response.json(rate, { headers }))
+    }
+    ctx.waitUntil(
+      work()
+        .catch(() => {
+          rateFailedAt = Date.now()
+        })
+        .finally(() => {
+          if (rateReadSince === started) rateReadSince = 0
+        }),
+    )
+  }
+  return body ? { body, fetchedAt } : null
+}
+
 /**
- * The Hyphen answers the page would read first, from the edge cache, or null when the tx and its bytes (or the block
- * and its bytes) are not both there within `budgetMs`, the tx is unconfirmed or the block is within `REORG_DEPTH` of
- * Hyphen's tip. A miss warms the cache for the next visit after the response has gone, so the HTML never waits for
- * Hyphen itself.
+ * What the page would read first, from the edge cache: the price on every page, and on a tx or block page the Hyphen
+ * answers it starts with, or none of them when the tx and its bytes (or the block and its bytes) are not both there
+ * within `budgetMs`, the tx is unconfirmed or the block is within `REORG_DEPTH` of Hyphen's tip. Null when there is
+ * nothing to inline. A miss warms the cache for the next visit after the response has gone, so the HTML never waits
+ * for an upstream itself.
  */
 export async function fetchFirstData(
   origin: string,
-  plan: FirstDataPlan,
+  plan: FirstDataPlan | null,
   ctx: Ctx,
   { budgetMs = FIRST_DATA_BUDGET_MS, warm = true }: { budgetMs?: number; warm?: boolean } = {},
 ): Promise<FirstData | null> {
@@ -193,7 +261,12 @@ export async function fetchFirstData(
     timer = setTimeout(() => resolve(null), budgetMs)
   })
   try {
-    return await gather(origin, plan, deadline, ctx, { warm }).catch(() => null)
+    const [hyphen, rate] = await Promise.all([
+      plan ? gather(origin, plan, deadline, ctx, { warm }).catch(() => null) : null,
+      Promise.race([rateRead(origin, ctx, { warm }), deadline]).catch(() => null),
+    ])
+    const reads = { ...hyphen?.reads, ...(rate ? { [RATE_URL]: rate } : {}) }
+    return Object.keys(reads).length > 0 ? { at: hyphen?.at ?? Date.now(), reads } : null
   } finally {
     clearTimeout(timer)
   }

@@ -27,6 +27,10 @@ const BUDGET_MS = 8000
 let mf
 let upstreamCalls = []
 let upstream = () => new Response('not mocked', { status: 599 })
+// The price every page inlines is answered apart, so the other tests count only their own upstream reads.
+const RATE_URL = 'https://api.pe.dashhq.org/rate'
+let rateCalls = []
+let rateAnswer = () => Response.json({ usd: 30, source: 'test' })
 
 const origin = 'http://radar.localhost'
 const get = (p, init) => mf.dispatchFetch(origin + p, { redirect: 'manual', ...init })
@@ -62,6 +66,10 @@ before(async () => {
       routerConfig,
     },
     outboundService: async (request) => {
+      if (request.url === RATE_URL) {
+        rateCalls.push(request)
+        return rateAnswer(request)
+      }
       upstreamCalls.push(request)
       return upstream(request)
     },
@@ -234,10 +242,14 @@ describe('first data for immutable pages', () => {
   }
   after(() => release())
   const NAVIGATE = { 'sec-fetch-mode': 'navigate', 'sec-fetch-dest': 'document' }
+  /** The page's inlined Hyphen reads; the price every page carries has its own tests. */
   const payload = async (p, headers = NAVIGATE) => {
     const html = await (await get(p, { headers })).text()
     const m = /<script type="application\/json" id="radar-first-data">([^<]*)<\/script>/.exec(html)
-    return m ? JSON.parse(m[1]) : null
+    if (!m) return null
+    const data = JSON.parse(m[1])
+    delete data.reads[RATE_URL]
+    return Object.keys(data.reads).length > 0 ? data : null
   }
   /** The inlined bodies by path, after checking each says when the edge read it. */
   const inlined = async (p, init) => {
@@ -438,6 +450,55 @@ describe('first data for immutable pages', () => {
       JSON.parse(m[1]).reads[`/x/hy/mainnet/tx/${txid}`].body.note,
       '</script><script>x()',
     )
+  })
+})
+
+describe('the price on every page', () => {
+  const NAVIGATE = { 'sec-fetch-mode': 'navigate', 'sec-fetch-dest': 'document' }
+  const firstData = async (p, headers = NAVIGATE) => {
+    const html = await (await get(p, { headers })).text()
+    const m = /<script type="application\/json" id="radar-first-data">([^<]*)<\/script>/.exec(html)
+    return m ? JSON.parse(m[1]) : null
+  }
+  const settle = () => new Promise((r) => setTimeout(r, 300))
+
+  it('is read upstream by a navigation that finds none, then inlined on any page with when the edge read it', async () => {
+    let data = null
+    for (let i = 0; i < 20 && !data?.reads?.[RATE_URL]; i++) {
+      data = await firstData('/blocks')
+      if (!data?.reads?.[RATE_URL]) await settle()
+    }
+    assert.ok(data?.reads?.[RATE_URL], 'inlined after the warm-up')
+    assert.equal(typeof data.reads[RATE_URL].body.usd, 'number')
+    assert.ok(data.reads[RATE_URL].fetchedAt <= data.at)
+    const calls = rateCalls.length
+    assert.ok(calls >= 1)
+    const other = await firstData('/nodes')
+    assert.ok(other?.reads?.[RATE_URL])
+    assert.equal(rateCalls.length, calls, 'answered from the edge cache')
+    assert.equal(rateCalls[0].headers.get('user-agent')?.startsWith('Radar/'), true)
+  })
+
+  it('sends a page that carries it whole, so a copy the browser kept with its etag never freezes it out', async () => {
+    for (let i = 0; i < 20 && !(await firstData('/nodes'))?.reads?.[RATE_URL]; i++) await settle()
+    const res = await get('/nodes', { headers: { ...NAVIGATE, 'if-none-match': '"anything"' } })
+    assert.equal(res.status, 200)
+    assert.match(await res.text(), /radar-first-data/)
+  })
+
+  it('leaves it out of a Decentralized only link, which reads no hosted source', async () => {
+    assert.equal(await firstData('/nodes?sources=decentralized'), null)
+  })
+
+  it('inlines nothing for a crawler or a link preview, and never into a static file', async () => {
+    assert.equal(
+      await firstData('/blocks', {
+        'user-agent': 'Googlebot/2.1 (+http://www.google.com/bot.html) crawler',
+      }),
+      null,
+    )
+    const js = await get('/assets/app.js')
+    assert.doesNotMatch(await js.text(), /radar-first-data/)
   })
 })
 

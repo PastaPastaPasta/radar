@@ -53,6 +53,7 @@ import {
   type HyValidatorDetail,
 } from './schemas'
 import { cursorFromHeight, type HyListQuery, type HyQueryParams } from './params'
+import { sawHyphenDetail } from './seen'
 import { openHyphenStream } from './stream'
 
 function qs(q: HyQueryParams | undefined): string {
@@ -170,12 +171,22 @@ export const hyphen = {
     )
   },
 
-  block(
+  async block(
     net: NetworkId,
     hashOrHeight: string | number,
     signal?: AbortSignal,
   ): Promise<Sourced<HyBlockDetail | null>> {
-    return getOrNull(net, `/block/${seg(String(hashOrHeight))}`, HyBlockDetailSchema, signal)
+    const read = await getOrNull(
+      net,
+      `/block/${seg(String(hashOrHeight))}`,
+      HyBlockDetailSchema,
+      signal,
+    )
+    // By hash only, which is how a page asks for it; a block Hyphen saw orphaned is no answer for its height either.
+    if (read.data && read.data.orphanedAt == null) {
+      sawHyphenDetail(net, { kind: 'block', ids: [read.data.blockHash], read })
+    }
+    return read
   },
 
   blockTxs(
@@ -200,8 +211,15 @@ export const hyphen = {
     return getOrNull(net, `/rawblock/${seg(String(hashOrHeight))}`, HyRawBlockSchema, signal)
   },
 
-  tx(net: NetworkId, txid: string, signal?: AbortSignal): Promise<Sourced<HyTxDetail | null>> {
-    return getOrNull(net, `/tx/${seg(txid)}`, HyTxDetailSchema, signal)
+  async tx(
+    net: NetworkId,
+    txid: string,
+    signal?: AbortSignal,
+  ): Promise<Sourced<HyTxDetail | null>> {
+    const read = await getOrNull(net, `/tx/${seg(txid)}`, HyTxDetailSchema, signal)
+    // A page asks for the detail once the tx is mined, so a mempool answer is no answer for it.
+    if (read.data?.blockHeight != null) sawHyphenDetail(net, { kind: 'tx', ids: [txid], read })
+    return read
   },
 
   rawTx(net: NetworkId, txid: string, signal?: AbortSignal): Promise<Sourced<HyRawTx | null>> {

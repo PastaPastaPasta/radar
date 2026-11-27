@@ -6,7 +6,8 @@ import { App, createAppRouter, createQueryClient } from './app'
 import { loadDevnets } from './app/devnets'
 import { enableLiveTip } from './app/live-tip'
 import { preconnectHostedSources } from './app/preconnect'
-import { registerServiceWorker } from './app/sw-register'
+import { registerServiceWorker, serviceWorkerDelay } from './app/sw-register'
+import { installProductionDapiTransport } from './data/dapi-core/production'
 import { enableEarlyAnswers } from './data/early'
 import { enableHyphenBatching } from './data/shared-get'
 import { setSdkDevnets } from './data/sdk/devnets'
@@ -23,7 +24,6 @@ async function start(container: HTMLElement) {
     const { startFixtureWorker } = await import('./test/msw/browser')
     await startFixtureWorker()
   } else {
-    const { installProductionDapiTransport } = await import('./data/dapi-core/production')
     installProductionDapiTransport({ devnets: loadDevnets })
     enableEarlyAnswers()
   }
@@ -40,7 +40,7 @@ async function start(container: HTMLElement) {
     </StrictMode>,
   )
   requestAnimationFrame(() => {
-    window.setTimeout(registerServiceWorker, 0)
+    window.setTimeout(registerServiceWorker, serviceWorkerDelay())
   })
 }
 

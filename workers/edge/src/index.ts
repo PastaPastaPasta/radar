@@ -30,6 +30,16 @@ async function serveAssets(request: Request, env: Env, url: URL): Promise<Respon
   return env.ASSETS.fetch(new Request(new URL('/', url), request))
 }
 
+function unconditional(request: Request): Request {
+  if (!request.headers.has('if-none-match') && !request.headers.has('if-modified-since')) {
+    return request
+  }
+  const headers = new Headers(request.headers)
+  headers.delete('if-none-match')
+  headers.delete('if-modified-since')
+  return new Request(request, { headers })
+}
+
 const SERVICE_WORKER_PATH = '/sw.js'
 
 /** A worker script must be served as JavaScript, and browsers must be able to check it for a new version on every visit. */
@@ -77,27 +87,28 @@ async function handle(request: Request, env: Env, ctx: ExecutionContext): Promis
   }
 
   const ua = request.headers.get('user-agent')
-  const plan =
+  const inlines =
     request.method === 'GET' &&
     env.FIRST_DATA !== 'off' &&
     !isLinkPreviewAgent(ua) &&
-    !isCrawler(ua)
-      ? firstDataPlan(url)
-      : null
-  // The page's first Hyphen reads are looked up beside the shell's own fetch.
-  const firstData = plan
-    ? fetchFirstData(url.origin, plan, ctx, {
+    !isCrawler(ua) &&
+    !STATIC_FILE.test(url.pathname) &&
+    url.searchParams.get('sources') !== 'decentralized'
+  // The page's first reads are looked up beside the shell's own fetch.
+  const firstData = inlines
+    ? fetchFirstData(url.origin, firstDataPlan(url), ctx, {
         budgetMs: Number(env.FIRST_DATA_BUDGET_MS) || undefined,
         warm: isNavigation(request),
       })
     : null
 
-  const served = await serveAssets(request, env, url)
+  // A page that may carry first data is sent whole: a 304 would keep a copy built without it.
+  const served = await serveAssets(inlines ? unconditional(request) : request, env, url)
   if (url.pathname === SERVICE_WORKER_PATH && served.ok) return asServiceWorker(served)
 
   const isHtml = served.headers.get('content-type')?.startsWith('text/html') === true
   let res = isHtml && served.status === 200 ? await preloaded(served, request, env, url) : served
-  // The shell waits for its first data at most FIRST_DATA_BUDGET_MS, and only on a tx or block page.
+  // The shell waits for its first data at most FIRST_DATA_BUDGET_MS.
   if (firstData && isHtml && res.status === 200) res = withFirstData(res, await firstData)
 
   const og = matchOgRoute(url)
