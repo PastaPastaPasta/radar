@@ -148,6 +148,24 @@ describe('sharedGet', () => {
       ])
     })
 
+    it('sends a probe in a batch with the page’s reads, and keeps its tag on a batch of nothing but probes', async () => {
+      answer = (url) => {
+        const n = new URL(url).searchParams.getAll('r').length
+        return Response.json({
+          results: Array.from({ length: n }, () => ({ status: 200, body: {} })),
+        })
+      }
+      await Promise.all([read(`${BASE}/status`, undefined, '#radar-probe'), read(`${BASE}/tx/abc`)])
+      await Promise.all([
+        read(`${BASE}/status`, undefined, '#radar-probe'),
+        read('http://radar.test/x/hy/mainnet/metrics/latest', undefined, '#radar-probe'),
+      ])
+      expect(calls).toEqual([
+        `${BASE}/batch?r=status&r=${encodeURIComponent('tx/abc')}`,
+        `${BASE}/batch?r=status&r=${encodeURIComponent('metrics/latest')}#radar-probe`,
+      ])
+    })
+
     it('splits a burst into batches of at most the edge’s limit', async () => {
       answer = (url) => {
         const n = new URL(url).searchParams.getAll('r').length

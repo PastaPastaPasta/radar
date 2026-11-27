@@ -44,6 +44,8 @@ const inflight = new Map<string, Shared>()
 interface Queued {
   path: string
   url: string
+  /** The fixture layer's tag (`#radar-probe`), kept on a read sent alone and on a batch of nothing but probes. */
+  fragment: string
   signal: AbortSignal
   resolve: (res: Response) => void
   reject: (e: unknown) => void
@@ -84,7 +86,7 @@ function answer({ status, body, headers }: BatchResult): Response {
   })
 }
 
-const alone = (i: Queued) => single(i.url, i.signal).then(i.resolve, i.reject)
+const alone = (i: Queued) => single(`${i.url}${i.fragment}`, i.signal).then(i.resolve, i.reject)
 
 async function flush(base: string, queue: Queue): Promise<void> {
   if (queue.sent) return
@@ -98,13 +100,14 @@ async function flush(base: string, queue: Queue): Promise<void> {
   if (items.length === 0) return
   if (items.length === 1) return void alone(items[0]!)
   const query = items.map((i) => `r=${encodeURIComponent(i.path)}`).join('&')
+  const fragment = items.every((i) => i.fragment) ? items[0]!.fragment : ''
   // The batch ends early only when every read in it has been given up.
   const everyone = new AbortController()
   let left = items.length
   for (const i of items)
     i.signal.addEventListener('abort', () => --left === 0 && everyone.abort(), { once: true })
   try {
-    const res = await single(`${base}/batch?${query}`, everyone.signal)
+    const res = await single(`${base}/batch?${query}${fragment}`, everyone.signal)
     // An edge without the batch endpoint (a dev server's pass-through) answers 404: each read goes out alone.
     if (res.status === 404) {
       unbatched.add(base)
@@ -149,7 +152,7 @@ function batched(base: string, item: Omit<Queued, 'resolve' | 'reject'>): Promis
 }
 
 function start(url: string, fragment: string, signal: AbortSignal) {
-  const hyphen = batching && !fragment ? HYPHEN_READ.exec(url) : null
+  const hyphen = batching ? HYPHEN_READ.exec(url) : null
   const path = hyphen?.[2]
   if (
     hyphen &&
@@ -158,15 +161,15 @@ function start(url: string, fragment: string, signal: AbortSignal) {
     !IMMUTABLE_READ.test(path) &&
     !unbatched.has(hyphen[1]!)
   ) {
-    return batched(hyphen[1]!, { path, url, signal })
+    return batched(hyphen[1]!, { path, url, fragment, signal })
   }
   return single(`${url}${fragment}`, signal)
 }
 
 /**
  * A GET of `url` (absolute), shared with any other caller reading it right now. `fragment` tags the request for the
- * fixture layer (a health probe's `#radar-probe`) and is never sent; a probe still shares a read already in flight,
- * since that read is a live answer from the source too. The read, body included, is cancelled once every caller
+ * fixture layer (a health probe's `#radar-probe`) and is never sent; a probe still shares a read already in flight
+ * and goes in a batch with the page's first reads, since either is a live answer from the source too. The read, body included, is cancelled once every caller
  * waiting on it has given up.
  */
 export function sharedGet(
