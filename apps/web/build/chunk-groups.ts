@@ -188,23 +188,5 @@ export function chunkGroups(
       }
     },
   }
-  plugin.generateBundle = function (_o, bundle) {
-    if (analysing || !process.env.CHUNK_DEBUG) return
-    for (const c of Object.values(bundle)) {
-      if (c.type !== 'chunk' || !groups) continue
-      const off = c.moduleIds.filter((id) => groups!.get(id) !== c.name)
-      if (off.length)
-        console.log(
-          'OFF',
-          c.name,
-          c.fileName,
-          off.length,
-          off
-            .slice(0, 6)
-            .map((id) => `${groups!.get(id)}:${id.replace(/.*radar\//, '')}`)
-            .join(' | '),
-        )
-    }
-  }
   return { plugin, manualChunks: (id) => (analysing ? undefined : groups?.get(id)) }
 }

@@ -352,6 +352,8 @@ async function readSourced<S extends z.ZodType, N extends 'throw' | 'null' = 'th
   } finally {
     clearTimeout(timer)
     req.signal?.removeEventListener('abort', onAbort)
+    // Lets go of a shared read (`sharedGet`), so the last caller to finish or give up ends it.
+    controller.abort()
   }
 }
 

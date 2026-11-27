@@ -759,6 +759,15 @@ describe('hyphen batch', () => {
     assert.equal((await get('/x/hy/devnet/batch?r=status')).status, 404)
   })
 
+  it('answers a read that throws with its own 502 and keeps the others', async () => {
+    reset(() => Response.json({ ok: true }))
+    const res = await get(`/x/hy/mainnet/batch?r=status&r=${encodeURIComponent('http://[x')}`)
+    assert.equal(res.status, 200)
+    const { results } = await res.json()
+    assert.deepEqual(results[0].body, { ok: true })
+    assert.deepEqual(results[1], { status: 502, body: { error: 'upstream_unavailable' } })
+  })
+
   it('reads a path named twice once, and forwards no validators to the reads', async () => {
     reset(() => Response.json({ ok: true }))
     const res = await get('/x/hy/mainnet/batch?r=status&r=status', {

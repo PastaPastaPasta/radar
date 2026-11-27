@@ -69,7 +69,15 @@ async function handleBatch(request: Request, url: URL, net: string): Promise<Res
   const reads = new Map<string, Promise<BatchEntry>>()
   const read = (path: string) => {
     let entry = reads.get(path)
-    if (!entry) reads.set(path, (entry = readOne(path)))
+    // A read that throws (its body cut off by the timeout, a reset, a path the URL parser refuses) is its own 502.
+    if (!entry)
+      reads.set(
+        path,
+        (entry = readOne(path).catch(() => ({
+          status: 502,
+          body: { error: 'upstream_unavailable' },
+        }))),
+      )
     return entry
   }
   const readOne = async (path: string): Promise<BatchEntry> => {

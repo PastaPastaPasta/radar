@@ -13,7 +13,9 @@ const BATCH_WINDOW_MS = 4
 const BATCH_MAX_QUERY = 6_000
 /** Ends a read that every caller has stopped watching without cancelling it; callers' own timers are far shorter. */
 const SHARED_CAP_MS = 60_000
-const HYPHEN_READ = /^(.*\/x\/hy\/(?:mainnet|testnet))\/(.+)$/
+const HYPHEN_READ = /^(https?:\/\/[^/]+\/x\/hy\/(?:mainnet|testnet))\/(.+)$/
+/** Bytes named by their hash, which the browser keeps a day on their own (`immutable`); a batch is never kept. */
+const IMMUTABLE_READ = /^raw(?:tx|block)\/[0-9a-f]{64}$/i
 const ACCEPT = { accept: 'application/json' }
 
 export interface BatchResult {
@@ -59,6 +61,7 @@ const cancelled = () => new DOMException('The read was cancelled', 'AbortError')
 
 /** A fetch that `signal` cancels, body included, and that ends on its own after `SHARED_CAP_MS`. */
 async function single(url: string, signal: AbortSignal): Promise<Response> {
+  if (signal.aborted) throw cancelled()
   const controller = new AbortController()
   const stop = () => controller.abort()
   const timer = setTimeout(stop, SHARED_CAP_MS)
@@ -103,7 +106,10 @@ async function flush(base: string, queue: Queue): Promise<void> {
     // An edge without the batch endpoint (a dev server's pass-through) answers 404: each read goes out alone.
     if (res.status === 404) {
       unbatched.add(base)
-      for (const i of items) void alone(i)
+      for (const i of items) {
+        if (i.signal.aborted) i.reject(cancelled())
+        else void alone(i)
+      }
       return
     }
     // A refused batch (the zone's 429 with its Retry-After, a 5xx) is each read's answer, read as it would be alone.
@@ -142,8 +148,15 @@ function batched(base: string, item: Omit<Queued, 'resolve' | 'reject'>): Promis
 
 function start(url: string, fragment: string, signal: AbortSignal) {
   const hyphen = batching && !fragment ? HYPHEN_READ.exec(url) : null
-  if (hyphen && !hyphen[2]!.startsWith('stream') && !unbatched.has(hyphen[1]!)) {
-    return batched(hyphen[1]!, { path: hyphen[2]!, url, signal })
+  const path = hyphen?.[2]
+  if (
+    hyphen &&
+    path &&
+    !path.startsWith('stream') &&
+    !IMMUTABLE_READ.test(path) &&
+    !unbatched.has(hyphen[1]!)
+  ) {
+    return batched(hyphen[1]!, { path, url, signal })
   }
   return single(`${url}${fragment}`, signal)
 }
@@ -197,10 +210,8 @@ export function sharedGet(
 export function jsonUntil(res: Response, signal: AbortSignal): Promise<unknown> {
   if (signal.aborted) return Promise.reject(cancelled())
   return new Promise((resolve, reject) => {
-    const onAbort = () => {
-      reject(cancelled())
-      res.body?.cancel().catch(() => undefined)
-    }
+    // The body itself stops when the last caller lets go of the shared read (`sharedGet`).
+    const onAbort = () => reject(cancelled())
     signal.addEventListener('abort', onAbort, { once: true })
     res.json().then(
       (v: unknown) => {

@@ -100,11 +100,17 @@ describe('sharedGet', () => {
       expect(b.headers.get('etag')).toBe('"x"')
     })
 
-    it('sends a lone read, a probe, the stream and other sources as they are', async () => {
+    it('sends a lone read, a probe, the stream, raw bytes by hash and other sources as they are', async () => {
       await read(`${BASE}/status`)
       await read(`${BASE}/status`, undefined, '#radar-probe')
-      await Promise.all([read(`${BASE}/stream`), read('https://radar.test/api/v1/status')])
+      const hash = 'ab'.repeat(32)
+      await Promise.all([
+        read(`${BASE}/stream`),
+        read(`${BASE}/rawtx/${hash}`),
+        read('https://radar.test/api/v1/status'),
+      ])
       expect(calls.sort()).toEqual([
+        `${BASE}/rawtx/${'ab'.repeat(32)}`,
         `${BASE}/status`,
         `${BASE}/status#radar-probe`,
         `${BASE}/stream`,
