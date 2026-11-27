@@ -20,6 +20,9 @@ const PE_READ = /^https:\/\/api\.(testnet\.)?pe\.dashhq\.org\/(.+)$/
 /** Bytes named by their hash, which the browser keeps a day on their own (`immutable`); a batch is never kept. */
 const IMMUTABLE_READ = /^raw(?:tx|block)\/[0-9a-f]{64}$/i
 const ACCEPT = { accept: 'application/json' }
+const NDJSON = 'application/x-ndjson'
+/** Radar's whole masternode list (about 2 MB): sent alone, so the browser keeps revalidating it by its ETag. */
+const LARGE_RADAR_READ = /^(?:mainnet|testnet)\/masternodes(?:\?|$)/
 
 export interface BatchResult {
   status: number
@@ -91,6 +94,40 @@ function answer({ status, body, headers }: BatchResult): Response {
 
 const alone = (i: Queued) => single(`${i.url}${i.fragment}`, i.signal).then(i.resolve, i.reject)
 
+/**
+ * One read's line of a batch. A read the edge does not carry goes out alone; a Radar or Platform Explorer read the edge
+ * could not reach fails as it would have alone (a network error, not the edge's 502).
+ */
+function settle(item: Queued, result: BatchResult): void {
+  const error = (result.body as { error?: unknown } | null)?.error
+  if (error === 'not_batched') {
+    if (item.signal.aborted) item.reject(cancelled())
+    else void alone(item)
+  } else if (error === 'upstream_unavailable' && !item.path.startsWith('hy/')) {
+    item.reject(new TypeError('The source could not be reached'))
+  } else {
+    item.resolve(answer(result))
+  }
+}
+
+async function* lines(body: ReadableStream<Uint8Array>): AsyncGenerator<string> {
+  const reader = body.getReader()
+  const decoder = new TextDecoder()
+  let rest = ''
+  for (;;) {
+    const { done, value } = await reader.read()
+    if (done) break
+    rest += decoder.decode(value, { stream: true })
+    let at: number
+    while ((at = rest.indexOf('\n')) >= 0) {
+      const line = rest.slice(0, at).trim()
+      rest = rest.slice(at + 1)
+      if (line) yield line
+    }
+  }
+  if (rest.trim()) yield rest.trim()
+}
+
 async function flush(base: string, queue: Queue): Promise<void> {
   if (queue.sent) return
   queue.sent = true
@@ -115,8 +152,11 @@ async function flush(base: string, queue: Queue): Promise<void> {
     i.signal.addEventListener('abort', () => --left === 0 && everyone.abort(), { once: true })
   try {
     const res = await single(`${base}/x/batch?${query}${fragment}`, everyone.signal)
-    // An edge without the batch endpoint (a dev server's pass-through) answers 404: each read goes out alone.
-    if (res.status === 404) {
+    const type = res.headers.get('content-type') ?? ''
+    // An edge without the batch endpoint answers 404 (a dev server) or the app's HTML (a static host that serves every
+    // path): each read goes out alone, now and from then on.
+    if (res.status === 404 || (res.ok && !type.startsWith(NDJSON))) {
+      res.body?.cancel().catch(() => undefined)
       unbatched.add(base)
       for (const i of items) {
         if (i.signal.aborted) i.reject(cancelled())
@@ -125,16 +165,19 @@ async function flush(base: string, queue: Queue): Promise<void> {
       return
     }
     // A refused batch (the zone's 429 with its Retry-After, a 5xx) is each read's answer, read as it would be alone.
-    if (!res.ok) {
+    if (!res.ok || !res.body) {
       for (const i of items) i.resolve(res.clone())
       return
     }
-    const { results } = (await res.json()) as { results?: BatchResult[] }
-    items.forEach((item, n) => {
-      const result = results?.[n]
-      if (result) item.resolve(answer(result))
-      else item.reject(new TypeError('The batch answer is missing a read'))
-    })
+    // One line per read as soon as it is done, so each caller has its answer when its own source does.
+    const pending = new Set(items.keys())
+    for await (const line of lines(res.body)) {
+      const result = JSON.parse(line) as BatchResult & { i?: number }
+      const item = result.i === undefined ? undefined : items[result.i]
+      if (!item || !pending.delete(result.i!)) continue
+      settle(item, result)
+    }
+    for (const n of pending) items[n]!.reject(new TypeError('The batch answer is missing a read'))
   } catch (e) {
     for (const i of items) i.reject(e)
   }
@@ -169,7 +212,7 @@ function batchRead(url: string): { base: string; path: string } | null {
   const base = globalThis.location?.origin
   if (!base?.startsWith('http')) return null
   const radar = RADAR_READ.exec(url)
-  if (radar) return { base, path: `radar/${radar[1]!}` }
+  if (radar) return LARGE_RADAR_READ.test(radar[1]!) ? null : { base, path: `radar/${radar[1]!}` }
   const pe = PE_READ.exec(url)
   if (pe) return { base, path: `pe/${pe[1] ? 'testnet' : 'mainnet'}/${pe[2]!}` }
   return null

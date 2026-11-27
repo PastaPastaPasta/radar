@@ -14,7 +14,7 @@ export function isProxyPath(pathname: string): boolean {
   return pathname.startsWith('/x/hy/')
 }
 
-const PROXY_HEADERS = {
+export const PROXY_HEADERS = {
   'content-security-policy': "default-src 'none'; sandbox",
   'cross-origin-resource-policy': 'same-origin',
 }
@@ -47,7 +47,7 @@ function allowedType(type: string, isStream: boolean): string | null {
 /** As many reads as one batch may carry (`HYPHEN_BATCH_MAX` in `apps/web/src/data/shared-get.ts`). */
 export const HYPHEN_BATCH_MAX = 16
 const BATCH_PATH = /^\/x\/hy\/(mainnet|testnet)\/batch$/
-const BATCH_KEEP = ['etag', 'last-modified']
+const BATCH_KEEP = ['etag', 'last-modified', 'retry-after']
 /** Under the browser's 10 s, so one slow read comes back as its own 502 instead of timing out the whole batch. */
 export const BATCH_READ_TIMEOUT_MS = 6_000
 

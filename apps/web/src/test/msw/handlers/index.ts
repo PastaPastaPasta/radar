@@ -38,13 +38,14 @@ function batchReadUrl(read: string, origin: URL): string | null {
   const [source, ...rest] = read.split('/')
   if (source === 'hy') return new URL(`/x/hy/${rest.join('/')}`, origin).href
   if (source === 'radar') return `https://radar.dashhq.org/api/v1/${rest.join('/')}`
-  const base = source === 'pe' ? PE_BASE[rest[0] ?? ''] : undefined
+  const net = rest[0] ?? ''
+  const base = source === 'pe' && Object.hasOwn(PE_BASE, net) ? PE_BASE[net] : undefined
   return base ? `${base}/${rest.slice(1).join('/')}` : null
 }
 
 /**
- * The edge's cross-source batch, answered read by read from the same recordings and handlers, so a source a test
- * refuses fails only its own reads. A probe (`p`) keeps its tag, which the fixture layer counts apart from page reads.
+ * The edge's cross-source batch (NDJSON, one line per read), answered read by read from the same recordings and
+ * handlers, so a source a test refuses fails only its own reads. A probe (`p`) keeps its tag, which the fixture layer counts apart from page reads.
  */
 const sourcesBatch = http.get('*/x/batch', async ({ request }) => {
   const url = new URL(request.url)
@@ -52,7 +53,7 @@ const sourcesBatch = http.get('*/x/batch', async ({ request }) => {
   const results = await Promise.all(
     url.searchParams.getAll('r').map(async (read, n): Promise<BatchResult> => {
       const target = batchReadUrl(read, url)
-      if (!target) return { status: 400, body: { error: 'bad_batch' } }
+      if (!target) return { status: 400, body: { error: 'not_batched' } }
       try {
         const res = await fetch(`${target}${probes.has(String(n)) ? '#radar-probe' : ''}`)
         const text = await res.text()
@@ -68,7 +69,9 @@ const sourcesBatch = http.get('*/x/batch', async ({ request }) => {
       }
     }),
   )
-  return HttpResponse.json({ results })
+  return new HttpResponse(results.map((r, i) => `${JSON.stringify({ i, ...r })}\n`).join(''), {
+    headers: { 'content-type': 'application/x-ndjson' },
+  })
 })
 
 export const fixtureHandlers: AnyHandler[] = [

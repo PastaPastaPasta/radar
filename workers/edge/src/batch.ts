@@ -1,10 +1,11 @@
 import { UPSTREAM_USER_AGENT } from './hyphen-path'
 import {
-  answerBatch,
   BATCH_READ_TIMEOUT_MS,
   batchEntry,
+  HYPHEN_BATCH_MAX,
   hyphenBatchRead,
   json,
+  PROXY_HEADERS,
   type BatchEntry,
 } from './proxy'
 
@@ -19,7 +20,7 @@ export const PE_API: Record<string, string> = {
 
 export interface BatchEnv {
   RADAR?: Fetcher
-  /** `off` leaves Platform Explorer out of `/x/batch`; its reads then go out on their own. */
+  /** `off` leaves Platform Explorer out of `/x/batch`: its reads answer `not_batched` and go out on their own. */
   BATCH_PE?: string
 }
 
@@ -53,11 +54,14 @@ const PE_ROOTS = new Set([
   'validators',
   'validator',
 ])
-const SEGMENT = /^[A-Za-z0-9_.:@=-]+$/
+/** A path segment as `encodeURIComponent` leaves it; an escaped slash, backslash or dot is refused. */
+const SEGMENT = /^(?:[A-Za-z0-9_.~!*'()-]|%(?!2[eEfF]|5[cC])[0-9A-Fa-f]{2})+$/
 const MAX_SEGMENTS = 6
 const MAX_QUERY = 2_000
 
 const refuse = (status: number, error: string): BatchEntry => ({ status, body: { error } })
+/** A read this batch does not carry; the page sends it on its own (`sharedGet`). */
+const notBatched = (): BatchEntry => refuse(400, 'not_batched')
 
 function split(path: string): { segments: string[]; search: string } | null {
   const [pathname = '', search = ''] = path.split(/\?(.*)/s, 2)
@@ -72,12 +76,20 @@ function split(path: string): { segments: string[]; search: string } | null {
 async function upstream(url: string, accept: Headers, via?: Fetcher): Promise<BatchEntry> {
   const headers = new Headers({ 'user-agent': UPSTREAM_USER_AGENT })
   headers.set('accept', accept.get('accept') ?? 'application/json')
-  const init = { headers, signal: AbortSignal.timeout(BATCH_READ_TIMEOUT_MS) }
+  const init: RequestInit = {
+    headers,
+    redirect: 'manual',
+    signal: AbortSignal.timeout(BATCH_READ_TIMEOUT_MS),
+  }
   let res: Response
   try {
     res = await (via ? via.fetch(url, init) : fetch(url, init))
   } catch {
     return refuse(502, 'upstream_unavailable')
+  }
+  if (res.status >= 300 && res.status < 400) {
+    res.body?.cancel().catch(() => undefined)
+    return refuse(502, 'bad_upstream_type')
   }
   const type = (res.headers.get('content-type') ?? '').split(';')[0]!.trim().toLowerCase()
   if (type !== 'application/json' && res.status !== 204) {
@@ -96,35 +108,64 @@ function readOne(env: BatchEnv, origin: URL, read: string, accept: Headers): Pro
   const path = rest.join('/')
   if (source === 'hy') {
     const [net = '', ...hyPath] = rest
-    if (net !== 'mainnet' && net !== 'testnet') return Promise.resolve(refuse(400, 'bad_batch'))
+    if (net !== 'mainnet' && net !== 'testnet') return Promise.resolve(notBatched())
     return hyphenBatchRead(net, hyPath.join('/'), origin, accept)
   }
   const parts = split(path)
-  if (!parts) return Promise.resolve(refuse(400, 'bad_batch'))
-  if (source === 'radar') {
-    if (!RADAR_READ.test(parts.segments.join('/'))) return Promise.resolve(refuse(404, 'not_found'))
-    const url = `${RADAR_API}/${path}`
-    return upstream(url, accept, env.RADAR)
+  if (!parts) return Promise.resolve(notBatched())
+  if (source === 'radar' && RADAR_READ.test(parts.segments.join('/'))) {
+    return upstream(`${RADAR_API}/${path}`, accept, env.RADAR)
   }
-  if (source === 'pe' && env.BATCH_PE !== 'off') {
-    const [net = '', root = ''] = parts.segments
-    const base = PE_API[net]
-    if (!base || !PE_ROOTS.has(root)) return Promise.resolve(refuse(404, 'not_found'))
-    return upstream(`${base}/${path.slice(net.length + 1)}`, accept)
+  const [net = '', root = ''] = parts.segments
+  if (
+    source === 'pe' &&
+    env.BATCH_PE !== 'off' &&
+    Object.hasOwn(PE_API, net) &&
+    PE_ROOTS.has(root)
+  ) {
+    return upstream(`${PE_API[net]}/${path.slice(net.length + 1)}`, accept)
   }
-  return Promise.resolve(refuse(400, 'bad_batch'))
+  return Promise.resolve(notBatched())
 }
 
 /**
- * Up to 16 reads from Hyphen, Radar and Platform Explorer in one request (`?r=<read>&r=<read>…`), answered in order as
- * `{ results: [{ status, body, headers }] }`, each read with its own status and its own 6 s limit, so one source that is
- * down answers only its own reads with an error. A page's first reads cost the zone's rate limit one request.
+ * Up to 16 reads from Hyphen, Radar and Platform Explorer in one request (`?r=<read>&r=<read>…`). The answer is
+ * NDJSON, one `{ i, status, body, headers }` line per read as soon as that read is done, so a slow source holds up
+ * only its own reads, and each read keeps its own status and 6 s limit: a source that is down answers only its own
+ * reads with an error. A read the batch does not carry (another source, a path its client never asks for) answers
+ * `not_batched` and goes out on its own. A page's first reads cost the zone's rate limit one request.
  */
-export function handleSourcesBatch(request: Request, url: URL, env: BatchEnv): Promise<Response> {
+export function handleSourcesBatch(request: Request, url: URL, env: BatchEnv): Response {
   if (request.method !== 'GET') {
-    return Promise.resolve(json(405, { error: 'method_not_allowed' }, { allow: 'GET' }))
+    return json(405, { error: 'method_not_allowed' }, { allow: 'GET' })
   }
-  return answerBatch(request, url.searchParams.getAll('r'), (read, accept) =>
-    readOne(env, url, read, accept),
-  )
+  const reads = url.searchParams.getAll('r')
+  if (reads.length === 0 || reads.length > HYPHEN_BATCH_MAX)
+    return json(400, { error: 'bad_batch' })
+  const accept = new Headers()
+  const wanted = request.headers.get('accept')
+  if (wanted && wanted !== NDJSON) accept.set('accept', wanted)
+  const { readable, writable } = new TransformStream<Uint8Array, Uint8Array>()
+  const writer = writable.getWriter()
+  const encoder = new TextEncoder()
+  const once = new Map<string, Promise<BatchEntry>>()
+  const done = reads.map((read, i) => {
+    let entry = once.get(read)
+    if (!entry) {
+      entry = readOne(env, url, read, accept).catch((e: unknown) => {
+        console.error('batch read failed', read, e)
+        return refuse(502, 'upstream_unavailable')
+      })
+      once.set(read, entry)
+    }
+    return entry.then((e) => writer.write(encoder.encode(`${JSON.stringify({ i, ...e })}\n`)))
+  })
+  void Promise.all(done)
+    .catch(() => undefined)
+    .finally(() => writer.close().catch(() => undefined))
+  return new Response(readable, {
+    headers: { 'content-type': NDJSON, 'cache-control': 'no-store', ...PROXY_HEADERS },
+  })
 }
+
+const NDJSON = 'application/x-ndjson'

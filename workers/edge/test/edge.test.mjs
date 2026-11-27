@@ -846,8 +846,23 @@ describe('hyphen batch', () => {
 describe('sources batch', () => {
   const batch = (reads, init) =>
     get(`/x/batch?${reads.map((r) => `r=${encodeURIComponent(r)}`).join('&')}`, init)
+  /** The answer's lines, put back in the order the reads were named. */
+  const results = async (res) => {
+    assert.equal(res.headers.get('content-type'), 'application/x-ndjson')
+    const lines = (await res.text())
+      .trim()
+      .split('\n')
+      .map((l) => JSON.parse(l))
+    return lines
+      .sort((a, b) => a.i - b.i)
+      .map((line) => {
+        const r = { ...line }
+        delete r.i
+        return r
+      })
+  }
 
-  it('answers Hyphen, Radar and Platform Explorer reads in one request, in order', async () => {
+  it('answers Hyphen, Radar and Platform Explorer reads in one request, a line each', async () => {
     reset((req) => {
       const u = new URL(req.url)
       return Response.json({ host: u.host, path: u.pathname, search: u.search })
@@ -861,9 +876,8 @@ describe('sources batch', () => {
     ])
     assert.equal(res.status, 200)
     assert.equal(res.headers.get('cache-control'), 'no-store')
-    const { results } = await res.json()
     assert.deepEqual(
-      results.map((r) => [r.status, `${r.body.host}${r.body.path}${r.body.search}`]),
+      (await results(res)).map((r) => [r.status, `${r.body.host}${r.body.path}${r.body.search}`]),
       [
         [200, 'hy.kw.vg/api/v1/status'],
         [200, 'radar.dashhq.org/api/v1/mainnet/summary'],
@@ -880,44 +894,54 @@ describe('sources batch', () => {
       const u = new URL(req.url)
       if (u.host === 'radar.dashhq.org') return new Response('down', { status: 503 })
       if (u.host === 'api.pe.dashhq.org') throw new TypeError('connection refused')
-      return Response.json({ ok: true })
+      return Response.json({ ok: true }, { status: 200 })
     })
-    const { results } = await (
-      await batch(['radar/mainnet/summary', 'pe/mainnet/status', 'hy/mainnet/status'])
-    ).json()
-    assert.deepEqual(results[0], { status: 503, body: { error: 'upstream_error' } })
+    const [radar, pe, hy] = await results(
+      await batch(['radar/mainnet/summary', 'pe/mainnet/status', 'hy/mainnet/status']),
+    )
+    assert.deepEqual(radar, { status: 503, body: { error: 'upstream_error' } })
     // Miniflare answers a throwing outbound handler with a 500; a real network failure is a 502.
-    assert.ok(results[1].status >= 500 && results[1].body.error.startsWith('upstream_'))
-    assert.deepEqual(results[2].body, { ok: true })
+    assert.ok(pe.status >= 500 && pe.body.error.startsWith('upstream_'))
+    assert.deepEqual(hy.body, { ok: true })
   })
 
-  it('reads only what the app reads, and never another host', async () => {
+  it('carries only reads the app makes, and names the rest not_batched without asking anyone', async () => {
     reset(() => Response.json({ ok: true }))
-    const { results } = await (
+    const answered = await results(
       await batch([
         'radar/mainnet/masternodes/../../admin',
         'radar/mainnet/secret',
         'pe/mainnet/admin/users',
         'pe/devnet/status',
+        'pe/__proto__/status',
         'insight/mainnet/status',
+        'pe/mainnet/contestedResource/a%2F..%2Fx',
         'radar/mainnet/history?dim=totals&scope=all&days=30',
         'pe/mainnet/identity/Bjix/documents?limit=10',
-      ])
-    ).json()
+        'pe/mainnet/contestedResource/WyJkYXNoIiwiYWxpY2UiXQ%3D%3D/votes',
+      ]),
+    )
     assert.deepEqual(
-      results.map((r) => r.status),
-      [400, 404, 404, 404, 400, 200, 200],
+      answered.map((r) => (r.status === 400 ? r.body.error : r.status)),
+      [...Array(7).fill('not_batched'), 200, 200, 200],
     )
     assert.deepEqual(upstreamCalls.map((c) => c.url).sort(), [
+      'https://api.pe.dashhq.org/contestedResource/WyJkYXNoIiwiYWxpY2UiXQ%3D%3D/votes',
       'https://api.pe.dashhq.org/identity/Bjix/documents?limit=10',
       'https://radar.dashhq.org/api/v1/mainnet/history?dim=totals&scope=all&days=30',
     ])
   })
 
-  it('refuses a body that is not JSON, an empty or oversized batch, and any method but GET', async () => {
-    reset(() => new Response('<html>', { headers: { 'content-type': 'text/html' } }))
-    const { results } = await (await batch(['radar/mainnet/geo'])).json()
-    assert.deepEqual(results[0], { status: 502, body: { error: 'bad_upstream_type' } })
+  it('refuses a body that is not JSON, a redirect, an empty or oversized batch, and any method but GET', async () => {
+    reset((req) =>
+      new URL(req.url).pathname.endsWith('/geo')
+        ? new Response('<html>', { headers: { 'content-type': 'text/html' } })
+        : new Response(null, { status: 302, headers: { location: 'https://evil.example/' } }),
+    )
+    const [html, moved] = await results(await batch(['radar/mainnet/geo', 'radar/status']))
+    assert.deepEqual(html, { status: 502, body: { error: 'bad_upstream_type' } })
+    assert.deepEqual(moved, { status: 502, body: { error: 'bad_upstream_type' } })
+    assert.ok(upstreamCalls.every((c) => !c.url.includes('evil.example')))
     assert.equal((await get('/x/batch')).status, 400)
     assert.equal((await batch(Array.from({ length: 17 }, () => 'radar/status'))).status, 400)
     assert.equal((await get('/x/batch?r=radar%2Fstatus', { method: 'POST' })).status, 405)
