@@ -7,6 +7,7 @@ import { SourceError, disabledByMode, type SourceErrorKind } from './errors'
 import { firstDataAnswer, type FirstDataAnswer } from './first-data'
 import { healthRegistry } from './health'
 import { queryLog } from './query-log'
+import { sharedGet } from './shared-get'
 import type { NetworkId } from '@/lib/network'
 
 type HttpSource = Exclude<SourceId, 'sdk' | 'dapi' | 'local'>
@@ -262,17 +263,20 @@ async function readSourced<S extends z.ZodType, N extends 'throw' | 'null' = 'th
         (req.method ?? 'GET') === 'GET' && req.body === undefined && !req.probe
           ? firstDataAnswer(resolveUrl(url))
           : undefined
+      const fragment = req.probe ? PROBE_FRAGMENT : ''
       res =
         inlined?.response ??
-        (await fetch(`${resolveUrl(url)}${req.probe ? PROBE_FRAGMENT : ''}`, {
-          method: req.method ?? 'GET',
-          headers: {
-            accept: 'application/json',
-            ...(req.body === undefined ? {} : { 'content-type': 'application/json' }),
-          },
-          body: req.body === undefined ? undefined : JSON.stringify(req.body),
-          signal: controller.signal,
-        }))
+        (await ((req.method ?? 'GET') === 'GET' && req.body === undefined
+          ? sharedGet(resolveUrl(url), { signal: controller.signal, timeoutMs, fragment })
+          : fetch(`${resolveUrl(url)}${fragment}`, {
+              method: req.method ?? 'GET',
+              headers: {
+                accept: 'application/json',
+                ...(req.body === undefined ? {} : { 'content-type': 'application/json' }),
+              },
+              body: req.body === undefined ? undefined : JSON.stringify(req.body),
+              signal: controller.signal,
+            })))
     } catch (cause) {
       throw interrupted(cause) ?? fail({ kind: 'network', cause })
     }

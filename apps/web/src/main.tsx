@@ -8,6 +8,7 @@ import { enableLiveTip } from './app/live-tip'
 import { preconnectHostedSources } from './app/preconnect'
 import { registerServiceWorker } from './app/sw-register'
 import { enableEarlyAnswers } from './data/early'
+import { enableHyphenBatching } from './data/shared-get'
 import { setSdkDevnets } from './data/sdk/devnets'
 import { i18nReady } from './i18n'
 import './styles.css'
@@ -17,6 +18,7 @@ if (!root) throw new Error('Missing #root element')
 
 async function start(container: HTMLElement) {
   setSdkDevnets(loadDevnets)
+  enableHyphenBatching()
   if (import.meta.env.VITE_DATA_MODE === 'fixtures') {
     const { startFixtureWorker } = await import('./test/msw/browser')
     await startFixtureWorker()

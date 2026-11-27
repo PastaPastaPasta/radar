@@ -40,10 +40,54 @@ function allowedType(type: string, isStream: boolean): string | null {
   return isStream && type === NDJSON ? NDJSON : null
 }
 
+/** As many reads as one batch may carry (`HYPHEN_BATCH_MAX` in `apps/web/src/data/shared-get.ts`). */
+export const HYPHEN_BATCH_MAX = 16
+const BATCH_PATH = /^\/x\/hy\/(mainnet|testnet)\/batch$/
+const BATCH_KEEP = ['etag', 'last-modified']
+
+/**
+ * Several Hyphen reads in one request: `?r=<path>&r=<path>…`, each a path the pass-through serves on its own (a
+ * stream excepted), answered in order as `{ results: [{ status, body, headers }] }`. Each read goes through the same
+ * checks and the same edge cache as it would alone; the page pays the zone's rate limit once instead of once per read.
+ */
+async function handleBatch(request: Request, url: URL, net: string): Promise<Response> {
+  const paths = url.searchParams.getAll('r')
+  if (paths.length === 0 || paths.length > HYPHEN_BATCH_MAX) {
+    return json(400, { error: 'bad_batch' })
+  }
+  const results = await Promise.all(
+    paths.map(async (path) => {
+      const [pathname = '', search = ''] = path.split(/\?(.*)/s, 2)
+      const sub = new URL(`/x/hy/${net}/${pathname}`, url)
+      sub.search = search
+      const resolved = resolveHyphenRequest(sub.pathname, sub.search)
+      if (!resolved.ok) return { status: resolved.status, body: { error: resolved.error } }
+      if (resolved.stream) return { status: 400, body: { error: 'bad_batch' } }
+      const res = await handleProxy(new Request(sub, { headers: request.headers }), sub)
+      const text = await res.text()
+      let body: unknown = null
+      try {
+        body = text ? JSON.parse(text) : null
+      } catch {
+        return { status: 502, body: { error: 'bad_upstream_type' } }
+      }
+      const headers: Record<string, string> = {}
+      for (const name of BATCH_KEEP) {
+        const v = res.headers.get(name)
+        if (v) headers[name] = v
+      }
+      return { status: res.status, body, headers }
+    }),
+  )
+  return json(200, { results })
+}
+
 export async function handleProxy(request: Request, url: URL): Promise<Response> {
   if (request.method !== 'GET' && request.method !== 'HEAD') {
     return json(405, { error: 'method_not_allowed' }, { allow: 'GET, HEAD' })
   }
+  const batch = BATCH_PATH.exec(url.pathname)
+  if (batch) return handleBatch(request, url, batch[1]!)
   const resolved = resolveHyphenRequest(url.pathname, url.search)
   if (!resolved.ok) return json(resolved.status, { error: resolved.error })
   const { url: target, stream: isStream, immutable } = resolved
