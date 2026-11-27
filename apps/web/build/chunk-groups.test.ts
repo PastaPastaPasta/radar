@@ -40,18 +40,33 @@ describe('routeArea', () => {
 
 describe('planGroups', () => {
   const chunks = [
-    chunk('index.js', ['/app/src/main.tsx', '/app/src/shell.tsx'], { entry: true, imports: ['react.js'] }),
+    chunk('index.js', ['/app/src/main.tsx', '/app/src/shell.tsx'], {
+      entry: true,
+      imports: ['react.js'],
+    }),
     chunk('react.js', ['/app/node_modules/react/index.js']),
-    chunk('tx.js', [page('tx')], { facade: page('tx'), imports: ['core-shared.js', 'everyone.js'] }),
-    chunk('block.js', [page('block')], { facade: page('block'), imports: ['core-shared.js', 'everyone.js'] }),
+    chunk('tx.js', [page('tx')], {
+      facade: page('tx'),
+      imports: ['core-shared.js', 'everyone.js'],
+    }),
+    chunk('block.js', [page('block')], {
+      facade: page('block'),
+      imports: ['core-shared.js', 'everyone.js'],
+    }),
     chunk('v24.js', [page('v24')], { facade: page('v24'), imports: ['everyone.js', 'net-a.js'] }),
     chunk('net-a.js', ['/app/src/data/query/prefetch/net-a.ts'], {
       facade: '/app/src/data/query/prefetch/net-a.ts',
       imports: ['net-queries.js'],
     }),
     chunk('net-queries.js', ['/app/src/data/radar/queries.ts']),
-    chunk('identities.js', [page('identities')], { facade: page('identities'), imports: ['sdk-ui.js', 'everyone.js'] }),
-    chunk('settings.js', [page('settings')], { facade: page('settings'), imports: ['everyone.js'] }),
+    chunk('identities.js', [page('identities')], {
+      facade: page('identities'),
+      imports: ['sdk-ui.js', 'everyone.js'],
+    }),
+    chunk('settings.js', [page('settings')], {
+      facade: page('settings'),
+      imports: ['everyone.js'],
+    }),
     chunk('sdk-ui.js', ['/app/src/ui/sdk-thing.ts'], { imports: ['sdk.js'] }),
     chunk('sdk.js', ['/app/node_modules/@dashevo/evo-sdk/dist/sdk.js']),
     chunk('core-shared.js', ['/app/src/features/core/tx/IoTables.tsx']),
