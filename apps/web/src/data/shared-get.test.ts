@@ -70,6 +70,36 @@ describe('sharedGet', () => {
     expect(calls).toHaveLength(2)
   })
 
+  it('keeps a body arriving for one caller after another has finished and let go, and ends it when both have', async () => {
+    let push: (text: string) => void = () => undefined
+    let end: () => void = () => undefined
+    answer = () =>
+      new Response(
+        new ReadableStream<Uint8Array>({
+          start(c) {
+            push = (t) => c.enqueue(new TextEncoder().encode(t))
+            end = () => c.close()
+          },
+        }),
+      )
+    const a = new AbortController()
+    const b = new AbortController()
+    const [ra, rb] = await Promise.all([
+      read(`${BASE}/status`, a.signal),
+      read(`${BASE}/status`, b.signal),
+    ])
+    a.abort()
+    void ra.body?.cancel()
+    expect(signals[0]!.aborted).toBe(false)
+    const text = rb.text()
+    push('{"ok":')
+    push('true}')
+    end()
+    expect(JSON.parse(await text)).toEqual({ ok: true })
+    b.abort()
+    expect(signals[0]!.aborted).toBe(true)
+  })
+
   it('sends Hyphen reads one by one while batching is off', async () => {
     await Promise.all([read(`${BASE}/status`), read(`${BASE}/block/1`)])
     expect(calls.sort()).toEqual([`${BASE}/block/1`, `${BASE}/status`])

@@ -53,6 +53,7 @@ interface Queue {
   items: Queued[]
   query: number
   sent: boolean
+  timer?: ReturnType<typeof setTimeout>
 }
 
 const queues = new Map<string, Queue>()
@@ -88,6 +89,7 @@ const alone = (i: Queued) => single(i.url, i.signal).then(i.resolve, i.reject)
 async function flush(base: string, queue: Queue): Promise<void> {
   if (queue.sent) return
   queue.sent = true
+  clearTimeout(queue.timer)
   if (queues.get(base) === queue) queues.delete(base)
   const items = queue.items.filter((i) => {
     if (i.signal.aborted) i.reject(cancelled())
@@ -137,7 +139,7 @@ function batched(base: string, item: Omit<Queued, 'resolve' | 'reject'>): Promis
     if (!queue) {
       const fresh: Queue = { items: [], query: 0, sent: false }
       queues.set(base, fresh)
-      setTimeout(() => void flush(base, fresh), BATCH_WINDOW_MS)
+      fresh.timer = setTimeout(() => void flush(base, fresh), BATCH_WINDOW_MS)
       queue = fresh
     }
     queue.items.push({ ...item, resolve, reject })
@@ -200,7 +202,9 @@ export function sharedGet(
       { once: true },
     )
     entry.read.then(
-      (res) => resolve(res.clone()),
+      (res) => {
+        if (!signal.aborted) resolve(res.clone())
+      },
       (e: unknown) => reject(e instanceof Error ? e : new TypeError(String(e))),
     )
   })
@@ -228,6 +232,7 @@ export function jsonUntil(res: Response, signal: AbortSignal): Promise<unknown> 
 
 export function resetSharedGetForTests(): void {
   inflight.clear()
+  for (const q of queues.values()) clearTimeout(q.timer)
   queues.clear()
   unbatched.clear()
   batching = false

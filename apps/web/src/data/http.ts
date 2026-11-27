@@ -123,10 +123,10 @@ function retryAfterMs(res: Response): number | undefined {
   return Number.isNaN(at) ? undefined : Math.max(0, at - Date.now())
 }
 
-async function errorDetail(res: Response): Promise<string> {
+async function errorDetail(res: Response, signal: AbortSignal): Promise<string> {
   const fallback = `HTTP ${res.status}`
   try {
-    const body = (await res.json()) as unknown
+    const body = await jsonUntil(res, signal)
     if (body && typeof body === 'object') {
       const o = body as { error?: unknown; message?: unknown }
       const nested =
@@ -289,7 +289,12 @@ async function readSourced<S extends z.ZodType, N extends 'throw' | 'null' = 'th
           const now = Date.now()
           return { source, asOf: now, fetchedAt: now, proved: false, data: null as Out }
         }
-        throw fail({ kind: 'http', status: 404, reportOk: true, detail: await errorDetail(res) })
+        throw fail({
+          kind: 'http',
+          status: 404,
+          reportOk: true,
+          detail: await errorDetail(res, controller.signal),
+        })
       }
       if (res.status === 429) {
         throw fail({ kind: 'rate-limited', status: 429, retryAfterMs: retryAfterMs(res) })
@@ -297,7 +302,7 @@ async function readSourced<S extends z.ZodType, N extends 'throw' | 'null' = 'th
       throw fail({
         kind: 'http',
         status: res.status,
-        detail: await errorDetail(res),
+        detail: await errorDetail(res, controller.signal),
         reportOk: res.status < 500,
       })
     }

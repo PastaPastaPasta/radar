@@ -73,10 +73,10 @@ async function handleBatch(request: Request, url: URL, net: string): Promise<Res
     if (!entry)
       reads.set(
         path,
-        (entry = readOne(path).catch(() => ({
-          status: 502,
-          body: { error: 'upstream_unavailable' },
-        }))),
+        (entry = readOne(path).catch((e: unknown) => {
+          console.error('hyphen batch read failed', path, e)
+          return { status: 502, body: { error: 'upstream_unavailable' } }
+        })),
       )
     return entry
   }
