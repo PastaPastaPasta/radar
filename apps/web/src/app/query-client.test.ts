@@ -53,8 +53,9 @@ describe('details the Core client read from Hyphen', () => {
       ids: ['aa'],
       read: sourced({ txHash: 'a' } as unknown as HyTxDetail),
     })
-    writeSourceMode('all')
+    // Checked before the mode changes back, which resets Hyphen's queries anyway.
     expect(client.getQueryData(hyQueries.tx('mainnet', 'aa').queryKey)).toBeUndefined()
+    writeSourceMode('all')
   })
 
   it('never replace an answer the query already has', () => {
