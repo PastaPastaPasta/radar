@@ -3274,6 +3274,7 @@ html[data-scroll-gutter] {
   display: none;
 }
 /* A switched pool's signalling part: the share, then "now" with it, then its name too, as width allows. */
+/* Tighter than other labels so the short form fits a 70 px part; the share comes first, so a cut drops only "now". */
 .rx-v24-pools > span .rx-v24-seg.rx-v24-seg--now {
   padding: 0 4px 0 7px;
 }

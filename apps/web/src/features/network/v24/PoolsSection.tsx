@@ -129,8 +129,8 @@ export function PoolsSection({
                 >
                   {s.now !== undefined ? (
                     <span className="rx-v24-seg rx-v24-seg--now">
-                      <span className="rx-v24-seg__long">{t`${s.name} now ${pct(s.blocks, mined)}`}</span>
-                      <span className="rx-v24-seg__short">{t`now ${pct(s.blocks, mined)}`}</span>
+                      <span className="rx-v24-seg__long">{t`${s.name} ${pct(s.blocks, mined)} now`}</span>
+                      <span className="rx-v24-seg__short">{t`${pct(s.blocks, mined)} now`}</span>
                       <span className="rx-v24-seg__pct">{pct(s.blocks, mined)}</span>
                     </span>
                   ) : (

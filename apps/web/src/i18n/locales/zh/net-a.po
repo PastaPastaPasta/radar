@@ -65,6 +65,11 @@ msgstr "{0} 共 {1}"
 msgid "{0} {1} in all<0/>{2} signalling now · {3} before it switched"
 msgstr "{0} 共 {1}<0/>现已发出信号 {2} · 切换之前 {3}"
 
+#. placeholder {0}: s.name
+#. placeholder {1}: pct(s.blocks, mined)
+msgid "{0} {1} now"
+msgstr "{0} {1} 现在"
+
 #. placeholder {0}: formatPercent(goodShare, 0)
 msgid "{0} A or B"
 msgstr "{0} 为 A 或 B"
@@ -115,10 +120,9 @@ msgctxt "share of blocks"
 msgid "{0} needed"
 msgstr "需要 {0}"
 
-#. placeholder {0}: s.name
-#. placeholder {1}: pct(s.blocks, mined)
-msgid "{0} now {1}"
-msgstr "{0} 现在 {1}"
+#. placeholder {0}: pct(s.blocks, mined)
+msgid "{0} now"
+msgstr "{0} 现在"
 
 #. placeholder {0}: formatInt(answered.n)
 #. placeholder {0}: formatInt(d.overall.pass)
@@ -1002,10 +1006,6 @@ msgstr "现在"
 
 msgid "Now"
 msgstr "现在"
-
-#. placeholder {0}: pct(s.blocks, mined)
-msgid "now {0}"
-msgstr "现在 {0}"
 
 msgid "now signalling"
 msgstr "现已发出信号"
