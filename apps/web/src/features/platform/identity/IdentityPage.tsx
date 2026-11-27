@@ -29,6 +29,7 @@ import { NamesTab } from './NamesTab'
 import { OverviewTab } from './OverviewTab'
 import { TokensTab } from './TokensTab'
 import { VotesTab } from './VotesTab'
+import { TX_FILTER_KEYS, type IdentityTxFilters } from './tx-filters'
 
 export interface IdentityPageSearch {
   tab: IdentityTab
@@ -36,6 +37,12 @@ export interface IdentityPageSearch {
   contract?: string | undefined
   type?: string | undefined
   tokens?: string[] | undefined
+  txtype?: IdentityTxFilters['txtype']
+  batch?: string[] | undefined
+  status?: IdentityTxFilters['status']
+  gas?: IdentityTxFilters['gas']
+  from?: string | undefined
+  to?: string | undefined
 }
 
 export function IdentityPage({ id: raw, search }: { id: string; search: IdentityPageSearch }) {
@@ -181,6 +188,7 @@ function IdentityView({ id, search }: { id: string; search: IdentityPageSearch }
                     tab: tab === 'overview' ? undefined : tab,
                     page: undefined,
                     type: tab === 'documents' ? prev.type : undefined,
+                    ...(tab === 'transactions' ? {} : leaveTransitions(tab)),
                   })) as never,
                 }) as never
               }
@@ -230,6 +238,22 @@ function TabBody({ id, search }: { id: string; search: IdentityPageSearch }) {
     case 'contracts':
     case 'documents':
     case 'transfers':
-      return <HistoryTab id={id} tab={search.tab} page={search.page} type={search.type} />
+      return (
+        <HistoryTab
+          id={id}
+          tab={search.tab}
+          page={search.page}
+          type={search.type}
+          filters={search}
+        />
+      )
   }
+}
+
+/** The Transitions tab's filters end with it; Groups and Advanced read `contract` too, so it stays for them. */
+function leaveTransitions(tab: string): Record<string, undefined> {
+  const keep = tab === 'groups' || tab === 'advanced' ? ['contract'] : []
+  return Object.fromEntries(
+    TX_FILTER_KEYS.filter((k) => !keep.includes(k)).map((k) => [k, undefined]),
+  )
 }

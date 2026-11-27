@@ -1,28 +1,20 @@
-import { i18n } from '@lingui/core'
 import { useLingui } from '@lingui/react/macro'
 import { useMemo } from 'react'
 import { peQueries } from '@/data/pe/queries'
 import type { PeTransaction } from '@/data/pe/schemas'
 import { PageFrame, ScrollList, TransitionTable, useNetwork, pagePosition } from '@/features/entity'
-import { BATCH_TYPES, type BatchType, type TransitionType } from '@/lib/tx-types'
-import {
-  ActiveFilters,
-  Card,
-  DateRangeFilter,
-  Empty,
-  RangeFilter,
-  SegFilter,
-  TableTools,
-  TYPE_META,
-  TypeBadge,
-} from '@/ui'
-import { rangeText } from '@/data/pe/blocks-query'
+import { ActiveFilters, Card, Empty, TableTools } from '@/ui'
 import { IndexedList } from '../blocks/IndexNeeded'
 import { FilterPanel, TextFilter } from '../blocks/list-chrome'
 import { useListControls } from '../blocks/use-list-controls'
 import { usePeScroll } from '../pe-scroll'
-import { MultiSelect, type MultiSelectOption } from './MultiSelect'
-import { FILTER_TYPES, txsQuery, type TxsSearch } from '@/data/pe/transitions-query'
+import { txsQuery, type TxsSearch } from '@/data/pe/transitions-query'
+import {
+  NO_TRANSITION_FILTERS,
+  StatusFilter,
+  TransitionFilterFields,
+  useTransitionFilterTokens,
+} from './filters'
 
 /** A base58 identifier: what Explorer takes for an owner. */
 const IDENTIFIER = /^[1-9A-HJ-NP-Za-km-z]{42,44}$/
@@ -31,15 +23,6 @@ const IDENTIFIER = /^[1-9A-HJ-NP-Za-km-z]{42,44}$/
 const NAME_LIKE = /^[a-z0-9-]{3,63}(\.dash)?$/i
 
 const SORTS = ['time', 'gas', 'owner'] as const
-
-const typeText = (type: TransitionType | BatchType) => i18n._(TYPE_META[type].label)
-
-const typeOptions = (types: readonly (TransitionType | BatchType)[]): MultiSelectOption[] =>
-  types.map((type) => ({
-    id: type,
-    text: typeText(type),
-    node: <TypeBadge type={type} />,
-  }))
 
 export function TransitionsPage() {
   const { t } = useLingui()
@@ -73,7 +56,6 @@ function TransitionsList() {
     getRowId: (r: PeTransaction) => r.hash,
   })
 
-  const types = search.type ?? []
   const batches = search.batch ?? []
   const sortField = search.sort.replace(/^-/, '')
   const desc = search.sort.startsWith('-')
@@ -82,50 +64,19 @@ function TransitionsList() {
     gas: t`Gas`,
     owner: t`Owner`,
   }
-  const batchOptions = useMemo(() => typeOptions(BATCH_TYPES), [])
-  const typeChoices = useMemo(() => typeOptions(FILTER_TYPES), [])
-
+  const filters = useTransitionFilterTokens(search)
   const active = [
-    ...types.map((v) => ({ id: `type:${v}`, label: t`Type: ${typeText(v)}` })),
-    ...batches.map((v) => ({
-      id: `batch:${v}`,
-      label: t`Batch: ${typeText(v as BatchType)}`,
-    })),
-    ...(search.status
-      ? [{ id: 'status', label: search.status === 'fail' ? t`Failed only` : t`Succeeded only` }]
-      : []),
-    ...(search.gas ? [{ id: 'gas', label: t`Gas: ${rangeText(search.gas)}` }] : []),
+    ...filters.tokens,
     ...(search.owner ? [{ id: 'owner', label: t`Owner: ${search.owner.slice(0, 8)}…` }] : []),
-    ...(search.from || search.to
-      ? [{ id: 'date', label: t`Date: ${search.from ?? '…'} – ${search.to ?? '…'}` }]
-      : []),
   ]
   const remove = (id: string) => {
-    const [kind, value] = id.split(':')
-    if (kind === 'type') {
-      controls.filter({ type: types.filter((v) => v !== value) })
-    } else if (kind === 'batch') {
-      controls.filter({ batch: batches.filter((v) => v !== value) })
-    } else {
-      controls.filter(id === 'date' ? { from: undefined, to: undefined } : { [id]: undefined })
-    }
+    controls.filter(id === 'owner' ? { owner: undefined } : filters.removal(id))
   }
 
   return (
     <Card layer="platform" source={list.stamps[0]}>
       <TableTools>
-        <SegFilter
-          label={t`Status`}
-          value={search.status ?? 'all'}
-          onChange={(id) => {
-            controls.filter({ status: id === 'all' ? undefined : id })
-          }}
-          options={[
-            { id: 'all', label: t`All` },
-            { id: 'success', label: t`Succeeded` },
-            { id: 'fail', label: t`Failed` },
-          ]}
-        />
+        <StatusFilter value={search.status} onChange={controls.filter} />
         <label className="flex items-center gap-2 text-sm">
           <span className="whitespace-nowrap">{t`Sort by`}</span>
           <select
@@ -156,47 +107,7 @@ function TransitionsList() {
         </button>
       </TableTools>
       <FilterPanel count={active.length}>
-        <MultiSelect
-          label={t`Type`}
-          options={typeChoices}
-          value={types}
-          onChange={(type) => {
-            controls.filter({
-              type: type.length > 0 ? type : undefined,
-              ...(type.length > 0 && !(type.length === 1 && type[0] === 'batch')
-                ? { batch: undefined }
-                : {}),
-            })
-          }}
-        />
-        <MultiSelect
-          label={t`Batch type`}
-          options={batchOptions}
-          value={batches}
-          onChange={(batch) => {
-            controls.filter({
-              batch: batch.length > 0 ? batch : undefined,
-              ...(batch.length > 0 ? { type: undefined } : {}),
-            })
-          }}
-        />
-        <RangeFilter
-          label={t`Gas`}
-          value={rangeText(search.gas)}
-          onChange={(gas) => {
-            controls.filter({ gas })
-          }}
-        />
-        <div className="[&_input[type=date]]:w-[9.5rem]">
-          <DateRangeFilter
-            label={t`Date`}
-            from={search.from}
-            to={search.to}
-            onChange={({ from, to }) => {
-              controls.filter({ from, to })
-            }}
-          />
-        </div>
+        <TransitionFilterFields value={search} onChange={controls.filter} />
         <TextFilter
           label={t`Owner`}
           placeholder={t`Identity ID`}
@@ -219,15 +130,7 @@ function TransitionsList() {
           tokens={active}
           onRemove={remove}
           onClear={() => {
-            controls.filter({
-              type: undefined,
-              batch: undefined,
-              status: undefined,
-              gas: undefined,
-              owner: undefined,
-              from: undefined,
-              to: undefined,
-            })
+            controls.filter({ ...NO_TRANSITION_FILTERS, owner: undefined })
           }}
         >
           {batches.length > 0 ? t`A batch type shows batches only.` : null}

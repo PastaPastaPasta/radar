@@ -228,9 +228,11 @@ export function usePageChain<P, Param, Row, K extends QueryKey>(
     })
   }
 
-  // A page whose rows a browser-side filter hides entirely reads on, so the list is not left blank.
+  // A page whose rows a browser-side filter hides entirely reads on, so the list is not left blank, and a later one
+  // does too, so the reader's scroll is not answered with nothing.
+  const lastKeptNone = last?.data !== undefined && rowsOf(last.data).length === 0
   const canReadOn =
-    rows.length === 0 &&
+    (rows.length === 0 || lastKeptNone) &&
     !busy &&
     !failedPage &&
     nextParam !== undefined &&

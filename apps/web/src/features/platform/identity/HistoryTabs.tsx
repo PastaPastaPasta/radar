@@ -4,16 +4,11 @@ import { useMemo, useState } from 'react'
 import { useDecentralizedOnly } from '@/data/health'
 import { peQueries } from '@/data/pe/queries'
 import type { PeDataContract, PeDocument, PeTransfer } from '@/data/pe/schemas'
-import {
-  Entity,
-  IdentityRef,
-  ScrollList,
-  TransitionTable,
-  useNetwork,
-  pagePosition,
-} from '@/features/entity'
+import { Entity, IdentityRef, ScrollList, useNetwork, pagePosition } from '@/features/entity'
 import { Amount, Badge, Card, DataTable, Empty, Time, Unavailable } from '@/ui'
 import { peChildQuery, usePeChild, useSetSearch, type IdentityTabProps } from './common'
+import { Transactions } from './TransactionsTab'
+import type { IdentityTxFilters } from './tx-filters'
 
 const transferId = (r: PeTransfer) => `${r.txHash}:${r.recipient ?? ''}`
 
@@ -24,7 +19,13 @@ export function HistoryTab({
   tab,
   page,
   type,
-}: IdentityTabProps & { tab: Tab; page: number; type?: string | undefined }) {
+  filters,
+}: IdentityTabProps & {
+  tab: Tab
+  page: number
+  type?: string | undefined
+  filters: IdentityTxFilters
+}) {
   const { t } = useLingui()
   const decentralized = useDecentralizedOnly()
   if (decentralized) {
@@ -37,45 +38,13 @@ export function HistoryTab({
     return <Unavailable title={title[tab]} />
   }
   return tab === 'transactions' ? (
-    <Transactions id={id} page={page} />
+    <Transactions id={id} page={page} filters={filters} />
   ) : tab === 'contracts' ? (
     <Contracts id={id} page={page} />
   ) : tab === 'documents' ? (
     <Documents id={id} page={page} type={type} />
   ) : (
     <Transfers id={id} page={page} />
-  )
-}
-
-function Transactions({ id, page }: { id: string; page: number }) {
-  const { t } = useLingui()
-  const net = useNetwork()
-  const list = usePeChild(
-    `identity-tx\u0000${id}`,
-    page,
-    (n) => peQueries.identityTransactions(net, id, peChildQuery(n)),
-    (r) => r.hash,
-  )
-  return (
-    <Card
-      title={t`Transitions`}
-      layer="platform"
-      id="identity-transactions"
-      source={list.stamps[0]}
-    >
-      <ScrollList chain={list} position={pagePosition}>
-        <TransitionTable
-          rows={list.rows}
-          state={list.state}
-          error={list.error}
-          onRetry={list.onRetry}
-          caption={t`Transitions`}
-          columns={['type', 'hash', 'status', 'block', 'gas', 'time']}
-          paging={list.paging}
-          empty={<Empty kind="none-yet" title={t`This identity has sent no transitions.`} />}
-        />
-      </ScrollList>
-    </Card>
   )
 }
 
