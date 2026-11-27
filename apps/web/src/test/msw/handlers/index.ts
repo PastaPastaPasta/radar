@@ -28,7 +28,51 @@ const hyphenBatch = http.get('*/x/hy/:net/batch', async ({ request, params }) =>
   return HttpResponse.json({ results })
 })
 
+const PE_BASE: Record<string, string> = {
+  mainnet: 'https://api.pe.dashhq.org',
+  testnet: 'https://api.testnet.pe.dashhq.org',
+}
+
+/** Where a `/x/batch` read goes on its own (`workers/edge/src/batch.ts`). */
+function batchReadUrl(read: string, origin: URL): string | null {
+  const [source, ...rest] = read.split('/')
+  if (source === 'hy') return new URL(`/x/hy/${rest.join('/')}`, origin).href
+  if (source === 'radar') return `https://radar.dashhq.org/api/v1/${rest.join('/')}`
+  const base = source === 'pe' ? PE_BASE[rest[0] ?? ''] : undefined
+  return base ? `${base}/${rest.slice(1).join('/')}` : null
+}
+
+/**
+ * The edge's cross-source batch, answered read by read from the same recordings and handlers, so a source a test
+ * refuses fails only its own reads. A probe (`p`) keeps its tag, which the fixture layer counts apart from page reads.
+ */
+const sourcesBatch = http.get('*/x/batch', async ({ request }) => {
+  const url = new URL(request.url)
+  const probes = new Set(url.searchParams.getAll('p'))
+  const results = await Promise.all(
+    url.searchParams.getAll('r').map(async (read, n): Promise<BatchResult> => {
+      const target = batchReadUrl(read, url)
+      if (!target) return { status: 400, body: { error: 'bad_batch' } }
+      try {
+        const res = await fetch(`${target}${probes.has(String(n)) ? '#radar-probe' : ''}`)
+        const text = await res.text()
+        let body: unknown = null
+        try {
+          body = text ? JSON.parse(text) : null
+        } catch {
+          body = null
+        }
+        return { status: res.status, body }
+      } catch {
+        return { status: 502, body: { error: 'upstream_unavailable' } }
+      }
+    }),
+  )
+  return HttpResponse.json({ results })
+})
+
 export const fixtureHandlers: AnyHandler[] = [
+  sourcesBatch,
   hyphenBatch,
   ...radarHandlers,
   ...peHandlers,

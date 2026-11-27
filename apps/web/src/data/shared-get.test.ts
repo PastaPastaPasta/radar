@@ -6,7 +6,8 @@ import {
   sharedGet,
 } from './shared-get'
 
-const BASE = 'http://radar.test/x/hy/mainnet'
+const ORIGIN = 'http://radar.test'
+const BASE = `${ORIGIN}/x/hy/mainnet`
 const real = globalThis.fetch
 let calls: string[]
 let signals: AbortSignal[]
@@ -123,7 +124,7 @@ describe('sharedGet', () => {
         read(`${BASE}/tx/abc`),
       ])
       expect(calls).toEqual([
-        `${BASE}/batch?r=${encodeURIComponent('address/Xa/utxos?limit=100')}&r=${encodeURIComponent('tx/abc')}`,
+        `${ORIGIN}/x/batch?r=${encodeURIComponent('hy/mainnet/address/Xa/utxos?limit=100')}&r=${encodeURIComponent('hy/mainnet/tx/abc')}`,
       ])
       expect(await a.json()).toEqual({ n: 1 })
       expect(b.status).toBe(404)
@@ -160,10 +161,45 @@ describe('sharedGet', () => {
         read(`${BASE}/status`, undefined, '#radar-probe'),
         read('http://radar.test/x/hy/mainnet/metrics/latest', undefined, '#radar-probe'),
       ])
+      const hy = (path: string) => `r=${encodeURIComponent(`hy/mainnet/${path}`)}`
       expect(calls).toEqual([
-        `${BASE}/batch?r=status&r=${encodeURIComponent('tx/abc')}`,
-        `${BASE}/batch?r=status&r=${encodeURIComponent('metrics/latest')}#radar-probe`,
+        `${ORIGIN}/x/batch?${hy('status')}&${hy('tx/abc')}&p=0`,
+        `${ORIGIN}/x/batch?${hy('status')}&${hy('metrics/latest')}&p=0&p=1#radar-probe`,
       ])
+    })
+
+    it('puts Radar and Platform Explorer reads in the same batch, each answered with its own status', async () => {
+      const page = location.origin
+      answer = (url) =>
+        url.startsWith(`${page}/x/batch?`)
+          ? Response.json({
+              results: [
+                { status: 503, body: { error: 'upstream_error' } },
+                { status: 200, body: { usd: 30 } },
+                { status: 200, body: { net: 'testnet' } },
+              ],
+            })
+          : Response.json({ unexpected: url })
+      const [radar, rate, testnet] = await Promise.all([
+        read('https://radar.dashhq.org/api/v1/mainnet/summary'),
+        read('https://api.pe.dashhq.org/rate'),
+        read('https://api.testnet.pe.dashhq.org/status'),
+      ])
+      expect(calls).toEqual([
+        `${page}/x/batch?r=${encodeURIComponent('radar/mainnet/summary')}&r=${encodeURIComponent('pe/mainnet/rate')}&r=${encodeURIComponent('pe/testnet/status')}`,
+      ])
+      expect(radar.status).toBe(503)
+      expect(await rate.json()).toEqual({ usd: 30 })
+      expect(await testnet.json()).toEqual({ net: 'testnet' })
+    })
+
+    it('leaves Insight, DAPI quorum lists and other hosts out of a batch', async () => {
+      await Promise.all([
+        read('https://insight.dash.org/insight-api/status'),
+        read('https://quorums.mainnet.networks.dash.org/masternodes'),
+      ])
+      expect(calls.every((u) => !u.includes('/x/batch'))).toBe(true)
+      expect(calls).toHaveLength(2)
     })
 
     it('splits a burst into batches of at most the edge’s limit', async () => {
