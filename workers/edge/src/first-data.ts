@@ -25,8 +25,13 @@ const MISSING_TTL_SECONDS = 60
  * refresh reads it live.
  */
 export const RATE_URL = 'https://api.pe.dashhq.org/rate'
-const RATE_TTL_SECONDS = 120
+/** A price older than this is still inlined, and a navigation reads a new one for the visits after it. */
+const RATE_FRESH_MS = 120_000
+/** How long the edge keeps a price at all; past it a page reads the price itself. */
+const RATE_KEEP_SECONDS = 900
 const RATE_KEY = `${RATE_URL}#radar-first-data`
+/** One upstream read of the price at a time per isolate, however many navigations find it old. */
+let rateReading = false
 const FETCHED_AT = 'x-radar-fetched-at'
 const MISSING = 'x-radar-missing'
 
@@ -189,7 +194,7 @@ async function gather(
   return { at: Date.now(), reads }
 }
 
-/** The price from the edge cache, warming it for the next visit when it is not there. */
+/** The price from the edge cache, reading a new one for the next visits when it is missing or old. */
 async function rateRead(ctx: Ctx, opts: Options): Promise<FirstRead | null> {
   const cache = edgeCache()
   if (!cache) return null
@@ -197,8 +202,8 @@ async function rateRead(ctx: Ctx, opts: Options): Promise<FirstRead | null> {
   const hit = await cache.match(key).catch(() => undefined)
   const fetchedAt = Number(hit?.headers.get(FETCHED_AT))
   const body = hit && fetchedAt > 0 ? await hit.json<Json>().catch(() => null) : null
-  if (body) return { body, fetchedAt }
-  if (opts.warm) {
+  if (opts.warm && !rateReading && (!body || Date.now() - fetchedAt > RATE_FRESH_MS)) {
+    rateReading = true
     const work = async () => {
       const res = await fetch(RATE_URL, {
         headers: { accept: 'application/json', 'user-agent': UPSTREAM_USER_AGENT },
@@ -206,14 +211,18 @@ async function rateRead(ctx: Ctx, opts: Options): Promise<FirstRead | null> {
       const rate = res.ok ? await res.json<Json>().catch(() => null) : null
       if (typeof rate?.usd !== 'number') return res.body?.cancel()
       const headers = {
-        'cache-control': `public, max-age=${RATE_TTL_SECONDS}`,
+        'cache-control': `public, max-age=${RATE_KEEP_SECONDS}`,
         [FETCHED_AT]: String(Date.now()),
       }
       await cache.put(key, Response.json(rate, { headers }))
     }
-    ctx.waitUntil(work().catch(() => undefined))
+    ctx.waitUntil(
+      work()
+        .catch(() => undefined)
+        .finally(() => (rateReading = false)),
+    )
   }
-  return null
+  return body ? { body, fetchedAt } : null
 }
 
 /**
