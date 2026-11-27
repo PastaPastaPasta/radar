@@ -442,13 +442,18 @@ export interface Segment {
   on: boolean
   /** For the blocks that didn't signal from a pool that signals now: the block it signals in every block since. */
   since?: number
+  /** For the signalling blocks of that pool: the same block. */
+  now?: number
 }
 
 /** The whole share of the one pool that signals for some of its blocks, across its two segments. */
 export interface Span {
   name: string
   blocks: number
+  signalling: number
   left: number
+  /** The block the pool signals in every block since, when it switched to signalling. */
+  since?: number
 }
 
 /**
@@ -470,6 +475,7 @@ export function layoutOf(
     name: name(s),
     blocks: s.row.signalling,
     on: true,
+    now: s.trend.kind === 'on' ? s.trend.since : undefined,
   })
   const no = (s: PoolStanding): Omit<Segment, 'key'> => ({
     name: name(s),
@@ -487,7 +493,9 @@ export function layoutOf(
   const span = one && {
     name: name(one),
     blocks: one.row.blocks,
+    signalling: one.row.signalling,
     left: full.reduce((n, s) => n + s.row.blocks, 0),
+    since: one.trend.kind === 'on' ? one.trend.since : undefined,
   }
   const blocker = segments
     .filter((x) => !x.on && x.since === undefined)

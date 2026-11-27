@@ -378,7 +378,15 @@ test.describe('Core 24 activation tracker', () => {
     const pools = card(page, 'pools')
     await expect(pools.locator('[data-blocker]')).toHaveCount(0)
     await expect(pools.locator('[data-switched]')).toHaveAttribute('data-pool', 'ViaBTC')
-    await expect(pools.locator('[data-pool-span="ViaBTC"]')).toContainText('ViaBTC 50.0% in all')
+    const caption = pools.locator('[data-pool-span="ViaBTC"] p')
+    await expect(caption).toContainText('ViaBTC 50.0% in all')
+    await expect(caption).toContainText('16.7% signalling now · 33.3% before it switched')
+    await expect(pools.locator('[data-now] .rx-v24-seg__long')).toHaveText('ViaBTC now 16.7%')
+    await expect(pools.locator('[data-now]')).toHaveAttribute('data-pool', 'ViaBTC')
+    await expect(pools.locator('[data-now]')).toHaveAttribute(
+      'title',
+      'ViaBTC: 16.7%, signalling since block 2,577,447',
+    )
     const bar = pools.getByRole('img', { name: /^Share of this window's blocks by pool: / })
     await expect(bar).toHaveAttribute(
       'aria-label',

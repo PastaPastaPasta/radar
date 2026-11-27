@@ -58,6 +58,13 @@ msgstr "{0, plural, other {1日前より # 件少なくなっています。}}"
 msgid "{0} {1} in all"
 msgstr "{0} 合計 {1}"
 
+#. placeholder {0}: span.name
+#. placeholder {1}: pct(span.blocks, mined)
+#. placeholder {2}: pct(span.signalling, mined)
+#. placeholder {3}: pct(span.blocks - span.signalling, mined)
+msgid "{0} {1} in all<0/>{2} signalling now · {3} before it switched"
+msgstr "{0} 合計 {1}<0/>現在シグナル中 {2} · 切り替え前 {3}"
+
 #. placeholder {0}: formatPercent(goodShare, 0)
 msgid "{0} A or B"
 msgstr "{0} が A か B"
@@ -107,6 +114,11 @@ msgstr "必要 {0}"
 msgctxt "share of blocks"
 msgid "{0} needed"
 msgstr "必要 {0}"
+
+#. placeholder {0}: s.name
+#. placeholder {1}: pct(s.blocks, mined)
+msgid "{0} now {1}"
+msgstr "{0} 現在 {1}"
 
 #. placeholder {0}: formatInt(answered.n)
 #. placeholder {0}: formatInt(d.overall.pass)
@@ -214,6 +226,12 @@ msgstr "{0}: {1}、ブロック {2} より前はシグナルなし"
 #. placeholder {1}: pct(s.blocks, mined)
 msgid "{0}: {1}, signalling"
 msgstr "{0}：{1}、シグナル発信中"
+
+#. placeholder {0}: s.name
+#. placeholder {1}: pct(s.blocks, mined)
+#. placeholder {2}: formatInt(s.now)
+msgid "{0}: {1}, signalling since block {2}"
+msgstr "{0}: {1}、ブロック {2} 以降シグナル中"
 
 msgid "{answered, plural, one {# masternode answered the last crawl} other {# masternodes answered the last crawl}}"
 msgstr "{answered, plural, other {# 件のマスターノードが直近のクロールに応答しました}}"
@@ -385,9 +403,6 @@ msgstr "今日のペースではロックインするウィンドウはありま
 #. placeholder {1}: at(projection.end)
 msgid "At today's pace window #{0} locks in, about {1}."
 msgstr "今日のペースではウィンドウ #{0} がロックインします（{1} ごろ）。"
-
-msgid "before it switched"
-msgstr "切り替え前"
 
 #. placeholder {0}: g.llmq
 #. placeholder {1}: formatInt(size)
@@ -987,6 +1002,10 @@ msgstr "今"
 
 msgid "Now"
 msgstr "現在"
+
+#. placeholder {0}: pct(s.blocks, mined)
+msgid "now {0}"
+msgstr "現在 {0}"
 
 msgid "now signalling"
 msgstr "現在シグナル中"

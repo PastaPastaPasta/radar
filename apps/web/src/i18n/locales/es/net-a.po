@@ -58,6 +58,13 @@ msgstr "{0, plural, one {Es # menos que hace un día.} other {Son # menos que ha
 msgid "{0} {1} in all"
 msgstr "{0} {1} en total"
 
+#. placeholder {0}: span.name
+#. placeholder {1}: pct(span.blocks, mined)
+#. placeholder {2}: pct(span.signalling, mined)
+#. placeholder {3}: pct(span.blocks - span.signalling, mined)
+msgid "{0} {1} in all<0/>{2} signalling now · {3} before it switched"
+msgstr "{0} {1} en total<0/>{2} ya señaliza · {3} antes del cambio"
+
 #. placeholder {0}: formatPercent(goodShare, 0)
 msgid "{0} A or B"
 msgstr "{0} A o B"
@@ -107,6 +114,11 @@ msgstr "{0} necesarios"
 msgctxt "share of blocks"
 msgid "{0} needed"
 msgstr "{0} necesario"
+
+#. placeholder {0}: s.name
+#. placeholder {1}: pct(s.blocks, mined)
+msgid "{0} now {1}"
+msgstr "{0} ahora {1}"
 
 #. placeholder {0}: formatInt(answered.n)
 #. placeholder {0}: formatInt(d.overall.pass)
@@ -214,6 +226,12 @@ msgstr "{0}: {1}, no señalizaba antes del bloque {2}"
 #. placeholder {1}: pct(s.blocks, mined)
 msgid "{0}: {1}, signalling"
 msgstr "{0}: {1}, señaliza"
+
+#. placeholder {0}: s.name
+#. placeholder {1}: pct(s.blocks, mined)
+#. placeholder {2}: formatInt(s.now)
+msgid "{0}: {1}, signalling since block {2}"
+msgstr "{0}: {1}, señaliza desde el bloque {2}"
 
 msgid "{answered, plural, one {# masternode answered the last crawl} other {# masternodes answered the last crawl}}"
 msgstr "{answered, plural, one {# masternode respondió en el último rastreo} other {# masternodes respondieron en el último rastreo}}"
@@ -385,9 +403,6 @@ msgstr "Al ritmo de hoy ninguna ventana se fija: incluso el umbral más bajo es 
 #. placeholder {1}: at(projection.end)
 msgid "At today's pace window #{0} locks in, about {1}."
 msgstr "Al ritmo de hoy se fija la ventana #{0}, hacia el {1}."
-
-msgid "before it switched"
-msgstr "antes del cambio"
 
 #. placeholder {0}: g.llmq
 #. placeholder {1}: formatInt(size)
@@ -987,6 +1002,10 @@ msgstr "ahora"
 
 msgid "Now"
 msgstr "Ahora"
+
+#. placeholder {0}: pct(s.blocks, mined)
+msgid "now {0}"
+msgstr "ahora {0}"
 
 msgid "now signalling"
 msgstr "ya señaliza"

@@ -58,6 +58,13 @@ msgstr "{0, plural, other {比一天前少 # 个。}}"
 msgid "{0} {1} in all"
 msgstr "{0} 共 {1}"
 
+#. placeholder {0}: span.name
+#. placeholder {1}: pct(span.blocks, mined)
+#. placeholder {2}: pct(span.signalling, mined)
+#. placeholder {3}: pct(span.blocks - span.signalling, mined)
+msgid "{0} {1} in all<0/>{2} signalling now · {3} before it switched"
+msgstr "{0} 共 {1}<0/>现已发出信号 {2} · 切换之前 {3}"
+
 #. placeholder {0}: formatPercent(goodShare, 0)
 msgid "{0} A or B"
 msgstr "{0} 为 A 或 B"
@@ -107,6 +114,11 @@ msgstr "需要 {0}"
 msgctxt "share of blocks"
 msgid "{0} needed"
 msgstr "需要 {0}"
+
+#. placeholder {0}: s.name
+#. placeholder {1}: pct(s.blocks, mined)
+msgid "{0} now {1}"
+msgstr "{0} 现在 {1}"
 
 #. placeholder {0}: formatInt(answered.n)
 #. placeholder {0}: formatInt(d.overall.pass)
@@ -214,6 +226,12 @@ msgstr "{0}：{1}，区块 {2} 之前未发出信号"
 #. placeholder {1}: pct(s.blocks, mined)
 msgid "{0}: {1}, signalling"
 msgstr "{0}：{1}，发出信号"
+
+#. placeholder {0}: s.name
+#. placeholder {1}: pct(s.blocks, mined)
+#. placeholder {2}: formatInt(s.now)
+msgid "{0}: {1}, signalling since block {2}"
+msgstr "{0}：{1}，自区块 {2} 起发出信号"
 
 msgid "{answered, plural, one {# masternode answered the last crawl} other {# masternodes answered the last crawl}}"
 msgstr "{answered, plural, other {# 个主节点在上次抓取中响应}}"
@@ -385,9 +403,6 @@ msgstr "按今天的速度没有窗口能锁定：即使最低阈值也是 {0}�
 #. placeholder {1}: at(projection.end)
 msgid "At today's pace window #{0} locks in, about {1}."
 msgstr "按今天的速度，第 {0} 个窗口将锁定，约在 {1}。"
-
-msgid "before it switched"
-msgstr "切换之前"
 
 #. placeholder {0}: g.llmq
 #. placeholder {1}: formatInt(size)
@@ -987,6 +1002,10 @@ msgstr "现在"
 
 msgid "Now"
 msgstr "现在"
+
+#. placeholder {0}: pct(s.blocks, mined)
+msgid "now {0}"
+msgstr "现在 {0}"
 
 msgid "now signalling"
 msgstr "现已发出信号"

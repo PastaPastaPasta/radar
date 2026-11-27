@@ -69,11 +69,13 @@ export function PoolsSection({
   const before = segments.reduce((a, s) => a + (s.since === undefined ? 0 : s.blocks), 0)
   const needed = w.threshold == null ? undefined : w.threshold / d.params.window
   const say = (s: Segment) =>
-    s.on
-      ? t`${s.name}: ${pct(s.blocks, mined)}, signalling`
-      : s.since !== undefined
-        ? t`${s.name}: ${pct(s.blocks, mined)}, not signalling before block ${formatInt(s.since)}`
-        : t`${s.name}: ${pct(s.blocks, mined)}, not signalling`
+    s.now !== undefined
+      ? t`${s.name}: ${pct(s.blocks, mined)}, signalling since block ${formatInt(s.now)}`
+      : s.on
+        ? t`${s.name}: ${pct(s.blocks, mined)}, signalling`
+        : s.since !== undefined
+          ? t`${s.name}: ${pct(s.blocks, mined)}, not signalling before block ${formatInt(s.since)}`
+          : t`${s.name}: ${pct(s.blocks, mined)}, not signalling`
   return (
     <Card
       level="section"
@@ -123,16 +125,23 @@ export function PoolsSection({
                   data-pool={s.name}
                   data-blocker={s === blocker || undefined}
                   data-switched={s.since !== undefined || undefined}
+                  data-now={s.now !== undefined || undefined}
                 >
-                  <span className="rx-v24-seg">
-                    <span className="rx-v24-seg__name">{s.name}</span>{' '}
-                    <span>{pct(s.blocks, mined)}</span>
-                    {s === blocker ? (
-                      <span className="rx-v24-seg__not"> · {t`not signalling`}</span>
-                    ) : s.since !== undefined ? (
-                      <span className="rx-v24-seg__not"> · {t`before it switched`}</span>
-                    ) : null}
-                  </span>
+                  {s.now !== undefined ? (
+                    <span className="rx-v24-seg rx-v24-seg--now">
+                      <span className="rx-v24-seg__long">{t`${s.name} now ${pct(s.blocks, mined)}`}</span>
+                      <span className="rx-v24-seg__short">{t`now ${pct(s.blocks, mined)}`}</span>
+                      <span className="rx-v24-seg__pct">{pct(s.blocks, mined)}</span>
+                    </span>
+                  ) : (
+                    <span className="rx-v24-seg">
+                      <span className="rx-v24-seg__name">{s.name}</span>{' '}
+                      <span>{pct(s.blocks, mined)}</span>
+                      {s === blocker ? (
+                        <span className="rx-v24-seg__not"> · {t`not signalling`}</span>
+                      ) : null}
+                    </span>
+                  )}
                 </span>
               ))}
             </div>
@@ -144,15 +153,27 @@ export function PoolsSection({
                     width: `${(span.blocks / mined) * 100}%`,
                   }}
                 />
-                <span
+                <p
                   style={
                     span.left + span.blocks / 2 >= mined / 2
-                      ? { right: `${(1 - (span.left + span.blocks) / mined) * 100}%` }
-                      : { left: `${(span.left / mined) * 100}%` }
+                      ? {
+                          textAlign: 'right',
+                          paddingRight: `${(1 - (span.left + span.blocks) / mined) * 100}%`,
+                        }
+                      : { paddingLeft: `${(span.left / mined) * 100}%` }
                   }
                 >
-                  {t`${span.name} ${pct(span.blocks, mined)} in all`}
-                </span>
+                  {span.since === undefined ? (
+                    t`${span.name} ${pct(span.blocks, mined)} in all`
+                  ) : (
+                    <Trans>
+                      {span.name} {pct(span.blocks, mined)} in all
+                      <br />
+                      {pct(span.signalling, mined)} signalling now ·{' '}
+                      {pct(span.blocks - span.signalling, mined)} before it switched
+                    </Trans>
+                  )}
+                </p>
               </div>
             ) : null}
             {needed !== undefined ? (
