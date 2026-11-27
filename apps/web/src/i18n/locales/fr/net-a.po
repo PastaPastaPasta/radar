@@ -58,6 +58,18 @@ msgstr "{0, plural, one {C’est # de moins qu’il y a un jour.} other {C’est
 msgid "{0} {1} in all"
 msgstr "{0} {1} au total"
 
+#. placeholder {0}: span.name
+#. placeholder {1}: pct(span.blocks, mined)
+#. placeholder {2}: pct(span.signalling, mined)
+#. placeholder {3}: pct(span.blocks - span.signalling, mined)
+msgid "{0} {1} in all<0/>{2} signalling now · {3} before it switched"
+msgstr "{0} {1} au total<0/>{2} signale désormais · {3} avant son passage"
+
+#. placeholder {0}: s.name
+#. placeholder {1}: pct(s.blocks, mined)
+msgid "{0} {1} now"
+msgstr "{0} {1} désormais"
+
 #. placeholder {0}: formatPercent(goodShare, 0)
 msgid "{0} A or B"
 msgstr "{0} A ou B"
@@ -107,6 +119,10 @@ msgstr "{0} nécessaires"
 msgctxt "share of blocks"
 msgid "{0} needed"
 msgstr "{0} nécessaires"
+
+#. placeholder {0}: pct(s.blocks, mined)
+msgid "{0} now"
+msgstr "{0} désormais"
 
 #. placeholder {0}: formatInt(answered.n)
 #. placeholder {0}: formatInt(d.overall.pass)
@@ -214,6 +230,12 @@ msgstr "{0} : {1}, ne signalait pas avant le bloc {2}"
 #. placeholder {1}: pct(s.blocks, mined)
 msgid "{0}: {1}, signalling"
 msgstr "{0} : {1}, signale"
+
+#. placeholder {0}: s.name
+#. placeholder {1}: pct(s.blocks, mined)
+#. placeholder {2}: formatInt(s.now)
+msgid "{0}: {1}, signalling since block {2}"
+msgstr "{0} : {1}, signale depuis le bloc {2}"
 
 msgid "{answered, plural, one {# masternode answered the last crawl} other {# masternodes answered the last crawl}}"
 msgstr "{answered, plural, one {# masternode a répondu au dernier crawl} other {# masternodes ont répondu au dernier crawl}}"
@@ -385,9 +407,6 @@ msgstr "Au rythme d’aujourd’hui, aucune fenêtre ne se verrouille : même le
 #. placeholder {1}: at(projection.end)
 msgid "At today's pace window #{0} locks in, about {1}."
 msgstr "Au rythme d’aujourd’hui, la fenêtre n° {0} se verrouille, vers le {1}."
-
-msgid "before it switched"
-msgstr "avant son passage"
 
 #. placeholder {0}: g.llmq
 #. placeholder {1}: formatInt(size)

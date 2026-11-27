@@ -315,7 +315,15 @@ describe('poolStandings', () => {
       ['ViaBTC', true, 100, undefined],
       ['ViaBTC', false, 400, 1799],
     ])
-    expect(one.span).toEqual({ name: 'ViaBTC', blocks: 500, left: 500 })
+    expect(one.span).toEqual({
+      name: 'ViaBTC',
+      blocks: 500,
+      signalling: 100,
+      left: 500,
+      since: 1799,
+    })
+    expect(one.segments[1]!.now).toBe(1799)
+    expect(one.segments[2]!.now).toBeUndefined()
 
     const two = layoutOf(
       poolStandings(

@@ -3150,7 +3150,7 @@ html[data-scroll-gutter] {
   box-shadow: 0 0 0 1px var(--dh-page);
 }
 .rx-v24-bar__mark--tick {
-  height: 11px;
+  height: 7px;
   box-shadow: none;
 }
 .rx-v24-bar--paced {
@@ -3215,29 +3215,32 @@ html[data-scroll-gutter] {
     ),
     color-mix(in srgb, var(--dh-warn) 40%, var(--rx-ground, var(--dh-page)));
 }
-.rx-v24-was .rx-v24-seg {
+/* Its label sits on a chip of the ground, so it reads over the stripes in either theme. */
+.rx-v24-pools > .rx-v24-no.rx-v24-was .rx-v24-seg {
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: var(--rx-ground, var(--dh-page));
   color: var(--dh-ink);
 }
-/* A bracket under a pool's signalling and non-signalling segments, with its whole share aligned to its outer end, so it stays inside the bar. */
+/* A bracket under a pool's signalling and non-signalling segments; the caption under it names both parts, aligned to
+   the bracket's outer end and wrapping inside the bar. */
 .rx-v24-spans {
   position: relative;
-  height: 28px;
+  padding-top: 13px;
 }
 .rx-v24-spans > span {
   position: absolute;
-}
-.rx-v24-spans > span:first-child {
   top: 4px;
   height: 6px;
   border: 1.5px solid var(--dh-ink-2);
   border-top: 0;
   border-radius: 0 0 3px 3px;
 }
-.rx-v24-spans > span + span {
-  top: 13px;
+.rx-v24-spans > p {
+  margin: 0;
   font-size: 12.5px;
-  line-height: 14px;
-  white-space: nowrap;
+  line-height: 16px;
   color: var(--dh-ink-2);
   font-variant-numeric: tabular-nums;
 }
@@ -3261,6 +3264,7 @@ html[data-scroll-gutter] {
   padding: 0 7px;
   overflow: hidden;
   white-space: nowrap;
+  text-overflow: ellipsis;
   font-size: 12.5px;
   font-weight: var(--dh-w-strong);
   font-variant-numeric: tabular-nums;
@@ -3269,8 +3273,39 @@ html[data-scroll-gutter] {
 .rx-v24-seg__not {
   display: none;
 }
+/* A switched pool's signalling part: the share, then "now" with it, then its name too, as width allows. */
+/* Tighter than other labels so the short form fits a 70 px part; the share comes first, so a cut drops only "now". */
+.rx-v24-pools > span .rx-v24-seg.rx-v24-seg--now {
+  padding: 0 4px 0 7px;
+}
+.rx-v24-seg--now > .rx-v24-seg__long,
+.rx-v24-seg--now > .rx-v24-seg__short {
+  display: none;
+}
+@container (min-width: 70px) {
+  .rx-v24-seg--now > .rx-v24-seg__pct {
+    display: none;
+  }
+  .rx-v24-seg--now > .rx-v24-seg__short {
+    display: inline;
+  }
+}
+@container (min-width: 130px) {
+  .rx-v24-seg--now > .rx-v24-seg__short {
+    display: none;
+  }
+  .rx-v24-seg--now > .rx-v24-seg__long {
+    display: inline;
+  }
+}
 @container (max-width: 64px) {
-  .rx-v24-seg {
+  .rx-v24-seg:not(.rx-v24-seg--now) {
+    display: none;
+  }
+}
+/* A switched pool's share stays down to the width it needs, since it is the part the caption pairs with. */
+@container (max-width: 48px) {
+  .rx-v24-seg--now {
     display: none;
   }
 }

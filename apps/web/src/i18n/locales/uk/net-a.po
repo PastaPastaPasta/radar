@@ -58,6 +58,18 @@ msgstr "{0, plural, one {Це на # менше, ніж добу тому.} few 
 msgid "{0} {1} in all"
 msgstr "{0}: усього {1}"
 
+#. placeholder {0}: span.name
+#. placeholder {1}: pct(span.blocks, mined)
+#. placeholder {2}: pct(span.signalling, mined)
+#. placeholder {3}: pct(span.blocks - span.signalling, mined)
+msgid "{0} {1} in all<0/>{2} signalling now · {3} before it switched"
+msgstr "{0}: усього {1}<0/>{2} тепер із сигналом · {3} до переходу"
+
+#. placeholder {0}: s.name
+#. placeholder {1}: pct(s.blocks, mined)
+msgid "{0} {1} now"
+msgstr "{0} {1} зараз"
+
 #. placeholder {0}: formatPercent(goodShare, 0)
 msgid "{0} A or B"
 msgstr "{0} — A або B"
@@ -107,6 +119,10 @@ msgstr "потрібно {0}"
 msgctxt "share of blocks"
 msgid "{0} needed"
 msgstr "потрібно {0}"
+
+#. placeholder {0}: pct(s.blocks, mined)
+msgid "{0} now"
+msgstr "{0} зараз"
 
 #. placeholder {0}: formatInt(answered.n)
 #. placeholder {0}: formatInt(d.overall.pass)
@@ -214,6 +230,12 @@ msgstr "{0}: {1}, без сигналу до блока {2}"
 #. placeholder {1}: pct(s.blocks, mined)
 msgid "{0}: {1}, signalling"
 msgstr "{0}: {1}, із сигналом"
+
+#. placeholder {0}: s.name
+#. placeholder {1}: pct(s.blocks, mined)
+#. placeholder {2}: formatInt(s.now)
+msgid "{0}: {1}, signalling since block {2}"
+msgstr "{0}: {1}, із сигналом з блока {2}"
 
 msgid "{answered, plural, one {# masternode answered the last crawl} other {# masternodes answered the last crawl}}"
 msgstr "{answered, plural, one {# мастернода відповіла в останньому обході} few {# мастерноди відповіли в останньому обході} many {# мастернод відповіли в останньому обході} other {# мастерноди відповіли в останньому обході}}"
@@ -385,9 +407,6 @@ msgstr "За сьогоднішнього темпу жодне вікно не 
 #. placeholder {1}: at(projection.end)
 msgid "At today's pace window #{0} locks in, about {1}."
 msgstr "За сьогоднішнього темпу зафіксується вікно №{0}, приблизно {1}."
-
-msgid "before it switched"
-msgstr "до переходу"
 
 #. placeholder {0}: g.llmq
 #. placeholder {1}: formatInt(size)

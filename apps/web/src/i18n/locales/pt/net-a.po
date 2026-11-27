@@ -58,6 +58,18 @@ msgstr "{0, plural, one {É # a menos do que há um dia.} other {São # a menos 
 msgid "{0} {1} in all"
 msgstr "{0} {1} no total"
 
+#. placeholder {0}: span.name
+#. placeholder {1}: pct(span.blocks, mined)
+#. placeholder {2}: pct(span.signalling, mined)
+#. placeholder {3}: pct(span.blocks - span.signalling, mined)
+msgid "{0} {1} in all<0/>{2} signalling now · {3} before it switched"
+msgstr "{0} {1} no total<0/>{2} sinalizando agora · {3} antes da mudança"
+
+#. placeholder {0}: s.name
+#. placeholder {1}: pct(s.blocks, mined)
+msgid "{0} {1} now"
+msgstr "{0} {1} agora"
+
 #. placeholder {0}: formatPercent(goodShare, 0)
 msgid "{0} A or B"
 msgstr "{0} A ou B"
@@ -107,6 +119,10 @@ msgstr "{0} necessários"
 msgctxt "share of blocks"
 msgid "{0} needed"
 msgstr "{0} necessário"
+
+#. placeholder {0}: pct(s.blocks, mined)
+msgid "{0} now"
+msgstr "{0} agora"
 
 #. placeholder {0}: formatInt(answered.n)
 #. placeholder {0}: formatInt(d.overall.pass)
@@ -214,6 +230,12 @@ msgstr "{0}: {1}, não sinalizava antes do bloco {2}"
 #. placeholder {1}: pct(s.blocks, mined)
 msgid "{0}: {1}, signalling"
 msgstr "{0}: {1}, sinaliza"
+
+#. placeholder {0}: s.name
+#. placeholder {1}: pct(s.blocks, mined)
+#. placeholder {2}: formatInt(s.now)
+msgid "{0}: {1}, signalling since block {2}"
+msgstr "{0}: {1}, sinaliza desde o bloco {2}"
 
 msgid "{answered, plural, one {# masternode answered the last crawl} other {# masternodes answered the last crawl}}"
 msgstr "{answered, plural, one {# masternode respondeu ao último rastreio} other {# masternodes responderam ao último rastreio}}"
@@ -385,9 +407,6 @@ msgstr "No ritmo de hoje nenhuma janela é consolidada: mesmo o limiar mais baix
 #. placeholder {1}: at(projection.end)
 msgid "At today's pace window #{0} locks in, about {1}."
 msgstr "No ritmo de hoje a janela #{0} é consolidada, por volta de {1}."
-
-msgid "before it switched"
-msgstr "antes da mudança"
 
 #. placeholder {0}: g.llmq
 #. placeholder {1}: formatInt(size)
