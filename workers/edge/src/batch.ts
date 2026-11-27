@@ -1,6 +1,5 @@
 import { UPSTREAM_USER_AGENT } from './hyphen-path'
 import {
-  BATCH_READ_TIMEOUT_MS,
   batchEntry,
   HYPHEN_BATCH_MAX,
   hyphenBatchRead,
@@ -59,6 +58,9 @@ const SEGMENT = /^(?:[A-Za-z0-9_.~!*'()-]|%(?!2[eEfF]|5[cC])[0-9A-Fa-f]{2})+$/
 const MAX_SEGMENTS = 6
 const MAX_QUERY = 2_000
 
+/** Each line goes out when its read is done, so a read may take nearly as long as the page waits for it alone (10 s). */
+const SOURCES_READ_TIMEOUT_MS = 9_000
+
 const refuse = (status: number, error: string): BatchEntry => ({ status, body: { error } })
 /** A read this batch does not carry; the page sends it on its own (`sharedGet`). */
 const notBatched = (): BatchEntry => refuse(400, 'not_batched')
@@ -79,7 +81,7 @@ async function upstream(url: string, accept: Headers, via?: Fetcher): Promise<Ba
   const init: RequestInit = {
     headers,
     redirect: 'manual',
-    signal: AbortSignal.timeout(BATCH_READ_TIMEOUT_MS),
+    signal: AbortSignal.timeout(SOURCES_READ_TIMEOUT_MS),
   }
   let res: Response
   try {

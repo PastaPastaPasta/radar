@@ -150,6 +150,8 @@ async function flush(base: string, queue: Queue): Promise<void> {
   let left = items.length
   for (const i of items)
     i.signal.addEventListener('abort', () => --left === 0 && everyone.abort(), { once: true })
+  // Reads still waiting on the batch's answer; one already answered (or sent alone) never fails with it.
+  const pending = new Set(items.keys())
   try {
     const res = await single(`${base}/x/batch?${query}${fragment}`, everyone.signal)
     const type = res.headers.get('content-type') ?? ''
@@ -170,7 +172,6 @@ async function flush(base: string, queue: Queue): Promise<void> {
       return
     }
     // One line per read as soon as it is done, so each caller has its answer when its own source does.
-    const pending = new Set(items.keys())
     for await (const line of lines(res.body)) {
       const result = JSON.parse(line) as BatchResult & { i?: number }
       const item = result.i === undefined ? undefined : items[result.i]
@@ -179,7 +180,7 @@ async function flush(base: string, queue: Queue): Promise<void> {
     }
     for (const n of pending) items[n]!.reject(new TypeError('The batch answer is missing a read'))
   } catch (e) {
-    for (const i of items) i.reject(e)
+    for (const n of pending) items[n]!.reject(e)
   }
 }
 
