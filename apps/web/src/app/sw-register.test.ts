@@ -1,6 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { resetUpdate, updateOffer } from '@/features/you/update/update-state'
-import { registerServiceWorker, SW_FLAG_KEY } from './sw-register'
+import {
+  registerServiceWorker,
+  serviceWorkerDelay,
+  SW_FLAG_KEY,
+  SW_REGISTER_DELAY_MS,
+} from './sw-register'
 
 class FakeWorker extends EventTarget {
   state = 'installed'
@@ -45,6 +50,15 @@ beforeEach(() => {
 afterEach(() => {
   resetUpdate()
   localStorage.removeItem(SW_FLAG_KEY)
+})
+
+describe('serviceWorkerDelay', () => {
+  it('waits out the page’s own burst of requests, unless the flag asks for the worker', () => {
+    expect(serviceWorkerDelay()).toBe(SW_REGISTER_DELAY_MS)
+    expect(SW_REGISTER_DELAY_MS).toBeGreaterThan(10_000)
+    localStorage.setItem(SW_FLAG_KEY, 'on')
+    expect(serviceWorkerDelay()).toBe(0)
+  })
 })
 
 describe('registerServiceWorker', () => {
