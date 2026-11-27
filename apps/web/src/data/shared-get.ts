@@ -1,7 +1,7 @@
 /**
  * Every hosted read goes out through here. Two callers asking for the same URL while it is in flight share one request,
- * and Hyphen reads asked within a few milliseconds of each other go to the edge as one (`/x/hy/{net}/batch`, which
- * `workers/edge/src/proxy.ts` answers): a page that asks for a dozen Hyphen documents costs the zone's rate limit one
+ * and Hyphen, Radar and Platform Explorer reads asked within a few milliseconds of each other go to the edge as one
+ * (`/x/batch`, which `workers/edge/src/batch.ts` answers): a page's first dozen reads cost the zone's rate limit one
  * request. Each caller keeps its own timeout and cancellation (`readSourced` also holds the body read to them); a
  * shared read ends when the last caller waiting on it gives up.
  */
@@ -13,10 +13,16 @@ const BATCH_WINDOW_MS = 4
 const BATCH_MAX_QUERY = 6_000
 /** Ends a read that every caller has stopped watching without cancelling it; callers' own timers are far shorter. */
 const SHARED_CAP_MS = 60_000
-const HYPHEN_READ = /^(https?:\/\/[^/]+\/x\/hy\/(?:mainnet|testnet))\/(.+)$/
+const HYPHEN_READ = /^(https?:\/\/[^/]+)\/x\/hy\/((?:mainnet|testnet)\/.+)$/
+/** The census API and Platform Explorer, which the edge reads for a batch (`RADAR_API` and `PE_API` there). */
+const RADAR_READ = /^https:\/\/radar\.dashhq\.org\/api\/v1\/(.+)$/
+const PE_READ = /^https:\/\/api\.(testnet\.)?pe\.dashhq\.org\/(.+)$/
 /** Bytes named by their hash, which the browser keeps a day on their own (`immutable`); a batch is never kept. */
 const IMMUTABLE_READ = /^raw(?:tx|block)\/[0-9a-f]{64}$/i
 const ACCEPT = { accept: 'application/json' }
+const NDJSON = 'application/x-ndjson'
+/** Radar's whole masternode list (about 2 MB): sent alone, so the browser keeps revalidating it by its ETag. */
+const LARGE_RADAR_READ = /^(?:mainnet|testnet)\/masternodes(?:\?|$)/
 
 export interface BatchResult {
   status: number
@@ -25,10 +31,10 @@ export interface BatchResult {
 }
 
 let batching = false
-/** Bases whose edge has no batch endpoint (a dev or preview proxy), learnt from its first 404. */
+/** Origins whose edge has no batch endpoint (a dev server), learnt from its first 404. */
 const unbatched = new Set<string>()
 
-/** Batches Hyphen reads from now on; the app turns it on at start (`main.tsx`), tests that count requests leave it off. */
+/** Batches hosted reads from now on; the app turns it on at start (`main.tsx`), tests that count requests leave it off. */
 export function enableHyphenBatching(on = true): void {
   batching = on
 }
@@ -88,6 +94,40 @@ function answer({ status, body, headers }: BatchResult): Response {
 
 const alone = (i: Queued) => single(`${i.url}${i.fragment}`, i.signal).then(i.resolve, i.reject)
 
+/**
+ * One read's line of a batch. A read the edge does not carry goes out alone; a Radar or Platform Explorer read the edge
+ * could not reach fails as it would have alone (a network error, not the edge's 502).
+ */
+function settle(item: Queued, result: BatchResult): void {
+  const error = (result.body as { error?: unknown } | null)?.error
+  if (error === 'not_batched') {
+    if (item.signal.aborted) item.reject(cancelled())
+    else void alone(item)
+  } else if (error === 'upstream_unavailable' && !item.path.startsWith('hy/')) {
+    item.reject(new TypeError('The source could not be reached'))
+  } else {
+    item.resolve(answer(result))
+  }
+}
+
+async function* lines(body: ReadableStream<Uint8Array>): AsyncGenerator<string> {
+  const reader = body.getReader()
+  const decoder = new TextDecoder()
+  let rest = ''
+  for (;;) {
+    const { done, value } = await reader.read()
+    if (done) break
+    rest += decoder.decode(value, { stream: true })
+    let at: number
+    while ((at = rest.indexOf('\n')) >= 0) {
+      const line = rest.slice(0, at).trim()
+      rest = rest.slice(at + 1)
+      if (line) yield line
+    }
+  }
+  if (rest.trim()) yield rest.trim()
+}
+
 async function flush(base: string, queue: Queue): Promise<void> {
   if (queue.sent) return
   queue.sent = true
@@ -99,17 +139,26 @@ async function flush(base: string, queue: Queue): Promise<void> {
   })
   if (items.length === 0) return
   if (items.length === 1) return void alone(items[0]!)
-  const query = items.map((i) => `r=${encodeURIComponent(i.path)}`).join('&')
+  // `p` names the probes, which the fixture layer tells apart from a page's reads; the edge reads only `r`.
+  const query = [
+    ...items.map((i) => `r=${encodeURIComponent(i.path)}`),
+    ...items.flatMap((i, n) => (i.fragment ? [`p=${n}`] : [])),
+  ].join('&')
   const fragment = items.every((i) => i.fragment) ? items[0]!.fragment : ''
   // The batch ends early only when every read in it has been given up.
   const everyone = new AbortController()
   let left = items.length
   for (const i of items)
     i.signal.addEventListener('abort', () => --left === 0 && everyone.abort(), { once: true })
+  // Reads still waiting on the batch's answer; one already answered (or sent alone) never fails with it.
+  const pending = new Set(items.keys())
   try {
-    const res = await single(`${base}/batch?${query}${fragment}`, everyone.signal)
-    // An edge without the batch endpoint (a dev server's pass-through) answers 404: each read goes out alone.
-    if (res.status === 404) {
+    const res = await single(`${base}/x/batch?${query}${fragment}`, everyone.signal)
+    const type = res.headers.get('content-type') ?? ''
+    // An edge without the batch endpoint answers 404 (a dev server) or the app's HTML (a static host that serves every
+    // path): each read goes out alone, now and from then on.
+    if (res.status === 404 || (res.ok && !type.startsWith(NDJSON))) {
+      res.body?.cancel().catch(() => undefined)
       unbatched.add(base)
       for (const i of items) {
         if (i.signal.aborted) i.reject(cancelled())
@@ -118,18 +167,20 @@ async function flush(base: string, queue: Queue): Promise<void> {
       return
     }
     // A refused batch (the zone's 429 with its Retry-After, a 5xx) is each read's answer, read as it would be alone.
-    if (!res.ok) {
+    if (!res.ok || !res.body) {
       for (const i of items) i.resolve(res.clone())
       return
     }
-    const { results } = (await res.json()) as { results?: BatchResult[] }
-    items.forEach((item, n) => {
-      const result = results?.[n]
-      if (result) item.resolve(answer(result))
-      else item.reject(new TypeError('Hyphen batch answer is missing a read'))
-    })
+    // One line per read as soon as it is done, so each caller has its answer when its own source does.
+    for await (const line of lines(res.body)) {
+      const result = JSON.parse(line) as BatchResult & { i?: number }
+      const item = result.i === undefined ? undefined : items[result.i]
+      if (!item || !pending.delete(result.i!)) continue
+      settle(item, result)
+    }
+    for (const n of pending) items[n]!.reject(new TypeError('The batch answer is missing a read'))
   } catch (e) {
-    for (const i of items) i.reject(e)
+    for (const n of pending) items[n]!.reject(e)
   }
 }
 
@@ -151,17 +202,27 @@ function batched(base: string, item: Omit<Queued, 'resolve' | 'reject'>): Promis
   })
 }
 
+/** Where a read can go in a batch: the edge's origin and the read as `/x/batch` names it, or null to send it alone. */
+function batchRead(url: string): { base: string; path: string } | null {
+  const hyphen = HYPHEN_READ.exec(url)
+  if (hyphen) {
+    const path = hyphen[2]!.slice(hyphen[2]!.indexOf('/') + 1)
+    if (path.startsWith('stream') || IMMUTABLE_READ.test(path)) return null
+    return { base: hyphen[1]!, path: `hy/${hyphen[2]!}` }
+  }
+  const base = globalThis.location?.origin
+  if (!base?.startsWith('http')) return null
+  const radar = RADAR_READ.exec(url)
+  if (radar) return LARGE_RADAR_READ.test(radar[1]!) ? null : { base, path: `radar/${radar[1]!}` }
+  const pe = PE_READ.exec(url)
+  if (pe) return { base, path: `pe/${pe[1] ? 'testnet' : 'mainnet'}/${pe[2]!}` }
+  return null
+}
+
 function start(url: string, fragment: string, signal: AbortSignal) {
-  const hyphen = batching ? HYPHEN_READ.exec(url) : null
-  const path = hyphen?.[2]
-  if (
-    hyphen &&
-    path &&
-    !path.startsWith('stream') &&
-    !IMMUTABLE_READ.test(path) &&
-    !unbatched.has(hyphen[1]!)
-  ) {
-    return batched(hyphen[1]!, { path, url, fragment, signal })
+  const read = batching ? batchRead(url) : null
+  if (read && !unbatched.has(read.base)) {
+    return batched(read.base, { path: read.path, url, fragment, signal })
   }
   return single(`${url}${fragment}`, signal)
 }

@@ -14,12 +14,16 @@ export function isProxyPath(pathname: string): boolean {
   return pathname.startsWith('/x/hy/')
 }
 
-const PROXY_HEADERS = {
+export const PROXY_HEADERS = {
   'content-security-policy': "default-src 'none'; sandbox",
   'cross-origin-resource-policy': 'same-origin',
 }
 
-function json(status: number, body: unknown, headers: Record<string, string> = {}): Response {
+export function json(
+  status: number,
+  body: unknown,
+  headers: Record<string, string> = {},
+): Response {
   return Response.json(body, {
     status,
     headers: { 'cache-control': 'no-store', ...PROXY_HEADERS, ...headers },
@@ -43,23 +47,57 @@ function allowedType(type: string, isStream: boolean): string | null {
 /** As many reads as one batch may carry (`HYPHEN_BATCH_MAX` in `apps/web/src/data/shared-get.ts`). */
 export const HYPHEN_BATCH_MAX = 16
 const BATCH_PATH = /^\/x\/hy\/(mainnet|testnet)\/batch$/
-const BATCH_KEEP = ['etag', 'last-modified']
+const BATCH_KEEP = ['etag', 'last-modified', 'retry-after']
 /** Under the browser's 10 s, so one slow read comes back as its own 502 instead of timing out the whole batch. */
-const BATCH_READ_TIMEOUT_MS = 6_000
+export const BATCH_READ_TIMEOUT_MS = 6_000
 
-interface BatchEntry {
+export interface BatchEntry {
   status: number
   body: unknown
   headers?: Record<string, string>
 }
 
-/**
- * Several Hyphen reads in one request: `?r=<path>&r=<path>…`, each a path the pass-through serves on its own (a
- * stream excepted), answered in order as `{ results: [{ status, body, headers }] }`. Each read goes through the same
- * checks and the same edge cache as it would alone; the page pays the zone's rate limit once instead of once per read.
- */
-async function handleBatch(request: Request, url: URL, net: string): Promise<Response> {
-  const paths = url.searchParams.getAll('r')
+/** A batch's answer to one read, from a response the read got on its own. */
+export async function batchEntry(res: Response): Promise<BatchEntry> {
+  const text = await res.text()
+  let body: unknown = null
+  try {
+    body = text ? JSON.parse(text) : null
+  } catch {
+    return { status: 502, body: { error: 'bad_upstream_type' } }
+  }
+  const headers: Record<string, string> = {}
+  for (const name of BATCH_KEEP) {
+    const v = res.headers.get(name)
+    if (v) headers[name] = v
+  }
+  return { status: res.status, body, headers }
+}
+
+/** One Hyphen read of a batch (`<path>` under `/x/hy/<net>/`), through the pass-through's checks and edge cache. */
+export async function hyphenBatchRead(
+  net: string,
+  path: string,
+  origin: URL,
+  accept: Headers,
+): Promise<BatchEntry> {
+  const [pathname = '', search = ''] = path.split(/\?(.*)/s, 2)
+  const sub = new URL(`/x/hy/${net}/${pathname}`, origin)
+  sub.search = search
+  const resolved = resolveHyphenRequest(sub.pathname, sub.search)
+  if (!resolved.ok) return { status: resolved.status, body: { error: resolved.error } }
+  if (resolved.stream) return { status: 400, body: { error: 'bad_batch' } }
+  return batchEntry(
+    await handleProxy(new Request(sub, { headers: accept }), sub, BATCH_READ_TIMEOUT_MS),
+  )
+}
+
+/** The reads of a batch, each once however often it is named, a read that throws answering its own 502. */
+export async function answerBatch(
+  request: Request,
+  paths: readonly string[],
+  readOne: (path: string, accept: Headers) => Promise<BatchEntry>,
+): Promise<Response> {
   if (paths.length === 0 || paths.length > HYPHEN_BATCH_MAX) {
     return json(400, { error: 'bad_batch' })
   }
@@ -73,36 +111,26 @@ async function handleBatch(request: Request, url: URL, net: string): Promise<Res
     if (!entry)
       reads.set(
         path,
-        (entry = readOne(path).catch((e: unknown) => {
-          console.error('hyphen batch read failed', path, e)
+        (entry = readOne(path, accept).catch((e: unknown) => {
+          console.error('batch read failed', path, e)
           return { status: 502, body: { error: 'upstream_unavailable' } }
         })),
       )
     return entry
   }
-  const readOne = async (path: string): Promise<BatchEntry> => {
-    const [pathname = '', search = ''] = path.split(/\?(.*)/s, 2)
-    const sub = new URL(`/x/hy/${net}/${pathname}`, url)
-    sub.search = search
-    const resolved = resolveHyphenRequest(sub.pathname, sub.search)
-    if (!resolved.ok) return { status: resolved.status, body: { error: resolved.error } }
-    if (resolved.stream) return { status: 400, body: { error: 'bad_batch' } }
-    const res = await handleProxy(new Request(sub, { headers: accept }), sub, BATCH_READ_TIMEOUT_MS)
-    const text = await res.text()
-    let body: unknown = null
-    try {
-      body = text ? JSON.parse(text) : null
-    } catch {
-      return { status: 502, body: { error: 'bad_upstream_type' } }
-    }
-    const headers: Record<string, string> = {}
-    for (const name of BATCH_KEEP) {
-      const v = res.headers.get(name)
-      if (v) headers[name] = v
-    }
-    return { status: res.status, body, headers }
-  }
   return json(200, { results: await Promise.all(paths.map(read)) })
+}
+
+/**
+ * Several Hyphen reads in one request: `?r=<path>&r=<path>…`, each a path the pass-through serves on its own (a
+ * stream excepted), answered in order as `{ results: [{ status, body, headers }] }`. Each read goes through the same
+ * checks and the same edge cache as it would alone; the page pays the zone's rate limit once instead of once per read.
+ * Pages from before `/x/batch` (`batch.ts`) still send these.
+ */
+function handleBatch(request: Request, url: URL, net: string): Promise<Response> {
+  return answerBatch(request, url.searchParams.getAll('r'), (path, accept) =>
+    hyphenBatchRead(net, path, url, accept),
+  )
 }
 
 export async function handleProxy(

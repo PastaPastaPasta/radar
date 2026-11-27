@@ -35,6 +35,7 @@ const HOSTED: [name: string, test: (url: URL) => boolean][] = [
   ['Insight', (u) => u.hostname.startsWith('insight.')],
   ['Platform Explorer', (u) => u.hostname.endsWith('pe.dashhq.org')],
   ['Radar API', (u) => u.hostname === 'radar.dashhq.org'],
+  ['the edge batch', (u) => u.pathname === '/x/batch'],
 ]
 
 /** The one outside host the fixture build still asks in the mode: the DAPI node list and the SDK's quorum keys. */

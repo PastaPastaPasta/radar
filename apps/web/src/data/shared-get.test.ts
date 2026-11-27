@@ -6,7 +6,8 @@ import {
   sharedGet,
 } from './shared-get'
 
-const BASE = 'http://radar.test/x/hy/mainnet'
+const ORIGIN = 'http://radar.test'
+const BASE = `${ORIGIN}/x/hy/mainnet`
 const real = globalThis.fetch
 let calls: string[]
 let signals: AbortSignal[]
@@ -28,6 +29,12 @@ afterEach(() => {
   globalThis.fetch = real
   resetSharedGetForTests()
 })
+
+/** The edge's batch answer: one line per read, in the order given. */
+const ndjson = (results: { status: number; body: unknown; headers?: Record<string, string> }[]) =>
+  new Response(results.map((r, i) => `${JSON.stringify({ i, ...r })}\n`).join(''), {
+    headers: { 'content-type': 'application/x-ndjson' },
+  })
 
 const read = (url: string, signal = new AbortController().signal, fragment?: string) =>
   sharedGet(url, { signal, fragment })
@@ -111,19 +118,17 @@ describe('sharedGet', () => {
     it('sends Hyphen reads started together as one batch and hands each its own answer', async () => {
       answer = (url) =>
         url.includes('/batch?')
-          ? Response.json({
-              results: [
-                { status: 200, body: { n: 1 } },
-                { status: 404, body: { error: 'not_found' }, headers: { etag: '"x"' } },
-              ],
-            })
+          ? ndjson([
+              { status: 200, body: { n: 1 } },
+              { status: 404, body: { error: 'not_found' }, headers: { etag: '"x"' } },
+            ])
           : Response.json({ unexpected: url })
       const [a, b] = await Promise.all([
         read(`${BASE}/address/Xa/utxos?limit=100`),
         read(`${BASE}/tx/abc`),
       ])
       expect(calls).toEqual([
-        `${BASE}/batch?r=${encodeURIComponent('address/Xa/utxos?limit=100')}&r=${encodeURIComponent('tx/abc')}`,
+        `${ORIGIN}/x/batch?r=${encodeURIComponent('hy/mainnet/address/Xa/utxos?limit=100')}&r=${encodeURIComponent('hy/mainnet/tx/abc')}`,
       ])
       expect(await a.json()).toEqual({ n: 1 })
       expect(b.status).toBe(404)
@@ -151,27 +156,124 @@ describe('sharedGet', () => {
     it('sends a probe in a batch with the page’s reads, and keeps its tag on a batch of nothing but probes', async () => {
       answer = (url) => {
         const n = new URL(url).searchParams.getAll('r').length
-        return Response.json({
-          results: Array.from({ length: n }, () => ({ status: 200, body: {} })),
-        })
+        return ndjson(Array.from({ length: n }, () => ({ status: 200, body: {} })))
       }
       await Promise.all([read(`${BASE}/status`, undefined, '#radar-probe'), read(`${BASE}/tx/abc`)])
       await Promise.all([
         read(`${BASE}/status`, undefined, '#radar-probe'),
         read('http://radar.test/x/hy/mainnet/metrics/latest', undefined, '#radar-probe'),
       ])
+      const hy = (path: string) => `r=${encodeURIComponent(`hy/mainnet/${path}`)}`
       expect(calls).toEqual([
-        `${BASE}/batch?r=status&r=${encodeURIComponent('tx/abc')}`,
-        `${BASE}/batch?r=status&r=${encodeURIComponent('metrics/latest')}#radar-probe`,
+        `${ORIGIN}/x/batch?${hy('status')}&${hy('tx/abc')}&p=0`,
+        `${ORIGIN}/x/batch?${hy('status')}&${hy('metrics/latest')}&p=0&p=1#radar-probe`,
       ])
+    })
+
+    it('puts Radar and Platform Explorer reads in the same batch, each answered with its own status', async () => {
+      const page = location.origin
+      answer = (url) =>
+        url.startsWith(`${page}/x/batch?`)
+          ? ndjson([
+              { status: 503, body: { error: 'upstream_error' } },
+              { status: 200, body: { usd: 30 } },
+              { status: 200, body: { net: 'testnet' } },
+            ])
+          : Response.json({ unexpected: url })
+      const [radar, rate, testnet] = await Promise.all([
+        read('https://radar.dashhq.org/api/v1/mainnet/summary'),
+        read('https://api.pe.dashhq.org/rate'),
+        read('https://api.testnet.pe.dashhq.org/status'),
+      ])
+      expect(calls).toEqual([
+        `${page}/x/batch?r=${encodeURIComponent('radar/mainnet/summary')}&r=${encodeURIComponent('pe/mainnet/rate')}&r=${encodeURIComponent('pe/testnet/status')}`,
+      ])
+      expect(radar.status).toBe(503)
+      expect(await rate.json()).toEqual({ usd: 30 })
+      expect(await testnet.json()).toEqual({ net: 'testnet' })
+    })
+
+    it('hands each read its answer as its line arrives, before a slower read is done', async () => {
+      let finish: () => void = () => undefined
+      answer = () =>
+        new Response(
+          new ReadableStream<Uint8Array>({
+            start(c) {
+              const line = (o: unknown) =>
+                c.enqueue(new TextEncoder().encode(`${JSON.stringify(o)}\n`))
+              line({ i: 1, status: 200, body: { fast: true } })
+              finish = () => {
+                line({ i: 0, status: 200, body: { slow: true } })
+                c.close()
+              }
+            },
+          }),
+          { headers: { 'content-type': 'application/x-ndjson' } },
+        )
+      // The page's own Hyphen reads share its origin with the batch.
+      const slow = read('https://api.pe.dashhq.org/transactions/history')
+      const fast = await read(`${location.origin}/x/hy/mainnet/status`)
+      expect(await fast.json()).toEqual({ fast: true })
+      finish()
+      expect(await (await slow).json()).toEqual({ slow: true })
+    })
+
+    it('sends a read the edge does not carry on its own, and fails an unreachable source as unreachable', async () => {
+      answer = (url) =>
+        url.includes('/x/batch?')
+          ? ndjson([
+              { status: 400, body: { error: 'not_batched' } },
+              { status: 502, body: { error: 'upstream_unavailable' } },
+              { status: 502, body: { error: 'upstream_unavailable' } },
+            ])
+          : Response.json({ alone: url })
+      const [newer, radar, hy] = await Promise.allSettled([
+        read('https://radar.dashhq.org/api/v1/mainnet/something-new'),
+        read('https://radar.dashhq.org/api/v1/mainnet/summary'),
+        read(`${location.origin}/x/hy/mainnet/status`),
+      ])
+      expect(newer.status === 'fulfilled' && (await newer.value.json())).toEqual({
+        alone: 'https://radar.dashhq.org/api/v1/mainnet/something-new',
+      })
+      expect(radar.status === 'rejected' && radar.reason instanceof TypeError).toBe(true)
+      expect(hy.status === 'fulfilled' && hy.value.status).toBe(502)
+    })
+
+    it('stops batching for a host that answers the batch with its HTML', async () => {
+      answer = (url) =>
+        url.includes('/x/batch?')
+          ? new Response('<!doctype html>', { headers: { 'content-type': 'text/html' } })
+          : Response.json({ alone: url })
+      const [a] = await Promise.all([read(`${BASE}/block/1`), read(`${BASE}/block/2`)])
+      expect(await a.json()).toEqual({ alone: `${BASE}/block/1` })
+      await Promise.all([read(`${BASE}/block/3`), read(`${BASE}/block/4`)])
+      expect(calls.filter((u) => u.includes('/x/batch?'))).toHaveLength(1)
+    })
+
+    it('sends Radar’s whole masternode list alone, so it keeps its revalidation', async () => {
+      await Promise.all([
+        read('https://radar.dashhq.org/api/v1/mainnet/masternodes'),
+        read('https://radar.dashhq.org/api/v1/mainnet/masternodes?limit=10'),
+      ])
+      expect(calls.sort()).toEqual([
+        'https://radar.dashhq.org/api/v1/mainnet/masternodes',
+        'https://radar.dashhq.org/api/v1/mainnet/masternodes?limit=10',
+      ])
+    })
+
+    it('leaves Insight, DAPI quorum lists and other hosts out of a batch', async () => {
+      await Promise.all([
+        read('https://insight.dash.org/insight-api/status'),
+        read('https://quorums.mainnet.networks.dash.org/masternodes'),
+      ])
+      expect(calls.every((u) => !u.includes('/x/batch'))).toBe(true)
+      expect(calls).toHaveLength(2)
     })
 
     it('splits a burst into batches of at most the edge’s limit', async () => {
       answer = (url) => {
         const n = new URL(url).searchParams.getAll('r').length
-        return Response.json({
-          results: Array.from({ length: n }, () => ({ status: 200, body: {} })),
-        })
+        return ndjson(Array.from({ length: n }, () => ({ status: 200, body: {} })))
       }
       await Promise.all(
         Array.from({ length: HYPHEN_BATCH_MAX + 2 }, (_, i) => read(`${BASE}/block/${i}`)),
@@ -212,9 +314,7 @@ describe('sharedGet', () => {
     it('sends a batch early before its address grows too long', async () => {
       answer = (url) => {
         const n = new URL(url).searchParams.getAll('r').length
-        return Response.json({
-          results: Array.from({ length: n }, () => ({ status: 200, body: {} })),
-        })
+        return ndjson(Array.from({ length: n }, () => ({ status: 200, body: {} })))
       }
       const cursor = 'ab'.repeat(400)
       await Promise.all(

@@ -1,3 +1,4 @@
+import { BATCH_PATH, handleSourcesBatch, type BatchEnv } from './batch'
 import { fetchFirstData, firstDataPlan, isCrawler, isNavigation, withFirstData } from './first-data'
 import { withSecurityHeaders } from './headers'
 import {
@@ -12,7 +13,7 @@ import { preloadFiles, preloadTable, withPreloads } from './preload'
 import { handleProxy, isProxyPath } from './proxy'
 import { redirectFor } from './redirects'
 
-export interface Env {
+export interface Env extends BatchEnv {
   ASSETS: Fetcher
   /** How long the HTML may wait for a tx or block page's first data (ms); tests on a slow machine raise it. */
   FIRST_DATA_BUDGET_MS?: string
@@ -59,6 +60,7 @@ async function preloaded(res: Response, request: Request, env: Env, url: URL): P
 async function handle(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   const url = new URL(request.url)
 
+  if (url.pathname === BATCH_PATH) return handleSourcesBatch(request, url, env)
   if (isProxyPath(url.pathname)) return handleProxy(request, url)
 
   if (url.pathname.startsWith('/api/v1/')) {
