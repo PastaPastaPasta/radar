@@ -480,8 +480,7 @@ describe('the price on every page', () => {
   })
 
   it('sends a page that carries it whole, so a copy the browser kept with its etag never freezes it out', async () => {
-    const first = await get('/nodes', { headers: NAVIGATE })
-    await first.text()
+    for (let i = 0; i < 20 && !(await firstData('/nodes'))?.reads?.[RATE_URL]; i++) await settle()
     const res = await get('/nodes', { headers: { ...NAVIGATE, 'if-none-match': '"anything"' } })
     assert.equal(res.status, 200)
     assert.match(await res.text(), /radar-first-data/)

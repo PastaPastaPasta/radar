@@ -212,7 +212,8 @@ async function rateRead(origin: string, ctx: Ctx, opts: Options): Promise<FirstR
   const due = !body || now - fetchedAt > RATE_FRESH_MS
   const free = now - rateReadSince > RATE_READ_HELD_MS && now - rateFailedAt > RATE_RETRY_MS
   if (opts.warm && due && free) {
-    rateReadSince = now
+    const started = now
+    rateReadSince = started
     const work = async () => {
       const res = await fetch(RATE_URL, {
         headers: { accept: 'application/json', 'user-agent': UPSTREAM_USER_AGENT },
@@ -235,7 +236,7 @@ async function rateRead(origin: string, ctx: Ctx, opts: Options): Promise<FirstR
           rateFailedAt = Date.now()
         })
         .finally(() => {
-          rateReadSince = 0
+          if (rateReadSince === started) rateReadSince = 0
         }),
     )
   }
