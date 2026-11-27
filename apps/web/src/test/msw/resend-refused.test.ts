@@ -20,6 +20,18 @@ describe('resending a request the mock closed before it was written', () => {
     expect(send).toHaveBeenCalledTimes(2)
   })
 
+  it('sends again a request the mock passed to the real network, where the connection was refused', async () => {
+    const refused = new TypeError('fetch failed', {
+      cause: Object.assign(new AggregateError([]), { code: 'ECONNREFUSED' }),
+    })
+    const answer = new Response('ok')
+    const send = vi.fn<typeof fetch>().mockRejectedValueOnce(refused).mockResolvedValue(answer)
+    expect(await resendRefusedBeforeWrite(send)('http://localhost:3000/x/hy/testnet/block/1')).toBe(
+      answer,
+    )
+    expect(send).toHaveBeenCalledTimes(2)
+  })
+
   it('gives up after a few tries', async () => {
     const send = vi.fn<typeof fetch>().mockRejectedValue(closedBeforeWrite())
     await expect(resendRefusedBeforeWrite(send)('https://x.test/a')).rejects.toThrow('fetch failed')
