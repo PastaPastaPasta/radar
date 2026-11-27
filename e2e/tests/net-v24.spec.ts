@@ -381,7 +381,13 @@ test.describe('Core 24 activation tracker', () => {
     const caption = pools.locator('[data-pool-span="ViaBTC"] p')
     await expect(caption).toContainText('ViaBTC 50.0% in all')
     await expect(caption).toContainText('16.7% signalling now · 33.3% before it switched')
-    await expect(pools.locator('[data-now] .rx-v24-seg__long')).toHaveText('ViaBTC now 16.7%')
+    const nowSeg = pools.locator('[data-now]')
+    await expect(nowSeg.locator('.rx-v24-seg__long')).toHaveText('ViaBTC now 16.7%')
+    if (((await nowSeg.boundingBox())?.width ?? 0) >= 130) {
+      await expect(nowSeg.locator('.rx-v24-seg__long')).toBeVisible()
+      await expect(nowSeg.locator('.rx-v24-seg__short')).toBeHidden()
+      await expect(nowSeg.locator('.rx-v24-seg__pct')).toBeHidden()
+    }
     await expect(pools.locator('[data-now]')).toHaveAttribute('data-pool', 'ViaBTC')
     await expect(pools.locator('[data-now]')).toHaveAttribute(
       'title',

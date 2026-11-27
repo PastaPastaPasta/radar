@@ -3264,6 +3264,7 @@ html[data-scroll-gutter] {
   padding: 0 7px;
   overflow: hidden;
   white-space: nowrap;
+  text-overflow: ellipsis;
   font-size: 12.5px;
   font-weight: var(--dh-w-strong);
   font-variant-numeric: tabular-nums;
@@ -3272,22 +3273,27 @@ html[data-scroll-gutter] {
 .rx-v24-seg__not {
   display: none;
 }
-/* A switched pool's signalling part: its name and "now" while they fit, then "now", then the share. */
-.rx-v24-seg--now > span {
+/* A switched pool's signalling part: the share, then "now" with it, then its name too, as width allows. */
+.rx-v24-pools > span .rx-v24-seg.rx-v24-seg--now {
+  padding: 0 4px 0 7px;
+}
+.rx-v24-seg--now > .rx-v24-seg__long,
+.rx-v24-seg--now > .rx-v24-seg__short {
   display: none;
 }
-@container (min-width: 130px) {
-  .rx-v24-seg--now > .rx-v24-seg__long {
-    display: inline;
+@container (min-width: 70px) {
+  .rx-v24-seg--now > .rx-v24-seg__pct {
+    display: none;
   }
-}
-@container (min-width: 70px) and (max-width: 129.98px) {
   .rx-v24-seg--now > .rx-v24-seg__short {
     display: inline;
   }
 }
-@container (max-width: 69.98px) {
-  .rx-v24-seg--now > .rx-v24-seg__pct {
+@container (min-width: 130px) {
+  .rx-v24-seg--now > .rx-v24-seg__short {
+    display: none;
+  }
+  .rx-v24-seg--now > .rx-v24-seg__long {
     display: inline;
   }
 }

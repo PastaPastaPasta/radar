@@ -323,6 +323,7 @@ describe('poolStandings', () => {
       since: 1799,
     })
     expect(one.segments[1]!.now).toBe(1799)
+    expect(one.segments[2]!.now).toBeUndefined()
 
     const two = layoutOf(
       poolStandings(
