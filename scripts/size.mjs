@@ -52,8 +52,9 @@ if (total > BUDGET_BYTES) {
 // What each route loads beside the entry before its first read (the edge preloads it): the route's graph and the
 // English catalog. Core routes must not reach the Platform SDK.
 const ROUTE_BUDGET_BYTES = Number(process.env.ROUTE_BUDGET_BYTES ?? 270 * 1000)
-// Each file is its own request before the first read; on a phone the count costs more than the bytes.
-const CORE_ROUTE_MAX_FILES = Number(process.env.CORE_ROUTE_MAX_FILES ?? 42)
+// Each file is its own request before the first read, and each counts against the zone's rate limit (50 requests in
+// 10 s per visitor), so shared code goes in a few chunks per area (apps/web/build/chunk-groups.ts).
+const ROUTE_MAX_FILES = Number(process.env.ROUTE_MAX_FILES ?? 8)
 const CORE_ROUTES = [
   '/',
   '/tx/$txid',
@@ -110,9 +111,7 @@ const coreWithSdk = routes.filter(
   (r) => CORE_ROUTES.includes(r.pattern) && r.files.some((f) => sdkFiles.has(f)),
 )
 const unknownCore = CORE_ROUTES.filter((p) => !routes.some((r) => r.pattern === p))
-const coreTooMany = routes.filter(
-  (r) => CORE_ROUTES.includes(r.pattern) && r.files.length > CORE_ROUTE_MAX_FILES,
-)
+const tooMany = routes.filter((r) => r.files.length > ROUTE_MAX_FILES)
 console.log(
   `Largest route preload: ${kb(routes[0]?.bytes ?? 0)} gzipped (budget ${kb(ROUTE_BUDGET_BYTES)})`,
 )
@@ -120,9 +119,9 @@ if (over.length > 0) {
   console.error(`Routes over the preload budget: ${over.map((r) => r.pattern).join(', ')}`)
   process.exit(1)
 }
-if (coreTooMany.length > 0) {
+if (tooMany.length > 0) {
   console.error(
-    `Core routes preload more than ${CORE_ROUTE_MAX_FILES} files: ${coreTooMany.map((r) => `${r.pattern} (${r.files.length})`).join(', ')}`,
+    `Routes preload more than ${ROUTE_MAX_FILES} files: ${tooMany.map((r) => `${r.pattern} (${r.files.length})`).join(', ')}`,
   )
   process.exit(1)
 }

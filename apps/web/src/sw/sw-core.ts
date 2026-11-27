@@ -45,7 +45,11 @@ export function assetUrls(html: string, origin: string): string[] {
   return [...found]
 }
 
-/** Stores the app shell and every file it names, all or nothing: a shell with a missing file would be worse than none. */
+/**
+ * Stores the app shell and every file it names, all or nothing: a shell with a missing file would be worse than none.
+ * The shell is read afresh; its files are named by their hash, so the copies the page just loaded serve as they are
+ * instead of costing the zone's rate limit a second request each.
+ */
 export async function precache(env: SwEnv): Promise<void> {
   const shell = await env.fetch(SHELL_URL, { cache: 'reload' })
   if (!shell.ok || !(shell.headers.get('content-type') ?? '').includes('text/html')) {
@@ -54,7 +58,7 @@ export async function precache(env: SwEnv): Promise<void> {
   const urls = assetUrls(await shell.clone().text(), env.origin)
   const files = await Promise.all(
     urls.map(async (url) => {
-      const res = await env.fetch(url, { cache: 'reload' })
+      const res = await env.fetch(url, { cache: 'force-cache' })
       if (!res.ok) throw new Error(`${url} could not be fetched`)
       return [url, res] as const
     }),

@@ -21,7 +21,9 @@ import {
 
 const ADDRESS_PAGE = 100
 const UTXO_MAX_PAGES = 3
-const lookups = limiter(3)
+// Hyphen reads started together go to the edge as one batch (`data/shared-get.ts`), so the lookups of a screenful of
+// outputs cost one request, not one per address.
+const lookups = limiter(8)
 const NO_SPENDERS = new Map<number, Spender | null | 'resolving'>()
 
 /**

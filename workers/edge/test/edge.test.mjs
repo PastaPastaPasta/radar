@@ -715,6 +715,73 @@ describe('hyphen pass-through', () => {
   })
 })
 
+describe('hyphen batch', () => {
+  it('answers several reads in one request, in order, each through the pass-through', async () => {
+    reset((req) => {
+      const u = new URL(req.url)
+      if (u.pathname.endsWith('/status')) return Response.json({ blockHeight: 7 })
+      if (u.pathname.includes('/missing')) return Response.json({ error: 'nope' }, { status: 404 })
+      return Response.json({ path: u.pathname, search: u.search }, { headers: { etag: '"e"' } })
+    })
+    const r = ['status', 'address/Xa/utxos?limit=100&junk=1', 'tx/missing', 'nonsense/path']
+    const res = await get(
+      `/x/hy/mainnet/batch?${r.map((p) => `r=${encodeURIComponent(p)}`).join('&')}`,
+    )
+    assert.equal(res.status, 200)
+    assert.equal(res.headers.get('cache-control'), 'no-store')
+    assert.equal(res.headers.get('content-security-policy'), "default-src 'none'; sandbox")
+    const { results } = await res.json()
+    assert.equal(results.length, 4)
+    assert.deepEqual(results[0], { status: 200, body: { blockHeight: 7 }, headers: {} })
+    assert.deepEqual(results[1], {
+      status: 200,
+      body: { path: '/api/v1/address/Xa/utxos', search: '?limit=100' },
+      headers: { etag: '"e"' },
+    })
+    assert.equal(results[2].status, 404)
+    assert.deepEqual(results[3], { status: 404, body: { error: 'unknown_path' } })
+    assert.deepEqual(upstreamCalls.map((c) => c.url).sort(), [
+      'https://hy.kw.vg/api/v1/address/Xa/utxos?limit=100',
+      'https://hy.kw.vg/api/v1/status',
+      'https://hy.kw.vg/api/v1/tx/missing',
+    ])
+  })
+
+  it('refuses the stream, an empty batch, too many reads, and another network', async () => {
+    reset(() => Response.json({}))
+    const one = await (await get('/x/hy/testnet/batch?r=stream&r=status')).json()
+    assert.equal(one.results[0].status, 400)
+    assert.equal(one.results[1].status, 200)
+    assert.equal(upstreamCalls[0].url, 'https://ts.kw.vg/api/v1/status')
+    assert.equal((await get('/x/hy/mainnet/batch')).status, 400)
+    const many = Array.from({ length: 17 }, () => 'r=status').join('&')
+    assert.equal((await get(`/x/hy/mainnet/batch?${many}`)).status, 400)
+    assert.equal((await get('/x/hy/devnet/batch?r=status')).status, 404)
+  })
+
+  it('answers a read that throws with its own 502 and keeps the others', async () => {
+    reset(() => Response.json({ ok: true }))
+    const res = await get(`/x/hy/mainnet/batch?r=status&r=${encodeURIComponent('http://[x')}`)
+    assert.equal(res.status, 200)
+    const { results } = await res.json()
+    assert.deepEqual(results[0].body, { ok: true })
+    assert.deepEqual(results[1], { status: 502, body: { error: 'upstream_unavailable' } })
+  })
+
+  it('reads a path named twice once, and forwards no validators to the reads', async () => {
+    reset(() => Response.json({ ok: true }))
+    const res = await get('/x/hy/mainnet/batch?r=status&r=status', {
+      headers: { 'if-none-match': '"abc"', cookie: 'a=b' },
+    })
+    const { results } = await res.json()
+    assert.equal(results.length, 2)
+    assert.deepEqual(results[0], results[1])
+    assert.equal(upstreamCalls.length, 1)
+    assert.equal(upstreamCalls[0].headers.get('if-none-match'), null)
+    assert.equal(upstreamCalls[0].headers.get('cookie'), null)
+  })
+})
+
 describe('redirects', () => {
   const check = async (host, p, expected) => {
     const res = await mf.dispatchFetch(`http://${host}${p}`, { redirect: 'manual' })

@@ -2,6 +2,7 @@ import '@testing-library/jest-dom/vitest'
 import { cleanup, configure } from '@testing-library/react'
 import { afterAll, afterEach, beforeAll, beforeEach } from 'vitest'
 import { resetHealthRegistry } from '@/data/health'
+import { resetSharedGetForTests } from '@/data/shared-get'
 import { i18nReady } from '@/i18n'
 import { setSourceModeFromLink, writeSourceMode } from '@/lib/source-mode'
 import { resendRefusedBeforeWrite } from './msw/resend-refused'
@@ -31,6 +32,7 @@ beforeAll(() => {
 beforeEach(() => {
   takeFixtureMisses()
   resetHealthRegistry()
+  resetSharedGetForTests()
   // A test that switched Decentralized only mode on must not leave it on for the next one.
   writeSourceMode('all')
   setSourceModeFromLink(undefined)

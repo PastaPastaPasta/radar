@@ -6,6 +6,7 @@ import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
 import { loadEnv } from 'vite'
 import { defineConfig } from 'vitest/config'
+import { chunkGroups } from './build/chunk-groups'
 import { dashhqAssets } from './build/dashhq-assets'
 import { fixtureWorker } from './build/fixture-worker'
 import { routePreload } from './build/route-preload'
@@ -26,6 +27,7 @@ function appVersion(): string {
 
 export default defineConfig(({ mode }) => {
   const fixtures = loadEnv(mode, process.cwd(), 'VITE_').VITE_DATA_MODE === 'fixtures'
+  const groups = chunkGroups()
   return {
     define: { __APP_VERSION__: JSON.stringify(appVersion()) },
     plugins: [
@@ -39,6 +41,7 @@ export default defineConfig(({ mode }) => {
       sdkSplit({ fixtures }),
       serviceWorker(),
       routePreload(),
+      groups.plugin,
     ],
     resolve: {
       alias: [
@@ -54,10 +57,10 @@ export default defineConfig(({ mode }) => {
     preview: { proxy: fixtures ? undefined : hyphenProxy() },
     build: {
       manifest: true,
-      // Folds chunks under 4 kB into their neighbours: a Core page's start-up drops from ~57 requests to ~37. Larger
-      // thresholds fold shared code into the entry and break its budget (scripts/size.mjs). Not in the e2e fixture
-      // build, whose thousands of recorded answers make Rollup's folding take minutes.
-      rollupOptions: fixtures ? undefined : { output: { experimentalMinChunkSize: 4000 } },
+      // A few shared chunks per area instead of one per set of pages that share code (build/chunk-groups.ts).
+      rollupOptions: {
+        output: { manualChunks: groups.manualChunks, onlyExplicitManualChunks: true },
+      },
     },
     test: {
       environment: 'jsdom',

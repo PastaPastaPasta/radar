@@ -7,6 +7,7 @@ import { SourceError, disabledByMode, type SourceErrorKind } from './errors'
 import { firstDataAnswer, type FirstDataAnswer } from './first-data'
 import { healthRegistry } from './health'
 import { queryLog } from './query-log'
+import { jsonUntil, sharedGet } from './shared-get'
 import type { NetworkId } from '@/lib/network'
 
 type HttpSource = Exclude<SourceId, 'sdk' | 'dapi' | 'local'>
@@ -122,10 +123,10 @@ function retryAfterMs(res: Response): number | undefined {
   return Number.isNaN(at) ? undefined : Math.max(0, at - Date.now())
 }
 
-async function errorDetail(res: Response): Promise<string> {
+async function errorDetail(res: Response, signal: AbortSignal): Promise<string> {
   const fallback = `HTTP ${res.status}`
   try {
-    const body = (await res.json()) as unknown
+    const body = await jsonUntil(res, signal)
     if (body && typeof body === 'object') {
       const o = body as { error?: unknown; message?: unknown }
       const nested =
@@ -262,17 +263,20 @@ async function readSourced<S extends z.ZodType, N extends 'throw' | 'null' = 'th
         (req.method ?? 'GET') === 'GET' && req.body === undefined && !req.probe
           ? firstDataAnswer(resolveUrl(url))
           : undefined
+      const fragment = req.probe ? PROBE_FRAGMENT : ''
       res =
         inlined?.response ??
-        (await fetch(`${resolveUrl(url)}${req.probe ? PROBE_FRAGMENT : ''}`, {
-          method: req.method ?? 'GET',
-          headers: {
-            accept: 'application/json',
-            ...(req.body === undefined ? {} : { 'content-type': 'application/json' }),
-          },
-          body: req.body === undefined ? undefined : JSON.stringify(req.body),
-          signal: controller.signal,
-        }))
+        (await ((req.method ?? 'GET') === 'GET' && req.body === undefined
+          ? sharedGet(resolveUrl(url), { signal: controller.signal, fragment })
+          : fetch(`${resolveUrl(url)}${fragment}`, {
+              method: req.method ?? 'GET',
+              headers: {
+                accept: 'application/json',
+                ...(req.body === undefined ? {} : { 'content-type': 'application/json' }),
+              },
+              body: req.body === undefined ? undefined : JSON.stringify(req.body),
+              signal: controller.signal,
+            })))
     } catch (cause) {
       throw interrupted(cause) ?? fail({ kind: 'network', cause })
     }
@@ -285,7 +289,12 @@ async function readSourced<S extends z.ZodType, N extends 'throw' | 'null' = 'th
           const now = Date.now()
           return { source, asOf: now, fetchedAt: now, proved: false, data: null as Out }
         }
-        throw fail({ kind: 'http', status: 404, reportOk: true, detail: await errorDetail(res) })
+        throw fail({
+          kind: 'http',
+          status: 404,
+          reportOk: true,
+          detail: await errorDetail(res, controller.signal),
+        })
       }
       if (res.status === 429) {
         throw fail({ kind: 'rate-limited', status: 429, retryAfterMs: retryAfterMs(res) })
@@ -293,14 +302,14 @@ async function readSourced<S extends z.ZodType, N extends 'throw' | 'null' = 'th
       throw fail({
         kind: 'http',
         status: res.status,
-        detail: await errorDetail(res),
+        detail: await errorDetail(res, controller.signal),
         reportOk: res.status < 500,
       })
     }
 
     let json: unknown
     try {
-      json = await res.json()
+      json = await jsonUntil(res, controller.signal)
     } catch (cause) {
       throw (
         interrupted(cause) ??
@@ -348,6 +357,8 @@ async function readSourced<S extends z.ZodType, N extends 'throw' | 'null' = 'th
   } finally {
     clearTimeout(timer)
     req.signal?.removeEventListener('abort', onAbort)
+    // Lets go of a shared read (`sharedGet`), so the last caller to finish or give up ends it.
+    controller.abort()
   }
 }
 
