@@ -3299,7 +3299,13 @@ html[data-scroll-gutter] {
   }
 }
 @container (max-width: 64px) {
-  .rx-v24-seg {
+  .rx-v24-seg:not(.rx-v24-seg--now) {
+    display: none;
+  }
+}
+/* A switched pool's share stays down to the width it needs, since it is the part the caption pairs with. */
+@container (max-width: 44px) {
+  .rx-v24-seg--now {
     display: none;
   }
 }

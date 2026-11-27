@@ -384,8 +384,8 @@ test.describe('Core 24 activation tracker', () => {
     const nowSeg = pools.locator('[data-now]')
     await expect(nowSeg.locator('.rx-v24-seg__long')).toHaveText('ViaBTC 16.7% now')
     if (test.info().project.name.startsWith('phone')) {
-      // A sixth of a phone's bar is too narrow for any label; the caption names it.
-      await expect(nowSeg.locator('.rx-v24-seg')).toBeHidden()
+      await expect(nowSeg.locator('.rx-v24-seg__pct')).toBeVisible()
+      await expect(nowSeg.locator('.rx-v24-seg__pct')).toHaveText('16.7%')
     } else {
       await expect(nowSeg.locator('.rx-v24-seg__long')).toBeVisible()
       await expect(nowSeg.locator('.rx-v24-seg__short')).toBeHidden()
