@@ -53,6 +53,7 @@ import {
   type HyValidatorDetail,
 } from './schemas'
 import { cursorFromHeight, type HyListQuery, type HyQueryParams } from './params'
+import { sawHyphenDetail } from './seen'
 import { openHyphenStream } from './stream'
 
 function qs(q: HyQueryParams | undefined): string {
@@ -170,12 +171,22 @@ export const hyphen = {
     )
   },
 
-  block(
+  async block(
     net: NetworkId,
     hashOrHeight: string | number,
     signal?: AbortSignal,
   ): Promise<Sourced<HyBlockDetail | null>> {
-    return getOrNull(net, `/block/${seg(String(hashOrHeight))}`, HyBlockDetailSchema, signal)
+    const read = await getOrNull(
+      net,
+      `/block/${seg(String(hashOrHeight))}`,
+      HyBlockDetailSchema,
+      signal,
+    )
+    if (read.data) {
+      const ids = [String(hashOrHeight), String(read.data.blockHeight), read.data.blockHash]
+      sawHyphenDetail(net, { kind: 'block', ids, read })
+    }
+    return read
   },
 
   blockTxs(
@@ -200,8 +211,14 @@ export const hyphen = {
     return getOrNull(net, `/rawblock/${seg(String(hashOrHeight))}`, HyRawBlockSchema, signal)
   },
 
-  tx(net: NetworkId, txid: string, signal?: AbortSignal): Promise<Sourced<HyTxDetail | null>> {
-    return getOrNull(net, `/tx/${seg(txid)}`, HyTxDetailSchema, signal)
+  async tx(
+    net: NetworkId,
+    txid: string,
+    signal?: AbortSignal,
+  ): Promise<Sourced<HyTxDetail | null>> {
+    const read = await getOrNull(net, `/tx/${seg(txid)}`, HyTxDetailSchema, signal)
+    if (read.data) sawHyphenDetail(net, { kind: 'tx', ids: [txid], read })
+    return read
   },
 
   rawTx(net: NetworkId, txid: string, signal?: AbortSignal): Promise<Sourced<HyRawTx | null>> {

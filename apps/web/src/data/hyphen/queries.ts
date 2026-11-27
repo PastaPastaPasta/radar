@@ -3,6 +3,7 @@ import type { NetworkId } from '@/lib/network'
 import { hyKeys } from '../query/keys'
 import { dataClass, POLL_MS } from '../query/stale'
 import { hyphen } from './client'
+import { hyBlockKey, hyTxKey } from './seen'
 import type { HyListQuery } from './params'
 
 export { cursorFromHeight, decodeCursor, type HyCursor, type HyListQuery } from './params'
@@ -26,7 +27,7 @@ export const hyQueries = {
     }),
   block: (net: NetworkId, hashOrHeight: string | number) =>
     queryOptions({
-      queryKey: hyKeys(net, 'block', { id: lower(String(hashOrHeight)) }),
+      queryKey: hyBlockKey(net, hashOrHeight),
       queryFn: ({ signal }) => hyphen.block(net, hashOrHeight, signal),
       ...dataClass('index'),
     }),
@@ -44,7 +45,7 @@ export const hyQueries = {
     }),
   tx: (net: NetworkId, txid: string) =>
     queryOptions({
-      queryKey: hyKeys(net, 'tx', { txid: lower(txid) }),
+      queryKey: hyTxKey(net, txid),
       queryFn: ({ signal }) => hyphen.tx(net, txid, signal),
       ...dataClass('index'),
     }),
