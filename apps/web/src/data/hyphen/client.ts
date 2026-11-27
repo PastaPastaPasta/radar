@@ -182,9 +182,9 @@ export const hyphen = {
       HyBlockDetailSchema,
       signal,
     )
-    if (read.data) {
-      const ids = [String(hashOrHeight), String(read.data.blockHeight), read.data.blockHash]
-      sawHyphenDetail(net, { kind: 'block', ids, read })
+    // By hash only, which is how a page asks for it; a block Hyphen saw orphaned is no answer for its height either.
+    if (read.data && read.data.orphanedAt == null) {
+      sawHyphenDetail(net, { kind: 'block', ids: [read.data.blockHash], read })
     }
     return read
   },
@@ -217,7 +217,8 @@ export const hyphen = {
     signal?: AbortSignal,
   ): Promise<Sourced<HyTxDetail | null>> {
     const read = await getOrNull(net, `/tx/${seg(txid)}`, HyTxDetailSchema, signal)
-    if (read.data) sawHyphenDetail(net, { kind: 'tx', ids: [txid], read })
+    // A page asks for the detail once the tx is mined, so a mempool answer is no answer for it.
+    if (read.data?.blockHeight != null) sawHyphenDetail(net, { kind: 'tx', ids: [txid], read })
     return read
   },
 

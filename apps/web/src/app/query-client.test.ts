@@ -5,6 +5,7 @@ import { hyQueries } from '@/data/hyphen/queries'
 import type { HyBlockDetail, HyTxDetail } from '@/data/hyphen/schemas'
 import { onHyphenDetail, sawHyphenDetail } from '@/data/hyphen/seen'
 import { queryDefaults } from '@/data/query'
+import { writeSourceMode } from '@/lib/source-mode'
 import { createQueryClient } from './query-client'
 
 describe('createQueryClient', () => {
@@ -33,16 +34,27 @@ const sourced = <T>(data: T): Sourced<T> => ({
 afterEach(() => onHyphenDetail(undefined))
 
 describe('details the Core client read from Hyphen', () => {
-  it('answer the page’s own Hyphen query under every id, as of when they were read', () => {
+  it('answer the page’s own Hyphen query, as of when they were read', () => {
     const client = createQueryClient()
     const block = sourced({ blockHeight: 7, blockHash: HASH } as HyBlockDetail)
-    sawHyphenDetail('mainnet', { kind: 'block', ids: ['7', '7', HASH], read: block })
-    expect(client.getQueryData(hyQueries.block('mainnet', 7).queryKey)).toBe(block)
+    sawHyphenDetail('mainnet', { kind: 'block', ids: [HASH, HASH.toLowerCase()], read: block })
     expect(client.getQueryData(hyQueries.block('mainnet', HASH).queryKey)).toBe(block)
     expect(client.getQueryState(hyQueries.block('mainnet', HASH).queryKey)?.dataUpdatedAt).toBe(
       2_000,
     )
     expect(client.getQueryData(hyQueries.block('testnet', 7).queryKey)).toBeUndefined()
+  })
+
+  it('are left out of the cache in Decentralized only mode', () => {
+    const client = createQueryClient()
+    writeSourceMode('decentralized')
+    sawHyphenDetail('mainnet', {
+      kind: 'tx',
+      ids: ['aa'],
+      read: sourced({ txHash: 'a' } as unknown as HyTxDetail),
+    })
+    writeSourceMode('all')
+    expect(client.getQueryData(hyQueries.tx('mainnet', 'aa').queryKey)).toBeUndefined()
   })
 
   it('never replace an answer the query already has', () => {

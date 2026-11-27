@@ -30,6 +30,16 @@ async function serveAssets(request: Request, env: Env, url: URL): Promise<Respon
   return env.ASSETS.fetch(new Request(new URL('/', url), request))
 }
 
+function unconditional(request: Request): Request {
+  if (!request.headers.has('if-none-match') && !request.headers.has('if-modified-since')) {
+    return request
+  }
+  const headers = new Headers(request.headers)
+  headers.delete('if-none-match')
+  headers.delete('if-modified-since')
+  return new Request(request, { headers })
+}
+
 const SERVICE_WORKER_PATH = '/sw.js'
 
 /** A worker script must be served as JavaScript, and browsers must be able to check it for a new version on every visit. */
@@ -82,7 +92,8 @@ async function handle(request: Request, env: Env, ctx: ExecutionContext): Promis
     env.FIRST_DATA !== 'off' &&
     !isLinkPreviewAgent(ua) &&
     !isCrawler(ua) &&
-    !STATIC_FILE.test(url.pathname)
+    !STATIC_FILE.test(url.pathname) &&
+    url.searchParams.get('sources') !== 'decentralized'
   // The page's first reads are looked up beside the shell's own fetch.
   const firstData = inlines
     ? fetchFirstData(url.origin, firstDataPlan(url), ctx, {
@@ -91,7 +102,8 @@ async function handle(request: Request, env: Env, ctx: ExecutionContext): Promis
       })
     : null
 
-  const served = await serveAssets(request, env, url)
+  // A page that may carry first data is sent whole: a 304 would keep a copy built without it.
+  const served = await serveAssets(inlines ? unconditional(request) : request, env, url)
   if (url.pathname === SERVICE_WORKER_PATH && served.ok) return asServiceWorker(served)
 
   const isHtml = served.headers.get('content-type')?.startsWith('text/html') === true

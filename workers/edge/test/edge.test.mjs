@@ -479,6 +479,18 @@ describe('the price on every page', () => {
     assert.equal(rateCalls[0].headers.get('user-agent')?.startsWith('Radar/'), true)
   })
 
+  it('sends a page that carries it whole, so a copy the browser kept with its etag never freezes it out', async () => {
+    const first = await get('/nodes', { headers: NAVIGATE })
+    await first.text()
+    const res = await get('/nodes', { headers: { ...NAVIGATE, 'if-none-match': '"anything"' } })
+    assert.equal(res.status, 200)
+    assert.match(await res.text(), /radar-first-data/)
+  })
+
+  it('leaves it out of a Decentralized only link, which reads no hosted source', async () => {
+    assert.equal(await firstData('/nodes?sources=decentralized'), null)
+  })
+
   it('inlines nothing for a crawler or a link preview, and never into a static file', async () => {
     assert.equal(
       await firstData('/blocks', {

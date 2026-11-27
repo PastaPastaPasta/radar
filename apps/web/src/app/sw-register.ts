@@ -61,9 +61,9 @@ async function removeWorker(
   await Promise.all(names.filter((n) => n.startsWith(CACHE_PREFIX)).map((n) => storage.delete(n)))
 }
 
-/** When to register: `SW_REGISTER_DELAY_MS` after the first paint, or at once where `radar.sw` is `on`. */
+/** When to register: `SW_REGISTER_DELAY_MS` after the first paint, or at once where `radar.sw` says `on` or `off`. */
 export function serviceWorkerDelay(): number {
-  return flag() === 'on' ? 0 : SW_REGISTER_DELAY_MS
+  return flag() === null ? SW_REGISTER_DELAY_MS : 0
 }
 
 /**

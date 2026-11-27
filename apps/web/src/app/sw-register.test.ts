@@ -53,10 +53,12 @@ afterEach(() => {
 })
 
 describe('serviceWorkerDelay', () => {
-  it('waits out the page’s own burst of requests, unless the flag asks for the worker', () => {
+  it('waits out the page’s own burst of requests, unless the flag asks for the worker or its removal', () => {
     expect(serviceWorkerDelay()).toBe(SW_REGISTER_DELAY_MS)
     expect(SW_REGISTER_DELAY_MS).toBeGreaterThan(10_000)
     localStorage.setItem(SW_FLAG_KEY, 'on')
+    expect(serviceWorkerDelay()).toBe(0)
+    localStorage.setItem(SW_FLAG_KEY, 'off')
     expect(serviceWorkerDelay()).toBe(0)
   })
 })

@@ -29,9 +29,15 @@ export const RATE_URL = 'https://api.pe.dashhq.org/rate'
 const RATE_FRESH_MS = 120_000
 /** How long the edge keeps a price at all; past it a page reads the price itself. */
 const RATE_KEEP_SECONDS = 900
-const RATE_KEY = `${RATE_URL}#radar-first-data`
-/** One upstream read of the price at a time per isolate, however many navigations find it old. */
-let rateReading = false
+/** On the Worker's own origin, so the edge's copy can never stand in for Platform Explorer's own `/rate` in the zone. */
+const RATE_CACHE_PATH = '/__first-data/rate'
+const RATE_READ_TIMEOUT_MS = 5_000
+/** After a failed read, navigations leave Platform Explorer alone this long. */
+const RATE_RETRY_MS = 60_000
+/** One upstream read of the price at a time per isolate (a read cut off with its `waitUntil` frees it after this). */
+const RATE_READ_HELD_MS = 30_000
+let rateReadSince = 0
+let rateFailedAt = 0
 const FETCHED_AT = 'x-radar-fetched-at'
 const MISSING = 'x-radar-missing'
 
@@ -195,21 +201,28 @@ async function gather(
 }
 
 /** The price from the edge cache, reading a new one for the next visits when it is missing or old. */
-async function rateRead(ctx: Ctx, opts: Options): Promise<FirstRead | null> {
+async function rateRead(origin: string, ctx: Ctx, opts: Options): Promise<FirstRead | null> {
   const cache = edgeCache()
   if (!cache) return null
-  const key = new Request(RATE_KEY)
+  const key = new Request(origin + RATE_CACHE_PATH)
   const hit = await cache.match(key).catch(() => undefined)
   const fetchedAt = Number(hit?.headers.get(FETCHED_AT))
   const body = hit && fetchedAt > 0 ? await hit.json<Json>().catch(() => null) : null
-  if (opts.warm && !rateReading && (!body || Date.now() - fetchedAt > RATE_FRESH_MS)) {
-    rateReading = true
+  const now = Date.now()
+  const due = !body || now - fetchedAt > RATE_FRESH_MS
+  const free = now - rateReadSince > RATE_READ_HELD_MS && now - rateFailedAt > RATE_RETRY_MS
+  if (opts.warm && due && free) {
+    rateReadSince = now
     const work = async () => {
       const res = await fetch(RATE_URL, {
         headers: { accept: 'application/json', 'user-agent': UPSTREAM_USER_AGENT },
+        signal: AbortSignal.timeout(RATE_READ_TIMEOUT_MS),
       })
       const rate = res.ok ? await res.json<Json>().catch(() => null) : null
-      if (typeof rate?.usd !== 'number') return res.body?.cancel()
+      if (typeof rate?.usd !== 'number') {
+        rateFailedAt = Date.now()
+        return res.body?.cancel()
+      }
       const headers = {
         'cache-control': `public, max-age=${RATE_KEEP_SECONDS}`,
         [FETCHED_AT]: String(Date.now()),
@@ -218,8 +231,12 @@ async function rateRead(ctx: Ctx, opts: Options): Promise<FirstRead | null> {
     }
     ctx.waitUntil(
       work()
-        .catch(() => undefined)
-        .finally(() => (rateReading = false)),
+        .catch(() => {
+          rateFailedAt = Date.now()
+        })
+        .finally(() => {
+          rateReadSince = 0
+        }),
     )
   }
   return body ? { body, fetchedAt } : null
@@ -245,7 +262,7 @@ export async function fetchFirstData(
   try {
     const [hyphen, rate] = await Promise.all([
       plan ? gather(origin, plan, deadline, ctx, { warm }).catch(() => null) : null,
-      Promise.race([rateRead(ctx, { warm }), deadline]).catch(() => null),
+      Promise.race([rateRead(origin, ctx, { warm }), deadline]).catch(() => null),
     ])
     const reads = { ...hyphen?.reads, ...(rate ? { [RATE_URL]: rate } : {}) }
     return Object.keys(reads).length > 0 ? { at: hyphen?.at ?? Date.now(), reads } : null
