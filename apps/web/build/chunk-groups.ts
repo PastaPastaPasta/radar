@@ -17,16 +17,21 @@ export const ENTRY_CHUNK = 'index'
 export const COMMON_CHUNK = 'common'
 export const AFTER_PAINT_CHUNK = 'after-paint'
 /**
- * What every page loads on its own right after its first paint: the DAPI pool and its cache, the header's tip, the fiat
- * rate, the You boot, the command palette and its word list. One chunk instead of a request each.
+ * What every page loads on its own right after its first paint: the DAPI pool, its cache and seed list, the header's tip,
+ * the fiat rate, the You boot, the command palette and its word list. One chunk instead of a request each.
  */
 const AFTER_PAINT =
-  /\/src\/(?:data\/dapi-core\/(?:pool|cache)|features\/entity\/HeaderTip|app\/fiat-rate|features\/you\/boot|features\/search\/(?:CommandPalette|bip39-words))\.tsx?$/
+  /\/src\/(?:(?:data\/dapi-core\/(?:pool|cache)|features\/entity\/HeaderTip|app\/fiat-rate|features\/you\/boot|features\/search\/(?:CommandPalette|bip39-words))\.tsx?|data\/dapi-core\/seed\.(?:mainnet|testnet)\.json)$/
 const APP_AREA = 'app'
 /** Feature folders whose pages share another area's chunk; a page from no feature folder (settings, sources) is You's. */
 const AREA_OF_FEATURE: Record<string, string> = { home: 'core', search: 'you' }
 
 const stripQuery = (id: string) => id.split('?')[0]!
+
+const prefetchPackage = (c: OutputChunk): boolean => {
+  const id = c.facadeModuleId
+  return id !== null && (PREFETCH_PACKAGE.test(id) || id.endsWith(ROUTE_PREFETCH))
+}
 
 /** The area a route's page serves: the feature folder its route file imports (`src/features/<area>`). */
 export function routeArea(source: string): string {
@@ -135,7 +140,8 @@ export function planGroups(
       for (const id of byFile.get(file)!.moduleIds) groups.set(id, AFTER_PAINT_CHUNK)
       continue
     }
-    if ((users.get(file) ?? 0) < 2) continue
+    // A loader's prefetch package is a file of its own for one dynamic import; it rides in its routes' area chunk.
+    if ((users.get(file) ?? 0) < 2 && !prefetchPackage(byFile.get(file)!)) continue
     if (set.size > 1) set.delete(APP_AREA)
     const only = set.size === 1 ? [...set][0]! : undefined
     // Every page loads the after-paint modules: what they share with a page's area is everyone's, and what they share
