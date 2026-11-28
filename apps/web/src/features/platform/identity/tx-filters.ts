@@ -150,6 +150,7 @@ export function useUsedContracts(net: NetworkId, id: string, enabled: boolean) {
 
   const byId = new Map<string, UsedContract>()
   let scanned = 0
+  const seen = new Set<string>()
   let more = false
   let pending = false
   let failed = false
@@ -159,8 +160,11 @@ export function useUsedContracts(net: NetworkId, id: string, enabled: boolean) {
       failed ||= r.isError
       break
     }
-    scanned += r.data.data.items.length
     for (const row of r.data.data.items) {
+      // A transition that landed between two reads shows up on both pages.
+      if (seen.has(row.hash)) continue
+      seen.add(row.hash)
+      scanned += 1
       const target = rowTarget(row)
       if (!target) continue
       const used = byId.get(target.contract) ?? { id: target.contract, count: 0, types: [] }
