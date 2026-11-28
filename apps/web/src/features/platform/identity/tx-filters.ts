@@ -50,6 +50,15 @@ export const CONTRACT_TYPES: TransitionType[] = [
 /** Platform Explorer's largest page: the contract filter reads this many transitions per request. */
 export const SCAN_PAGE = 100
 
+/**
+ * One page of a contract scan. A scan can hold many pages whose rows are all hidden, so coming back to the tab doesn't
+ * read them all again.
+ */
+export const scanPageQuery = (net: NetworkId, query: PeQuery, page: number) => ({
+  ...peQueries.transactions(net, { ...query, page, limit: SCAN_PAGE }),
+  refetchOnWindowFocus: false,
+})
+
 export const hasTxFilter = (f: IdentityTxFilters): boolean =>
   TX_FILTER_KEYS.some((k) => {
     const v = f[k]
@@ -134,8 +143,7 @@ export function useUsedContracts(net: NetworkId, id: string, enabled: boolean) {
   const client = useQueryClient()
   const [cap, setCap] = useState(SCAN_STEP)
   const query = ownerQuery(id, { txtype: CONTRACT_TYPES })
-  const pageQuery = (page: number) =>
-    peQueries.transactions(net, { ...query, page, limit: SCAN_PAGE })
+  const pageQuery = (page: number) => scanPageQuery(net, query, page)
   const landed = (page: number) =>
     client.getQueryData<Sourced<Page<PeTransaction>>>(pageQuery(page).queryKey)
   const results = useQueries({

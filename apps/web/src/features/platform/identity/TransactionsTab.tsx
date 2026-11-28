@@ -15,7 +15,7 @@ import {
 } from '../txs/filters'
 import { ContractFilter, shortId, useContractNames } from './ContractFilter'
 import { peChildQuery, useSetSearch } from './common'
-import { identityTxsPlan, rowTarget, type IdentityTxFilters } from './tx-filters'
+import { identityTxsPlan, rowTarget, scanPageQuery, type IdentityTxFilters } from './tx-filters'
 
 export function Transactions({
   id,
@@ -42,9 +42,11 @@ export function Transactions({
     start: page,
     limit: plan.limit,
     page: (n) =>
-      plan.filtered
-        ? peQueries.transactions(net, { ...plan.query, page: n, limit: plan.limit })
-        : peQueries.identityTransactions(net, id, peChildQuery(n)),
+      !plan.filtered
+        ? peQueries.identityTransactions(net, id, peChildQuery(n))
+        : contract
+          ? scanPageQuery(net, plan.query, n)
+          : peQueries.transactions(net, { ...plan.query, page: n, limit: plan.limit }),
     getRowId: (r: PeTransaction) => r.hash,
     keep: contract ? (r) => rowTarget(r)?.contract === contract : undefined,
     enabled: !matchesNothing,
