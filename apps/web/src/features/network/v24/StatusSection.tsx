@@ -51,6 +51,7 @@ export function StatusSection({
       ? block(b)
       : t`${block(b)}, ${b.estimated ? t`about` + ' ' : ''}${when(blockMs(b))}`
 
+  const next = o.phase === 'signalling' ? o.next_attempt : undefined
   const headline = (): string => {
     switch (o.phase) {
       case 'waiting_for_signal':
@@ -59,8 +60,21 @@ export function StatusSection({
           : t`Core 24 can't start before ${when(p.start_time)} (the chain's median time). Then masternodes signal it, and miners vote window by window.`
       case 'waiting_for_window':
         return t`The masternodes' signal is in block ${formatInt(d.ehf.height ?? 0)}; miners start signalling at block ${formatInt(o.earliest_start?.height ?? 0)}.`
-      case 'signalling':
+      case 'signalling': {
+        const count = formatInt(w?.count ?? 0)
+        const needs = formatInt(w?.threshold ?? 0)
+        const left = formatInt(o.remaining ?? 0)
+        if (o.possible === false && next) {
+          const earliest = blockWithTime(next.activation)
+          const attempt = String(next.attempt + 1)
+          return t`Miners are signalling: ${count} of the ${needs} blocks this window needs, with ${left} blocks to go. It can't get there, so the earliest activation is ${earliest}, if window #${attempt} locks in.`
+        }
+        if (o.possible === false && next === null) {
+          const timeout = when(p.timeout)
+          return t`Miners are signalling: ${count} of the ${needs} blocks this window needs, with ${left} blocks to go. It can't get there, and no window starts after it before the timeout (${timeout}): Core 24 can no longer activate in this deployment.`
+        }
         return t`Miners are signalling: ${formatInt(w?.count ?? 0)} of the ${formatInt(w?.threshold ?? 0)} blocks this window needs, with ${formatInt(o.remaining ?? 0)} blocks to go.`
+      }
       case 'locked_in':
         return t`Core 24 is locked in. It activates at ${o.activation ? blockWithTime(o.activation) : ''}.`
       case 'active':
@@ -111,12 +125,29 @@ export function StatusSection({
         note={t`about ${when(blockMs(o.earliest_activation))}`}
       />
     ) : null,
-    o.activation_if_reached ? (
+    o.activation_if_reached && o.possible !== false ? (
       <Figure
         key="if-reached"
         label={t`Activation if this window locks in`}
         value={block(o.activation_if_reached)}
         note={t`about ${when(blockMs(o.activation_if_reached))}`}
+      />
+    ) : null,
+    o.possible === false && next ? (
+      <Figure
+        key="earliest-next"
+        label={t`Earliest activation`}
+        value={block(next.activation)}
+        note={t`about ${when(blockMs(next.activation))}, after lock-in at block ${formatInt(next.lock_in.height)}`}
+      />
+    ) : null,
+    o.possible === false && next === null ? (
+      <Figure
+        key="no-activation"
+        label={t`Activation`}
+        value={t`no longer possible`}
+        tone="bad"
+        note={t`this window can't lock in, and it's the last before the timeout`}
       />
     ) : null,
     o.activation && o.phase !== 'active' ? (
@@ -153,6 +184,11 @@ export function StatusSection({
           ? t`Activation`
           : t`Activation, at the earliest`,
     'window-end': t`This window ends (attempt ${String((w?.attempt ?? 0) + 1)})`,
+    'window-end-short': t`This window ends (attempt ${String((w?.attempt ?? 0) + 1)}), out of reach`,
+    'window-end-last': t`This window ends (attempt ${String((w?.attempt ?? 0) + 1)}), out of reach and the last before the timeout`,
+    'next-window-end': t`Next window ends (attempt ${String((next?.attempt ?? 0) + 1)})`,
+    'earliest-activation': t`Earliest activation`,
+    fails: t`Core 24 fails; it can no longer activate`,
     'locked-in': t`Locked in`,
     active: t({ message: 'Active', context: 'upgrade state' }),
   }

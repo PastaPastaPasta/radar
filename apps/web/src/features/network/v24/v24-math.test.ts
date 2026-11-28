@@ -113,6 +113,48 @@ describe('v24Pending', () => {
   })
 })
 
+describe('an out-of-reach window (mainnet at block 2,579,678)', () => {
+  const base = v24Of(RadarActivationSchema.parse(signalling))!
+  const at = (height: number, time: number) => ({ height, time, estimated: true })
+  const next = {
+    attempt: 1,
+    threshold: 3218,
+    window_start: at(2_580_480, 1_795_974_013),
+    window_end: at(2_584_511, 1_796_610_601),
+    lock_in: at(2_584_512, 1_796_610_759),
+    activation: at(2_588_544, 1_797_247_506),
+  }
+  const short = (next_attempt: typeof next | null) => ({
+    ...base,
+    outlook: { ...base.outlook, possible: false, needed: 891, remaining: 801, next_attempt },
+  })
+
+  it('leads the road to the next window and its activation, not this one’s', () => {
+    const d = short(next)
+    const road = milestones(d, d.outlook)
+    expect(road.map((m) => m.id)).toEqual([
+      'signal',
+      'window-end-short',
+      'next-window-end',
+      'lock-in',
+      'earliest-activation',
+    ])
+    expect(road.slice(2).map((m) => m.block?.height)).toEqual([2_584_511, 2_584_512, 2_588_544])
+    expect(thresholdRows(d, 158).find((r) => r.attempt === 1)?.startHeight).toBe(2_580_480)
+  })
+
+  it('says no window comes after the last one before the timeout', () => {
+    const d = short(null)
+    expect(milestones(d, d.outlook).map((m) => m.id)).toEqual([
+      'signal',
+      'window-end-last',
+      'fails',
+    ])
+    expect(windowSlots(d, 158).some((s) => s.future)).toBe(false)
+    expect(thresholdRows(d, 158).find((r) => r.attempt === 1)?.startHeight).toBeUndefined()
+  })
+})
+
 describe('the lock-in outlook (mainnet at block 2,577,670)', () => {
   const doc = RadarActivationSchema.parse(signalling)
   const d = v24Of(doc)!

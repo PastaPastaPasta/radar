@@ -42,13 +42,30 @@ export function milestones(d: RadarActivationDeployment, o: ActivationOutlook): 
         { id: 'lock-in', block: o.earliest_lock_in, done: false },
         { id: 'activation', block: o.earliest_activation, done: false },
       ]
-    case 'signalling':
+    case 'signalling': {
+      const signal = { id: 'signal', block: d.ehf.block, done: true }
+      if (o.possible !== false)
+        return [
+          signal,
+          { id: 'window-end', block: o.window_end, done: false },
+          { id: 'lock-in', block: o.lock_in_if_reached, done: false },
+          { id: 'activation', block: o.activation_if_reached, done: false },
+        ]
+      const n = o.next_attempt
+      if (!n)
+        return [
+          signal,
+          { id: 'window-end-last', block: o.window_end, done: false },
+          { id: 'fails', block: o.next_window, done: false },
+        ]
       return [
-        { id: 'signal', block: d.ehf.block, done: true },
-        { id: 'window-end', block: o.window_end, done: false },
-        { id: 'lock-in', block: o.lock_in_if_reached, done: false },
-        { id: 'activation', block: o.activation_if_reached, done: false },
+        signal,
+        { id: 'window-end-short', block: o.window_end, done: false },
+        { id: 'next-window-end', block: n.window_end, done: false },
+        { id: 'lock-in', block: n.lock_in, done: false },
+        { id: 'earliest-activation', block: n.activation, done: false },
       ]
+    }
     case 'locked_in':
       return [
         { id: 'signal', block: d.ehf.block, done: true },
@@ -74,6 +91,17 @@ export function milestones(d: RadarActivationDeployment, o: ActivationOutlook): 
     default:
       return []
   }
+}
+
+/** While signalling, the next window's attempt and first block, unless this window is the last before the timeout. */
+function nextWindow(d: RadarActivationDeployment): [number, ActivationBlock] | undefined {
+  const o = d.outlook
+  if (o.phase !== 'signalling') return undefined
+  if (o.next_attempt !== undefined)
+    return o.next_attempt ? [o.next_attempt.attempt, o.next_attempt.window_start] : undefined
+  return o.next_window && d.window?.attempt != null
+    ? [d.window.attempt + 1, o.next_window]
+    : undefined
 }
 
 export interface Slot {
@@ -109,8 +137,9 @@ export function windowSlots(d: RadarActivationDeployment, pace: number): Slot[] 
   let next: { start: ActivationBlock; attempt: number } | undefined
   if ((o.phase === 'waiting_for_signal' || o.phase === 'waiting_for_window') && o.earliest_start) {
     next = { start: o.earliest_start, attempt: 0 }
-  } else if (o.phase === 'signalling' && o.next_window && d.window?.attempt != null) {
-    next = { start: o.next_window, attempt: d.window.attempt + 1 }
+  } else {
+    const n = nextWindow(d)
+    if (n) next = { start: n[1], attempt: n[0] }
   }
   if (next && d.schedule.length > 0) {
     for (let a = next.attempt, i = 0; i < 12; a++, i++) {
@@ -171,11 +200,7 @@ export function thresholdRows(d: RadarActivationDeployment, pace: number): Thres
     (d.windows ?? []).filter((w) => w.attempt != null).map((w) => [w.attempt!, w]),
   )
   const anchor: [number, ActivationBlock] | undefined =
-    o.phase === 'signalling' && o.next_window && d.window?.attempt != null
-      ? [d.window.attempt + 1, o.next_window]
-      : o.earliest_start
-        ? [0, o.earliest_start]
-        : undefined
+    o.phase === 'signalling' ? nextWindow(d) : o.earliest_start ? [0, o.earliest_start] : undefined
   const beyond = [...done.keys()]
     .filter((a) => a >= d.schedule.length)
     .sort((a, b) => a - b)
