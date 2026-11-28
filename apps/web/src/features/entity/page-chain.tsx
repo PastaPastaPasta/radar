@@ -196,11 +196,26 @@ export function usePageChain<P, Param, Row, K extends QueryKey>(
   const hasPrev = chain.lo > 0 || prevParam !== undefined
   const failedPage = pages.find((p) => p.failed)
 
+  // Pages a browser-side filter hid entirely don't count toward `max`, so reading past them never drops the rows on
+  // screen. They render nothing and each is one cached read, so a long run of them stays cheap.
+  const hidden = new Set<number>()
+  pages.forEach((p, i) => {
+    if (p.data !== undefined && rowsOf(p.data).length === 0) hidden.add(chain.lo + i)
+  })
   const advance = (c: Chain<Param>, skipped: number): Chain<Param> => {
     if (nextParam === undefined) return c
     const params = c.hi < c.params.length - 1 ? c.params : [...c.params, nextParam]
     const hi = c.hi + 1
-    return { ...c, params, hi, lo: Math.max(c.lo, hi - max + 1), skipped }
+    let lo = c.lo
+    let held = 0
+    for (let i = hi; i >= c.lo; i--) {
+      if (!hidden.has(i)) held += 1
+      if (held > max) {
+        lo = i + 1
+        break
+      }
+    }
+    return { ...c, params, hi, lo, skipped }
   }
   const readOn = () => {
     if (busy || !last) return
@@ -221,16 +236,25 @@ export function usePageChain<P, Param, Row, K extends QueryKey>(
       if (!same(c)) return c
       if (c.lo > 0) {
         const lo = c.lo - 1
-        return { ...c, lo, hi: Math.min(c.hi, lo + max - 1) }
+        // Reading up drops pages below; a hidden page left last must not read on downward by itself.
+        return { ...c, lo, hi: Math.min(c.hi, lo + max - 1), skipped: MAX_SKIPPED_PAGES }
       }
       if (prevParam === undefined) return c
-      return { ...c, params: [prevParam, ...c.params], lo: 0, hi: Math.min(c.hi + 1, max - 1) }
+      return {
+        ...c,
+        params: [prevParam, ...c.params],
+        lo: 0,
+        hi: Math.min(c.hi + 1, max - 1),
+        skipped: MAX_SKIPPED_PAGES,
+      }
     })
   }
 
-  // A page whose rows a browser-side filter hides entirely reads on, so the list is not left blank.
+  // A page whose rows a browser-side filter hides entirely reads on, so the list is not left blank, and a later one
+  // does too, so the reader's scroll is not answered with nothing.
+  const lastKeptNone = last?.data !== undefined && rowsOf(last.data).length === 0
   const canReadOn =
-    rows.length === 0 &&
+    (rows.length === 0 || lastKeptNone) &&
     !busy &&
     !failedPage &&
     nextParam !== undefined &&

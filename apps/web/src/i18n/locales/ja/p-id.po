@@ -13,9 +13,23 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: used.scanned
+msgid "{0, plural, one {From its latest transition of a type that acts on a contract.} other {From its latest # transitions of the types that act on a contract.}}"
+msgstr "{0, plural, other {コントラクトに関係する種類の直近 # 件のトランジションから。}}"
+
+#. placeholder {0}: used.scanned
+msgid "{0, plural, one {From its one transition of a type that acts on a contract.} other {From all # of its transitions of the types that act on a contract.}}"
+msgstr "{0, plural, other {コントラクトに関係する種類の全 # 件のトランジションから。}}"
+
 #. placeholder {0}: formatInt(found.balance)
 msgid "{0} credits"
 msgstr "{0} クレジット"
+
+msgid "{count, plural, one {# transition} other {# transitions}}"
+msgstr "{count, plural, other {# 件のトランジション}}"
+
+msgid "{reached, plural, one {No match in this identity’s latest transition} other {No match in this identity’s latest # transitions}}"
+msgstr "{reached, plural, other {このアイデンティティの直近 # 件のトランジションに一致するものはありません}}"
 
 msgid "A public key hash holds only the characters 0–9 and a–f."
 msgstr "公開鍵ハッシュには 0–9 と a–f の文字のみ使用できます。"
@@ -42,11 +56,17 @@ msgstr "詳細"
 msgid "All"
 msgstr "すべて"
 
+msgid "All contracts"
+msgstr "すべてのコントラクト"
+
 msgid "Amount"
 msgstr "金額"
 
 msgid "An identity ID is 43 or 44 base58 characters, or 64 hexadecimal characters."
 msgstr "アイデンティティ ID は base58 の 43 または 44 文字、または 16 進数の 64 文字です。"
+
+msgid "Apply"
+msgstr "適用"
 
 msgid "Balance"
 msgstr "残高"
@@ -103,6 +123,9 @@ msgstr "コントラクト ID"
 
 msgid "Contract nonce"
 msgstr "コントラクトのノンス"
+
+msgid "Contract: {contractLabel}"
+msgstr "コントラクト: {contractLabel}"
 
 msgid "Contracts"
 msgstr "コントラクト"
@@ -161,6 +184,9 @@ msgstr "Platform Explorer がインデックス化したすべてのアイデン
 
 msgid "Filter"
 msgstr "絞り込む"
+
+msgid "Filtered, the list shows the transitions this identity signed; credit it received is on the Transfers tab."
+msgstr "フィルター時は、このアイデンティティが署名したトランジションのみ表示します。受け取ったクレジットは「送金」タブにあります。"
 
 msgid "Find"
 msgstr "検索"
@@ -227,6 +253,9 @@ msgstr "読み込み中…"
 msgid "Lock"
 msgstr "ロック"
 
+msgid "Look further back"
+msgstr "さらに遡る"
+
 msgid "Manage in Bridge"
 msgstr "Bridge で管理"
 
@@ -269,11 +298,20 @@ msgstr "このハッシュを単独で持つアイデンティティはなく、
 msgid "No tokens to check."
 msgstr "確認するトークンはありません。"
 
+msgid "No transition from this identity matches these filters"
+msgstr "このアイデンティティのトランジションでこのフィルターに一致するものはありません"
+
 msgid "Nonce"
 msgstr "ノンス"
 
 msgid "None"
 msgstr "なし"
+
+msgid "None of its transitions acts on a contract."
+msgstr "このアイデンティティのトランジションはどれもコントラクトに関係しません。"
+
+msgid "None of the chosen types can act on a contract."
+msgstr "選んだ種類はどれもコントラクトに関係できません。"
 
 msgid "Not available"
 msgstr "利用不可"
@@ -302,6 +340,9 @@ msgstr "アイデンティティを開いています…"
 msgid "Operator"
 msgstr "オペレーター"
 
+msgid "Or paste a contract ID"
+msgstr "またはコントラクト ID を貼り付け"
+
 msgid "Overview"
 msgstr "概要"
 
@@ -313,6 +354,12 @@ msgstr "Platform"
 
 msgid "Platform answers group membership only for the contracts it is asked about: the ones this identity owns, and the one you name."
 msgstr "Platform がグループ所属を返すのは、問い合わせたコントラクト（このアイデンティティが所有するものと、指定したもの）に限られます。"
+
+msgid "Platform Explorer can’t filter by contract, so Radar reads 100 transitions at a time and keeps the ones on this contract."
+msgstr "Platform Explorer はコントラクトで絞り込めないため、Radar がトランジションを 100 件ずつ読み、このコントラクトのものだけ残します。"
+
+msgid "Platform Explorer did not answer."
+msgstr "Platform Explorer から応答がありません。"
 
 msgid "Platform Explorer has no identity with this ID on {net}."
 msgstr "Platform Explorer には {net} でこの ID のアイデンティティがありません。"
@@ -352,6 +399,9 @@ msgstr "用途"
 
 msgid "Read-only"
 msgstr "読み取り専用"
+
+msgid "Reading this identity’s transitions…"
+msgstr "このアイデンティティのトランジションを読み込み中…"
 
 msgid "Regular"
 msgstr "通常"
@@ -484,6 +534,9 @@ msgstr "トランジション"
 #. placeholder {0}: rangeText(search.txs) ?? ''
 msgid "Transitions {0}"
 msgstr "トランジション {0}"
+
+msgid "Try again"
+msgstr "再試行"
 
 msgid "Type"
 msgstr "種類"

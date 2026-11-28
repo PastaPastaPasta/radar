@@ -13,9 +13,23 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: used.scanned
+msgid "{0, plural, one {From its latest transition of a type that acts on a contract.} other {From its latest # transitions of the types that act on a contract.}}"
+msgstr "{0, plural, other {来自其最近 # 次涉及合约类型的状态转换。}}"
+
+#. placeholder {0}: used.scanned
+msgid "{0, plural, one {From its one transition of a type that acts on a contract.} other {From all # of its transitions of the types that act on a contract.}}"
+msgstr "{0, plural, other {来自其全部 # 次涉及合约类型的状态转换。}}"
+
 #. placeholder {0}: formatInt(found.balance)
 msgid "{0} credits"
 msgstr "{0} 积分"
+
+msgid "{count, plural, one {# transition} other {# transitions}}"
+msgstr "{count, plural, other {# 次状态转换}}"
+
+msgid "{reached, plural, one {No match in this identity’s latest transition} other {No match in this identity’s latest # transitions}}"
+msgstr "{reached, plural, other {此身份最近 # 次状态转换中没有匹配项}}"
 
 msgid "A public key hash holds only the characters 0–9 and a–f."
 msgstr "公钥哈希只包含字符 0–9 和 a–f。"
@@ -42,11 +56,17 @@ msgstr "高级"
 msgid "All"
 msgstr "全部"
 
+msgid "All contracts"
+msgstr "所有合约"
+
 msgid "Amount"
 msgstr "金额"
 
 msgid "An identity ID is 43 or 44 base58 characters, or 64 hexadecimal characters."
 msgstr "身份 ID 为 43 或 44 个 base58 字符，或 64 个十六进制字符。"
+
+msgid "Apply"
+msgstr "应用"
 
 msgid "Balance"
 msgstr "余额"
@@ -103,6 +123,9 @@ msgstr "合约 ID"
 
 msgid "Contract nonce"
 msgstr "合约 Nonce"
+
+msgid "Contract: {contractLabel}"
+msgstr "合约：{contractLabel}"
 
 msgid "Contracts"
 msgstr "合约"
@@ -161,6 +184,9 @@ msgstr "Platform Explorer 已索引的所有身份，含余额与活动。"
 
 msgid "Filter"
 msgstr "筛选"
+
+msgid "Filtered, the list shows the transitions this identity signed; credit it received is on the Transfers tab."
+msgstr "筛选后，列表只显示此身份签署的状态转换；收到的积分见“转账”标签页。"
 
 msgid "Find"
 msgstr "查找"
@@ -227,6 +253,9 @@ msgstr "正在加载…"
 msgid "Lock"
 msgstr "锁定"
 
+msgid "Look further back"
+msgstr "继续往前找"
+
 msgid "Manage in Bridge"
 msgstr "在 Bridge 中管理"
 
@@ -269,11 +298,20 @@ msgstr "没有单一身份拥有此哈希；以下身份共用它。"
 msgid "No tokens to check."
 msgstr "没有可检查的代币。"
 
+msgid "No transition from this identity matches these filters"
+msgstr "此身份没有符合这些筛选条件的状态转换"
+
 msgid "Nonce"
 msgstr "Nonce"
 
 msgid "None"
 msgstr "无"
+
+msgid "None of its transitions acts on a contract."
+msgstr "其状态转换都不涉及合约。"
+
+msgid "None of the chosen types can act on a contract."
+msgstr "所选类型都不能涉及合约。"
 
 msgid "Not available"
 msgstr "不可用"
@@ -302,6 +340,9 @@ msgstr "正在打开身份…"
 msgid "Operator"
 msgstr "运营者"
 
+msgid "Or paste a contract ID"
+msgstr "或粘贴合约 ID"
+
 msgid "Overview"
 msgstr "概览"
 
@@ -313,6 +354,12 @@ msgstr "Platform"
 
 msgid "Platform answers group membership only for the contracts it is asked about: the ones this identity owns, and the one you name."
 msgstr "Platform 只会针对被查询的合约返回群组成员关系：此身份拥有的合约，以及您指定的合约。"
+
+msgid "Platform Explorer can’t filter by contract, so Radar reads 100 transitions at a time and keeps the ones on this contract."
+msgstr "Platform Explorer 无法按合约筛选，因此 Radar 每次读取 100 次状态转换，只保留属于此合约的。"
+
+msgid "Platform Explorer did not answer."
+msgstr "Platform Explorer 没有响应。"
 
 msgid "Platform Explorer has no identity with this ID on {net}."
 msgstr "Platform Explorer 在 {net} 上没有此 ID 的身份。"
@@ -352,6 +399,9 @@ msgstr "用途"
 
 msgid "Read-only"
 msgstr "只读"
+
+msgid "Reading this identity’s transitions…"
+msgstr "正在读取此身份的状态转换…"
 
 msgid "Regular"
 msgstr "普通"
@@ -484,6 +534,9 @@ msgstr "状态转换"
 #. placeholder {0}: rangeText(search.txs) ?? ''
 msgid "Transitions {0}"
 msgstr "状态转换 {0}"
+
+msgid "Try again"
+msgstr "重试"
 
 msgid "Type"
 msgstr "类型"

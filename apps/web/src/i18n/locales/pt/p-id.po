@@ -13,9 +13,23 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: used.scanned
+msgid "{0, plural, one {From its latest transition of a type that acts on a contract.} other {From its latest # transitions of the types that act on a contract.}}"
+msgstr "{0, plural, one {Da sua transição mais recente de um tipo que atua sobre um contrato.} other {Das suas # transições mais recentes dos tipos que atuam sobre um contrato.}}"
+
+#. placeholder {0}: used.scanned
+msgid "{0, plural, one {From its one transition of a type that acts on a contract.} other {From all # of its transitions of the types that act on a contract.}}"
+msgstr "{0, plural, one {Da sua única transição de um tipo que atua sobre um contrato.} other {De todas as suas # transições dos tipos que atuam sobre um contrato.}}"
+
 #. placeholder {0}: formatInt(found.balance)
 msgid "{0} credits"
 msgstr "{0} créditos"
+
+msgid "{count, plural, one {# transition} other {# transitions}}"
+msgstr "{count, plural, one {# transição} other {# transições}}"
+
+msgid "{reached, plural, one {No match in this identity’s latest transition} other {No match in this identity’s latest # transitions}}"
+msgstr "{reached, plural, one {Nenhuma correspondência na transição mais recente desta identidade} other {Nenhuma correspondência nas # transições mais recentes desta identidade}}"
 
 msgid "A public key hash holds only the characters 0–9 and a–f."
 msgstr "Um hash de chave pública contém apenas os caracteres 0–9 e a–f."
@@ -42,11 +56,17 @@ msgstr "Avançado"
 msgid "All"
 msgstr "Tudo"
 
+msgid "All contracts"
+msgstr "Todos os contratos"
+
 msgid "Amount"
 msgstr "Valor"
 
 msgid "An identity ID is 43 or 44 base58 characters, or 64 hexadecimal characters."
 msgstr "Um ID de identidade tem 43 ou 44 caracteres base58, ou 64 caracteres hexadecimais."
+
+msgid "Apply"
+msgstr "Aplicar"
 
 msgid "Balance"
 msgstr "Saldo"
@@ -103,6 +123,9 @@ msgstr "ID do contrato"
 
 msgid "Contract nonce"
 msgstr "Nonce do contrato"
+
+msgid "Contract: {contractLabel}"
+msgstr "Contrato: {contractLabel}"
 
 msgid "Contracts"
 msgstr "Contratos"
@@ -161,6 +184,9 @@ msgstr "Todas as identidades indexadas pelo Platform Explorer, com saldo e ativi
 
 msgid "Filter"
 msgstr "Filtrar"
+
+msgid "Filtered, the list shows the transitions this identity signed; credit it received is on the Transfers tab."
+msgstr "Com filtros, a lista mostra as transições que esta identidade assinou; os créditos recebidos estão no separador Transferências."
 
 msgid "Find"
 msgstr "Buscar"
@@ -227,6 +253,9 @@ msgstr "A carregar…"
 msgid "Lock"
 msgstr "Bloquear"
 
+msgid "Look further back"
+msgstr "Procurar mais atrás"
+
 msgid "Manage in Bridge"
 msgstr "Gerenciar no Bridge"
 
@@ -269,11 +298,20 @@ msgstr "Nenhuma identidade possui este hash sozinha; estas identidades o compart
 msgid "No tokens to check."
 msgstr "Nenhum token para verificar."
 
+msgid "No transition from this identity matches these filters"
+msgstr "Nenhuma transição desta identidade corresponde a estes filtros"
+
 msgid "Nonce"
 msgstr "Nonce"
 
 msgid "None"
 msgstr "Nenhum"
+
+msgid "None of its transitions acts on a contract."
+msgstr "Nenhuma das suas transições atua sobre um contrato."
+
+msgid "None of the chosen types can act on a contract."
+msgstr "Nenhum dos tipos escolhidos pode atuar sobre um contrato."
 
 msgid "Not available"
 msgstr "Indisponível"
@@ -302,6 +340,9 @@ msgstr "Abrindo a identidade…"
 msgid "Operator"
 msgstr "Operador"
 
+msgid "Or paste a contract ID"
+msgstr "Ou cole um ID de contrato"
+
 msgid "Overview"
 msgstr "Visão geral"
 
@@ -313,6 +354,12 @@ msgstr "Platform"
 
 msgid "Platform answers group membership only for the contracts it is asked about: the ones this identity owns, and the one you name."
 msgstr "A Platform só responde sobre a participação em grupos para os contratos consultados: os que esta identidade possui e o que você indicar."
+
+msgid "Platform Explorer can’t filter by contract, so Radar reads 100 transitions at a time and keeps the ones on this contract."
+msgstr "O Platform Explorer não filtra por contrato, por isso o Radar lê 100 transições de cada vez e mantém as deste contrato."
+
+msgid "Platform Explorer did not answer."
+msgstr "O Platform Explorer não respondeu."
 
 msgid "Platform Explorer has no identity with this ID on {net}."
 msgstr "O Platform Explorer não tem nenhuma identidade com este ID em {net}."
@@ -352,6 +399,9 @@ msgstr "Finalidade"
 
 msgid "Read-only"
 msgstr "Somente leitura"
+
+msgid "Reading this identity’s transitions…"
+msgstr "A ler as transições desta identidade…"
 
 msgid "Regular"
 msgstr "Comum"
@@ -484,6 +534,9 @@ msgstr "Transições"
 #. placeholder {0}: rangeText(search.txs) ?? ''
 msgid "Transitions {0}"
 msgstr "Transições {0}"
+
+msgid "Try again"
+msgstr "Tentar novamente"
 
 msgid "Type"
 msgstr "Tipo"

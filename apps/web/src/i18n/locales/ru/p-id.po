@@ -13,9 +13,23 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: used.scanned
+msgid "{0, plural, one {From its latest transition of a type that acts on a contract.} other {From its latest # transitions of the types that act on a contract.}}"
+msgstr "{0, plural, one {Последние переходы типов, относящихся к контракту: #.} few {Последние переходы типов, относящихся к контракту: #.} many {Последние переходы типов, относящихся к контракту: #.} other {Последние переходы типов, относящихся к контракту: #.}}"
+
+#. placeholder {0}: used.scanned
+msgid "{0, plural, one {From its one transition of a type that acts on a contract.} other {From all # of its transitions of the types that act on a contract.}}"
+msgstr "{0, plural, one {Все переходы типов, относящихся к контракту: #.} few {Все переходы типов, относящихся к контракту: #.} many {Все переходы типов, относящихся к контракту: #.} other {Все переходы типов, относящихся к контракту: #.}}"
+
 #. placeholder {0}: formatInt(found.balance)
 msgid "{0} credits"
 msgstr "{0} кредитов"
+
+msgid "{count, plural, one {# transition} other {# transitions}}"
+msgstr "{count, plural, one {# переход} few {# перехода} many {# переходов} other {# перехода}}"
+
+msgid "{reached, plural, one {No match in this identity’s latest transition} other {No match in this identity’s latest # transitions}}"
+msgstr "{reached, plural, one {Нет совпадений среди последних переходов этой идентичности (прочитано: #)} few {Нет совпадений среди последних переходов этой идентичности (прочитано: #)} many {Нет совпадений среди последних переходов этой идентичности (прочитано: #)} other {Нет совпадений среди последних переходов этой идентичности (прочитано: #)}}"
 
 msgid "A public key hash holds only the characters 0–9 and a–f."
 msgstr "Хеш открытого ключа состоит только из символов 0–9 и a–f."
@@ -42,11 +56,17 @@ msgstr "Дополнительно"
 msgid "All"
 msgstr "Все"
 
+msgid "All contracts"
+msgstr "Все контракты"
+
 msgid "Amount"
 msgstr "Сумма"
 
 msgid "An identity ID is 43 or 44 base58 characters, or 64 hexadecimal characters."
 msgstr "ID идентичности — 43 или 44 символа base58 либо 64 шестнадцатеричных символа."
+
+msgid "Apply"
+msgstr "Применить"
 
 msgid "Balance"
 msgstr "Баланс"
@@ -103,6 +123,9 @@ msgstr "ID контракта"
 
 msgid "Contract nonce"
 msgstr "Nonce контракта"
+
+msgid "Contract: {contractLabel}"
+msgstr "Контракт: {contractLabel}"
 
 msgid "Contracts"
 msgstr "Контракты"
@@ -161,6 +184,9 @@ msgstr "Все идентичности, проиндексированные Pl
 
 msgid "Filter"
 msgstr "Фильтр"
+
+msgid "Filtered, the list shows the transitions this identity signed; credit it received is on the Transfers tab."
+msgstr "С фильтрами список показывает переходы, подписанные этой идентичностью; полученные кредиты — на вкладке «Переводы»."
 
 msgid "Find"
 msgstr "Найти"
@@ -227,6 +253,9 @@ msgstr "Загрузка…"
 msgid "Lock"
 msgstr "Заблокировать"
 
+msgid "Look further back"
+msgstr "Искать дальше"
+
 msgid "Manage in Bridge"
 msgstr "Управлять в Bridge"
 
@@ -269,11 +298,20 @@ msgstr "Этот хеш не принадлежит одной идентичн�
 msgid "No tokens to check."
 msgstr "Нет токенов для проверки."
 
+msgid "No transition from this identity matches these filters"
+msgstr "Ни один переход этой идентичности не подходит под эти фильтры"
+
 msgid "Nonce"
 msgstr "Nonce"
 
 msgid "None"
 msgstr "Нет"
+
+msgid "None of its transitions acts on a contract."
+msgstr "Ни один из её переходов не относится к контракту."
+
+msgid "None of the chosen types can act on a contract."
+msgstr "Ни один из выбранных типов не может относиться к контракту."
 
 msgid "Not available"
 msgstr "Недоступно"
@@ -302,6 +340,9 @@ msgstr "Открываем идентичность…"
 msgid "Operator"
 msgstr "Оператор"
 
+msgid "Or paste a contract ID"
+msgstr "Или вставьте ID контракта"
+
 msgid "Overview"
 msgstr "Обзор"
 
@@ -313,6 +354,12 @@ msgstr "Platform"
 
 msgid "Platform answers group membership only for the contracts it is asked about: the ones this identity owns, and the one you name."
 msgstr "Platform отвечает о членстве в группах только для запрошенных контрактов: тех, что принадлежат этой идентичности, и указанного вами."
+
+msgid "Platform Explorer can’t filter by contract, so Radar reads 100 transitions at a time and keeps the ones on this contract."
+msgstr "Platform Explorer не умеет фильтровать по контракту, поэтому Radar читает переходы по 100 и оставляет относящиеся к этому контракту."
+
+msgid "Platform Explorer did not answer."
+msgstr "Platform Explorer не ответил."
 
 msgid "Platform Explorer has no identity with this ID on {net}."
 msgstr "У Platform Explorer нет идентичности с таким ID в сети {net}."
@@ -352,6 +399,9 @@ msgstr "Назначение"
 
 msgid "Read-only"
 msgstr "Только чтение"
+
+msgid "Reading this identity’s transitions…"
+msgstr "Читаем переходы этой идентичности…"
 
 msgid "Regular"
 msgstr "Обычная"
@@ -484,6 +534,9 @@ msgstr "Переходы"
 #. placeholder {0}: rangeText(search.txs) ?? ''
 msgid "Transitions {0}"
 msgstr "Переходы {0}"
+
+msgid "Try again"
+msgstr "Повторить"
 
 msgid "Type"
 msgstr "Тип"

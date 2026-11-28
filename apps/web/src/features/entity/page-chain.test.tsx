@@ -16,8 +16,10 @@ function List({
   asked,
   maxPages,
   hold,
+  keep,
 }: {
   hold?: Promise<void>
+  keep?: (id: string) => boolean
   all: string[] | (() => string[])
   start?: string | undefined
   earlier?: (string | undefined)[]
@@ -39,7 +41,7 @@ function List({
           return list.slice(from, from + PAGE + 1)
         },
       }),
-    rows: (page) => page.slice(0, PAGE),
+    rows: (page) => page.slice(0, PAGE).filter((id) => keep?.(id) ?? true),
     getRowId: (id) => id,
     next: (page) => (page.length > PAGE ? page[PAGE - 1] : undefined),
     maxPages,
@@ -122,6 +124,49 @@ describe('usePageChain', () => {
     expect(screen.queryByText('end')).toBeNull()
     release()
     expect(await screen.findByText('v10')).toBeInTheDocument()
+  })
+
+  it('reads on past later pages a browser-side filter hides entirely', async () => {
+    const user = userEvent.setup()
+    const kept = new Set(['v1', 'v2', 'v18'])
+    const { asked } = setup({ all: ids(30), keep: (id) => kept.has(id) })
+    expect(await screen.findByText('v2')).toBeInTheDocument()
+    expect(asked).toEqual([undefined])
+    await user.click(screen.getByRole('button', { name: 'more' }))
+    expect(await screen.findByText('v18')).toBeInTheDocument()
+    expect(shown()).toEqual(['v1', 'v2', 'v18'])
+    expect(asked).toEqual([undefined, 'v5', 'v10', 'v15'])
+  })
+
+  it('keeps the rows on screen while it reads past more hidden pages than it keeps', async () => {
+    const user = userEvent.setup()
+    const { asked } = setup({
+      all: ids(200),
+      maxPages: 3,
+      keep: (id) => id === 'v1' || id === 'v2',
+    })
+    expect(await screen.findByText('v2')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'more' }))
+    await waitFor(() => {
+      expect(asked).toHaveLength(14)
+    })
+    expect(shown()).toEqual(['v1', 'v2'])
+    expect(screen.queryByRole('button', { name: 'earlier' })).toBeNull()
+  })
+
+  it('keeps the rows on screen through a second read past hidden pages', async () => {
+    const user = userEvent.setup()
+    const { asked } = setup({ all: ids(400), keep: (id) => id === 'v1' || id === 'v2' })
+    expect(await screen.findByText('v2')).toBeInTheDocument()
+    for (const total of [14, 27]) {
+      await user.click(screen.getByRole('button', { name: 'more' }))
+      await waitFor(() => {
+        expect(asked).toHaveLength(total)
+      })
+    }
+    expect(shown()).toEqual(['v1', 'v2'])
+    expect(screen.getByTestId('state')).toHaveTextContent('ready')
+    expect(screen.queryByRole('button', { name: 'earlier' })).toBeNull()
   })
 
   it('opens at the cursor the address names, without reading the pages above it', async () => {

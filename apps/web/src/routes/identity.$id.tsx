@@ -1,8 +1,9 @@
 import { createFileRoute, stripSearchParams } from '@tanstack/react-router'
 import { z } from 'zod'
 import { routePrefetch } from '@/app/route-loader'
-import { zCsv, zDefault, zOpt, zPage } from '@/app/search'
+import { zCsv, zCsvEnum, zDefault, zIsoDate, zOpt, zPage, zRange } from '@/app/search'
 import { IdentityPage } from '@/features/platform'
+import { TRANSITION_TYPES } from '@/lib/tx-types'
 
 const defaults = { tab: 'overview', page: 1 } as const
 
@@ -27,6 +28,13 @@ const identitySearch = z.object({
   contract: zOpt(z.string()),
   type: zOpt(z.string()),
   tokens: zOpt(zCsv),
+  txtype: zOpt(zCsvEnum(TRANSITION_TYPES)),
+  batch: zOpt(zCsv),
+  status: zOpt(z.enum(['success', 'fail'])),
+  gas: zOpt(zRange),
+  from: zOpt(zIsoDate),
+  to: zOpt(zIsoDate),
+  txcontract: zOpt(z.string()),
 })
 
 export const Route = createFileRoute('/identity/$id')({

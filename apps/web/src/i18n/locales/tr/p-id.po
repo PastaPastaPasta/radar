@@ -13,9 +13,23 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: used.scanned
+msgid "{0, plural, one {From its latest transition of a type that acts on a contract.} other {From its latest # transitions of the types that act on a contract.}}"
+msgstr "{0, plural, one {Sözleşmeyle ilgili türdeki son geçişinden.} other {Sözleşmeyle ilgili türlerdeki son # geçişinden.}}"
+
+#. placeholder {0}: used.scanned
+msgid "{0, plural, one {From its one transition of a type that acts on a contract.} other {From all # of its transitions of the types that act on a contract.}}"
+msgstr "{0, plural, one {Sözleşmeyle ilgili türdeki tek geçişinden.} other {Sözleşmeyle ilgili türlerdeki tüm # geçişinden.}}"
+
 #. placeholder {0}: formatInt(found.balance)
 msgid "{0} credits"
 msgstr "{0} kredi"
+
+msgid "{count, plural, one {# transition} other {# transitions}}"
+msgstr "{count, plural, one {# geçiş} other {# geçiş}}"
+
+msgid "{reached, plural, one {No match in this identity’s latest transition} other {No match in this identity’s latest # transitions}}"
+msgstr "{reached, plural, one {Bu kimliğin son geçişinde eşleşme yok} other {Bu kimliğin son # geçişinde eşleşme yok}}"
 
 msgid "A public key hash holds only the characters 0–9 and a–f."
 msgstr "Bir açık anahtar hash’i yalnızca 0–9 ve a–f karakterlerini içerir."
@@ -42,11 +56,17 @@ msgstr "Gelişmiş"
 msgid "All"
 msgstr "Tümü"
 
+msgid "All contracts"
+msgstr "Tüm sözleşmeler"
+
 msgid "Amount"
 msgstr "Tutar"
 
 msgid "An identity ID is 43 or 44 base58 characters, or 64 hexadecimal characters."
 msgstr "Bir kimlik ID’si 43 veya 44 base58 karakterinden ya da 64 onaltılık karakterden oluşur."
+
+msgid "Apply"
+msgstr "Uygula"
 
 msgid "Balance"
 msgstr "Bakiye"
@@ -103,6 +123,9 @@ msgstr "Sözleşme kimliği"
 
 msgid "Contract nonce"
 msgstr "Sözleşme nonce’u"
+
+msgid "Contract: {contractLabel}"
+msgstr "Sözleşme: {contractLabel}"
 
 msgid "Contracts"
 msgstr "Sözleşmeler"
@@ -161,6 +184,9 @@ msgstr "Platform Explorer’ın dizinlediği tüm kimlikler, bakiye ve etkinlikl
 
 msgid "Filter"
 msgstr "Filtrele"
+
+msgid "Filtered, the list shows the transitions this identity signed; credit it received is on the Transfers tab."
+msgstr "Filtrelendiğinde liste bu kimliğin imzaladığı geçişleri gösterir; aldığı krediler Transferler sekmesindedir."
 
 msgid "Find"
 msgstr "Bul"
@@ -227,6 +253,9 @@ msgstr "Yükleniyor…"
 msgid "Lock"
 msgstr "Kilitle"
 
+msgid "Look further back"
+msgstr "Daha geriye bak"
+
 msgid "Manage in Bridge"
 msgstr "Bridge’de yönet"
 
@@ -269,11 +298,20 @@ msgstr "Bu hash’e tek bir kimlik sahip değil; bu kimlikler paylaşıyor."
 msgid "No tokens to check."
 msgstr "Kontrol edilecek token yok."
 
+msgid "No transition from this identity matches these filters"
+msgstr "Bu kimliğin hiçbir geçişi bu filtrelerle eşleşmiyor"
+
 msgid "Nonce"
 msgstr "Nonce"
 
 msgid "None"
 msgstr "Yok"
+
+msgid "None of its transitions acts on a contract."
+msgstr "Geçişlerinin hiçbiri bir sözleşmeyle ilgili değil."
+
+msgid "None of the chosen types can act on a contract."
+msgstr "Seçilen türlerin hiçbiri bir sözleşmeyle ilgili olamaz."
 
 msgid "Not available"
 msgstr "Kullanılamıyor"
@@ -302,6 +340,9 @@ msgstr "Kimlik açılıyor…"
 msgid "Operator"
 msgstr "Operatör"
 
+msgid "Or paste a contract ID"
+msgstr "Ya da bir sözleşme kimliği yapıştırın"
+
 msgid "Overview"
 msgstr "Genel bakış"
 
@@ -313,6 +354,12 @@ msgstr "Platform"
 
 msgid "Platform answers group membership only for the contracts it is asked about: the ones this identity owns, and the one you name."
 msgstr "Platform, grup üyeliğini yalnızca sorulan sözleşmeler için yanıtlar: bu kimliğin sahip olduğu sözleşmeler ve sizin belirttiğiniz sözleşme."
+
+msgid "Platform Explorer can’t filter by contract, so Radar reads 100 transitions at a time and keeps the ones on this contract."
+msgstr "Platform Explorer sözleşmeye göre filtreleyemez; bu yüzden Radar geçişleri 100’er okur ve bu sözleşmeye ait olanları tutar."
+
+msgid "Platform Explorer did not answer."
+msgstr "Platform Explorer yanıt vermedi."
 
 msgid "Platform Explorer has no identity with this ID on {net}."
 msgstr "Platform Explorer’da {net} üzerinde bu ID’ye sahip kimlik yok."
@@ -352,6 +399,9 @@ msgstr "Amaç"
 
 msgid "Read-only"
 msgstr "Salt okunur"
+
+msgid "Reading this identity’s transitions…"
+msgstr "Bu kimliğin geçişleri okunuyor…"
 
 msgid "Regular"
 msgstr "Normal"
@@ -484,6 +534,9 @@ msgstr "Geçişler"
 #. placeholder {0}: rangeText(search.txs) ?? ''
 msgid "Transitions {0}"
 msgstr "Geçişler {0}"
+
+msgid "Try again"
+msgstr "Tekrar dene"
 
 msgid "Type"
 msgstr "Tür"

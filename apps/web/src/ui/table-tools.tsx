@@ -100,7 +100,8 @@ export function FilterButton({
 }
 
 export interface ActiveFiltersProps {
-  matches: number
+  /** How many rows match; left out while that is not known yet (a filter applied as rows load). */
+  matches?: number | undefined
   tokens: { id: string; label: string }[]
   onRemove: (id: string) => void
   onClear: () => void
@@ -116,11 +117,13 @@ export function ActiveFilters({
 }: ActiveFiltersProps) {
   return (
     <div className="rx-activef" role="status">
-      <span>
-        <Trans>
-          <b>{formatInt(matches)}</b> match
-        </Trans>
-      </span>
+      {matches === undefined ? null : (
+        <span>
+          <Trans>
+            <b>{formatInt(matches)}</b> match
+          </Trans>
+        </span>
+      )}
       {tokens.map((tok) => (
         <span key={tok.id} className="rx-token">
           {tok.label}
