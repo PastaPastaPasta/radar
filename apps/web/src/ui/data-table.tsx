@@ -52,6 +52,8 @@ export interface DataTableProps<Row> {
         fetching: boolean
         /** The last load failed: no more loads start by themselves until the reader asks again. */
         failed?: boolean
+        /** The button that asks again after a load that added nothing, when that is not a failure. */
+        stalledLabel?: string
       }
   virtual?: boolean
   rowLink?: (r: Row) => LinkProps
@@ -190,7 +192,7 @@ function InfinitePager({
       <span>{t`${formatInt(shown)} loaded`}</span>
       {failed && paging.hasNext && !paging.fetching ? (
         <button type="button" className="dh-btn dh-btn--sm" onClick={more}>
-          {t`Try again`}
+          {paging.failed !== true && paging.stalledLabel ? paging.stalledLabel : t`Try again`}
         </button>
       ) : (
         <InfiniteSentinel

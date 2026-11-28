@@ -14,16 +14,12 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. placeholder {0}: used.scanned
-msgid "{0, plural, one {From its latest transition.} other {From its latest # transitions.}}"
-msgstr "{0, plural, one {По последнему # переходу.} few {По последним # переходам.} many {По последним # переходам.} other {По последним # перехода.}}"
+msgid "{0, plural, one {From its latest transition of a type that acts on a contract.} other {From its latest # transitions of the types that act on a contract.}}"
+msgstr "{0, plural, one {По последнему # переходу тех типов, что относятся к контракту.} few {По последним # переходам тех типов, что относятся к контракту.} many {По последним # переходам тех типов, что относятся к контракту.} other {По последним # перехода тех типов, что относятся к контракту.}}"
 
 #. placeholder {0}: used.scanned
-msgid "{0, plural, one {From its one transition.} other {From all # of its transitions.}}"
-msgstr "{0, plural, one {По всем # переходу.} few {По всем # переходам.} many {По всем # переходам.} other {По всем # перехода.}}"
-
-#. placeholder {0}: used.scanned
-msgid "{0, plural, one {Its latest transition acts on no contract.} other {None of its latest # transitions acts on a contract.}}"
-msgstr "{0, plural, one {Ни один из последних # перехода не относится к контракту.} few {Ни один из последних # переходов не относится к контракту.} many {Ни один из последних # переходов не относится к контракту.} other {Ни один из последних # перехода не относится к контракту.}}"
+msgid "{0, plural, one {From its one transition of a type that acts on a contract.} other {From all # of its transitions of the types that act on a contract.}}"
+msgstr "{0, plural, one {По всем # переходу тех типов, что относятся к контракту.} few {По всем # переходам тех типов, что относятся к контракту.} many {По всем # переходам тех типов, что относятся к контракту.} other {По всем # перехода тех типов, что относятся к контракту.}}"
 
 #. placeholder {0}: formatInt(found.balance)
 msgid "{0} credits"
@@ -310,6 +306,12 @@ msgstr "Nonce"
 
 msgid "None"
 msgstr "Нет"
+
+msgid "None of its transitions acts on a contract."
+msgstr "Ни один из её переходов не относится к контракту."
+
+msgid "None of the chosen types can act on a contract."
+msgstr "Ни один из выбранных типов не может относиться к контракту."
 
 msgid "Not available"
 msgstr "Недоступно"

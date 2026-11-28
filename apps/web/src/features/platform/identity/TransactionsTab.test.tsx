@@ -83,7 +83,7 @@ afterEach(() => {
 describe('Identity transitions filters @PE-15', () => {
   it('keeps the transitions that act on the contract in the address, from one read of 100', async () => {
     const asked = stubTransactions()
-    renderAt(`/identity/${M}?tab=transactions&contract=${DASHPAY}`)
+    renderAt(`/identity/${M}?tab=transactions&txcontract=${DASHPAY}`)
     await waitFor(() => {
       expect(shownHashes()).toEqual(hashes(1, 3, 5))
     })

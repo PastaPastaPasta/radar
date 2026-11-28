@@ -20,7 +20,8 @@ export interface IdentityTxFilters {
   gas?: NumericRange | undefined
   from?: string | undefined
   to?: string | undefined
-  contract?: string | undefined
+  /** `contract` belongs to the Groups and Advanced tabs. */
+  txcontract?: string | undefined
 }
 
 export const TX_FILTER_KEYS = [
@@ -30,7 +31,7 @@ export const TX_FILTER_KEYS = [
   'gas',
   'from',
   'to',
-  'contract',
+  'txcontract',
 ] as const satisfies readonly (keyof IdentityTxFilters)[]
 
 /** The transition types whose bytes name a data contract; the rest never match a contract filter. */
@@ -65,11 +66,23 @@ export const hasTxFilter = (f: IdentityTxFilters): boolean =>
 export function identityTxsPlan(
   id: string,
   f: IdentityTxFilters,
-): { filtered: false; limit: number } | { filtered: true; limit: number; query: PeQuery } {
+):
+  | { filtered: false; limit: number }
+  | { filtered: true; limit: number; query: PeQuery; matchesNothing: boolean } {
   if (!hasTxFilter(f)) return { filtered: false, limit: PE_PAGE }
-  const narrowsType = (f.txtype?.length ?? 0) > 0 || (f.batch?.length ?? 0) > 0
-  const query = ownerQuery(id, f.contract && !narrowsType ? { ...f, txtype: CONTRACT_TYPES } : f)
-  return { filtered: true, limit: f.contract ? SCAN_PAGE : PE_PAGE, query }
+  if (!f.txcontract)
+    return { filtered: true, limit: PE_PAGE, query: ownerQuery(id, f), matchesNothing: false }
+  // A batch type is a batch, which names a contract; of the chosen types, only those that can name one are read.
+  const txtype =
+    (f.batch?.length ?? 0) > 0
+      ? f.txtype
+      : (f.txtype ?? CONTRACT_TYPES).filter((t) => CONTRACT_TYPES.includes(t))
+  return {
+    filtered: true,
+    limit: SCAN_PAGE,
+    query: ownerQuery(id, { ...f, txtype }),
+    matchesNothing: txtype?.length === 0,
+  }
 }
 
 const ownerQuery = (id: string, f: IdentityTxFilters): PeQuery =>
@@ -159,11 +172,9 @@ export function useUsedContracts(net: NetworkId, id: string, enabled: boolean) {
     more = hasMore(r.data, i + 1)
     if (!more) break
   }
-  const first = results[0]?.data
   return {
     contracts: [...byId.values()].sort((a, b) => b.count - a.count),
     scanned,
-    total: first?.data.total,
     pending,
     failed,
     /** The scan stopped at its cap with older transitions left. */

@@ -43,6 +43,7 @@ export interface IdentityPageSearch {
   gas?: IdentityTxFilters['gas']
   from?: string | undefined
   to?: string | undefined
+  txcontract?: string | undefined
 }
 
 export function IdentityPage({ id: raw, search }: { id: string; search: IdentityPageSearch }) {
@@ -188,7 +189,7 @@ function IdentityView({ id, search }: { id: string; search: IdentityPageSearch }
                     tab: tab === 'overview' ? undefined : tab,
                     page: undefined,
                     type: tab === 'documents' ? prev.type : undefined,
-                    ...(tab === 'transactions' ? {} : leaveTransitions(tab)),
+                    ...(tab === 'transactions' ? {} : NO_TX_FILTERS),
                   })) as never,
                 }) as never
               }
@@ -250,10 +251,5 @@ function TabBody({ id, search }: { id: string; search: IdentityPageSearch }) {
   }
 }
 
-/** The Transitions tab's filters end with it; Groups and Advanced read `contract` too, so it stays for them. */
-function leaveTransitions(tab: string): Record<string, undefined> {
-  const keep = tab === 'groups' || tab === 'advanced' ? ['contract'] : []
-  return Object.fromEntries(
-    TX_FILTER_KEYS.filter((k) => !keep.includes(k)).map((k) => [k, undefined]),
-  )
-}
+/** The Transitions tab's filters end with it. */
+const NO_TX_FILTERS = Object.fromEntries(TX_FILTER_KEYS.map((k) => [k, undefined]))

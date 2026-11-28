@@ -138,6 +138,22 @@ describe('usePageChain', () => {
     expect(asked).toEqual([undefined, 'v5', 'v10', 'v15'])
   })
 
+  it('keeps the rows on screen while it reads past more hidden pages than it keeps', async () => {
+    const user = userEvent.setup()
+    const { asked } = setup({
+      all: ids(200),
+      maxPages: 3,
+      keep: (id) => id === 'v1' || id === 'v2',
+    })
+    expect(await screen.findByText('v2')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'more' }))
+    await waitFor(() => {
+      expect(asked).toHaveLength(14)
+    })
+    expect(shown()).toEqual(['v1', 'v2'])
+    expect(screen.queryByRole('button', { name: 'earlier' })).toBeNull()
+  })
+
   it('opens at the cursor the address names, without reading the pages above it', async () => {
     const { asked } = setup({ all: ids(20), start: 'v10' })
     expect(await screen.findByText('v11')).toBeInTheDocument()

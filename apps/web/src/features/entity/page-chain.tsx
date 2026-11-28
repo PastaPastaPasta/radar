@@ -196,11 +196,26 @@ export function usePageChain<P, Param, Row, K extends QueryKey>(
   const hasPrev = chain.lo > 0 || prevParam !== undefined
   const failedPage = pages.find((p) => p.failed)
 
+  // Pages a browser-side filter hid entirely don't count toward `max`, so reading past them never drops the rows on
+  // screen; the window still holds at most `max + MAX_SKIPPED_PAGES` pages.
+  const hidden = new Set<number>()
+  pages.forEach((p, i) => {
+    if (p.data !== undefined && rowsOf(p.data).length === 0) hidden.add(chain.lo + i)
+  })
   const advance = (c: Chain<Param>, skipped: number): Chain<Param> => {
     if (nextParam === undefined) return c
     const params = c.hi < c.params.length - 1 ? c.params : [...c.params, nextParam]
     const hi = c.hi + 1
-    return { ...c, params, hi, lo: Math.max(c.lo, hi - max + 1), skipped }
+    let lo = Math.max(c.lo, hi - max - MAX_SKIPPED_PAGES + 1)
+    let held = 0
+    for (let i = hi; i >= lo; i--) {
+      if (!hidden.has(i)) held += 1
+      if (held > max) {
+        lo = i + 1
+        break
+      }
+    }
+    return { ...c, params, hi, lo, skipped }
   }
   const readOn = () => {
     if (busy || !last) return

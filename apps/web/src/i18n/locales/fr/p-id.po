@@ -14,16 +14,12 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. placeholder {0}: used.scanned
-msgid "{0, plural, one {From its latest transition.} other {From its latest # transitions.}}"
-msgstr "{0, plural, one {D’après sa dernière transition.} other {D’après ses # dernières transitions.}}"
+msgid "{0, plural, one {From its latest transition of a type that acts on a contract.} other {From its latest # transitions of the types that act on a contract.}}"
+msgstr "{0, plural, one {D’après sa dernière transition d’un type qui porte sur un contrat.} other {D’après ses # dernières transitions des types qui portent sur un contrat.}}"
 
 #. placeholder {0}: used.scanned
-msgid "{0, plural, one {From its one transition.} other {From all # of its transitions.}}"
-msgstr "{0, plural, one {D’après son unique transition.} other {D’après ses # transitions.}}"
-
-#. placeholder {0}: used.scanned
-msgid "{0, plural, one {Its latest transition acts on no contract.} other {None of its latest # transitions acts on a contract.}}"
-msgstr "{0, plural, one {Sa dernière transition ne porte sur aucun contrat.} other {Aucune de ses # dernières transitions ne porte sur un contrat.}}"
+msgid "{0, plural, one {From its one transition of a type that acts on a contract.} other {From all # of its transitions of the types that act on a contract.}}"
+msgstr "{0, plural, one {D’après son unique transition d’un type qui porte sur un contrat.} other {D’après ses # transitions des types qui portent sur un contrat.}}"
 
 #. placeholder {0}: formatInt(found.balance)
 msgid "{0} credits"
@@ -310,6 +306,12 @@ msgstr "Nonce"
 
 msgid "None"
 msgstr "Aucun"
+
+msgid "None of its transitions acts on a contract."
+msgstr "Aucune de ses transitions ne porte sur un contrat."
+
+msgid "None of the chosen types can act on a contract."
+msgstr "Aucun des types choisis ne peut porter sur un contrat."
 
 msgid "Not available"
 msgstr "Non disponible"

@@ -21,6 +21,7 @@ describe('identityTxsPlan', () => {
     expect(plan).toEqual({
       filtered: true,
       limit: 10,
+      matchesNothing: false,
       query: expect.objectContaining({
         owner: ID,
         transaction_type: ['3'],
@@ -33,7 +34,7 @@ describe('identityTxsPlan', () => {
   })
 
   it('reads full pages of the types that can name a contract for a contract filter', () => {
-    const plan = identityTxsPlan(ID, { contract: DASHPAY })
+    const plan = identityTxsPlan(ID, { txcontract: DASHPAY })
     expect(plan.limit).toBe(100)
     expect(plan.filtered && plan.query.transaction_type).toEqual([
       '0',
@@ -48,8 +49,18 @@ describe('identityTxsPlan', () => {
     ])
   })
 
-  it('leaves a chosen type or batch type alone beside a contract filter', () => {
-    const plan = identityTxsPlan(ID, { contract: DASHPAY, batch: ['document-create'] })
+  it('reads only the chosen types that can name a contract, and nothing when none can', () => {
+    const plan = identityTxsPlan(ID, {
+      txcontract: DASHPAY,
+      txtype: ['identity-top-up', 'data-contract-update'],
+    })
+    expect(plan.filtered && plan.query.transaction_type).toEqual(['4'])
+    const none = identityTxsPlan(ID, { txcontract: DASHPAY, txtype: ['identity-top-up'] })
+    expect(none.filtered && none.matchesNothing).toBe(true)
+  })
+
+  it('leaves a chosen batch type alone beside a contract filter', () => {
+    const plan = identityTxsPlan(ID, { txcontract: DASHPAY, batch: ['document-create'] })
     expect(plan.filtered && plan.query).toMatchObject({
       transaction_type: ['1'],
       batch_type: ['0'],

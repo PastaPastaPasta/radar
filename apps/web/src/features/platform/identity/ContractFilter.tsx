@@ -131,18 +131,15 @@ export function ContractFilter({
             : used.failed
               ? t`Platform Explorer did not answer.`
               : used.contracts.length === 0
-                ? plural(used.scanned, {
-                    one: 'Its latest transition acts on no contract.',
-                    other: 'None of its latest # transitions acts on a contract.',
-                  })
+                ? t`None of its transitions acts on a contract.`
                 : used.more
                   ? plural(used.scanned, {
-                      one: 'From its latest transition.',
-                      other: 'From its latest # transitions.',
+                      one: 'From its latest transition of a type that acts on a contract.',
+                      other: 'From its latest # transitions of the types that act on a contract.',
                     })
                   : plural(used.scanned, {
-                      one: 'From its one transition.',
-                      other: 'From all # of its transitions.',
+                      one: 'From its one transition of a type that acts on a contract.',
+                      other: 'From all # of its transitions of the types that act on a contract.',
                     })}{' '}
           {used.failed ? (
             <button type="button" className="dh-btn dh-btn--link" onClick={used.retry}>

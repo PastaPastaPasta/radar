@@ -14,16 +14,12 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. placeholder {0}: used.scanned
-msgid "{0, plural, one {From its latest transition.} other {From its latest # transitions.}}"
-msgstr "{0, plural, other {来自其最近 # 次状态转换。}}"
+msgid "{0, plural, one {From its latest transition of a type that acts on a contract.} other {From its latest # transitions of the types that act on a contract.}}"
+msgstr "{0, plural, other {来自其最近 # 次涉及合约类型的状态转换。}}"
 
 #. placeholder {0}: used.scanned
-msgid "{0, plural, one {From its one transition.} other {From all # of its transitions.}}"
-msgstr "{0, plural, other {来自其全部 # 次状态转换。}}"
-
-#. placeholder {0}: used.scanned
-msgid "{0, plural, one {Its latest transition acts on no contract.} other {None of its latest # transitions acts on a contract.}}"
-msgstr "{0, plural, other {其最近 # 次状态转换都不涉及合约。}}"
+msgid "{0, plural, one {From its one transition of a type that acts on a contract.} other {From all # of its transitions of the types that act on a contract.}}"
+msgstr "{0, plural, other {来自其全部 # 次涉及合约类型的状态转换。}}"
 
 #. placeholder {0}: formatInt(found.balance)
 msgid "{0} credits"
@@ -310,6 +306,12 @@ msgstr "Nonce"
 
 msgid "None"
 msgstr "无"
+
+msgid "None of its transitions acts on a contract."
+msgstr "其状态转换都不涉及合约。"
+
+msgid "None of the chosen types can act on a contract."
+msgstr "所选类型都不能涉及合约。"
 
 msgid "Not available"
 msgstr "不可用"

@@ -34,6 +34,7 @@ const identitySearch = z.object({
   gas: zOpt(zRange),
   from: zOpt(zIsoDate),
   to: zOpt(zIsoDate),
+  txcontract: zOpt(z.string()),
 })
 
 export const Route = createFileRoute('/identity/$id')({
