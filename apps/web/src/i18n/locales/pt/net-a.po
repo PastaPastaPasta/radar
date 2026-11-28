@@ -302,6 +302,11 @@ msgstr "cerca de {0}"
 msgid "about {0} at today's pace"
 msgstr "cerca de {0} no ritmo de hoje"
 
+#. placeholder {0}: when(blockMs(next.activation))
+#. placeholder {1}: formatInt(next.lock_in.height)
+msgid "about {0}, after lock-in at block {1}"
+msgstr "cerca de {0}, após a consolidação no bloco {1}"
+
 msgid "About the network size"
 msgstr "Sobre o tamanho da rede"
 
@@ -510,6 +515,9 @@ msgstr "O Core 24 não foi ativado"
 
 msgid "Core 24 failed: it reached its timeout without locking in."
 msgstr "O Core 24 falhou: atingiu o tempo limite sem ser consolidado."
+
+msgid "Core 24 fails; it can no longer activate"
+msgstr "O Core 24 falha; já não pode ser ativado"
 
 #. placeholder {0}: String(p.bit)
 #. placeholder {1}: when(p.start_time)
@@ -864,6 +872,12 @@ msgstr "Os mineradores sinalizam o Core 24"
 msgid "Miners are signalling: {0} of the {1} blocks this window needs, with {2} blocks to go."
 msgstr "Os mineiros estão a sinalizar: {0} dos {1} blocos de que esta janela precisa, faltando {2} blocos."
 
+msgid "Miners are signalling: {count} of the {needs} blocks this window needs, with {left} blocks to go. It can't get there, and no window starts after it before the timeout ({timeout}): Core 24 can no longer activate in this deployment."
+msgstr "Os mineiros estão a sinalizar: {count} dos {needs} blocos de que esta janela precisa, faltando {left} blocos. Já não consegue lá chegar, e nenhuma janela começa depois dela antes do tempo limite ({timeout}): o Core 24 já não pode ser ativado nesta implementação."
+
+msgid "Miners are signalling: {count} of the {needs} blocks this window needs, with {left} blocks to go. It can't get there, so the earliest activation is {earliest}, if window #{attempt} locks in."
+msgstr "Os mineiros estão a sinalizar: {count} dos {needs} blocos de que esta janela precisa, faltando {left} blocos. Já não consegue lá chegar, por isso a ativação mais cedo possível é {earliest}, se a janela #{attempt} for consolidada."
+
 #. placeholder {0}: formatInt(p.window)
 #. placeholder {1}: String(p.bit)
 #. placeholder {2}: formatInt(p.threshold_start)
@@ -913,6 +927,10 @@ msgstr "Tamanho da rede ao longo do tempo"
 msgid "Network size. Use the left and right arrow keys to step through the points."
 msgstr "Tamanho da rede. Use as setas esquerda e direita para percorrer os pontos."
 
+#. placeholder {0}: String((next?.attempt ?? 0) + 1)
+msgid "Next window ends (attempt {0})"
+msgstr "A janela seguinte termina (tentativa {0})"
+
 msgid "Next window that counts"
 msgstr "Próxima janela que conta"
 
@@ -942,6 +960,9 @@ msgstr "Ainda sem dados de alojamento."
 
 msgid "No location data yet."
 msgstr "Ainda sem dados de localização."
+
+msgid "no longer possible"
+msgstr "já não é possível"
 
 msgid "No Platform ban"
 msgstr "Sem banimento na Platform"
@@ -1404,9 +1425,20 @@ msgstr "Esta leitura está desatualizada."
 msgid "This window (attempt {0}), block by block"
 msgstr "Esta janela (tentativa {0}), bloco a bloco"
 
+msgid "this window can't lock in, and it's the last before the timeout"
+msgstr "esta janela não pode ser consolidada e é a última antes do tempo limite"
+
 #. placeholder {0}: String((w?.attempt ?? 0) + 1)
 msgid "This window ends (attempt {0})"
 msgstr "Esta janela termina (tentativa {0})"
+
+#. placeholder {0}: String((w?.attempt ?? 0) + 1)
+msgid "This window ends (attempt {0}), out of reach"
+msgstr "Esta janela termina (tentativa {0}), fora de alcance"
+
+#. placeholder {0}: String((w?.attempt ?? 0) + 1)
+msgid "This window ends (attempt {0}), out of reach and the last before the timeout"
+msgstr "Esta janela termina (tentativa {0}), fora de alcance e a última antes do tempo limite"
 
 #. placeholder {0}: formatInt(mined)
 msgid "This window's {0} blocks by pool."

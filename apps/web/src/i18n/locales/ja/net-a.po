@@ -302,6 +302,11 @@ msgstr "約 {0}"
 msgid "about {0} at today's pace"
 msgstr "今日のペースで約 {0}"
 
+#. placeholder {0}: when(blockMs(next.activation))
+#. placeholder {1}: formatInt(next.lock_in.height)
+msgid "about {0}, after lock-in at block {1}"
+msgstr "約 {0}（ブロック {1} でのロックイン後）"
+
 msgid "About the network size"
 msgstr "ネットワーク規模について"
 
@@ -510,6 +515,9 @@ msgstr "Core 24 は有効化されませんでした"
 
 msgid "Core 24 failed: it reached its timeout without locking in."
 msgstr "Core 24 は失敗しました。ロックインしないままタイムアウトに達しました。"
+
+msgid "Core 24 fails; it can no longer activate"
+msgstr "Core 24 は失敗し、もう有効化できません"
 
 #. placeholder {0}: String(p.bit)
 #. placeholder {1}: when(p.start_time)
@@ -864,6 +872,12 @@ msgstr "マイナーが Core 24 へのシグナルを出しています"
 msgid "Miners are signalling: {0} of the {1} blocks this window needs, with {2} blocks to go."
 msgstr "マイナーがシグナルを発信中：このウィンドウに必要な {1} ブロックのうち {0} 、残り {2} ブロック。"
 
+msgid "Miners are signalling: {count} of the {needs} blocks this window needs, with {left} blocks to go. It can't get there, and no window starts after it before the timeout ({timeout}): Core 24 can no longer activate in this deployment."
+msgstr "マイナーがシグナルを発信中：このウィンドウに必要な {needs} ブロックのうち {count} 、残り {left} ブロック。しきい値には届かず、タイムアウト（{timeout}）までに次のウィンドウは始まりません。このデプロイメントで Core 24 はもう有効化できません。"
+
+msgid "Miners are signalling: {count} of the {needs} blocks this window needs, with {left} blocks to go. It can't get there, so the earliest activation is {earliest}, if window #{attempt} locks in."
+msgstr "マイナーがシグナルを発信中：このウィンドウに必要な {needs} ブロックのうち {count} 、残り {left} ブロック。しきい値には届かないため、最短の有効化はウィンドウ #{attempt} がロックインした場合の {earliest} です。"
+
 #. placeholder {0}: formatInt(p.window)
 #. placeholder {1}: String(p.bit)
 #. placeholder {2}: formatInt(p.threshold_start)
@@ -913,6 +927,10 @@ msgstr "ネットワーク規模の推移"
 msgid "Network size. Use the left and right arrow keys to step through the points."
 msgstr "ネットワーク規模。左右の矢印キーで各点を順に移動できます。"
 
+#. placeholder {0}: String((next?.attempt ?? 0) + 1)
+msgid "Next window ends (attempt {0})"
+msgstr "次のウィンドウの終了（{0} 回目の試行）"
+
 msgid "Next window that counts"
 msgstr "次にカウントされるウィンドウ"
 
@@ -942,6 +960,9 @@ msgstr "ホスティングのデータはまだありません。"
 
 msgid "No location data yet."
 msgstr "所在地のデータはまだありません。"
+
+msgid "no longer possible"
+msgstr "もう不可能"
 
 msgid "No Platform ban"
 msgstr "Platform での BAN なし"
@@ -1404,9 +1425,20 @@ msgstr "この読み取り結果は古くなっています。"
 msgid "This window (attempt {0}), block by block"
 msgstr "このウィンドウ（{0} 回目の試行）、ブロックごと"
 
+msgid "this window can't lock in, and it's the last before the timeout"
+msgstr "このウィンドウはロックインできず、タイムアウト前の最後のウィンドウです"
+
 #. placeholder {0}: String((w?.attempt ?? 0) + 1)
 msgid "This window ends (attempt {0})"
 msgstr "このウィンドウの終了（{0} 回目の試行）"
+
+#. placeholder {0}: String((w?.attempt ?? 0) + 1)
+msgid "This window ends (attempt {0}), out of reach"
+msgstr "このウィンドウの終了（{0} 回目の試行）、到達不能"
+
+#. placeholder {0}: String((w?.attempt ?? 0) + 1)
+msgid "This window ends (attempt {0}), out of reach and the last before the timeout"
+msgstr "このウィンドウの終了（{0} 回目の試行）、到達不能でタイムアウト前の最後"
 
 #. placeholder {0}: formatInt(mined)
 msgid "This window's {0} blocks by pool."

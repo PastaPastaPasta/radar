@@ -301,6 +301,11 @@ msgstr "about {0}"
 msgid "about {0} at today's pace"
 msgstr "about {0} at today's pace"
 
+#. placeholder {0}: when(blockMs(next.activation))
+#. placeholder {1}: formatInt(next.lock_in.height)
+msgid "about {0}, after lock-in at block {1}"
+msgstr "about {0}, after lock-in at block {1}"
+
 msgid "About the network size"
 msgstr "About the network size"
 
@@ -509,6 +514,9 @@ msgstr "Core 24 did not activate"
 
 msgid "Core 24 failed: it reached its timeout without locking in."
 msgstr "Core 24 failed: it reached its timeout without locking in."
+
+msgid "Core 24 fails; it can no longer activate"
+msgstr "Core 24 fails; it can no longer activate"
 
 #. placeholder {0}: String(p.bit)
 #. placeholder {1}: when(p.start_time)
@@ -863,6 +871,12 @@ msgstr "Miners are signalling for Core 24"
 msgid "Miners are signalling: {0} of the {1} blocks this window needs, with {2} blocks to go."
 msgstr "Miners are signalling: {0} of the {1} blocks this window needs, with {2} blocks to go."
 
+msgid "Miners are signalling: {count} of the {needs} blocks this window needs, with {left} blocks to go. It can't get there, and no window starts after it before the timeout ({timeout}): Core 24 can no longer activate in this deployment."
+msgstr "Miners are signalling: {count} of the {needs} blocks this window needs, with {left} blocks to go. It can't get there, and no window starts after it before the timeout ({timeout}): Core 24 can no longer activate in this deployment."
+
+msgid "Miners are signalling: {count} of the {needs} blocks this window needs, with {left} blocks to go. It can't get there, so the earliest activation is {earliest}, if window #{attempt} locks in."
+msgstr "Miners are signalling: {count} of the {needs} blocks this window needs, with {left} blocks to go. It can't get there, so the earliest activation is {earliest}, if window #{attempt} locks in."
+
 #. placeholder {0}: formatInt(p.window)
 #. placeholder {1}: String(p.bit)
 #. placeholder {2}: formatInt(p.threshold_start)
@@ -912,6 +926,10 @@ msgstr "Network size over time"
 msgid "Network size. Use the left and right arrow keys to step through the points."
 msgstr "Network size. Use the left and right arrow keys to step through the points."
 
+#. placeholder {0}: String((next?.attempt ?? 0) + 1)
+msgid "Next window ends (attempt {0})"
+msgstr "Next window ends (attempt {0})"
+
 msgid "Next window that counts"
 msgstr "Next window that counts"
 
@@ -941,6 +959,9 @@ msgstr "No hosting data yet."
 
 msgid "No location data yet."
 msgstr "No location data yet."
+
+msgid "no longer possible"
+msgstr "no longer possible"
 
 msgid "No Platform ban"
 msgstr "No Platform ban"
@@ -1403,9 +1424,20 @@ msgstr "This reading is stale."
 msgid "This window (attempt {0}), block by block"
 msgstr "This window (attempt {0}), block by block"
 
+msgid "this window can't lock in, and it's the last before the timeout"
+msgstr "this window can't lock in, and it's the last before the timeout"
+
 #. placeholder {0}: String((w?.attempt ?? 0) + 1)
 msgid "This window ends (attempt {0})"
 msgstr "This window ends (attempt {0})"
+
+#. placeholder {0}: String((w?.attempt ?? 0) + 1)
+msgid "This window ends (attempt {0}), out of reach"
+msgstr "This window ends (attempt {0}), out of reach"
+
+#. placeholder {0}: String((w?.attempt ?? 0) + 1)
+msgid "This window ends (attempt {0}), out of reach and the last before the timeout"
+msgstr "This window ends (attempt {0}), out of reach and the last before the timeout"
 
 #. placeholder {0}: formatInt(mined)
 msgid "This window's {0} blocks by pool."

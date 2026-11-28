@@ -302,6 +302,11 @@ msgstr "около {0}"
 msgid "about {0} at today's pace"
 msgstr "около {0} при сегодняшнем темпе"
 
+#. placeholder {0}: when(blockMs(next.activation))
+#. placeholder {1}: formatInt(next.lock_in.height)
+msgid "about {0}, after lock-in at block {1}"
+msgstr "около {0}, после фиксации в блоке {1}"
+
 msgid "About the network size"
 msgstr "О размере сети"
 
@@ -510,6 +515,9 @@ msgstr "Core 24 не активировался"
 
 msgid "Core 24 failed: it reached its timeout without locking in."
 msgstr "Core 24 не состоялся: наступил тайм-аут, а фиксации не произошло."
+
+msgid "Core 24 fails; it can no longer activate"
+msgstr "Core 24 не состоится: активация больше невозможна"
 
 #. placeholder {0}: String(p.bit)
 #. placeholder {1}: when(p.start_time)
@@ -864,6 +872,12 @@ msgstr "Майнеры сигнализируют о Core 24"
 msgid "Miners are signalling: {0} of the {1} blocks this window needs, with {2} blocks to go."
 msgstr "Майнеры подают сигнал: {0} из {1} блоков, нужных этому окну; осталось блоков: {2}."
 
+msgid "Miners are signalling: {count} of the {needs} blocks this window needs, with {left} blocks to go. It can't get there, and no window starts after it before the timeout ({timeout}): Core 24 can no longer activate in this deployment."
+msgstr "Майнеры подают сигнал: {count} из {needs} блоков, нужных этому окну; осталось блоков: {left}. Порог уже не достичь, а до тайм-аута ({timeout}) после него не начнётся ни одно окно: в этом развёртывании Core 24 больше не может активироваться."
+
+msgid "Miners are signalling: {count} of the {needs} blocks this window needs, with {left} blocks to go. It can't get there, so the earliest activation is {earliest}, if window #{attempt} locks in."
+msgstr "Майнеры подают сигнал: {count} из {needs} блоков, нужных этому окну; осталось блоков: {left}. Порог уже не достичь, поэтому самая ранняя активация — {earliest}, если окно №{attempt} зафиксирует."
+
 #. placeholder {0}: formatInt(p.window)
 #. placeholder {1}: String(p.bit)
 #. placeholder {2}: formatInt(p.threshold_start)
@@ -913,6 +927,10 @@ msgstr "Размер сети во времени"
 msgid "Network size. Use the left and right arrow keys to step through the points."
 msgstr "Размер сети. Стрелками влево и вправо переходите по точкам."
 
+#. placeholder {0}: String((next?.attempt ?? 0) + 1)
+msgid "Next window ends (attempt {0})"
+msgstr "Следующее окно заканчивается (попытка {0})"
+
 msgid "Next window that counts"
 msgstr "Следующее засчитываемое окно"
 
@@ -942,6 +960,9 @@ msgstr "Данных о хостинге пока нет."
 
 msgid "No location data yet."
 msgstr "Данных о местоположении пока нет."
+
+msgid "no longer possible"
+msgstr "больше невозможна"
 
 msgid "No Platform ban"
 msgstr "Нет бана на Platform"
@@ -1404,9 +1425,20 @@ msgstr "Это считывание устарело."
 msgid "This window (attempt {0}), block by block"
 msgstr "Это окно (попытка {0}) по блокам"
 
+msgid "this window can't lock in, and it's the last before the timeout"
+msgstr "это окно не может зафиксировать, и оно последнее перед тайм-аутом"
+
 #. placeholder {0}: String((w?.attempt ?? 0) + 1)
 msgid "This window ends (attempt {0})"
 msgstr "Это окно заканчивается (попытка {0})"
+
+#. placeholder {0}: String((w?.attempt ?? 0) + 1)
+msgid "This window ends (attempt {0}), out of reach"
+msgstr "Это окно заканчивается (попытка {0}), порог недостижим"
+
+#. placeholder {0}: String((w?.attempt ?? 0) + 1)
+msgid "This window ends (attempt {0}), out of reach and the last before the timeout"
+msgstr "Это окно заканчивается (попытка {0}), порог недостижим, и оно последнее перед тайм-аутом"
 
 #. placeholder {0}: formatInt(mined)
 msgid "This window's {0} blocks by pool."

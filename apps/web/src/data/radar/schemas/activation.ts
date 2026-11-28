@@ -36,6 +36,16 @@ const ActivationWindowSchema = z
 
 export type ActivationWindow = z.output<typeof ActivationWindowSchema>
 
+/** While signalling: the window after this one, if it starts (null: this window is the last before the timeout). */
+const ActivationNextAttemptSchema = z.object({
+  attempt: z.number(),
+  threshold: z.number(),
+  window_start: ActivationBlockSchema,
+  window_end: ActivationBlockSchema,
+  lock_in: ActivationBlockSchema,
+  activation: ActivationBlockSchema,
+})
+
 const ActivationOutlookSchema = z
   .object({
     phase: z.string(),
@@ -57,6 +67,7 @@ const ActivationOutlookSchema = z
     activation_if_reached: ActivationBlockSchema.nullish(),
     activation: ActivationBlockSchema.nullish(),
     failed: ActivationBlockSchema.nullish(),
+    next_attempt: ActivationNextAttemptSchema.nullish(),
   })
   .catchall(z.unknown())
 

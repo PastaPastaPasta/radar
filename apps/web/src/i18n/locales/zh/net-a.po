@@ -302,6 +302,11 @@ msgstr "约 {0}"
 msgid "about {0} at today's pace"
 msgstr "按今天的速度约 {0}"
 
+#. placeholder {0}: when(blockMs(next.activation))
+#. placeholder {1}: formatInt(next.lock_in.height)
+msgid "about {0}, after lock-in at block {1}"
+msgstr "约 {0}，在区块 {1} 锁定之后"
+
 msgid "About the network size"
 msgstr "关于网络规模"
 
@@ -510,6 +515,9 @@ msgstr "Core 24 未能激活"
 
 msgid "Core 24 failed: it reached its timeout without locking in."
 msgstr "Core 24 激活失败：已达超时仍未锁定。"
+
+msgid "Core 24 fails; it can no longer activate"
+msgstr "Core 24 激活失败；已无法再激活"
 
 #. placeholder {0}: String(p.bit)
 #. placeholder {1}: when(p.start_time)
@@ -864,6 +872,12 @@ msgstr "矿工正在为 Core 24 发出信号"
 msgid "Miners are signalling: {0} of the {1} blocks this window needs, with {2} blocks to go."
 msgstr "矿工正在发出信号：本窗口需要 {1} 个区块，已有 {0} 个，还剩 {2} 个区块。"
 
+msgid "Miners are signalling: {count} of the {needs} blocks this window needs, with {left} blocks to go. It can't get there, and no window starts after it before the timeout ({timeout}): Core 24 can no longer activate in this deployment."
+msgstr "矿工正在发出信号：本窗口需要 {needs} 个区块，已有 {count} 个，还剩 {left} 个区块。本窗口已无法达到阈值，且在超时（{timeout}）前不会再有新窗口开始：Core 24 在本次部署中已无法激活。"
+
+msgid "Miners are signalling: {count} of the {needs} blocks this window needs, with {left} blocks to go. It can't get there, so the earliest activation is {earliest}, if window #{attempt} locks in."
+msgstr "矿工正在发出信号：本窗口需要 {needs} 个区块，已有 {count} 个，还剩 {left} 个区块。本窗口已无法达到阈值，因此最早激活为 {earliest}（若窗口 #{attempt} 锁定）。"
+
 #. placeholder {0}: formatInt(p.window)
 #. placeholder {1}: String(p.bit)
 #. placeholder {2}: formatInt(p.threshold_start)
@@ -913,6 +927,10 @@ msgstr "网络规模变化"
 msgid "Network size. Use the left and right arrow keys to step through the points."
 msgstr "网络规模。使用左右方向键逐点查看。"
 
+#. placeholder {0}: String((next?.attempt ?? 0) + 1)
+msgid "Next window ends (attempt {0})"
+msgstr "下一窗口结束（第 {0} 次尝试）"
+
 msgid "Next window that counts"
 msgstr "下一个计入的窗口"
 
@@ -942,6 +960,9 @@ msgstr "暂无托管数据。"
 
 msgid "No location data yet."
 msgstr "暂无位置数据。"
+
+msgid "no longer possible"
+msgstr "已不可能"
 
 msgid "No Platform ban"
 msgstr "无 Platform 封禁"
@@ -1404,9 +1425,20 @@ msgstr "此读数已过期。"
 msgid "This window (attempt {0}), block by block"
 msgstr "本窗口（第 {0} 次尝试），逐区块"
 
+msgid "this window can't lock in, and it's the last before the timeout"
+msgstr "本窗口无法锁定，且是超时前的最后一个窗口"
+
 #. placeholder {0}: String((w?.attempt ?? 0) + 1)
 msgid "This window ends (attempt {0})"
 msgstr "本窗口结束（第 {0} 次尝试）"
+
+#. placeholder {0}: String((w?.attempt ?? 0) + 1)
+msgid "This window ends (attempt {0}), out of reach"
+msgstr "本窗口结束（第 {0} 次尝试），无法达到"
+
+#. placeholder {0}: String((w?.attempt ?? 0) + 1)
+msgid "This window ends (attempt {0}), out of reach and the last before the timeout"
+msgstr "本窗口结束（第 {0} 次尝试），无法达到，且是超时前的最后一个窗口"
 
 #. placeholder {0}: formatInt(mined)
 msgid "This window's {0} blocks by pool."
