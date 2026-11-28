@@ -52,7 +52,9 @@ export function milestones(d: RadarActivationDeployment, o: ActivationOutlook): 
           { id: 'activation', block: o.activation_if_reached, done: false },
         ]
       const n = o.next_attempt
-      if (!n)
+      if (n === undefined)
+        return [signal, { id: 'window-end-short', block: o.window_end, done: false }]
+      if (n === null)
         return [
           signal,
           { id: 'window-end-last', block: o.window_end, done: false },

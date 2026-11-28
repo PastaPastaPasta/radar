@@ -143,6 +143,11 @@ describe('an out-of-reach window (mainnet at block 2,579,678)', () => {
     expect(thresholdRows(d, 158).find((r) => r.attempt === 1)?.startHeight).toBe(2_580_480)
   })
 
+  it('claims nothing past this window when the API predates next_attempt', () => {
+    const d = { ...base, outlook: { ...base.outlook, possible: false } }
+    expect(milestones(d, d.outlook).map((m) => m.id)).toEqual(['signal', 'window-end-short'])
+  })
+
   it('says no window comes after the last one before the timeout', () => {
     const d = short(null)
     expect(milestones(d, d.outlook).map((m) => m.id)).toEqual([
